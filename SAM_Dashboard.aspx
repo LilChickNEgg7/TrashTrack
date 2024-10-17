@@ -7,12 +7,12 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>PBC - Dashboard</title>
+    <title>Dashboard</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
+    <link href="Pictures/logo_bgRM.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
@@ -97,8 +97,8 @@
 
                 <div class="d-flex align-items-center justify-content-between">
                     <a href="WAREHOUSE_ADD_ITEM.aspx" class="logo d-flex align-items-center">
-                        <img style="border-radius: 1px" src="Pictures/logo2.png" alt="" />
-                        <span style="color: aqua; font-weight: 900; font-family: 'Agency FB'" class="d-none d-lg-block">PBC</span>
+                        <img style="border-radius: 1px" src="Pictures/logo_bgRM.png" alt="" />
+                        <span style="color: aqua; font-weight: 900; font-family: 'Agency FB'" class="d-none d-lg-block">TrashTrack</span>
                     </a>
                     <i style="color: aqua" class="bi bi-list toggle-sidebar-btn"></i>
                 </div>
@@ -213,7 +213,7 @@
                                     <h6>
                                         <asp:Label ID="Label1" runat="server" Text=""></asp:Label></h6>
                                     <span>
-                                        <asp:Label ID="Label3" runat="server" Text="Administrator"></asp:Label></span>
+                                        <asp:Label ID="Label3" runat="server" Text=""></asp:Label></span>
                                 </li>
                                 <li>
                                     <hr class="dropdown-divider">
@@ -230,7 +230,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="Admin_Change_Pass.aspx">
+                                    <a class="dropdown-item d-flex align-items-center" href="SAM_AccountSettings.aspx">
                                         <i class="bi bi-gear"></i>
                                         <span>Account Settings</span>
                                     </a>
@@ -379,7 +379,7 @@
                                 <div class="row">
 
                                     <!-- Sales Card -->
-                                    <div class="col-lg-6" style="background-color: #052507">
+                                    <%--<div class="col-lg-6" style="background-color: #052507">
                                         <div class="card info-card sales-card" style="background-color: #052507">
                                             <div class="card-body" style="background-color: #053203; border-radius: 15px">
                                                 <h5 class="card-title" style="color: chartreuse">Total Customers </h5>
@@ -397,72 +397,241 @@
                                                         <h6>
                                                             <asp:Label ID="totalcustomer" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
                                                         </h6>
-                                                        <%--<span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>--%>
                                                     </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <!-- End Sales Card -->
-
-                                    <!-- Sales Card -->
-                                    <div class="col-lg-6" style="background-color: #052507">
-                                        <div class="card info-card sales-card" style="background-color: #052507">
-                                            <div class="card-body" style="background-color: #053203; border-radius: 15px">
-                                                <h5 class="card-title" style="color: chartreuse">Total Admins </h5>
-
-                                                <div class="d-flex align-items-center">
                                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
                                                         <i class="bi bi-people" style="color: #cb3ee4;"></i>
                                                     </div>
                                                     <div class="ps-3" style="background-color: #053203">
                                                         <style>
-                                                            #totaladmin {
+                                                            #totalcustomer2 {
                                                                 border: none; /* Remove border if not needed */
                                                             }
                                                         </style>
                                                         <h6>
-                                                            <asp:Label ID="totaladmin" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            <asp:Label ID="totalcustomer2" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
                                                         </h6>
-                                                        <%--<span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>--%>
                                                     </div>
                                                 </div>
                                             </div>
 
                                         </div>
+                                    </div>--%>
+                                    <div class="col-lg-6" style="background-color: #052507">
+                                        <div class="card info-card sales-card" style="background-color: #052507">
+                                            <div class="card-body p-3" style="background-color: #053203; border-radius: 15px">
+                                                <!-- Adjusted padding to p-3 for smaller gap -->
+                                                <h5 class="card-title" style="color: chartreuse">Customers</h5>
+
+                                                <!-- Adjusted d-flex container for smaller gaps -->
+                                                <div class="d-flex align-items-center gap-5">
+                                                    <!-- Added gap-2 for smaller uniform spacing -->
+
+                                                    <!-- First Icon and Count for Active Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #totalcustomer {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="totalcustomer" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: chartreuse;">Total</small>
+                                                    </div>
+
+                                                    <!-- Second Icon and Count for Total Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #activecustomer {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="activecustomer" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: chartreuse;">Active</small>
+                                                    </div>
+
+                                                    <!-- Third Icon and Count for Suspended Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #suspcustomer {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="suspcustomer" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: chartreuse;">Suspended</small>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+
+
+
+                                    <!-- End Sales Card -->
+
+                                    <!-- Sales Card -->
+                                    <div class="col-lg-6" style="background-color: #052507">
+                                        <div class="card info-card sales-card" style="background-color: #052507">
+                                            <div class="card-body p-3" style="background-color: #053203; border-radius: 15px">
+                                                <!-- Adjusted padding to p-3 for smaller gap -->
+                                                <h5 class="card-title" style="color: chartreuse">Super Account Managers</h5>
+
+                                                <!-- Adjusted d-flex container for smaller gaps -->
+                                                <div class="d-flex align-items-center gap-5">
+                                                    <!-- Added gap-2 for smaller uniform spacing -->
+
+                                                    <!-- First Icon and Count for Active Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #totalSAM {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="totalSAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: chartreuse;">Active</small>
+                                                    </div>
+
+                                                    <!-- Second Icon and Count for Total Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #activeSAM {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="activeSAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: chartreuse;">Total</small>
+                                                    </div>
+
+                                                    <!-- Third Icon and Count for Suspended Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #suspSAM {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="suspSAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: chartreuse;">Suspended</small>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
                                     <!-- End Sales Card -->
 
 
                                     <!-- Customers Card -->
                                     <div class="col-lg-6" style="background-color: #052507">
+                                        <div class="card info-card sales-card" style="background-color: #052507">
+                                            <div class="card-body p-3" style="background-color: #053203; border-radius: 15px">
+                                                <!-- Adjusted padding to p-3 for smaller gap -->
+                                                <h5 class="card-title" style="color: chartreuse">Super Account Managers</h5>
 
-                                        <div class="card info-card customers-card" style="background-color: #052507">
+                                                <!-- Adjusted d-flex container for smaller gaps -->
+                                                <div class="d-flex align-items-center gap-5">
+                                                    <!-- Added gap-2 for smaller uniform spacing -->
 
-                                            <div class="card-body" style="background-color: #053203; border-radius: 15px">
-                                                <h5 class="card-title" style="color: chartreuse">Active Customers</h5>
-
-                                                <div class="d-flex align-items-center">
-                                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
-                                                        <i class="bi bi-people"></i>
+                                                    <!-- First Icon and Count for Active Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #totalAM {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="totalAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: chartreuse;">Active</small>
                                                     </div>
-                                                    <div class="ps-3" style="background-color: #053203">
-                                                        <style>
-                                                            #activeuser123 {
-                                                                border: none; /* Remove border if not needed */
-                                                            }
-                                                        </style>
-                                                        <h6>
-                                                            <asp:Label ID="activeuser123" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
-                                                        </h6>
-                                                        <%--<span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span>--%>
+
+                                                    <!-- Second Icon and Count for Total Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #activeAM {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="activeAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: chartreuse;">Total</small>
                                                     </div>
+
+                                                    <!-- Third Icon and Count for Suspended Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #suspAM {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="suspAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: chartreuse;">Suspended</small>
+                                                    </div>
+
                                                 </div>
-
                                             </div>
                                         </div>
-
                                     </div>
                                     <!-- End Customers Card -->
 
@@ -472,29 +641,47 @@
                                         <div class="card info-card customers-card" style="background-color: #052507">
 
                                             <div class="card-body" style="background-color: #053203; border-radius: 15px">
-                                                <h5 class="card-title" style="color: chartreuse">Active Admins</h5>
+                                                <h5 class="card-title" style="color: chartreuse">Billing Officer</h5>
 
                                                 <div class="d-flex align-items-center">
-                                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
-                                                        <i class="bi bi-people"></i>
+                                                    <div class="d-flex flex-column align-items-center me-4" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #totalBO {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="totalBO" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: chartreuse;">Active</small>
                                                     </div>
-                                                    <div class="ps-3" style="background-color: #053203">
-                                                        <style>
-                                                            #activeadmin {
-                                                                border: none; /* Remove border if not needed */
-                                                            }
-                                                        </style>
-                                                        <h6>
-                                                            <asp:Label ID="activeadmin" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
-                                                        </h6>
-                                                        <%--<span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span>--%>
+
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #activeBO{
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="activeBO" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: chartreuse;">Total</small>
                                                     </div>
+
                                                 </div>
-
                                             </div>
-                                        </div>
 
-                                    </div>
+                                        </div>
                                     <!-- End Customers Card -->
 
                                     <!-- Revenue Card -->

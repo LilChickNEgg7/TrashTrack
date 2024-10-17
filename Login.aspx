@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>PBC - Login</title>
+    <title>TrashTrack Login</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -27,8 +27,12 @@
 
 
 <!-- Favicons -->
-<link href="assets/img/favicon.png" rel="icon">
+<%--<link href="assets/img/favicon.png" rel="icon">
+<link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">--%>
+
+<link href="Pictures/logo_bgRM.png" rel="icon">
 <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
 
 <!-- Google Fonts -->
 <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -51,6 +55,50 @@
 
 
     <style>
+
+        /* Base Styles for the Button */
+        .hover-toggle {
+            transition: all 0.2s ease; /* Smooth transition for hover effects */
+        }
+
+        /* Hover Effect */
+        .hover-toggle:hover {
+            background-color: #031c02; /* Complementary dark background color */
+            color: #fff; /* White text color for contrast */
+            border-color: #2ba352; /* Change border color on hover */
+            box-shadow: 0 8px 16px rgba(43, 163, 82, 0.5), 0 12px 24px rgba(43, 163, 82, 0.2); /* Soft green glow shadow */
+            transform: scale(1.05); /* Slight scale up effect */
+            text-shadow: 1px 1px 5px rgba(43, 163, 82, 0.7); /* Subtle text shadow */
+        }
+
+        /* Optional: Additional Styles for Smooth Hover */
+        .hover-toggle:active {
+            transform: scale(0.98); /* Slight scale down effect on click */
+            box-shadow: 0 4px 8px rgba(43, 163, 82, 0.2); /* Reduced shadow effect */
+        }
+
+        /* Base Styles for the Button */
+        .hover-toggle {
+            transition: all 0.2s ease; /* Smooth transition for hover effects */
+        }
+
+        /* Hover Effect */
+        .hover-toggle:hover {
+            background-color: #031c02; /* Complementary dark background color */
+            color: #fff; /* White text color for contrast */
+            border-color: #2ba352; /* Change border color on hover */
+            box-shadow: 0 8px 16px rgba(43, 163, 82, 0.5), 0 12px 24px rgba(43, 163, 82, 0.2); /* Soft green glow shadow */
+            transform: scale(1.05); /* Slight scale up effect */
+            text-shadow: 1px 1px 5px rgba(43, 163, 82, 0.7); /* Subtle text shadow */
+        }
+
+        /* Optional: Additional Styles for Smooth Hover */
+        .hover-toggle:active {
+            transform: scale(0.98); /* Slight scale down effect on click */
+            box-shadow: 0 4px 8px rgba(43, 163, 82, 0.2); /* Reduced shadow effect */
+        }
+
+
         /*eye*/
         .toggle-password i {
             font-size: 1.2rem;
@@ -149,7 +197,7 @@
     </style>
 </head>
 
-<body class="bg-gradient-primary" style="background-image: url('Pictures//operations1.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat" >
+<body class="bg-gradient-primary" style="background-image: url('Pictures//nature_deer.png'); background-size: cover; background-position: center; background-repeat: no-repeat" >
 
     <div class="container" style="margin-top: 100px">
 
@@ -162,7 +210,7 @@
                     <div class="card-body p-0" >
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"><img src="Pictures//logo2.png" alt="Your Image Description"></div>
+                            <div class="col-lg-6 d-none d-lg-block bg-login-image"><img src="Pictures//logo_tt.png" alt="logo"></div>
                             <div class="col-lg-6" style="background: #031c02">
                                 <div class="p-5">
                                     <div class="text-center"">
@@ -181,7 +229,7 @@
                                         <!-- Password Field -->
                                         <div class="custom-floating" style="position: relative;">
                                             <asp:TextBox ID="exampleInputPassword" runat="server" TextMode="Password" class="form-control"
-                                                Style="background-color: #031c02; border-color: #005c3b; border-radius: 30px; border-width: 3px; color: white;"
+                                                Style="background-color: #031c02; border-color: #005c3b; border-radius: 30px; border-width: 3px; color: white; padding-right: 40px;"
                                                 placeholder=" " aria-describedby="" OnTextChanged="exampleInputPassword_TextChanged"></asp:TextBox>
                                             <label for="exampleInputPassword">Password</label>
 
@@ -200,8 +248,9 @@
                                         </div>
 
                                         <!-- Login Button -->
-                                        <asp:Button ID="login_btn" runat="server" Style="background-color: #2ba352; border-color: #005c3b; font-weight: 700; font-size: large;"
-                                            Text="Login" class="btn btn-primary btn-user btn-block" OnClick="login_btn_Click" />
+                                        <asp:Button ID="login_btn" runat="server" class="btn btn-primary btn-user btn-block hover-toggle"
+                                            Style="background-color: #2ba352; border-color: #005c3b; font-weight: 700; font-size: large;"
+                                            Text="Login" OnClick="login_btn_Click" />
                                     </form>
 
                                     <hr>
@@ -281,7 +330,29 @@
             }
         };
 
+
+
+        function triggerConfetti(event) {
+            // Prevent the default behavior of the button click
+            event.preventDefault();
+
+            // Create a confetti burst effect at the button's position
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: {
+                    x: event.clientX / window.innerWidth,
+                    y: event.clientY / window.innerHeight
+                },
+                colors: ['#2ba352', '#031c02', '#ffffff']
+            });
+
+            // You can also add more animations here, like redirecting to a new page after the confetti ends
+        }
+
 </script>
+     <!-- Canvas Confetti Script -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 
 
     <!-- Bootstrap core JavaScript-->
@@ -296,7 +367,7 @@
     <!-- Vendor JS Files -->
     <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    fgen
+    
  <script src="assets/vendor/chart.js/chart.umd.js"></script>
     <script src="assets/vendor/echarts/echarts.min.js"></script>
     <script src="assets/vendor/quill/quill.min.js"></script>

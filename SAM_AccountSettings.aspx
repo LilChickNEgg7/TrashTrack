@@ -7,14 +7,14 @@
    <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>PBC - Dashboard</title>
+  <title>Account Settings</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
   <%--hide unhide eye--%>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+<link href="Pictures/logo_bgRM.png" rel="icon">
+<link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -33,8 +33,56 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
+    <%--<style>
+        .square-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover; /* Ensures the image fills the square without distortion */
+            border-radius: 0; /* Optional: Ensures no rounded corners */
+        }
+    </style>--%>
+    <style>
+        .autocomplete-suggestions {
+            border: 1px solid #ccc;
+            border-top: none;
+            position: absolute;
+            z-index: 999;
+            background: white;
+            max-height: 200px;
+            overflow-y: auto;
+            width: 100%; /* Match width of the input */
+        }
+
+        .suggestion-item {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+            .suggestion-item:hover {
+                background-color: #f0f0f0;
+            }
+
+
+
+
+        /* Square image styling */
+        .square-image {
+            border-radius: 8px; /* Rounded corners */
+        }
+
+        /* Hidden file upload */
+        .d-none {
+            display: none;
+        }
+
+        /* Upload buttontyling */
+        .btn-primary i {
+            color: white;
+        }
+    </style>
 </head>
     
+
     <div>
 <body style="background-color: #041d06 " >
 
@@ -44,8 +92,8 @@
 
     <div class="d-flex align-items-center justify-content-between">
       <a href="Customer_Dashboard.aspx" class="logo d-flex align-items-center">
-        <img style="border-radius: 1px" src="Pictures/logo2.png" alt=""/>
-        <span style="color: aqua; font-weight: 900; font-family: 'Agency FB'"  class="d-none d-lg-block">PBC</span>
+        <img style="border-radius: 1px" src="Pictures/logo_bgRM.png" alt=""/>
+        <span style="color: aqua; font-weight: 900; font-family: 'Agency FB'"  class="d-none d-lg-block">TrashTrack</span>
       </a>
       <i style="color:aqua" class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
@@ -98,7 +146,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="Customer_Change_Pass.aspx">
+              <a class="dropdown-item d-flex align-items-center" href="SAM_AccountSettings.aspx">
                 <i class="bi bi-gear"></i>
                 <span>Account Settings</span>
               </a>
@@ -230,158 +278,280 @@
           <div class="card">
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-              <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-              <h2>Kevin Anderson</h2>
-              <h3>Web Designer</h3>
-              <div class="social-links mt-2">
-                <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+              <img alt="Profile" class="rounded-circle" id="prof" runat="server" style="object-fit: cover; overflow: hidden;">
+              <h2><asp:Label ID="profile_name" runat="server" Text=""></asp:Label></h2>
+                <h3>
+                    <asp:Label ID="role_name" runat="server" Text=""></asp:Label></h3>
+                <div class="social-links mt-2">
+                    <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                    <a href="https://www.youtube.com/@michaelbacalso1168" class="facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="https://www.youtube.com/@michaelbacalso1168" class="instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+          </div>
+
+        </div>
+
+          <div class="col-xl-8">
+
+              <div class="card">
+                  <div class="card-body pt-3">
+                      <!-- Bordered Tabs -->
+                      <ul class="nav nav-tabs nav-tabs-bordered">
+
+                          <li class="nav-item">
+                              <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                          </li>
+
+                          <li class="nav-item">
+                              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+                          </li>
+
+                          <li class="nav-item">
+                              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                          </li>
+                      </ul>
+ 
+                      <form id="form1" runat="server">
+                          <!-- Hidden Field to Store Active Tab Index -->
+                          <asp:HiddenField ID="hfActiveTab" runat="server" />
+
+                          <div class="tab-content pt-2">
+
+                              <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                  <%--<h5 class="card-title">About</h5>
+                  <p class="small fst-italic">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</p>--%>
+
+                                  <h5 class="card-title">Profile Details</h5>
+
+                                  <div class="row">
+                                      <div class="col-lg-3 col-md-4 label ">Full Name</div>
+                                      <div class="col-lg-9 col-md-8">
+                                          <asp:Label ID="Label10" runat="server" Text=""></asp:Label>
+                                      </div>
+                                  </div>
+
+                                  <div class="row">
+                                      <div class="col-lg-3 col-md-4 label">Address</div>
+                                      <div class="col-lg-9 col-md-8">
+                                          <asp:Label ID="Label6" runat="server" Text=""></asp:Label>
+                                      </div>
+                                  </div>
+
+                                  <div class="row">
+                                      <div class="col-lg-3 col-md-4 label">Phone</div>
+                                      <div class="col-lg-9 col-md-8">
+                                          <asp:Label ID="Label7" runat="server" Text=""></asp:Label>
+                                      </div>
+                                  </div>
+
+                                  <div class="row">
+                                      <div class="col-lg-3 col-md-4 label">Email</div>
+                                      <div class="col-lg-9 col-md-8">
+                                          <asp:Label ID="Label8" runat="server" Text=""></asp:Label>
+                                      </div>
+                                  </div>
+
+                              </div>
+
+                               <%--Profile Edit Form --%>
+                              <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+
+                                  <div class="row mb-3">
+                                      <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+                                      <div class="col-md-8 col-lg-9">
+                                          <!-- Profile Image Display -->
+                                          <asp:ImageMap
+                                              ID="image_edit"
+                                              runat="server"
+                                              alt="Profile"
+                                              CssClass="img-thumbnail square-image"
+                                              ImageUrl="~/Pictures/blank_prof.png"
+                                              Width="150px"
+                                              Height="150px" Style="object-fit: cover;" >
+                                          </asp:ImageMap>
+                                          <%--<asp:ImageMap
+                                              ID="image_edit"
+                                              runat="server"
+                                              alt="Profile"
+                                              CssClass="img-thumbnail square-image"
+                                              ImageUrl="~/Pictures/blank_prof.png"
+                                              Width="150px"
+                                              Height="150px"
+                                              Style="object-fit: cover;" />--%>
+
+                                          <!-- Custom Upload Button and FileUpload Control -->
+                                          <div class="pt-2">
+                                              <!-- Upload Button -->
+                                              <a href="javascript:void(0);" class="btn btn-primary btn-sm" title="Upload new profile image" onclick="triggerFileUpload()">
+                                                  <i class="bi bi-upload"></i>
+                                              </a>
+
+                                              <!-- Hidden File Upload Control -->
+                                              <asp:FileUpload ID="formFile" runat="server" class="d-none" accept="image/*" onchange="previewImageUpdate()" />
+
+                                              <!-- Remove Profile Image Button -->
+
+                                              <a href="javascript:void(0);" class="btn btn-danger btn-sm" title="Remove my profile image" onclick="removeProfileImage(); return false;">
+                                                  <i class="bi bi-trash"></i>
+                                                  <asp:Button ID="btnHiddenRemoveImage" runat="server" Style="display: none;" />
+                                              </a>
+                                              <!-- Hidden field to track image removal -->
+                                              <asp:HiddenField ID="hfImageRemoved" runat="server" Value="false" />
+
+
+                                              <%--<asp:Button ID="btnHiddenRemoveImage" runat="server" style="display:none;" />--%>
+
+                                          </div>
+
+                                          <!-- Error Message -->
+                                          <div id="fileError" style="display: none; color: red;">Invalid file. Please upload a valid image.</div>
+                                      </div>
+                                  </div>
+
+                                  <!-- Hidden field for cropped image -->
+                                  <%--<asp:HiddenField ID="hfCroppedImage" runat="server" />
+
+                                  <div id="cropModal" class="modal" tabindex="-1" role="dialog">
+                                      <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                              <div class="modal-header">
+                                                  <h5 class="modal-title">Crop Image</h5>
+                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                  </button>
+                                              </div>
+                                              <div class="modal-body">
+                                                  <img id="cropImage" style="max-width: 100%;" />
+                                              </div>
+                                              <div class="modal-footer">
+                                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                  <button type="button" id="cropButton" class="btn btn-primary">Crop</button>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>--%>
+
+                                  <div class="row mb-3">
+
+
+                                      <label for="firstname" class="col-md-4 col-lg-3 col-form-label">First Name</label>
+                                      <div class="col-md-8 col-lg-9">
+                                          <asp:TextBox ID="firstname" runat="server" CssClass="form-control" onkeyup="validateFirstname()"></asp:TextBox>
+                                          <div class="valid-feedback">Looks good!</div>
+                                          <div class="invalid-feedback">Please provide a valid firstname.</div>
+                                      </div>
+                                  </div>
+
+                                  <div class="row mb-3">
+                                      <label for="m_initial" class="col-md-4 col-lg-3 col-form-label">M.I</label>
+                                      <div class="col-md-8 col-lg-9">
+                                          <asp:TextBox ID="m_initial" runat="server" CssClass="form-control" onkeyup="validateMiddleInitialOptional()"></asp:TextBox>
+                                          <div class="valid-feedback">Looks good!</div>
+                                          <%--<div class="invalid-feedback">Please provide a valid firstname.</div>--%>
+                                      </div>
+                                  </div>
+
+                                  <div class="row mb-3">
+                                      <label for="lastname" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
+                                      <div class="col-md-8 col-lg-9">
+                                          <asp:TextBox ID="lastname" runat="server" CssClass="form-control" onkeyup="validateLastname()"></asp:TextBox>
+                                          <div class="invalid-feedback">Please provide a valid fastname.</div>
+                                      </div>
+                                  </div>
+
+                                  <div class="row mb-3">
+                                      <label for="address" class="col-md-4 col-lg-3 col-form-label">Address</label>
+                                      <div class="col-md-8 col-lg-9">
+                                          <asp:TextBox ID="address" runat="server" CssClass="form-control" Placeholder="Enter your address" autocomplete="off" onkeyup="validateAddress()"></asp:TextBox>
+                                          <div id="suggestions" class="suggestions-list"></div>
+                                      </div>
+                                  </div>
+
+                                  <div class="row mb-3">
+                                      <label for="phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
+                                      <div class="col-md-8 col-lg-9">
+                                          <asp:TextBox ID="phone" runat="server" CssClass="form-control" onkeyup="validateContact()"></asp:TextBox>
+                                      </div>
+                                  </div>
+
+                                  <div class="row mb-3">
+                                      <label for="email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                      <div class="col-md-8 col-lg-9">
+                                          <asp:TextBox ID="email" runat="server" CssClass="form-control" onkeyup="validateUpdateEmail()" AutoPostBack="true"></asp:TextBox>
+                                          <div class="valid-feedback">Looks good!</div>
+                                          <div class="invalid-feedback">Please provide a valid email.</div>
+                                          <!-- Placeholder for API error -->
+                                          <div id="emailError" class="text-danger" style="display: none;">Invalid email address.</div>
+                                      </div>
+                                  </div>
+
+                                  <div class="text-center">
+                                      <asp:Button ID="Button1" runat="server" CssClass="btn btn-primary" Text="Save Changes" OnClick="Button1_Click" />
+                                      <asp:Button ID="Button2" runat="server" CssClass="btn btn-primary" Text="Edit" />
+                                  </div>
+                              </div>
+                              <!-- End Profile Edit Form -->
+                              <%--<div class="tab-pane fade pt-3" id="profile-settings">
+
+                              </div>--%>
+
+                              <div class="tab-pane fade pt-3" id="profile-change-password">
+                                  <!-- Change Password Form -->
+                                 
+                                  <div class="row mb-3">
+                                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                                      <div class="col-md-8 col-lg-9">
+                                          <div class="input-group">
+                                              <asp:TextBox ID="currentpassword" runat="server" CssClass="form-control" TextMode="Password" oninput="validatePasswords()"></asp:TextBox>
+                                              <span class="input-group-text" style="cursor: pointer;" onclick="togglePasswordVisibility('currentpassword', 'currentPasswordIcon')">
+                                                  <i id="currentPasswordIcon" class="fas fa-eye-slash"></i>
+                                              </span>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="row mb-3">
+                                      <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                                      <div class="col-md-8 col-lg-9">
+                                          <div class="input-group">
+                                              <asp:TextBox ID="changetxt" runat="server" CssClass="form-control" TextMode="Password" oninput="validatePasswords()"></asp:TextBox>
+                                              <span class="input-group-text" style="cursor: pointer;" onclick="togglePasswordVisibility('changetxt', 'newPasswordIcon')">
+                                                  <i id="newPasswordIcon" class="fas fa-eye-slash"></i>
+                                              </span>
+                                          </div>
+                                          <small id="newPassMessage" class="text-danger"></small>
+                                      </div>
+                                  </div>
+
+                                  <div class="row mb-3">
+                                      <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                                      <div class="col-md-8 col-lg-9">
+                                          <div class="input-group">
+                                              <asp:TextBox ID="confirmtxt" runat="server" CssClass="form-control" TextMode="Password" oninput="validatePasswords()"></asp:TextBox>
+                                              <span class="input-group-text" style="cursor: pointer;" onclick="togglePasswordVisibility('confirmtxt', 'confirmPasswordIcon')">
+                                                  <i id="confirmPasswordIcon" class="fas fa-eye-slash"></i>
+                                              </span>
+                                          </div>
+                                          <small id="confirmPassMessage" class="text-danger"></small>
+                                      </div>
+                                  </div>
+
+                                  <div class="text-center">
+                                      <asp:Button ID="changepassword" runat="server" CssClass="btn btn-primary" Text="Change Password" OnClick="changepassword_Click" />
+
+                                  </div>
+
+                                  <!-- End Change Password Form -->
+                              </div>
+                          </div>
+                          <!-- End Bordered Tabs -->
+                      </form>
+                  </div>
               </div>
-            </div>
+
           </div>
-
-        </div>
-
-        <div class="col-xl-8">
-
-          <div class="card">
-            <div class="card-body pt-3">
-              <!-- Bordered Tabs -->
-              <ul class="nav nav-tabs nav-tabs-bordered">
-
-                <li class="nav-item">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
-                </li>
-
-                <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
-                </li>
-
-                <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">Settings</button>
-                </li>
-
-                <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
-                </li>
-
-              </ul>
-              <div class="tab-content pt-2">
-
-                <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                  <h5 class="card-title">About</h5>
-                  <p class="small fst-italic">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</p>
-
-                  <h5 class="card-title">Profile Details</h5>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                    <div class="col-lg-9 col-md-8"></div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Company</div>
-                    <div class="col-lg-9 col-md-8"></div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Job</div>
-                    <div class="col-lg-9 col-md-8"></div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Country</div>
-                    <div class="col-lg-9 col-md-8">USA</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Address</div>
-                    <div class="col-lg-9 col-md-8">A108 Adam Street, New York, NY 535022</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Phone</div>
-                    <div class="col-lg-9 col-md-8">(436) 486-3538 x29071</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Email</div>
-                    <div class="col-lg-9 col-md-8">k.anderson@example.com</div>
-                  </div>
-
-                </div>
-
-                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-
-                  <!-- Profile Edit Form -->
-               
-
-                </div>
-
-                <div class="tab-pane fade pt-3" id="profile-settings">
-
-                  <!-- Settings Form -->
-              
-
-                </div>
-
-<div class="tab-pane fade pt-3" id="profile-change-password">
-        <!-- Change Password Form -->
-        <form runat="server">
-
-            <div class="row mb-3">
-                <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
-                <div class="col-md-8 col-lg-9">
-                    <div class="input-group">
-                        <asp:TextBox ID="currentpassword" runat="server" CssClass="form-control" TextMode="Password"></asp:TextBox>
-                        <span class="input-group-text" style="cursor: pointer;" onclick="togglePasswordVisibility('currentpassword', 'currentPasswordIcon')">
-                            <i id="currentPasswordIcon" class="fas fa-eye-slash"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
-                <div class="col-md-8 col-lg-9">
-                    <div class="input-group">
-                        <asp:TextBox ID="changetxt" runat="server" CssClass="form-control" TextMode="Password"></asp:TextBox>
-                        <span class="input-group-text" style="cursor: pointer;" onclick="togglePasswordVisibility('changetxt', 'newPasswordIcon')">
-                            <i id="newPasswordIcon" class="fas fa-eye-slash"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
-                <div class="col-md-8 col-lg-9">
-                    <div class="input-group">
-                        <asp:TextBox ID="confirmtxt" runat="server" CssClass="form-control" TextMode="Password"></asp:TextBox>
-                        <span class="input-group-text" style="cursor: pointer;" onclick="togglePasswordVisibility('confirmtxt', 'confirmPasswordIcon')">
-                            <i id="confirmPasswordIcon" class="fas fa-eye-slash"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center">
-                <asp:Button ID="changepassword" runat="server" OnClick="changepassword_Click" CssClass="btn btn-primary" Text="Change Password" />
-            </div>
-        </form>
-        <!-- End Change Password Form -->
-    </div>
-
-
-
-              </div><!-- End Bordered Tabs -->
-
-            </div>
-          </div>
-
-        </div>
       </div>
     </section>
 
@@ -399,10 +569,219 @@
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <%--inside script--%>
+<!-- Include jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Script to Maintain Tab State -->
+<%--<script type="text/javascript">
+    $(document).ready(function () {
+        // Set the active tab based on the value in the hidden field.
+        var activeTab = $("#<%= hfActiveTab.ClientID %>").val();
+        if (activeTab) {
+            $('#myTab button[data-bs-target="' + activeTab + '"]').tab('show');
+        }
+
+        // Store the active tab in the hidden field whenever a tab is shown.
+        $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var activeTab = $(e.target).attr("data-bs-target");
+            $("#<%= hfActiveTab.ClientID %>").val(activeTab);
+        });
+
+        // Save the active tab in the hidden field before any button triggers a postback.
+        $('form').on('submit', function () {
+            var activeTab = $('.nav-tabs .nav-link.active').attr("data-bs-target");
+            $("#<%= hfActiveTab.ClientID %>").val(activeTab);
+        });
+    });
+</script>--%>
+
     <script>
+
+        const addressField = document.getElementById('address');
+        const suggestionsContainer = document.getElementById('suggestions');
+        const apiKey = '550eeed7c49946e98cfb4958e0c6d726'; // Replace with your Geoapify API key
+
+        addressField.addEventListener('input', async () => {
+            const query = addressField.value.trim();
+            suggestionsContainer.innerHTML = '';
+
+            if (query.length > 0) {
+                const suggestions = await fetchSuggestions(query);
+                if (suggestions && suggestions.features) {
+                    suggestions.features.forEach(suggestion => {
+                        const div = document.createElement('div');
+                        div.classList.add('suggestion-item');
+                        div.innerText = suggestion.properties.formatted; // Use the formatted address
+                        div.addEventListener('click', () => {
+                            addressField.value = suggestion.properties.formatted; // Set input to selected address
+                            suggestionsContainer.innerHTML = ''; // Clear suggestions
+                        });
+                        suggestionsContainer.appendChild(div);
+                    });
+                }
+            }
+        });
+
+        async function fetchSuggestions(query) {
+            const requestOptions = {
+                method: 'GET',
+            };
+            const response = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&apiKey=${apiKey}`, requestOptions);
+            const data = await response.json();
+            return data; // Returns suggestions
+        }
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!addressField.contains(event.target)) {
+                suggestionsContainer.innerHTML = ''; // Clear suggestions if clicking outside
+            }
+        });
+
+        // Validation Functions for Add Account Manager
+
+        // Validate Firstname to allow multiple words
+        function validateFirstname() {
+            const firstname = document.getElementById('<%= firstname.ClientID %>');
+
+            // Allow alphabets, spaces, and hyphens for multiple-word first names
+            if (!/^[A-Za-z]+(?:[\s-][A-Za-z]+)*$/.test(firstname.value)) {
+                firstname.classList.add('is-invalid');
+                firstname.classList.remove('is-valid');
+            } else {
+                firstname.classList.remove('is-invalid');
+                firstname.classList.add('is-valid');
+            }
+        }
+
+        // Validate Middle Initial (Optional)
+        function validateMiddleInitialOptional() {
+            const middleInitial = document.getElementById('<%= m_initial.ClientID %>');
+
+            // Validate the input
+            if (middleInitial.value.length > 1 || !/^[A-Za-z]$/.test(middleInitial.value)) {
+                middleInitial.classList.add('is-invalid');
+                middleInitial.classList.remove('is-valid');
+            } else {
+                middleInitial.classList.remove('is-invalid');
+                middleInitial.classList.add('is-valid');
+            }
+        }
+
+        // Validate Lastname
+        function validateLastname() {
+            const lastname = document.getElementById('<%= lastname.ClientID %>');
+            if (!/^[A-Za-z]+$/.test(lastname.value)) {
+                lastname.classList.add('is-invalid');
+                lastname.classList.remove('is-valid');
+            } else {
+                lastname.classList.remove('is-invalid');
+                lastname.classList.add('is-valid');
+            }
+        }
+
+        // Validate Address (check if not empty and valid)
+        function validateAddress() {
+            const address = document.getElementById('<%= address.ClientID %>');
+            if (address.value.trim() === "") {
+                address.classList.add('is-invalid');
+                address.classList.remove('is-valid');
+            } else {
+                address.classList.remove('is-invalid');
+                address.classList.add('is-valid');
+            }
+        }
+
+        // Validate Contact Number
+        function validateContact() {
+            const contact = document.getElementById('<%= phone.ClientID %>');
+
+            // Remove non-numeric characters and limit to 11 digits
+            contact.value = contact.value.replace(/\D/g, ''); // Allow only numbers
+            if (contact.value.length > 11) {
+                contact.value = contact.value.substring(0, 11); // Limit to 11 digits
+            }
+
+            // Validation pattern for Philippines contact numbers
+            const contactPattern = /^09\d{9}$/; // Should start with 09 and followed by 9 digits
+            if (!contactPattern.test(contact.value)) {
+                contact.classList.add('is-invalid');
+                contact.classList.remove('is-valid');
+            } else {
+                contact.classList.remove('is-invalid');
+                contact.classList.add('is-valid');
+            }
+        }
+
+        function validateUpdateEmail() {
+            const email = document.getElementById('<%=email.ClientID%>');
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+            if (!emailPattern.test(email.value)) {
+                email.classList.add('is-invalid');
+                email.classList.remove('is-valid');
+            } else {
+                email.classList.remove('is-invalid');
+                email.classList.add('is-valid');
+            }
+        }
+
+        <%--// Function to preview the selected image
+        function previewImage() {
+            const fileInput = document.getElementById('<%= formFile.ClientID %>');
+            const imagePreview = document.getElementById('<%= image_edit.ClientID %>');
+            const file = fileInput.files[0]; // Get the selected file
+            const allowedExtensions = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
+            const fileError = document.getElementById('fileError');
+
+            // Validate the file type and display preview if valid
+            if (file && allowedExtensions.includes(file.type)) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result; // Set image preview to the selected file content
+                };
+                reader.readAsDataURL(file); // Read the file as a Data URL
+                fileError.style.display = "none"; // Hide error message
+            } else {
+                // Set to default image and show error message if invalid file
+                imagePreview.src = "~/Pictures/blank_prof.png";
+                fileError.style.display = "block";
+            }
+        }--%>
+
+        function previewImageUpdate() {
+            const fileInput = document.getElementById('<%=formFile.ClientID%>');
+            const imagePreview = document.getElementById('<%=image_edit.ClientID%>');
+            const file = fileInput.files[0];
+            const allowedExtensions = ["image/jpeg", "image/png", "image/gif"];
+            const fileError = document.getElementById('fileErrorUpdate');
+
+            if (file && allowedExtensions.includes(file.type)) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    fileError.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                /*imagePreview.src = "";*/
+                style.display = 'block';
+            }
+        }
+
+
+
+        // Function to allow only letter input
+        function isLetter(event) {
+            const char = String.fromCharCode(event.which);
+            return /^[A-Za-z]$/.test(char);
+        }
+
+        // Toggle password visibility
         function togglePasswordVisibility(textBoxId, iconId) {
-            var passwordField = document.getElementById(textBoxId);
-            var icon = document.getElementById(iconId);
+            const passwordField = document.getElementById(textBoxId);
+            const icon = document.getElementById(iconId);
 
             if (passwordField.type === "password") {
                 passwordField.type = "text";
@@ -415,9 +794,192 @@
             }
         }
 
+        // Validate Passwords in Real-Time
+        function validatePasswords() {
+            const currentPassword = document.getElementById('<%= currentpassword.ClientID %>').value;
+            const newPassword = document.getElementById('<%= changetxt.ClientID %>').value;
+            const confirmPassword = document.getElementById('<%= confirmtxt.ClientID %>').value;
+            const newPassMessage = document.getElementById('newPassMessage');
+            const confirmPassMessage = document.getElementById('confirmPassMessage');
+            const changePasswordButton = document.getElementById('<%= changepassword.ClientID %>');
+
+            // Password pattern to check if the new password meets the criteria
+            const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+
+            // Flag to determine if the button should be enabled
+            let isValid = true;
+
+            // Check if the new password is the same as the current password
+            if (newPassword === currentPassword && currentPassword !== "") {
+                newPassMessage.textContent = "New password cannot be the same as the current password.";
+                isValid = false;
+            } else {
+                newPassMessage.textContent = ""; // Clear the message if passwords do not match
+            }
+
+            // Validate the new password format (minimum requirements)
+            if (!passwordPattern.test(newPassword) && newPassword !== "") {
+                newPassMessage.textContent = "Password must contain at least one uppercase letter, one lowercase letter, and one digit, and must be at least 6 characters long.";
+                isValid = false;
+            }
+
+            // Check if the confirmation password matches the new password
+            if (newPassword !== confirmPassword && confirmPassword !== "") {
+                confirmPassMessage.textContent = "The confirmation password does not match the new password.";
+                isValid = false;
+            } else {
+                confirmPassMessage.textContent = ""; // Clear the message if passwords match
+            }
+
+            // Enable or disable the Change Password button based on validation
+            changePasswordButton.disabled = !isValid;
+        }
+
+        // Function to trigger the hidden file upload control
+        function triggerFileUpload() {
+            const fileUploadControl = document.getElementById('<%= formFile.ClientID %>');
+            if (fileUploadControl) {
+                fileUploadControl.click(); // Simulate a click to open file selector
+            }
+        }
+
+        // Function to remove the profile image and reset to default
+        function removeProfileImage() {
+            const profileImage = document.getElementById('<%= image_edit.ClientID %>');
+            if (profileImage) {
+                // Use single quotes to avoid conflicts with double quotes
+                profileImage.src = '<%= ResolveUrl("~/Pictures/blank_prof.png") %>';
+            }
+            const fileInput = document.getElementById('<%= formFile.ClientID %>');
+            if (fileInput) {
+                fileInput.value = ""; // Clear the file input control
+            }
+
+
+            // Set the hidden field to indicate the image was removed
+            document.getElementById('<%= hfImageRemoved.ClientID %>').value = "true";
+        }
+
+        $(document).ready(function () {
+            // Retrieve the active tab from the hidden field
+            var activeTab = $("#<%= hfActiveTab.ClientID %>").val();
+
+            // Check if there is an active tab stored in the hidden field
+            if (activeTab) {
+                console.log("Active tab on load: ", activeTab);  // Debugging output
+                // Activate the stored tab
+                $('button[data-bs-target="' + activeTab + '"]').tab('show');
+            }
+
+            // Store the active tab in the hidden field whenever a new tab is shown
+            $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var activeTab = $(e.target).attr("data-bs-target");
+                console.log("New active tab: ", activeTab);  // Debugging output
+                $("#<%= hfActiveTab.ClientID %>").val(activeTab);
+            });
+
+            // Save the active tab before form submission
+            $('form').on('submit', function () {
+                var activeTab = $('.nav-tabs .nav-link.active').attr("data-bs-target");
+                console.log("Form submission active tab: ", activeTab);  // Debugging output
+                $("#<%= hfActiveTab.ClientID %>").val(activeTab);
+            });
+        });
+
+        <%--function removeProfileImage() {
+            document.getElementById('<%= btnHiddenRemoveImage.ClientID %>').click(); // Trigger hidden button click
+            document.getElementById('<%= image_edit.ClientID %>').src = '~/Pictures/blank_prof.png'; // Set to default blank profile
+        }--%>
+
+        <%--// Global variable for cropper instance
+        let cropper;
+
+        // Trigger file upload when the custom button is clicked
+        function triggerFileUpload() {
+            document.getElementById('<%= formFile.ClientID %>').click();
+        }
+
+        // Preview the image, validate the type, and show the crop modal
+        function previewImageUpdate() {
+            const fileInput = document.getElementById('<%= formFile.ClientID %>');
+    const imagePreview = document.getElementById('<%= image_edit.ClientID %>');
+    const fileError = document.getElementById('fileError');
+    const file = fileInput.files[0];
+    const allowedExtensions = ["image/jpeg", "image/png", "image/gif"];
+
+    if (file && allowedExtensions.includes(file.type)) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            imagePreview.src = e.target.result; // Preview in the ImageMap
+            fileError.style.display = 'none'; // Hide error message
+            // Show the crop modal
+            $('#cropModal').modal('show');
+            initCropper(e.target.result); // Initialize the cropper with the new image
+        }
+        reader.readAsDataURL(file);
+    } else {
+        imagePreview.src = ""; // Clear the preview if not valid
+        fileError.style.display = 'block'; // Show error message
+    }
+}
+
+// Initialize Cropper.js
+function initCropper(imageSrc) {
+    const cropImage = document.getElementById('cropImage');
+
+    // Destroy any existing cropper instance
+    if (cropper) {
+        cropper.destroy();
+    }
+
+    // Set the source of the cropper image
+    cropImage.src = imageSrc;
+
+    // Initialize cropper
+    cropper = new Cropper(cropImage, {
+        aspectRatio: 1, // Square crop
+        viewMode: 1,
+        autoCropArea: 1,
+        scalable: false,
+    });
+}
+
+// Crop the image and update the ImageMap
+document.getElementById('cropButton').addEventListener('click', function () {
+    const canvas = cropper.getCroppedCanvas({
+        width: 150,
+        height: 150
+    });
+
+    // Convert the canvas to a data URL
+    const croppedImageDataUrl = canvas.toDataURL();
+
+    // Update the profile image display in the ImageMap
+    const profileImageMap = document.getElementById('<%= image_edit.ClientID %>');
+    profileImageMap.src = croppedImageDataUrl;
+
+    // Hide the crop modal
+    $('#cropModal').modal('hide');
+
+    // Optionally, you can also update the hidden field with the cropped image data URL
+    // or handle the file upload as needed
+});--%>
+
+
     </script>
 
 
+    <%--<!-- Include Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initAutocomplete" async defer></script>--%>
+    <!-- Include Geopify Maps API -->
+    <script src="https://api.geoapify.com/v1/geocode/autocomplete?text=YOUR_TEXT&format=json&apiKey=550eeed7c49946e98cfb4958e0c6d726"></script>
+<%--    https://api.geoapify.com/v1/geocode/autocomplete?text=YOUR_TEXT&format=json&apiKey=550eeed7c49946e98cfb4958e0c6d726--%>
+
+
+    <!-- Include Cropper.js CSS -->
+<link rel="stylesheet" href="https://unpkg.com/cropperjs/dist/cropper.min.css" />
+    <!-- Include Cropper.js JS -->
+<script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
     <!-- Vendor JS Files -->
     <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

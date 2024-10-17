@@ -69,31 +69,94 @@ namespace Capstone
         protected global::System.Web.UI.WebControls.Label totalcustomer;
 
         /// <summary>
-        /// totaladmin control.
+        /// activecustomer control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label totaladmin;
+        protected global::System.Web.UI.WebControls.Label activecustomer;
 
         /// <summary>
-        /// activeuser123 control.
+        /// suspcustomer control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label activeuser123;
+        protected global::System.Web.UI.WebControls.Label suspcustomer;
 
         /// <summary>
-        /// activeadmin control.
+        /// totalSAM control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label activeadmin;
+        protected global::System.Web.UI.WebControls.Label totalSAM;
+
+        /// <summary>
+        /// activeSAM control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label activeSAM;
+
+        /// <summary>
+        /// suspSAM control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label suspSAM;
+
+        /// <summary>
+        /// totalAM control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label totalAM;
+
+        /// <summary>
+        /// activeAM control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label activeAM;
+
+        /// <summary>
+        /// suspAM control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label suspAM;
+
+        /// <summary>
+        /// totalBO control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label totalBO;
+
+        /// <summary>
+        /// activeBO control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label activeBO;
 
         /// <summary>
         /// totalsales control.

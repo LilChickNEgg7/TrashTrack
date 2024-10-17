@@ -202,12 +202,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AM_AccountMan.aspx" />
+    <Content Include="AM_AccountManCustomers.aspx" />
+    <Content Include="AM_AccountSettings.aspx" />
     <Content Include="AM_Dashboard.aspx" />
+    <Content Include="BO_AccountSettings.aspx" />
+    <Content Include="BO_Billing.aspx" />
+    <Content Include="BO_Controls.aspx" />
     <Content Include="BO_Dashboard.aspx" />
     <Content Include="mongocrypt.dll" />
+    <Content Include="Pictures\fog.png" />
+    <Content Include="Pictures\logo.png" />
+    <Content Include="Pictures\logo_bgRM.png" />
+    <Content Include="Pictures\logo_remove_bg.png" />
+    <Content Include="Pictures\logo_remove_bg1.png" />
+    <Content Include="Pictures\logo_title.png" />
+    <Content Include="Pictures\logo_tt.png" />
+    <Content Include="Pictures\logo_up.jpg" />
+    <Content Include="Pictures\nature_deer.png" />
+    <Content Include="Pictures\title_logo.png" />
+    <Content Include="Pictures\title_logoo.png" />
     <Content Include="SAM_AccountManCustomers.aspx" />
     <Content Include="SAM_AccountSettings.aspx" />
-    <Content Include="SAM_BO.aspx" />
     <Content Include="SAM_Dashboard.aspx" />
     <Content Include="SAM_AccountMan.aspx" />
     <Content Include="assets\css\style.css" />
@@ -538,9 +554,8 @@
     <Content Include="Pictures\white.jpg" />
     <Content Include="libmongocrypt.so" />
     <Content Include="libmongocrypt.dylib" />
+    <Content Include="Z_Trial.aspx" />
     <None Include="Scripts\jquery-1.8.0.intellisense.js" />
-    <Content Include="SAM_Dispatcher.aspx" />
-    <Content Include="SAM_Drivers.aspx" />
     <Content Include="Scripts\jquery-1.8.0.js" />
     <Content Include="Scripts\jquery-1.8.0.min.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -2219,12 +2234,54 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AM_AccountMan.aspx.cs">
+      <DependentUpon>AM_AccountMan.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AM_AccountMan.aspx.designer.cs">
+      <DependentUpon>AM_AccountMan.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AM_AccountManCustomers.aspx.cs">
+      <DependentUpon>AM_AccountManCustomers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AM_AccountManCustomers.aspx.designer.cs">
+      <DependentUpon>AM_AccountManCustomers.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AM_AccountSettings.aspx.cs">
+      <DependentUpon>AM_AccountSettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AM_AccountSettings.aspx.designer.cs">
+      <DependentUpon>AM_AccountSettings.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AM_Dashboard.aspx.cs">
       <DependentUpon>AM_Dashboard.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="AM_Dashboard.aspx.designer.cs">
       <DependentUpon>AM_Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BO_AccountSettings.aspx.cs">
+      <DependentUpon>BO_AccountSettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BO_AccountSettings.aspx.designer.cs">
+      <DependentUpon>BO_AccountSettings.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BO_Billing.aspx.cs">
+      <DependentUpon>BO_Billing.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BO_Billing.aspx.designer.cs">
+      <DependentUpon>BO_Billing.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BO_Controls.aspx.cs">
+      <DependentUpon>BO_Controls.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BO_Controls.aspx.designer.cs">
+      <DependentUpon>BO_Controls.aspx</DependentUpon>
     </Compile>
     <Compile Include="BO_Dashboard.aspx.cs">
       <DependentUpon>BO_Dashboard.aspx</DependentUpon>
@@ -2246,13 +2303,6 @@
     </Compile>
     <Compile Include="SAM_AccountSettings.aspx.designer.cs">
       <DependentUpon>SAM_AccountSettings.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SAM_BO.aspx.cs">
-      <DependentUpon>SAM_BO.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SAM_BO.aspx.designer.cs">
-      <DependentUpon>SAM_BO.aspx</DependentUpon>
     </Compile>
     <Compile Include="SAM_Dashboard.aspx.cs">
       <DependentUpon>SAM_Dashboard.aspx</DependentUpon>
@@ -2283,26 +2333,19 @@
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SAM_Dispatcher.aspx.cs">
-      <DependentUpon>SAM_Dispatcher.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SAM_Dispatcher.aspx.designer.cs">
-      <DependentUpon>SAM_Dispatcher.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SAM_Drivers.aspx.cs">
-      <DependentUpon>SAM_Drivers.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SAM_Drivers.aspx.designer.cs">
-      <DependentUpon>SAM_Drivers.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Trial.aspx.cs">
       <DependentUpon>Trial.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Trial.aspx.designer.cs">
       <DependentUpon>Trial.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Z_Trial.aspx.cs">
+      <DependentUpon>Z_Trial.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Z_Trial.aspx.designer.cs">
+      <DependentUpon>Z_Trial.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>PBC - Dashboard</title>
+    <title>Dashboard</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -18,9 +18,10 @@
 
 
     <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
+    <%--<link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">--%>
+    <link href="Pictures/logo_bgRM.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -39,14 +40,67 @@
     <link href="assets/css/style.css" rel="stylesheet">
     <%--#052507--%>
 
-
-    <%--Location Address--%>
-    <%--    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>--%>
-
-
     <style>
+        .notification-link {
+            color: black; /* Initial color */
+            text-decoration: none; /* Optional: remove underline */
+        }
+
+            .notification-link:hover {
+                color: gray; /* Change to gray on hover */
+                cursor: pointer; /* Show pointer cursor */
+            }
+
+        .notification-item.read-notification {
+            background-color: #f0f0f0; /* Lighter background for read notifications */
+            color: #999; /* Dimmed text color */
+        }
+
+        .dropdown-menu.notifications {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .read-notification {
+            background-color: #f0f0f0; /* Example color for read notifications */
+            color: #999; /* Optional: Change text color for read notifications */
+        }
+
+
+        /*Panel scrollable height*/
+    /*.scrollable-panel {
+        max-height: 95vh;*/ /* Adjust this value as needed */
+        /*overflow-y: auto;*/ /* Enables vertical scrolling */
+    /*}*/
+      .scrollable-panel {
+        max-height: 680px; /* Adjust the height as needed */
+        overflow-y: auto; /* Enables vertical scrolling */
+        overflow-x: hidden; /* Hides horizontal scrolling */
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        padding: 20px; /* Padding inside the panel */
+        background-color: #f9f9f9; /* Light background color */
+        border: 1px solid #ddd; /* Light border */
+        box-sizing: border-box; /* Includes padding and border in element's total width and height */
+    }
+    .scrollable-panel::-webkit-scrollbar {
+        width: 12px; /* Increase width to make scrollbar less intrusive */
+    }
+    .scrollable-panel::-webkit-scrollbar-thumb {
+        background-color: #025539; /* Color of the scrollbar thumb */
+        border-radius: 6px; /* Rounded scrollbar thumb */
+    }
+    .scrollable-panel::-webkit-scrollbar-thumb:hover {
+        background-color: #555; /* Darker color on hover */
+    }
+    .scrollable-panel::-webkit-scrollbar-track {
+        background-color: #f1f1f1; /* Color of the scrollbar track */
+        border-radius: 6px; /* Rounded scrollbar track */
+    }
+    
+
+
+
         /*start of tabs*/
         /* Main Container */
         #myTab {
@@ -59,32 +113,29 @@
 
         /*Tab Buttons */
         .nav-tabs {
-            border-bottom: none;
-            Remove any default bottom border
+            border-bottom: none; /* Remove any default bottom border */
         }
 
             .nav-tabs .nav-item .nav-link {
-                background: #2f5f3e;
-                Dark green for inactive tabs color: white;
+                background: #2f5f3e; /* Dark green for inactive tabs */
+                color: white;
                 font-weight: bold;
                 margin-right: 10px;
-                border-radius: 10px 10px 0 0;
-                Keep tabs rounded at the top padding: 12px 24px;
+                border-radius: 10px 10px 0 0; /* Keep tabs rounded at the top */
+                padding: 12px 24px;
                 transition: all 0.3s ease-in-out;
-                border: none;
-                Remove default border
+                border: none; /* Remove default border */
             }
 
                 .nav-tabs .nav-item .nav-link:hover {
-                    background: #5fa17b;
-                    Luminous green for hover state color: white;
+                    background: #5fa17b; /* Luminous green for hover state */
+                    color: white;
                 }
 
                 .nav-tabs .nav-item .nav-link.active {
-                    background: #3c7944;
-                    Slightly darker green for active state color: #eaf7e6;
-                    Light green text border-bottom: none;
-                    Remove any bottom border
+                    background: #5fa17b; /* Slightly darker green for active state */
+                    color: #eaf7e6; /* Light green text */
+                    border-bottom: none; /* Remove any bottom border */
                 }
 
         /* Styling the GridView Container */
@@ -394,38 +445,64 @@
             <header style="background-color: black; height: 80px" id="header" class="header fixed-top d-flex align-items-center">
 
                 <div class="d-flex align-items-center justify-content-between">
-                    <a href="WAREHOUSE_ADD_ITEM.aspx" class="logo d-flex align-items-center">
-                        <img style="border-radius: 1px" src="Pictures/logo2.png" alt="" />
-                        <span style="color: aqua; font-weight: 900; font-family: 'Agency FB'" class="d-none d-lg-block">PBC</span>
+                    <a href="SAM_AccountMan.aspx" class="logo d-flex align-items-center">
+                        <img style="border-radius: 1px" src="Pictures/logo_bgRM.png" alt="" />
+                        <span style="color: aqua; font-weight: 900; font-family: 'Agency FB'" class="d-none d-lg-block">TrashTrack</span>
                     </a>
                     <i style="color: aqua" class="bi bi-list toggle-sidebar-btn"></i>
                 </div>
                 <!-- End Logo -->
                 <nav class="header-nav ms-auto">
                     <ul class="d-flex align-items-center">
+                        <%--notification--%>
                         <li class="nav-item dropdown">
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                            <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                                <i class="bi bi-bell"></i>
+                                <span id="notificationCount" runat="server" class="badge bg-primary badge-number">0</span>
+                            </a>
+                            <!-- Notification Dropdown -->
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications" style="max-height: 300px; overflow-y: auto;">
+                                <li class="dropdown-header">You have <span id="notificationHeader" runat="server">0</span> new notifications
+                                    <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                                </li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
+                                <asp:Repeater ID="NotificationRepeater" runat="server">
+                                    <ItemTemplate>
+                                        <li class="notification-item <%# Eval("read_status").ToString() == "Read" ? "read-notification" : "" %>">
+                                            <i class='<%# GetNotificationIcon(Eval("cont_status").ToString()) %>'></i>
+                                            <div>
+                                                <h4>
+                                                    <asp:LinkButton
+                                                        ID="lnkNotification"
+                                                        runat="server"
+                                                        CommandArgument='<%# Eval("cont_id") %>'
+                                                        OnClick="Notification_Click"
+                                                        CssClass="notification-link"><%# Eval("cont_rep_name") %> - <%# Eval("cont_comp_name") %></asp:LinkButton>
+                                                    <asp:Literal ID="litNewBadge" runat="server" Visible='<%# Eval("read_status").ToString() == "Unread" %>'>
+                                                        <span class="badge bg-danger" style="color: white;">New</span>
+                                                    </asp:Literal>
+                                                </h4>
+                                                <p><%# Eval("cont_status") %></p>
+                                                <p><%# Eval("cont_created_at") %> ago</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                    </ItemTemplate>
+                                </asp:Repeater>
 
-                                <li>
-                                    <hr class="dropdown-divider">
+                                <li class="dropdown-footer">
+                                    <a href="#">Show all notifications</a>
                                 </li>
-
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
                             </ul>
-                            <!-- End Notification Dropdown Items -->
-
                         </li>
-                        <!-- End Notification Nav -->
+
+                        <%--end of notification--%>
+
+
 
                         <li class="nav-item dropdown pe-3">
 
@@ -449,7 +526,6 @@
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center" href="SAM_AccountSettings.aspx">
                                         <i class="bi bi-gear"></i>
@@ -604,15 +680,15 @@
             <main id="main" class="main">
 
                 <div class="pagetitle">
-                    <h1 style="padding-top: 20px; color: chartreuse">Manage Accounts</h1>
-                    <nav>
+                    <h1 style="padding-top: -5px; color: chartreuse">Employees</h1>
+                    <%--<nav>
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="SAM_Dashboard.aspx">Dashboard</a></li>
                             <li class="breadcrumb-item"><a href="admin_manage_account.aspx">Manage Accounts   </a></li>
                             <li class="breadcrumb-item">Account Manager </li>
 
                         </ol>
-                    </nav>
+                    </nav>--%>
                 </div>
                 <!-- End Page Title -->
 
@@ -766,6 +842,9 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="od-tab" data-bs-toggle="tab" data-bs-target="#od" type="button" role="tab" aria-controls="od" aria-selected="false" style="color: #061f0d; font-weight: 900">Operational Dispatcher</button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="hauler-tab" data-bs-toggle="tab" data-bs-target="#hauler" type="button" role="tab" aria-controls="hauler" aria-selected="false" style="color: #061f0d; font-weight: 900">Hauler</button>
+                        </li>
                     </ul>
 
 
@@ -813,7 +892,7 @@
                                                 OnClick="Unsuspend_Click"
                                                 OnClientClick="return confirm('Are you sure you want to Unsuspend this account manager?');"
                                                 Visible='<%# Eval("emp_status").ToString() == "Suspend" %>' CommandArgument='<%# Eval("emp_id") %>' />
-                                            <asp:Label ID="Label9" runat="server" Text='<%# Eval("emp_status")%>' Visible='<%# Eval("emp_status").ToString() == "Inactive" %>' />
+                                            <asp:Label class="badge bg-success" ID="Label9" runat="server" Text='<%# Eval("emp_status")%>' Visible='<%# Eval("emp_status").ToString() == "Inactive" %>' />
                                             <asp:Button Style="font-size: 10px; color: lawngreen; font-weight: bold;" ID="btnSuspend" runat="server" Text='<%# Eval("emp_status") + " ▲"%>'
                                                 OnClick="Suspend_Click"
                                                 OnClientClick="return confirm('Are you sure you want to Suspend this account manager?');"
@@ -1070,6 +1149,83 @@
                             </asp:GridView>
                             <%-- </div>--%>
                         </div>
+
+                        <div class="tab-pane fade" id="hauler" role="tabpanel" aria-labelledby="hauler-tab">
+
+                            <%--<h1 style="color: #f40f0f; padding-top: 50px; padding-bottom: 0; font-family: 'Raleway',sans-serif; font-size: 62px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center; text-transform: uppercase;">Operational Dispatcher
+    </h1>--%>
+
+                            <%--<div class="gridview-container">--%>
+                            <asp:GridView Style="width: 100%; word-break: break-all; table-layout: fixed" ID="gridView5" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True"
+                                DataKeyNames="emp_id" AllowPaging="False" CellPadding="20" GridLines="None">
+                                <AlternatingRowStyle BackColor="white" ForeColor="Black" />
+
+                                <Columns>
+                                    <asp:BoundField DataField="emp_id" HeaderText="ID" InsertVisible="False" ReadOnly="True" SortExpression="emp_id" ItemStyle-Width="100px">
+                                        <ItemStyle Width="100px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="emp_fname" HeaderText="First Name" SortExpression="emp_fname" ItemStyle-Width="150px">
+                                        <ItemStyle Width="150px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="emp_mname" HeaderText="M.I" SortExpression="emp_mname" ItemStyle-Width="100px">
+                                        <ItemStyle Width="100px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="emp_lname" HeaderText="Last Name" SortExpression="emp_lname" ItemStyle-Width="150px">
+                                        <ItemStyle Width="150px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="emp_contact" HeaderText="Contact" SortExpression="emp_contact" ItemStyle-Width="100px">
+                                        <ItemStyle Width="100px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="emp_email" HeaderText="Email" SortExpression="emp_email" ItemStyle-Width="200px">
+                                        <ItemStyle Width="200px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="emp_created_at" HeaderText="Created At" SortExpression="emp_created_at" ItemStyle-Width="150px">
+                                        <ItemStyle Width="150px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="emp_updated_at" HeaderText="Updated At" SortExpression="emp_updated_at" ItemStyle-Width="150px">
+                                        <ItemStyle Width="150px" Wrap="true" />
+                                    </asp:BoundField>
+
+                                    <asp:TemplateField HeaderText="Status">
+                                        <ItemTemplate>
+                                            <asp:Button Style="font-size: 10px; color: orangered; font-weight: bold;" ID="btnUnsuspend" runat="server" Text='<%# Eval("emp_status") + " ▼"%>'
+                                                OnClick="Unsuspend_Click"
+                                                OnClientClick="return confirm('Are you sure you want to Unsuspend this account manager?');"
+                                                Visible='<%# Eval("emp_status").ToString() == "Suspend" %>' CommandArgument='<%# Eval("emp_id") %>' />
+                                            <asp:Label ID="Label9" runat="server" Text='<%# Eval("emp_status")%>' Visible='<%# Eval("emp_status").ToString() == "Inactive" %>' />
+                                            <asp:Button Style="font-size: 10px; color: lawngreen; font-weight: bold;" ID="btnSuspend" runat="server" Text='<%# Eval("emp_status") + " ▲"%>'
+                                                OnClick="Suspend_Click"
+                                                OnClientClick="return confirm('Are you sure you want to Suspend this account manager?');"
+                                                Visible='<%# Eval("emp_status").ToString() == "Active" %>' CommandArgument='<%# Eval("emp_id") %>' />
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+
+                                    <asp:TemplateField HeaderText="Action">
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="update" runat="server" OnClick="Update_Click" CommandArgument='<%# Eval("emp_id") %>'>
+                                                <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
+                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("emp_id") %>' OnClientClick="return confirm('Are you sure you want to remove this account manager?');">
+                                                <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
+                                            </asp:LinkButton>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
+
+                                <RowStyle BackColor="White" ForeColor="Black" />
+                                <EditRowStyle BackColor="#90EE90" />
+                                <FooterStyle BackColor="Black" Font-Bold="True" ForeColor="#f9cfb4" />
+                                <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="None" />
+                                <PagerStyle BorderColor="#CC9900" Font-Size="20px" BackColor="White" ForeColor="#f9cfb4" HorizontalAlign="Center" />
+                                <SelectedRowStyle BackColor="#C5BBAF" Font-Bold="True" ForeColor="White" />
+                                <SortedAscendingCellStyle BackColor="Black" />
+                                <SortedAscendingHeaderStyle BackColor="#246B61" />
+                                <SortedDescendingCellStyle BackColor="Black" />
+                                <SortedDescendingHeaderStyle BackColor="#15524A" />
+                            </asp:GridView>
+                        </div>
+
+
                     </div>
 
                 </section>
@@ -1254,6 +1410,15 @@
                                         </div>
                                     </div>
 
+                                    <!-- Dropdown (Role) -->
+                                    <div class="col-6 mb-3">
+                                        <asp:Label ID="Label21" runat="server" Text="Change Role" for="inputText" Style="color: chartreuse"></asp:Label>
+                                        <asp:DropDownList ID="promoteddl" class="form-select" aria-label="Default select example" runat="server" onChange="validateRole()">
+                                        </asp:DropDownList>
+                                        <div class="invalid-feedback">Please select a role.</div>
+                                    </div>
+
+
                                     <!-- Email -->
                                     <div class="col-12 mb-3">
                                         <div class="mb-3">
@@ -1284,7 +1449,7 @@
                                     <!-- Picture Upload -->
                                     <div class="col-12 mb-3">
                                         <asp:Label ID="Label20" runat="server" Text="Picture" Style="color: chartreuse"></asp:Label>
-                                        <asp:FileUpload ID="FileUpload1" accept="image/*" class="form-control" runat="server" OnChange="previewUpdateImage();" />
+                                        <asp:FileUpload ID="FileUpload1" accept="image/*" class="form-control" runat="server" OnChange="previewImageUpdate();" />
                                         <asp:Image ID="imagePreviewUpdate" runat="server" AlternateText="Image Preview" CssClass="img-thumbnail mt-2" Style="max-width: 150px;" />
                                         <span id="fileErrorUpdate" class="text-danger" style="display: none;">File uploaded is not an image.</span>
                                     </div>
@@ -1311,8 +1476,11 @@
                 <script>
                     // Validation Functions for Add Account Manager
                     function validateFirstname() {
+                        
                         const firstname = document.getElementById('<%= emp_firstname.ClientID %>');
-                        if (!/^[A-Za-z]+$/.test(firstname.value)) {
+
+                        // Allow alphabets, spaces, and hyphens for multiple-word first names
+                        if (!/^[A-Za-z]+(?:[\s-][A-Za-z]+)*$/.test(firstname.value)) {
                             firstname.classList.add('is-invalid');
                             firstname.classList.remove('is-valid');
                         } else {
@@ -1460,8 +1628,10 @@
 
                     // Validation Functions for Update Information
                     function validateUpdateFirstname() {
-                        const firstname = document.getElementById('<%=txtbfirstname.ClientID%>');
-                        if (!/^[A-Za-z]+$/.test(firstname.value)) {
+                        const firstname = document.getElementById('<%= txtbfirstname.ClientID %>');
+
+                        // Allow alphabets, spaces, and hyphens for multiple-word first names
+                        if (!/^[A-Za-z]+(?:[\s-][A-Za-z]+)*$/.test(firstname.value)) {
                             firstname.classList.add('is-invalid');
                             firstname.classList.remove('is-valid');
                         } else {
@@ -1590,8 +1760,8 @@
                             };
                             reader.readAsDataURL(file);
                         } else {
-                            imagePreview.src = "";
-                            fileError.style.display = 'block';
+                            /*imagePreview.src = "";*/
+                            style.display = 'block';
                         }
                     }
 
@@ -1604,7 +1774,7 @@
                         validateUpdateLastname();
                         validateUpdateEmail();
                         validateUpdateContact();
-                        validateUpdatePassword();
+                        /*validateUpdatePassword();*/
                         previewImageUpdate();
 
                         if (document.querySelectorAll('.is-invalid').length > 0) {
@@ -1797,7 +1967,7 @@
             <!-- Vendor JS Files -->
             <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
             <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-            fgen
+            
             <script src="assets/vendor/chart.js/chart.umd.js"></script>
             <script src="assets/vendor/echarts/echarts.min.js"></script>
             <script src="assets/vendor/quill/quill.min.js"></script>

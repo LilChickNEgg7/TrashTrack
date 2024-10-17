@@ -29,63 +29,129 @@ namespace Capstone
         {
             if (!IsPostBack)
             {
+                BindNotifications();
                 LoadRoles();
                 AccountManList();
                 SupAccountManList();
                 BillinOfficerList();
                 OperationalDispList();
+                HaulerList();
                 LoadProfile();
-
-                //// Fetch data from PostgreSQL
-                //DataTable dt = GetAccountManagers();
-
-                //// Build the HTML for the table body
-                //string tableBodyHtml = string.Empty;
-
-                //foreach (DataRow row in dt.Rows)
-                //{
-                //    tableBodyHtml += "<tr>";
-                //    tableBodyHtml += "<td>" + row["acc_id"] + "</td>"; // ID
-                //    tableBodyHtml += "<td>" + row["acc_fname"] + "</td>"; // First Name
-                //    tableBodyHtml += "<td>" + row["acc_mname"] + "</td>"; // M.I.
-                //    tableBodyHtml += "<td>" + row["acc_lname"] + "</td>"; // Last Name
-                //    tableBodyHtml += "<td>" + row["acc_contact"] + "</td>"; // Contact
-                //    tableBodyHtml += "<td>" + row["acc_email"] + "</td>"; // Email
-                //    tableBodyHtml += "<td>" + Convert.ToDateTime(row["acc_created_at"]).ToString("yyyy/MM/dd") + "</td>"; // Created At
-                //    tableBodyHtml += "<td>" + Convert.ToDateTime(row["acc_updated_at"]).ToString("yyyy/MM/dd") + "</td>"; // Updated At
-                //    tableBodyHtml += "<td>" + row["acc_status"] + "</td>"; // Status
-
-                //    // Status Button (Suspend/Unsuspend)
-                //    if (row["acc_status"].ToString() == "Active")
-                //    {
-                //        tableBodyHtml += "<td><button style='color: lawngreen;' onclick=\"suspend(" + row["acc_id"] + ")\">Suspend ▲</button></td>";
-                //    }
-                //    else if (row["acc_status"].ToString() == "Suspend")
-                //    {
-                //        tableBodyHtml += "<td><button style='color: orangered;' onclick=\"unsuspend(" + row["acc_id"] + ")\">Unsuspend ▼</button></td>";
-                //    }
-                //    else
-                //    {
-                //        tableBodyHtml += "<td>" + row["acc_status"] + "</td>";
-                //    }
-
-                //    // Action Buttons (Edit and Remove)
-                //    tableBodyHtml += "<td>";
-                //    tableBodyHtml += "<a href='EditAccount.aspx?acc_id=" + row["acc_id"] + "'><img src='~/Pictures/editlogo.png' width='35%' height='35%' style='margin-right: 10px;' alt='Edit' /></a>";
-                //    tableBodyHtml += "<a href='RemoveAccount.aspx?acc_id=" + row["acc_id"] + "' onclick=\"return confirm('Are you sure you want to remove this account manager?');\"><img src='~/Pictures/removeBtn.png' width='35%' height='35%' alt='Remove' /></a>";
-                //    tableBodyHtml += "</td>";
-
-                //    tableBodyHtml += "</tr>";
-                //}
-
-                //// Log table body HTML to check content
-                //System.Diagnostics.Debug.WriteLine("Table Body HTML: " + tableBodyHtml);
-
-                //// Inject the HTML into the Literal control
-                //tableBodyLiteral.Text = tableBodyHtml;
+                LoadChangeRoles();
             }
 
         }
+
+        protected void BindNotifications()
+        {
+            using (var db = new NpgsqlConnection(con))
+            {
+                db.Open();
+                using (var cmd = db.CreateCommand())
+                {
+                    // Query to fetch recent contractual applications that are not deleted
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = "SELECT cont_id, cont_rep_name, cont_comp_name, cont_status, cont_created_at, read_status FROM contractual WHERE cont_status != 'Deleted' ORDER BY cont_created_at DESC";
+
+                    DataTable dtNotifications = new DataTable();
+                    NpgsqlDataAdapter sda = new NpgsqlDataAdapter(cmd);
+                    sda.Fill(dtNotifications);
+
+                    // Bind the data to the Repeater
+                    NotificationRepeater.DataSource = dtNotifications;
+                    NotificationRepeater.DataBind();
+
+                    // Update the notification count and header dynamically
+                    int notificationCountValue = 0; // Initialize count variable
+
+                    // Query to count unread notifications
+                    cmd.CommandText = "SELECT COUNT(*) FROM contractual WHERE read_status = 'Unread' AND cont_status != 'Deleted'";
+                    notificationCountValue = Convert.ToInt32(cmd.ExecuteScalar()); // Get the count
+
+                    // Access the server control 'notificationCount' (ensure this is the actual control name in .aspx)
+                    notificationCount.InnerText = notificationCountValue.ToString(); // Update the count
+                    notificationHeader.InnerText = notificationCountValue.ToString(); // Assuming 'notificationHeader' is an HtmlGenericControl
+                }
+                db.Close();
+            }
+        }
+
+
+        // Helper function to get the corresponding icon based on the status
+        protected string GetNotificationIcon(string status)
+        {
+            switch (status)
+            {
+                case "Pending":
+                    return "bi bi-exclamation-circle text-warning";
+                case "Declined":
+                    return "bi bi-x-circle text-danger";
+                case "Approved":
+                    return "bi bi-check-circle text-success";
+                default:
+                    return "bi bi-info-circle text-primary";
+            }
+        }
+
+        protected void NotificationRepeater_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName == "MarkAsRead")
+            {
+                int notificationId = Convert.ToInt32(e.CommandArgument);
+
+                // Call a method to mark this notification as read in the database
+                MarkNotificationAsRead(notificationId);
+
+                // Update the notification count
+                int currentCount = Convert.ToInt32(notificationCount.InnerText); // Get current count
+                notificationCount.InnerText = (currentCount - 1).ToString(); // Decrement the count
+
+                // Update the header count as well
+                notificationHeader.InnerText = notificationCount.InnerText;
+
+                // Re-fetch and re-bind the notifications to reflect the updated status
+                BindNotifications();
+            }
+        }
+
+        private void MarkNotificationAsRead(int notificationId)
+        {
+            using (var db = new NpgsqlConnection(con))
+            {
+                db.Open();
+                using (var cmd = db.CreateCommand())
+                {
+                    // Update the notification status in the database
+                    cmd.CommandText = "UPDATE contractual SET read_status = 'Read' WHERE cont_id = @notificationId";
+                    cmd.Parameters.AddWithValue("@notificationId", notificationId);
+                    cmd.ExecuteNonQuery();
+                }
+                db.Close();
+            }
+        }
+
+
+        protected void Notification_Click(object sender, EventArgs e)
+        {
+            // Get the clicked notification's ID
+            LinkButton lnkButton = (LinkButton)sender;
+            int notificationId = Convert.ToInt32(lnkButton.CommandArgument);
+
+            // Logic to handle the notification (mark as read)
+            MarkNotificationAsRead(notificationId);
+
+            // Update notification count
+            int currentCount = Convert.ToInt32(notificationCount.InnerText);
+            notificationCount.InnerText = (currentCount - 1).ToString();
+
+            // Optionally: Update the notification header count
+            int headerCount = Convert.ToInt32(notificationHeader.InnerText);
+            notificationHeader.InnerText = (headerCount - 1).ToString();
+
+            // Re-bind notifications to update the view
+            BindNotifications();
+        }
+
 
 
 
@@ -124,26 +190,6 @@ namespace Capstone
             }
         }
 
-
-
-        // Function to retrieve data from PostgreSQL
-        private DataTable GetAccountManagers()
-        {
-            DataTable dt = new DataTable();
-            using (NpgsqlConnection conn = new NpgsqlConnection(con))
-            {
-                conn.Open();
-                string query = "SELECT emp_id, emp_fname, emp_mname, emp_lname, emp_contact, emp_email, emp_created_at, emp_updated_at, emp_status FROM employee";
-                using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
-                {
-                    using (NpgsqlDataAdapter da = new NpgsqlDataAdapter(cmd))
-                    {
-                        da.Fill(dt);
-                    }
-                }
-            }
-            return dt;
-        }
 
         private void LoadProfile()
         {
@@ -197,6 +243,8 @@ namespace Capstone
                     }
                 }
 
+
+
                 // Check if the profile_image control exists and is not null
                 if (profile_image != null)
                 {
@@ -249,7 +297,7 @@ namespace Capstone
                     cmd.CommandText = "SELECT * FROM employee WHERE emp_status != 'Deleted' AND role_id = 2 AND emp_id != @id ORDER BY emp_id, emp_status";
 
                     // Ensure the parameter type is correct (assuming emp_id is an integer)
-                    cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, Convert.ToInt32(Session["id"]));
+                    cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, Convert.ToInt32(Session["sam_id"]));
 
                     // Execute the query and bind to the GridView
                     DataTable admin_datatable = new DataTable();
@@ -259,6 +307,7 @@ namespace Capstone
                     gridView1.DataSource = admin_datatable;
                     gridView1.DataBind();
                 }
+                db.Close();
             }
         }
 
@@ -313,7 +362,7 @@ namespace Capstone
         }
 
 
-        protected void OperationalDispList()
+        protected void HaulerList()
         {
             using (var db = new NpgsqlConnection(con))
             {
@@ -329,12 +378,62 @@ namespace Capstone
                     NpgsqlDataAdapter admin_sda = new NpgsqlDataAdapter(cmd);
                     admin_sda.Fill(admin_datatable);
 
+                    gridView5.DataSource = admin_datatable; ;
+                    gridView5.DataBind();
+                }
+                db.Close();
+            }
+        }
+
+
+        protected void OperationalDispList()
+        {
+            using (var db = new NpgsqlConnection(con))
+            {
+                db.Open();
+                using (var cmd = db.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    // Modified the query to match the column names in the account_manager table
+                    cmd.CommandText = "SELECT * FROM employee WHERE emp_status != 'Deleted' AND role_id = 5 AND emp_id != @id ORDER BY emp_id, emp_status";
+                    cmd.Parameters.AddWithValue("@id", Convert.ToInt32(Session["id"]));
+
+                    DataTable admin_datatable = new DataTable();
+                    NpgsqlDataAdapter admin_sda = new NpgsqlDataAdapter(cmd);
+                    admin_sda.Fill(admin_datatable);
+
                     gridView4.DataSource = admin_datatable; ;
                     gridView4.DataBind();
                 }
                 db.Close();
             }
         }
+
+
+
+
+        //protected void OperationalDispList()
+        //{
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            // Modified the query to match the column names in the account_manager table
+        //            cmd.CommandText = "SELECT * FROM employee WHERE emp_status != 'Deleted' AND role_id = 5 AND emp_id != @id ORDER BY emp_id, emp_status";
+        //            cmd.Parameters.AddWithValue("@id", Convert.ToInt32(Session["id"]));
+
+        //            DataTable admin_datatable = new DataTable();
+        //            NpgsqlDataAdapter admin_sda = new NpgsqlDataAdapter(cmd);
+        //            admin_sda.Fill(admin_datatable);
+
+        //            gridView4.DataSource = admin_datatable; ;
+        //            gridView4.DataBind();
+        //        }
+        //        db.Close();
+        //    }
+        //}
 
 
 
@@ -676,6 +775,192 @@ namespace Capstone
         //}
 
 
+        //LATEST TO UPDATE 
+        //protected void UpdateAdminInfo(object sender, EventArgs e)
+        //{
+        //    int id;
+        //    if (!int.TryParse(txtbxID.Text, out id))
+        //    {
+        //        Response.Write("<script>alert('Invalid ID format.')</script>");
+        //        return;
+        //    }
+
+        //    string firstname = txtbfirstname.Text;
+        //    string mi = txtmi.Text;
+        //    string lastname = txtLastname.Text;
+        //    string contact = txtContact.Text;
+        //    string email = txtEmail.Text;
+        //    string pass = TextBox1.Text;
+
+        //    byte[] uploadedImageData = null;
+        //    if (FileUpload1.HasFile)
+        //    {
+        //        try
+        //        {
+        //            string fileExtension = Path.GetExtension(FileUpload1.PostedFile.FileName).ToLower();
+        //            string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+        //            if (allowedExtensions.Contains(fileExtension))
+        //            {
+        //                uploadedImageData = FileUpload1.FileBytes;
+        //            }
+        //            else
+        //            {
+        //                Response.Write("<script>alert('Only image files are allowed (jpg, jpeg, png, gif).')</script>");
+        //                return;
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Response.Write("<script>alert('Error uploading image: " + ex.Message + "')</script>");
+        //            return;
+        //        }
+        //    }
+
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+
+        //        // Check if the email already exists (excluding the current admin's email)
+        //        string emailCheckQuery = "SELECT COUNT(*) FROM employee WHERE emp_email = @newEmail AND emp_id <> @id";
+        //        using (var cmdCheckEmail = new NpgsqlCommand(emailCheckQuery, db))
+        //        {
+        //            cmdCheckEmail.Parameters.AddWithValue("@newEmail", email);
+        //            cmdCheckEmail.Parameters.AddWithValue("@id", id);
+
+        //            int emailExists = Convert.ToInt32(cmdCheckEmail.ExecuteScalar());
+        //            if (emailExists > 0)
+        //            {
+        //                Response.Write("<script>alert('Email is already taken. Please use a different email.')</script>");
+        //                return;
+        //            }
+        //        }
+
+        //        // Get current data for the admin based on the ID
+        //        string selectQuery = "SELECT emp_fname, emp_mname, emp_lname, emp_contact, emp_email, emp_password, emp_profile FROM employee WHERE emp_id = @id";
+        //        using (var cmdSelect = new NpgsqlCommand(selectQuery, db))
+        //        {
+        //            cmdSelect.Parameters.AddWithValue("@id", id);
+
+        //            string originalFirstname = null;
+        //            string originalMi = null;
+        //            string originalLastname = null;
+        //            string originalContact = null;
+        //            string originalEmail = null;
+        //            string originalPassword = null;
+        //            byte[] originalProfileImage = null;
+
+        //            using (var reader = cmdSelect.ExecuteReader())
+        //            {
+        //                if (reader.Read())
+        //                {
+        //                    originalFirstname = reader["emp_fname"].ToString();
+        //                    originalMi = reader["emp_mname"].ToString();
+        //                    originalLastname = reader["emp_lname"].ToString();
+        //                    originalContact = reader["emp_contact"].ToString();
+        //                    originalEmail = reader["emp_email"].ToString();
+        //                    originalPassword = reader["emp_password"].ToString();
+        //                    originalProfileImage = reader["emp_profile"] as byte[];
+        //                }
+        //                else
+        //                {
+        //                    Response.Write("<script>alert('No data found for the specified ID.')</script>");
+        //                    return;
+        //                }
+        //            }
+
+        //            var updateFields = new List<string>();
+        //            var updateParams = new List<NpgsqlParameter>();
+        //            var changes = new List<string>();
+
+        //            // Check and update each field
+        //            if (!string.IsNullOrEmpty(firstname) && firstname != originalFirstname)
+        //            {
+        //                updateFields.Add("emp_fname = @firstname");
+        //                updateParams.Add(new NpgsqlParameter("@firstname", firstname));
+        //                changes.Add($"First Name: {originalFirstname} → {firstname}");
+        //            }
+        //            if (!string.IsNullOrEmpty(mi) && mi != originalMi)
+        //            {
+        //                updateFields.Add("emp_mname = @mi");
+        //                updateParams.Add(new NpgsqlParameter("@mi", mi));
+        //                changes.Add($"Middle Initial: {originalMi} → {mi}");
+        //            }
+        //            if (!string.IsNullOrEmpty(lastname) && lastname != originalLastname)
+        //            {
+        //                updateFields.Add("emp_lname = @lastname");
+        //                updateParams.Add(new NpgsqlParameter("@lastname", lastname));
+        //                changes.Add($"Last Name: {originalLastname} → {lastname}");
+        //            }
+        //            if (!string.IsNullOrEmpty(contact) && contact != originalContact)
+        //            {
+        //                updateFields.Add("emp_contact = @contact");
+        //                updateParams.Add(new NpgsqlParameter("@contact", contact));
+        //                changes.Add($"Contact: {originalContact} → {contact}");
+        //            }
+        //            if (!string.IsNullOrEmpty(email) && email != originalEmail)
+        //            {
+        //                updateFields.Add("emp_email = @email");
+        //                updateParams.Add(new NpgsqlParameter("@email", email));
+        //                changes.Add($"Email: {originalEmail} → {email}");
+        //            }
+        //            if (!string.IsNullOrEmpty(pass) && pass != originalPassword)
+        //            {
+        //                string hashedPassword = HashPassword(pass);
+        //                updateFields.Add("emp_password = @password");
+        //                updateParams.Add(new NpgsqlParameter("@password", hashedPassword));
+        //                //changes.Add("Password: (Updated)");
+        //                changes.Add($"Password: {pass}");
+
+        //            }
+
+        //            if (uploadedImageData != null)
+        //            {
+        //                updateFields.Add("emp_profile = @profile");
+        //                updateParams.Add(new NpgsqlParameter("@profile", uploadedImageData));
+        //                changes.Add("Profile Picture: Updated");
+        //            }
+
+        //            if (updateFields.Count > 0)
+        //            {
+        //                string updateQuery = $"UPDATE employee SET {string.Join(", ", updateFields)} WHERE emp_id = @id";
+        //                using (var cmdUpdate = new NpgsqlCommand(updateQuery, db))
+        //                {
+        //                    cmdUpdate.Parameters.AddWithValue("@id", id);
+        //                    cmdUpdate.Parameters.AddRange(updateParams.ToArray());
+
+        //                    int updatedRows = cmdUpdate.ExecuteNonQuery();
+        //                    if (updatedRows > 0)
+        //                    {
+        //                        // Notify changes via email
+        //                        string changeDetails = string.Join("\n", changes);
+        //                        string subject = "Account Information Update Notification";
+        //                        string body = $"Dear Staff,\n\nYour account information has been updated. Below are the details of the changes:\n\n{changeDetails}\n\nIf you did not request these changes, please contact support immediately.\n\nBest regards,\nThe Account Manager Team";
+
+        //                        if (!string.IsNullOrEmpty(email) && email != originalEmail)
+        //                        {
+        //                            Send_Email(originalEmail, subject, body);
+        //                            Send_Email(email, subject, body);
+        //                        }
+        //                        else
+        //                        {
+        //                            Send_Email(originalEmail, subject, body);
+        //                        }
+
+        //                        Response.Write("<script>alert('Admin information updated successfully!')</script>");
+        //                    }
+        //                    else
+        //                    {
+        //                        Response.Write("<script>alert('Failed to update admin information.')</script>");
+        //                    }
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Response.Write("<script>alert('No changes detected.')</script>");
+        //            }
+        //        }
+        //    }
+        //}
 
         protected void UpdateAdminInfo(object sender, EventArgs e)
         {
@@ -693,29 +978,32 @@ namespace Capstone
             string email = txtEmail.Text;
             string pass = TextBox1.Text;
 
+            // Get selected role from the dropdown list
+            int roleId = Convert.ToInt32(promoteddl.SelectedValue);
+
             byte[] uploadedImageData = null;
-            if (FileUpload1.HasFile)
-            {
-                try
-                {
-                    string fileExtension = Path.GetExtension(FileUpload1.PostedFile.FileName).ToLower();
-                    string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
-                    if (allowedExtensions.Contains(fileExtension))
-                    {
-                        uploadedImageData = FileUpload1.FileBytes;
-                    }
-                    else
-                    {
-                        Response.Write("<script>alert('Only image files are allowed (jpg, jpeg, png, gif).')</script>");
-                        return;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Response.Write("<script>alert('Error uploading image: " + ex.Message + "')</script>");
-                    return;
-                }
-            }
+            //if (FileUpload1.HasFile)
+            //{
+            //    try
+            //    {
+            //        string fileExtension = Path.GetExtension(FileUpload1.PostedFile.FileName).ToLower();
+            //        string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+            //        if (allowedExtensions.Contains(fileExtension))
+            //        {
+            //            uploadedImageData = FileUpload1.FileBytes;
+            //        }
+            //        else
+            //        {
+            //            Response.Write("<script>alert('Only image files are allowed (jpg, jpeg, png, gif).')</script>");
+            //            return;
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Response.Write("<script>alert('Error uploading image: " + ex.Message + "')</script>");
+            //        return;
+            //    }
+            //}
 
             using (var db = new NpgsqlConnection(con))
             {
@@ -737,7 +1025,7 @@ namespace Capstone
                 }
 
                 // Get current data for the admin based on the ID
-                string selectQuery = "SELECT emp_fname, emp_mname, emp_lname, emp_contact, emp_email, emp_password, emp_profile FROM employee WHERE emp_id = @id";
+                string selectQuery = "SELECT emp_fname, emp_mname, emp_lname, emp_contact, emp_email, emp_password, emp_profile, role_id FROM employee WHERE emp_id = @id";
                 using (var cmdSelect = new NpgsqlCommand(selectQuery, db))
                 {
                     cmdSelect.Parameters.AddWithValue("@id", id);
@@ -749,6 +1037,7 @@ namespace Capstone
                     string originalEmail = null;
                     string originalPassword = null;
                     byte[] originalProfileImage = null;
+                    int originalRoleId = 0;
 
                     using (var reader = cmdSelect.ExecuteReader())
                     {
@@ -761,6 +1050,7 @@ namespace Capstone
                             originalEmail = reader["emp_email"].ToString();
                             originalPassword = reader["emp_password"].ToString();
                             originalProfileImage = reader["emp_profile"] as byte[];
+                            originalRoleId = Convert.ToInt32(reader["role_id"]); // Get the current role ID
                         }
                         else
                         {
@@ -809,14 +1099,21 @@ namespace Capstone
                         string hashedPassword = HashPassword(pass);
                         updateFields.Add("emp_password = @password");
                         updateParams.Add(new NpgsqlParameter("@password", hashedPassword));
-                        changes.Add("Password: (Updated)");
+                        changes.Add($"Password: (Updated)"); // Change details might be better to mention as 'Updated'
                     }
-
                     if (uploadedImageData != null)
                     {
                         updateFields.Add("emp_profile = @profile");
                         updateParams.Add(new NpgsqlParameter("@profile", uploadedImageData));
                         changes.Add("Profile Picture: Updated");
+                    }
+
+                    // Update role if it has changed
+                    if (roleId != originalRoleId)
+                    {
+                        updateFields.Add("role_id = @roleId");
+                        updateParams.Add(new NpgsqlParameter("@roleId", roleId));
+                        changes.Add($"Role: {originalRoleId} → {roleId}"); // Adding change to changes list
                     }
 
                     if (updateFields.Count > 0)
@@ -833,7 +1130,7 @@ namespace Capstone
                                 // Notify changes via email
                                 string changeDetails = string.Join("\n", changes);
                                 string subject = "Account Information Update Notification";
-                                string body = $"Dear Admin,\n\nYour account information has been updated. Below are the details of the changes:\n\n{changeDetails}\n\nIf you did not request these changes, please contact support immediately.\n\nBest regards,\nThe Account Manager Team";
+                                string body = $"Dear Staff,\n\nYour account information has been updated. Below are the details of the changes:\n\n{changeDetails}\n\nIf you did not request these changes, please contact support immediately.\n\nBest regards,\nThe Account Manager Team";
 
                                 if (!string.IsNullOrEmpty(email) && email != originalEmail)
                                 {
@@ -846,6 +1143,11 @@ namespace Capstone
                                 }
 
                                 Response.Write("<script>alert('Admin information updated successfully!')</script>");
+                                AccountManList();
+                                SupAccountManList();
+                                BillinOfficerList();
+                                OperationalDispList();
+                                HaulerList();
                             }
                             else
                             {
@@ -857,9 +1159,12 @@ namespace Capstone
                     {
                         Response.Write("<script>alert('No changes detected.')</script>");
                     }
+
                 }
+                db.Close();
             }
         }
+
 
 
 
@@ -981,14 +1286,22 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                         {
                             // Success: Account Manager added
                             Response.Write("<script>alert('Account Manager Added!')</script>");
-                            AccountManList();  // Reload or update the list of Account Managers
+                            AccountManList();
+                            SupAccountManList();
+                            BillinOfficerList();
+                            OperationalDispList();
+                            HaulerList();
                             Send_Email(toAddress, subject, body);  // Optionally send a welcome email
                         }
                         else
                         {
                             // Failure: Account Manager registration failed
                             Response.Write("<script>alert('Account Manager failed to Register!')</script>");
-                            AccountManList();  // Reload or update the list of Account Managers
+                            AccountManList();
+                            SupAccountManList();
+                            BillinOfficerList();
+                            OperationalDispList();
+                            HaulerList();
                         }
                     }
 
@@ -1046,6 +1359,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
             emp_lastname.Text = "";
             emp_email.Text = "";
             emp_pass.Text = "";
+            emp_address.Text = "";
             emp_contact.Text = "";
             emp_role.SelectedIndex = 0;
             //lblErrorMessage.Text = ""; // Clear any error messages
@@ -1084,23 +1398,86 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
         }
 
 
-        //IMODIFY PALANG
+
+        //private void LoadChangeRoles()
+        //{
+        //    using (NpgsqlConnection conn = new NpgsqlConnection(con))
+        //    {
+        //        string query = "SELECT role_id, role_name FROM roles ORDER BY role_id";
+        //        NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
+
+        //        try
+        //        {
+        //            conn.Open();
+        //            NpgsqlDataAdapter da = new NpgsqlDataAdapter(cmd);
+        //            DataTable dt = new DataTable();
+        //            da.Fill(dt);
+
+        //            promoteddl.DataSource = dt;
+        //            promoteddl.DataTextField = "role_name";
+        //            promoteddl.DataValueField = "role_id";
+        //            promoteddl.DataBind();
+
+        //            // Clear existing items and add the default "Select Role" option at the top
+        //            promoteddl.Items.Clear();
+        //            ListItem selectRoleItem = new ListItem("--Select Role--", "0");
+        //            selectRoleItem.Attributes.Add("disabled", "true"); // Disable the item
+        //            selectRoleItem.Attributes.Add("selected", "true"); // Set as selected
+        //            promoteddl.Items.Add(selectRoleItem);
+        //            promoteddl.Items.AddRange(dt.AsEnumerable().Select(row => new ListItem(row["role_name"].ToString(), row["role_id"].ToString())).ToArray());
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            // Handle exception (logging, showing a message, etc.)
+        //        }
+        //    }
+        //}
+
+        private void LoadChangeRoles()
+        {
+            using (NpgsqlConnection conn = new NpgsqlConnection(con))
+            {
+                string query = "SELECT role_id, role_name FROM roles ORDER BY role_id";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
+
+                try
+                {
+                    conn.Open();
+                    NpgsqlDataAdapter da = new NpgsqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    // Clear existing items and add the default "Select Role" option at the top
+                    promoteddl.Items.Clear();
+                    ListItem selectRoleItem = new ListItem("--Select Role--", "0");
+                    selectRoleItem.Attributes.Add("disabled", "true"); // Disable the item
+                    selectRoleItem.Attributes.Add("selected", "true"); // Set as selected
+                    promoteddl.Items.Add(selectRoleItem);
+                    promoteddl.Items.AddRange(dt.AsEnumerable()
+                        .Select(row => new ListItem(row["role_name"].ToString(), row["role_id"].ToString()))
+                        .ToArray());
+                }
+                catch (Exception ex)
+                {
+                    // Handle exception (logging, showing a message, etc.)
+                }
+            }
+        }
+
         protected void Update_Click(object sender, EventArgs e)
         {
             LinkButton btn = sender as LinkButton;
-            int id = Convert.ToInt32(btn.CommandArgument);  // Get the admin ID from the button's CommandArgument
-            //byte[] imageData = null;  // To hold the profile image data
+            int id = Convert.ToInt32(btn.CommandArgument); // Get the employee ID from the button's CommandArgument
 
             try
             {
-                // Connect to PostgreSQL
                 using (var db = new NpgsqlConnection(con))
                 {
                     db.Open();
 
-                    // Define the SQL query to get the admin details based on the admin ID (acc_id)
+                    // Query to get employee details along with the role_id
                     string query = @"
-                SELECT emp_fname, emp_mname, emp_lname, emp_contact, emp_email, emp_profile 
+                SELECT emp_fname, emp_mname, emp_lname, emp_contact, emp_email, emp_profile, role_id 
                 FROM employee 
                 WHERE emp_id = @acc_id";
 
@@ -1111,7 +1488,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                         // Execute the query
                         using (var reader = cmd.ExecuteReader())
                         {
-                            if (reader.Read()) // Check if data is available for the given admin ID
+                            if (reader.Read()) // Check if data is available for the given employee ID
                             {
                                 // Assign the data to the respective textboxes
                                 txtbfirstname.Text = reader["emp_fname"].ToString();
@@ -1119,38 +1496,37 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                                 txtLastname.Text = reader["emp_lname"].ToString();
                                 txtContact.Text = reader["emp_contact"].ToString();
                                 txtEmail.Text = reader["emp_email"].ToString();
-                                byte[] imageData = reader["emp_profile"] as byte[];  // Retrieve profile image data (byte array)
+                                byte[] imageData = reader["emp_profile"] as byte[]; // Retrieve profile image data (byte array)
 
                                 // Display profile image in the preview control
                                 if (imagePreviewUpdate != null)
                                 {
                                     if (imageData != null && imageData.Length > 0)
                                     {
-                                        try
-                                        {
-                                            string base64String = Convert.ToBase64String(imageData);
-                                            imagePreviewUpdate.ImageUrl = "data:image/jpeg;base64," + base64String;  // Set image as base64 string
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            Response.Write("<script>alert('Error converting image to Base64: " + ex.Message + "')</script>");
-                                        }
+                                        string base64String = Convert.ToBase64String(imageData);
+                                        imagePreviewUpdate.ImageUrl = "data:image/jpeg;base64," + base64String; // Set image as base64 string
                                     }
                                     else
                                     {
-                                        imagePreviewUpdate.ImageUrl = "~/Pictures/blank_prof.png";  // Default image if no profile picture found
+                                        imagePreviewUpdate.ImageUrl = "~/Pictures/blank_prof.png"; // Default image if no profile picture found
                                     }
                                 }
-                                else
+
+                                // Load roles into the dropdown
+                                LoadChangeRoles();
+
+                                // Set the selected role in the dropdown based on the role_id
+                                int roleId = Convert.ToInt32(reader["role_id"]);
+                                if (roleId > 0)
                                 {
-                                    Response.Write("<script>alert('Image preview control is not found');</script>");
+                                    promoteddl.SelectedValue = roleId.ToString(); // Set the selected value to the user's role
                                 }
                             }
                             else
                             {
-                                // Handle case when no data is found for the given admin ID
+                                // Handle case when no data is found for the given employee ID
                                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-                                    "swal('Unsuccessful!', 'Admin not found.', 'error')", true);
+                                    "swal('Unsuccessful!', 'Employee not found.', 'error')", true);
                                 return; // Exit if no data is found
                             }
                         }
@@ -1169,11 +1545,105 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
 
             // Set the ID textbox and show the modal popup
             txtbxID.Text = id.ToString();
-            this.ModalPopupExtender2.Show();  // Show the modal popup
+            this.ModalPopupExtender2.Show(); // Show the modal popup
 
             // Optionally refresh the account manager list after the modal popup
             AccountManList();
         }
+
+
+
+
+        //IMODIFY PALANG
+        //protected void Update_Click(object sender, EventArgs e)
+        //{
+        //    LinkButton btn = sender as LinkButton;
+        //    int id = Convert.ToInt32(btn.CommandArgument);  // Get the admin ID from the button's CommandArgument
+        //    //byte[] imageData = null;  // To hold the profile image data
+
+        //    try
+        //    {
+        //        // Connect to PostgreSQL
+        //        using (var db = new NpgsqlConnection(con))
+        //        {
+        //            db.Open();
+
+        //            // Define the SQL query to get the admin details based on the admin ID (acc_id)
+        //            string query = @"
+        //        SELECT emp_fname, emp_mname, emp_lname, emp_contact, emp_email, emp_profile 
+        //        FROM employee 
+        //        WHERE emp_id = @acc_id";
+
+        //            using (var cmd = new NpgsqlCommand(query, db))
+        //            {
+        //                cmd.Parameters.AddWithValue("@acc_id", id);
+
+        //                // Execute the query
+        //                using (var reader = cmd.ExecuteReader())
+        //                {
+        //                    if (reader.Read()) // Check if data is available for the given admin ID
+        //                    {
+        //                        // Assign the data to the respective textboxes
+        //                        txtbfirstname.Text = reader["emp_fname"].ToString();
+        //                        txtmi.Text = reader["emp_mname"].ToString();
+        //                        txtLastname.Text = reader["emp_lname"].ToString();
+        //                        txtContact.Text = reader["emp_contact"].ToString();
+        //                        txtEmail.Text = reader["emp_email"].ToString();
+        //                        byte[] imageData = reader["emp_profile"] as byte[];  // Retrieve profile image data (byte array)
+
+        //                        // Display profile image in the preview control
+        //                        if (imagePreviewUpdate != null)
+        //                        {
+        //                            if (imageData != null && imageData.Length > 0)
+        //                            {
+        //                                try
+        //                                {
+        //                                    string base64String = Convert.ToBase64String(imageData);
+        //                                    imagePreviewUpdate.ImageUrl = "data:image/jpeg;base64," + base64String;  // Set image as base64 string
+        //                                }
+        //                                catch (Exception ex)
+        //                                {
+        //                                    Response.Write("<script>alert('Error converting image to Base64: " + ex.Message + "')</script>");
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+        //                                imagePreviewUpdate.ImageUrl = "~/Pictures/blank_prof.png";  // Default image if no profile picture found
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            Response.Write("<script>alert('Image preview control is not found');</script>");
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        // Handle case when no data is found for the given admin ID
+        //                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
+        //                            "swal('Unsuccessful!', 'Admin not found.', 'error')", true);
+        //                        return; // Exit if no data is found
+        //                    }
+        //                }
+        //            }
+
+        //            db.Close();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle any errors
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
+        //            "swal('Unsuccessful!', '" + ex.Message + "', 'error')", true);
+        //        return; // Exit if there was an error
+        //    }
+
+        //    // Set the ID textbox and show the modal popup
+        //    txtbxID.Text = id.ToString();
+        //    this.ModalPopupExtender2.Show();  // Show the modal popup
+
+        //    // Optionally refresh the account manager list after the modal popup
+        //    AccountManList();
+        //}
 
 
 
@@ -1254,6 +1724,12 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                             AccountManList();
                         }
                     }
+                    AccountManList();
+                    SupAccountManList();
+                    BillinOfficerList();
+                    OperationalDispList();
+                    HaulerList();
+                    LoadProfile();
                     db.Close();
                 }
             }
@@ -1289,10 +1765,31 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
                                 "swal('Unsuspended!', 'Account Manager Unsuspended Successfully!', 'success')", true);
                             AccountManList();
+                            SupAccountManList();
+                            BillinOfficerList();
+                            OperationalDispList();
+                            HaulerList();
+                            LoadProfile();
                         }
+                        else
+                        {
+                            Response.Write("<script>alert('Can't unsuspend');</script>");
+                        }
+                        AccountManList();
+                        SupAccountManList();
+                        BillinOfficerList();
+                        OperationalDispList();
+                        HaulerList();
+                        LoadProfile();
                     }
                     db.Close();
                 }
+                AccountManList();
+                SupAccountManList();
+                BillinOfficerList();
+                OperationalDispList();
+                HaulerList();
+                LoadProfile();
             }
             catch (Exception ex)
             {

@@ -110,7 +110,7 @@ namespace Capstone
                 Session["sam_rolename"] = roleName;
                 // Redirect to Admin dashboard
                 Response.Write($"<script>alert('Login Successful! WELCOME {roleName.ToUpper()}');</script>");
-                Response.Redirect("SAM_AccountMan.aspx");
+                Response.Redirect("SAM_Dashboard.aspx");
                 
             }
             else if (IsAM(loginEmail, loginPass, out userId, out storedHashedPassword, out roleName))
@@ -265,11 +265,11 @@ namespace Capstone
                                     return true; // Login successful
                                 }
                             }
-                            else
-                            {
-                                // If no matching user found, show error
-                                Response.Write("<script>alert('The login credentials associated were not found or suspended!');</script>");
-                            }
+                            //else
+                            //{
+                            //    // If no matching user found, show error
+                            //    Response.Write("<script>alert('The login credentials associated were not found or suspended!');</script>");
+                            //}
                         }
                     }
                 }
@@ -332,10 +332,10 @@ namespace Capstone
                                     return true; // Login successful
                                 }
                             }
-                            else
-                            {
-                                Response.Write("<script>alert('The login credentials associated were not found or suspended!');</script>");
-                            }
+                            //else
+                            //{
+                            //    Response.Write("<script>alert('The login credentials associated were not found or suspended!');</script>");
+                            //}
                         }
                     }
                 }
@@ -394,10 +394,10 @@ namespace Capstone
                                     return true; // Login successful
                                 }
                             }
-                            else
-                            {
-                                Response.Write("<script>alert('The login credentials associated were not found or suspended!');</script>");
-                            }
+                            //else
+                            //{
+                            //    Response.Write("<script>alert('The login credentials associated were not found or suspended!');</script>");
+                            //}
                         }
                     }
                 }
@@ -455,10 +455,10 @@ namespace Capstone
                                     return true; // Login successful
                                 }
                             }
-                            else
-                            {
-                                Response.Write("<script>alert('The login credentials associated were not found or suspended!');</script>");
-                            }
+                            //else
+                            //{
+                            //    Response.Write("<script>alert('The login credentials associated were not found or suspended!');</script>");
+                            //}
                         }
                     }
                 }
