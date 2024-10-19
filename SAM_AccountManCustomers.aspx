@@ -797,12 +797,12 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="sam-tab" data-bs-toggle="tab" data-bs-target="#sam" type="button" role="tab" aria-controls="sam" aria-selected="true" style="color: #061f0d; font-weight: 900">Contractual</button>
                         </li>
-                        <%--<li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation">
                             <button class="nav-link" id="am-tab" data-bs-toggle="tab" data-bs-target="#am" type="button" role="tab" aria-controls="am" aria-selected="false" style="color: #061f0d; font-weight: 900">Non-Contractual</button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="apply-tab" data-bs-toggle="tab" data-bs-target="#apply" type="button" role="tab" aria-controls="apply" aria-selected="false" style="color: #061f0d; font-weight: 900">Requests for Contractual</button>
-                        </li>--%>
+                        </li>
                     </ul>
 
 
@@ -961,56 +961,56 @@
 
 
                         <div class="tab-pane fade" id="apply" role="tabpanel" aria-labelledby="apply-tab">
-                            <asp:GridView Style="width: 100%; word-break: break-all; table-layout: fixed" ID="gridView3" runat="server" 
-    AutoGenerateColumns="False" ShowHeaderWhenEmpty="True"
-    DataKeyNames="cont_id" AllowPaging="False" CellPadding="20" GridLines="None" 
-    OnRowDataBound="gridView3_RowDataBound">
-        <AlternatingRowStyle BackColor="white" ForeColor="Black" />
-        <Columns>
-            <asp:BoundField DataField="cont_id" HeaderText="ID" InsertVisible="False" ReadOnly="True" SortExpression="cont_id" ItemStyle-Width="100px">
-                <ItemStyle Width="100px" Wrap="true" />
-            </asp:BoundField>
-            <asp:BoundField DataField="cont_rep_name" HeaderText="Representative Name" SortExpression="cont_rep_name" ItemStyle-Width="150px">
-                <ItemStyle Width="150px" Wrap="true" />
-            </asp:BoundField>
-            <asp:BoundField DataField="cont_comp_name" HeaderText="Company Name" SortExpression="cont_comp_name" ItemStyle-Width="100px">
-                <ItemStyle Width="100px" Wrap="true" />
-            </asp:BoundField>
-            <asp:BoundField DataField="cus_id" HeaderText="Customer ID" SortExpression="cus_id" ItemStyle-Width="100px">
-                <ItemStyle Width="100px" Wrap="true" />
-            </asp:BoundField>
-            <asp:BoundField DataField="cont_status" HeaderText="Status" SortExpression="cont_status" ItemStyle-Width="150px">
-                <ItemStyle Width="150px" Wrap="true" />
-            </asp:BoundField>
-            <asp:BoundField DataField="cont_created_at" HeaderText="Created At" SortExpression="cont_created_at" ItemStyle-Width="150px">
-                <ItemStyle Width="150px" Wrap="true" />
-            </asp:BoundField>
-            <asp:BoundField DataField="cont_updated_at" HeaderText="Updated At" SortExpression="cont_updated_at" ItemStyle-Width="150px">
-                <ItemStyle Width="150px" Wrap="true" />
-            </asp:BoundField>
-            <asp:TemplateField HeaderText="Action">
-                <ItemTemplate>
-                    <asp:LinkButton ID="btnAccept" runat="server" OnClick="Accept_Click" CommandArgument='<%# Eval("cont_id") %>'>
+                            <asp:GridView Style="width: 100%; word-break: break-all; table-layout: fixed" ID="gridView3" runat="server"
+                                AutoGenerateColumns="False" ShowHeaderWhenEmpty="True"
+                                DataKeyNames="cont_id" AllowPaging="False" CellPadding="20" GridLines="None"
+                                OnRowDataBound="gridView3_RowDataBound">
+                                <AlternatingRowStyle BackColor="white" ForeColor="Black" />
+                                <Columns>
+                                    <asp:BoundField DataField="cont_id" HeaderText="ID" InsertVisible="False" ReadOnly="True" SortExpression="cont_id" ItemStyle-Width="100px">
+                                        <ItemStyle Width="100px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="cont_rep_name" HeaderText="Representative Name" SortExpression="cont_rep_name" ItemStyle-Width="150px">
+                                        <ItemStyle Width="150px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="cont_comp_name" HeaderText="Company Name" SortExpression="cont_comp_name" ItemStyle-Width="100px">
+                                        <ItemStyle Width="100px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="cus_id" HeaderText="Customer ID" SortExpression="cus_id" ItemStyle-Width="100px">
+                                        <ItemStyle Width="100px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="cont_status" HeaderText="Status" SortExpression="cont_status" ItemStyle-Width="150px">
+                                        <ItemStyle Width="150px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="cont_created_at" HeaderText="Created At" SortExpression="cont_created_at" ItemStyle-Width="150px">
+                                        <ItemStyle Width="150px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="cont_updated_at" HeaderText="Updated At" SortExpression="cont_updated_at" ItemStyle-Width="150px">
+                                        <ItemStyle Width="150px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:TemplateField HeaderText="Action">
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="btnAccept" runat="server" OnClick="Accept_Click" CommandArgument='<%# Eval("cont_id") %>'>
                         Accept
                     </asp:LinkButton>
-                    <asp:LinkButton ID="btnDecline" runat="server" 
-                        OnClientClick='<%# "showDeclineModal(" + Eval("cont_id") + "); return false;" %>'>
+                                            <asp:LinkButton ID="btnDecline" runat="server"
+                                                OnClientClick='<%# "showDeclineModal(" + Eval("cont_id") + "); return false;" %>'>
                         Decline
                     </asp:LinkButton>
-                </ItemTemplate>
-            </asp:TemplateField>
-        </Columns>
-        <RowStyle BackColor="White" ForeColor="Black" />
-        <EditRowStyle BackColor="#90EE90" />
-        <FooterStyle BackColor="Black" Font-Bold="True" ForeColor="#f9cfb4" />
-        <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="None" />
-        <PagerStyle BorderColor="#CC9900" Font-Size="20px" BackColor="White" ForeColor="#f9cfb4" HorizontalAlign="Center" />
-        <SelectedRowStyle BackColor="#C5BBAF" Font-Bold="True" ForeColor="White" />
-        <SortedAscendingCellStyle BackColor="Black" />
-        <SortedAscendingHeaderStyle BackColor="#246B61" />
-        <SortedDescendingCellStyle BackColor="Black" />
-        <SortedDescendingHeaderStyle BackColor="#15524A" />
-    </asp:GridView>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
+                                <RowStyle BackColor="White" ForeColor="Black" />
+                                <EditRowStyle BackColor="#90EE90" />
+                                <FooterStyle BackColor="Black" Font-Bold="True" ForeColor="#f9cfb4" />
+                                <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="None" />
+                                <PagerStyle BorderColor="#CC9900" Font-Size="20px" BackColor="White" ForeColor="#f9cfb4" HorizontalAlign="Center" />
+                                <SelectedRowStyle BackColor="#C5BBAF" Font-Bold="True" ForeColor="White" />
+                                <SortedAscendingCellStyle BackColor="Black" />
+                                <SortedAscendingHeaderStyle BackColor="#246B61" />
+                                <SortedDescendingCellStyle BackColor="Black" />
+                                <SortedDescendingHeaderStyle BackColor="#15524A" />
+                            </asp:GridView>
                         </div>
 
 

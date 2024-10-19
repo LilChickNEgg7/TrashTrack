@@ -34,7 +34,167 @@
     <%--#052507--%>
     <style>
 
+         /*start of tabs*/
+ /* Main Container */
+ #myTab {
+     background: #052507;
+     Green background for the tab container padding: 20px;
+     border-radius: 10px 10px 0 0;
+     Rounded corners for the top left and right margin-bottom: 0;
+     Ensures no spacing or white line at the bottom
+ }
 
+ /*Tab Buttons */
+ .nav-tabs {
+     border-bottom: none; /* Remove any default bottom border */
+ }
+
+     .nav-tabs .nav-item .nav-link {
+         background: #2f5f3e; /* Dark green for inactive tabs */
+         color: white;
+         font-weight: bold;
+         margin-right: 10px;
+         border-radius: 10px 10px 0 0; /* Keep tabs rounded at the top */
+         padding: 12px 24px;
+         transition: all 0.3s ease-in-out;
+         border: none; /* Remove default border */
+     }
+
+         .nav-tabs .nav-item .nav-link:hover {
+             background: #5fa17b; /* Luminous green for hover state */
+             color: white;
+         }
+
+         .nav-tabs .nav-item .nav-link.active {
+             background: #5fa17b; /* Slightly darker green for active state */
+             color: #eaf7e6; /* Light green text */
+             border-bottom: none; /* Remove any bottom border */
+         }
+
+ /* Styling the GridView Container */
+ .gridview-container {
+     padding: 20px;
+     border: 1px solid #ddd; /* Soft border around the grid */
+     border-top: none; /* Remove border between tabs and gridview */
+     border-radius: 0 0 12px 12px; /* Rounded bottom corners */
+     background-color: #f9f9f9; /* Light background color */
+     margin-top: -1px; /* Seamless connection between tabs and content */
+     overflow: hidden; /* Prevent overflow and maintain rounded corners */
+ }
+
+     /* GridView Header Styles */
+     .gridview-container .gridview-header {
+         background: #66CDAA; /* Luminous green for header */
+         color: white;
+         font-size: 16px; /* Slightly smaller font for a refined look */
+         font-weight: 600; /* Medium weight for balanced appearance */
+         text-align: center;
+         padding: 12px;
+         border-radius: 12px 12px 0 0; /* Rounded top corners */
+     }
+
+     /* GridView Row Styles */
+     .gridview-container .gridview-row {
+         border-bottom: 1px solid #ddd; /* Light row separators */
+         padding: 12px;
+         font-size: 14px; /* Smaller font size */
+         font-weight: 500; /* Medium weight for row text */
+         color: #333; /* Darker text color */
+         word-wrap: break-word; /* Text wraps neatly */
+     }
+
+         /* Hover Effect for Grid Rows */
+         .gridview-container .gridview-row:hover {
+             background: #eef8ee; /* Subtle hover effect */
+         }
+
+     /* GridView Text Styles */
+     .gridview-container .gridview-row,
+     .gridview-container .gridview-header {
+         font-family: 'Arial', sans-serif; /* Clean, formal font */
+         line-height: 1.5; /* Comfortable line height */
+     }
+
+     /* Optional: Adding Footer Rounded Corners */
+     .gridview-container .gridview-footer {
+         border-radius: 0 0 12px 12px; /* Ensure footer has rounded corners */
+     }
+
+     /* Additional Styling for Buttons and Labels */
+     .gridview-container .gridview-row .btnUnsuspend, .gridview-container .gridview-row .btnSuspend {
+         font-size: 12px; /* Adjusted button font size */
+         border-radius: 8px; /* Slightly rounded buttons */
+         padding: 5px 10px; /* Comfortable padding */
+     }
+
+     .gridview-container .gridview-row .imgEdit, .gridview-container .gridview-row .Image1 {
+         border-radius: 8px; /* Rounded corners for images */
+     }
+ /*end of tabs design*/
+
+
+
+ /* Styling for GridView Tables */
+ #gridViewBookings, #gridView2, #gridView3, #gridView4 {
+     width: 100%;
+     border-collapse: separate; /* Allows styling of borders separately */
+     border-spacing: 0; /* Removes additional spacing */
+     border-radius: 0 0 12px 12px; /* Rounded bottom corners */
+     overflow: hidden; /* Prevents content overflow */
+     background-color: #f9f9f9; /* Light background color */
+     margin-top: -1px; /* Seamless connection between tabs and content */
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for better depth */
+ }
+
+     /* GridView Header Styling */
+     #gridViewBookings th, #gridView2 th, #gridView3 th, #gridView4 th {
+         background: #66CDAA; /* Luminous green for header */
+         color: white;
+         font-size: 16px; /* Slightly smaller font for a refined look */
+         font-weight: 600; /* Medium weight for balanced appearance */
+         text-align: center;
+         padding: 12px;
+         border-bottom: 1px solid #ddd; /* Light bottom border */
+     }
+
+     /* GridView Row Styles */
+     #gridViewBookings td, #gridView2 td, #gridView3 td, #gridView4 td {
+         padding: 12px;
+         font-size: 14px; /* Smaller font size */
+         font-weight: 500; /* Medium weight for row text */
+         color: #333; /* Darker text color */
+         border-bottom: 1px solid #ddd; /* Light row separators */
+         word-wrap: break-word; /* Text wraps neatly */
+         text-align: center; /* Centered text alignment */
+     }
+
+     /* Hover Effect for GridView Rows */
+     #gridViewBookings tr:hover, #gridView2 tr:hover, #gridView3 tr:hover, #gridView4 tr:hover {
+         background: #eef8ee; /* Subtle hover effect */
+     }
+
+     /* Styling the GridView Footer */
+     #gridViewBookings .FooterStyle, #gridView2 .FooterStyle, #gridView3 .FooterStyle, #gridView4 .FooterStyle {
+         border-radius: 0 0 12px 12px; /* Rounded bottom corners */
+         background: #66CDAA;
+         color: #fff;
+         text-align: center;
+         padding: 12px;
+     }
+
+     /* Optional: Styling for the Status and Action Buttons */
+     #gridViewBookings .btnUnsuspend, #gridView2 .btnUnsuspend, #gridView3 .btnUnsuspend, #gridView4 .btnUnsuspend,
+     #gridViewBookings .btnSuspend, #gridView2 .btnSuspend, #gridView3 .btnSuspend, #gridView4 .btnSuspend {
+         font-size: 10px; /* Adjusted button font size */
+         border-radius: 8px; /* Slightly rounded buttons */
+         padding: 5px 10px; /* Comfortable padding */
+     }
+
+     #gridViewBookings .imgEdit, #gridView2 .imgEdit, #gridView3 .imgEdit, #gridView4 .imgEdit,
+     #gridViewBookings .Image1, #gridView2 .Image1, #gridView3 .Image1, #gridView4 .Image1 {
+         border-radius: 8px; /* Rounded corners for images */
+         margin-right: 10px; /* Margin between images */
+     }
 
 
 
@@ -374,124 +534,268 @@
               </button>--%>
           </div>
 
-<%--<div class="gridview-container">
-    <asp:GridView Style="width: 100%; word-break: break-all; table-layout: fixed" ID="gridViewCustomers" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True"
-        DataKeyNames="_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="White" GridLines="None">
-    <AlternatingRowStyle BackColor="#041d06" />
+                <div class="tab-pane fade show active" id="sam" role="tabpanel" aria-labelledby="sam-tab">
+                    <asp:GridView ID="gridViewBookings" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="bk_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
+                        <Columns>
+                            <asp:BoundField DataField="bk_id" HeaderText="Booking ID" SortExpression="bk_id" ItemStyle-Width="100px">
+                                <ItemStyle Width="100px"></ItemStyle>
+                            </asp:BoundField>
+                            <asp:BoundField DataField="bk_date" HeaderText="Date" SortExpression="bk_date" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px">
+                                <ItemStyle Width="150px"></ItemStyle>
+                            </asp:BoundField>
+                            <asp:BoundField DataField="bk_status" HeaderText="Status" SortExpression="bk_status" ItemStyle-Width="150px">
+                                <ItemStyle Width="150px"></ItemStyle>
+                            </asp:BoundField>
+                            <asp:BoundField DataField="bk_province" HeaderText="Province" SortExpression="bk_province" ItemStyle-Width="150px">
+                                <ItemStyle Width="150px"></ItemStyle>
+                            </asp:BoundField>
+                            <asp:BoundField DataField="bk_city" HeaderText="City" SortExpression="bk_city" ItemStyle-Width="150px">
+                                <ItemStyle Width="150px"></ItemStyle>
+                            </asp:BoundField>
+                            <asp:BoundField DataField="bk_brgy" HeaderText="Barangay" SortExpression="bk_brgy" ItemStyle-Width="150px">
+                                <ItemStyle Width="150px"></ItemStyle>
+                            </asp:BoundField>
+                            <asp:BoundField DataField="bk_street" HeaderText="Street" SortExpression="bk_street" ItemStyle-Width="150px">
+                                <ItemStyle Width="150px"></ItemStyle>
+                            </asp:BoundField>
+                            <asp:BoundField DataField="bk_postal" HeaderText="Postal Code" SortExpression="bk_postal" ItemStyle-Width="100px">
+                                <ItemStyle Width="100px"></ItemStyle>
+                            </asp:BoundField>
 
-    <Columns>
-        <asp:BoundField DataField="_id" HeaderText="ID" InsertVisible="False" ReadOnly="True" SortExpression="_id" ItemStyle-Width="100px">
-            <ItemStyle Width="100px"></ItemStyle>
-        </asp:BoundField>
-        <asp:BoundField DataField="comp_name" HeaderText="Company / Establishment" SortExpression="comp_name" ItemStyle-Width="100px" ItemStyle-CssClass="columns_label">
-            <ItemStyle Width="100px"></ItemStyle>
-        </asp:BoundField>
-        <asp:BoundField DataField="rep_name" HeaderText="Representative Name" SortExpression="rep_name" ItemStyle-Width="100px"  ItemStyle-CssClass="columns_label">
-            <ItemStyle Width="100px"></ItemStyle>
-        </asp:BoundField>
-          <asp:BoundField DataField="username" HeaderText="Username" SortExpression="username" />
+                            <asp:TemplateField HeaderText="Generate Bill">
+                                <ItemTemplate>
+                                    <asp:LinkButton ID="update" runat="server" OnClick="try_Click" CommandArgument='<%# Eval("bk_id") %>'>
+                                        <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
+                                    </asp:LinkButton>
+                                </ItemTemplate>
+                            </asp:TemplateField>
 
-          <asp:TemplateField HeaderText="Contact" SortExpression="contact"  ItemStyle-CssClass="columns_label">
-              <EditItemTemplate>
-                  <asp:TextBox ID="contact" runat="server" Text='<%# Bind("contact") %>' type="number" Width="80px"></asp:TextBox>
-              </EditItemTemplate>
-              <ItemTemplate>
-                  <asp:Label ID="contact" runat="server" Text='<%# Eval("contact") %>'></asp:Label>
-              </ItemTemplate>
-          </asp:TemplateField>
+                        </Columns>
 
-          <asp:TemplateField HeaderText="Location" SortExpression="address"  ItemStyle-CssClass="columns_label">
-              <EditItemTemplate>
-                  <asp:TextBox ID="txtMAX" runat="server" Text='<%# Bind("address") %>' type="number" Width="80px"></asp:TextBox>
-              </EditItemTemplate>
-              <ItemTemplate>
-                  <asp:Label ID="lblMAX" runat="server" Text='<%# Eval("address") %>'></asp:Label>
-              </ItemTemplate>
-              <ItemStyle Width="100px"></ItemStyle>
+                        <RowStyle BackColor="White" ForeColor="Black" BorderStyle="Solid" BorderColor="#ccc" BorderWidth="1px" />
+                        <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="Solid" BorderColor="#66CDAA" BorderWidth="1px" />
+                    </asp:GridView>
 
-          </asp:TemplateField>
-
-          <asp:TemplateField HeaderText="Email" SortExpression="email"   ItemStyle-CssClass="columns_label">
-              <EditItemTemplate>
-                  <asp:TextBox ID="empRole" runat="server" Text='<%# Bind("email") %>' Enabled="false" type="number" Width="80px"></asp:TextBox>
-              </EditItemTemplate>
-              <ItemTemplate>
-                  <asp:Label ID="lblQNTY" runat="server" Text='<%# Eval("email") %>'></asp:Label>
-              </ItemTemplate>
-              <ItemStyle Width="100px"></ItemStyle>
-          </asp:TemplateField>
-        <asp:TemplateField HeaderText="Generate Bill">
-            <ItemTemplate>
-                <asp:LinkButton ID="genBill" runat="server" OnClick="genBill_Click" CommandArgument='<%# Eval("_id") %>'>
-                    <asp:Image ID="imgGenerateBill" runat="server" ImageUrl="~/Pictures/invoice.png" Width="50%" Height="50%" Style="margin-right: 10px" AlternateText="Edit" Font-Size="10px" />
-                </asp:LinkButton>
-            </ItemTemplate>
-        </asp:TemplateField>
-    </Columns>
-
-        <RowStyle BackColor="#052507" BorderStyle="Solid" BorderColor="#0a4d1d"/>
-      <EditRowStyle Width="10%" BackColor="#7C6F57"></EditRowStyle>
-      <FooterStyle BackColor="Black" Font-Bold="True" ForeColor="White" />
-      <HeaderStyle BackColor="Black" Font-Bold="True" ForeColor="mediumaquamarine" BorderStyle="None" />
-      <PagerStyle BorderColor="#CC9900" Font-Size="20px" BackColor="White" ForeColor="White" HorizontalAlign="Center" />
-      <SelectedRowStyle BackColor="#C5BBAF" Font-Bold="True" ForeColor="White" />
-      <SortedAscendingCellStyle BackColor="Black" />
-      <SortedAscendingHeaderStyle BackColor="#246B61" />
-      <SortedDescendingCellStyle BackColor="Black" />
-      <SortedDescendingHeaderStyle BackColor="#15524A" />
-  </asp:GridView>
-        </div>--%>
-
-                <div class="gridview-container">
-    <asp:GridView ID="gridViewBookings" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="bk_id" AllowPaging="True" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
-    <Columns>
-        <asp:BoundField DataField="bk_id" HeaderText="Booking ID" SortExpression="bk_id" ItemStyle-Width="100px">
-            <ItemStyle Width="100px"></ItemStyle>
-        </asp:BoundField>
-        <asp:BoundField DataField="bk_date" HeaderText="Date" SortExpression="bk_date" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px">
-            <ItemStyle Width="150px"></ItemStyle>
-        </asp:BoundField>
-        <asp:BoundField DataField="bk_status" HeaderText="Status" SortExpression="bk_status" ItemStyle-Width="150px">
-            <ItemStyle Width="150px"></ItemStyle>
-        </asp:BoundField>
-        <asp:BoundField DataField="bk_province" HeaderText="Province" SortExpression="bk_province" ItemStyle-Width="150px">
-            <ItemStyle Width="150px"></ItemStyle>
-        </asp:BoundField>
-        <asp:BoundField DataField="bk_city" HeaderText="City" SortExpression="bk_city" ItemStyle-Width="150px">
-            <ItemStyle Width="150px"></ItemStyle>
-        </asp:BoundField>
-        <asp:BoundField DataField="bk_brgy" HeaderText="Barangay" SortExpression="bk_brgy" ItemStyle-Width="150px">
-            <ItemStyle Width="150px"></ItemStyle>
-        </asp:BoundField>
-        <asp:BoundField DataField="bk_street" HeaderText="Street" SortExpression="bk_street" ItemStyle-Width="150px">
-            <ItemStyle Width="150px"></ItemStyle>
-        </asp:BoundField>
-        <asp:BoundField DataField="bk_postal" HeaderText="Postal Code" SortExpression="bk_postal" ItemStyle-Width="100px">
-            <ItemStyle Width="100px"></ItemStyle>
-        </asp:BoundField>
-
-        <asp:TemplateField HeaderText="Generate Bill">
-            <ItemTemplate>
-                <asp:LinkButton ID="genBill" runat="server" OnClick="genBill_Click" CommandArgument='<%# Eval("bk_id") %>'>
-                    <asp:Image ID="imgGenerateBill" runat="server" ImageUrl="~/Pictures/invoice.png" Width="35%" Height="35%" AlternateText="Generate Bill" />
-                </asp:LinkButton>
-            </ItemTemplate>
-        </asp:TemplateField>
-
-    </Columns>
-
-    <RowStyle BackColor="White" ForeColor="Black" BorderStyle="Solid" BorderColor="#ccc" BorderWidth="1px" />
-    <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="Solid" BorderColor="#66CDAA" BorderWidth="1px" />
-</asp:GridView>
-
-</div>
+                </div>
+            </section>
 
 
-      </section>
-
- 
 <asp:LinkButton ID="LinkButton1" runat="server"></asp:LinkButton>
 <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+
+
+
+<%--BOOKING WASTE--%>
+<asp:LinkButton ID="LinkButton2" runat="server"></asp:LinkButton>
+<div class="container" style="height: 1000px; display: flex; justify-content: center; align-items: center;">
+    <!-- Main Panel Design -->
+    <asp:UpdatePanel ID="updatePanel1" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="true">
+        <ContentTemplate>
+            <!-- Card Container -->
+            <div class="card shadow-lg" style="max-width: 1000px; padding: 0; border: 2px solid #26D8A8; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);">
+                <div class="modal-header" style="background-color: #0D342D; color: #26D8A8;">
+                    <asp:Button ID="Button3" class="btn-close" runat="server" OnClick="btncancel_Click" />
+                </div>
+                
+                <!-- Card Header Design -->
+                <div class="card-header text-center" style="background-color: #0D342D; color: #26D8A8; padding: 15px;">
+                    <h4>Generate Bill</h4>
+                </div>
+                
+
+          <!-- Card Body with Form Elements -->
+          <div class="card-body" style="padding: 30px; background-color: #052507;">
+              <div class="row" style="margin-top: 50px;">
+                  <asp:Label runat="server" ID="l1" Text=""></asp:Label>
+                  <asp:HiddenField ID="HiddenField1" runat="server" />
+
+                  <div class="col-6">
+                  <button type="button" class="btn btn-primary" style="padding-right: 0px; margin: 10px; float: right; background-color: #052507; border-color: aquamarine; border-radius: 8px; border-width: 3px" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  Add Customer +
+              </button>
+                      </div>
+                  <!-- GridView inside modal body -->
+                  <asp:GridView ID="gridView2" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="bk_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
+                      <Columns>
+                          <asp:BoundField DataField="bw_id" HeaderText="Booking Waste ID" SortExpression="bw_id" ItemStyle-Width="100px">
+                              <ItemStyle Width="100px"></ItemStyle>
+                          </asp:BoundField>
+                          <asp:BoundField DataField="bw_name" HeaderText="Waste Type" SortExpression="bw_name" ItemStyle-Width="150px">
+                              <ItemStyle Width="150px"></ItemStyle>
+                          </asp:BoundField>
+                          <asp:BoundField DataField="bk_id" HeaderText="Booking ID" SortExpression="bk_id" ItemStyle-Width="150px">
+                              <ItemStyle Width="150px"></ItemStyle>
+                          </asp:BoundField>
+                          <asp:BoundField DataField="bw_total_unit" HeaderText="Total Unit" SortExpression="bw_total_unit" ItemStyle-Width="150px">
+                              <ItemStyle Width="150px"></ItemStyle>
+                          </asp:BoundField>
+                          <asp:BoundField DataField="bw_price" HeaderText="Price" SortExpression="bw_price" ItemStyle-Width="150px">
+                              <ItemStyle Width="150px"></ItemStyle>
+                          </asp:BoundField>
+                          <asp:BoundField DataField="bw_total_price" HeaderText="Total Price" SortExpression="bw_total_price" ItemStyle-Width="150px">
+                              <ItemStyle Width="150px"></ItemStyle>
+                          </asp:BoundField>
+
+                          <%--<asp:TemplateField HeaderText="Generate Bill">
+                              <ItemTemplate>
+                                  <asp:LinkButton ID="genBill" runat="server" OnClick="genBill_Click" CommandArgument='<%# Eval("bk_id") %>'>
+                                      <asp:Image ID="imgGenerateBill" runat="server" ImageUrl="~/Pictures/invoice.png" Width="35%" Height="35%" AlternateText="Generate Bill" />
+                                  </asp:LinkButton>
+                              </ItemTemplate>
+                          </asp:TemplateField>--%>
+                          <asp:TemplateField HeaderText="Action">
+                              <ItemTemplate>
+                                  <asp:LinkButton ID="update" runat="server" OnClick="Update_Click" CommandArgument='<%# Eval("bk_id") %>'>
+                                      <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
+                                  </asp:LinkButton>
+                                  <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("bk_id") %>' OnClientClick="return confirm('Are you sure you want to remove this account manager?');">
+                                      <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
+                                  </asp:LinkButton>
+                              </ItemTemplate>
+                          </asp:TemplateField>
+                      </Columns>
+                      <RowStyle BackColor="White" ForeColor="Black" BorderStyle="Solid" BorderColor="#ccc" BorderWidth="1px" />
+                      <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="Solid" BorderColor="#66CDAA" BorderWidth="1px" />
+                  </asp:GridView>
+
+                  <div class="col-6">
+                      <div class="input-group input-group-sm mb-3">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px">Booking ID</span>
+                          </div>
+                          <asp:TextBox ID="TextBox1" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                      </div>
+                  </div>
+                  <!-- Number of Trips -->
+                  <div class="col-6">
+                      <div class="input-group input-group-sm mb-3">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px">No. of Trip(s)</span>
+                          </div>
+                          <asp:TextBox ID="TextBox6" runat="server" type="number" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                      </div>
+                  </div>
+                  <!-- Net of VAT -->
+                  <div class="col-6">
+                      <div class="input-group input-group-sm mb-3">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px">Net of Vat</span>
+                          </div>
+                          <asp:TextBox ID="TextBox7" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                      </div>
+                  </div>
+                  <!-- VAT Amount -->
+                  <div class="col-6">
+                      <div class="input-group input-group-sm mb-3">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px">Vat Amount</span>
+                          </div>
+                          <asp:TextBox ID="TextBox8" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                      </div>
+                  </div>
+
+                  <!-- Total Sales -->
+                  <div class="col-6">
+                      <div class="input-group input-group-sm mb-3">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px">Total Sales</span>
+                          </div>
+                          <asp:TextBox ID="TextBox9" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                      </div>
+                  </div>
+                  <!-- Due Date -->
+                  <div class="col-6">
+                      <div class="input-group input-group-sm mb-3">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px">Due Date</span>
+                          </div>
+                          <asp:TextBox ID="TextBox10" TextMode="DateTimeLocal" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                      </div>
+                  </div>
+
+                  <!-- Additional Fee -->
+                  <div class="col-6">
+                      <div class="input-group input-group-sm mb-3">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px">Additional Fee</span>
+                          </div>
+                          <asp:TextBox ID="TextBox5" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                      </div>
+                  </div>
+                  <!-- Additional Note -->
+                  <div class="col-6">
+                      <div class="input-group input-group-sm mb-3">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px">Notes</span>
+                          </div>
+                          <asp:TextBox ID="TextBox2" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+    <!-- Footer Design -->
+                <div class="card-footer text-center" style="background-color: #0D342D; color: #26D8A8; padding: 10px;">
+                    <asp:Button ID="Button1" CssClass="btn btn-secondary" runat="server" Text="Cancel" OnClick="btncancel_Click" />
+                    <asp:Button ID="Button2" CssClass="btn btn-primary" runat="server" Text="Generate Bill" OnClick="btnGenerateBill_Click" OnClientClick="return confirm('Are you sure you want to generate bill?');" />
+                </div>
+            </div>
+      </ContentTemplate>
+          <Triggers>
+              <asp:PostBackTrigger ControlID="Button3" />
+              <asp:PostBackTrigger ControlID="Button1" />
+              <asp:PostBackTrigger ControlID="Button2" />
+          </Triggers>
+      </asp:UpdatePanel>
+      </div>
+      <ajaxToolkit:ModalPopupExtender ID="ModalPopupExtender1" runat="server" 
+    CancelControlID="btncancel" 
+    PopupControlID="updatePanel1" 
+    TargetControlID="LinkButton2" 
+    BackgroundCssClass="Background" 
+    DropShadow="True">
+</ajaxToolkit:ModalPopupExtender>
+      
+      
+      
+      
+<style>
+    /* Modal animations for smooth opening and closing */
+    .animate-modal {
+        opacity: 0;
+        transform: scale(0.95);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .modal.show .animate-modal {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    /* Soft fade effect for close buttons */
+    .btn-close {
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-close:hover {
+        color: #FF6F61;
+        transform: rotate(90deg);
+    }
+
+    /* Button hover effects for footer buttons */
+    .btn.btn-secondary:hover, .btn.btn-primary:hover {
+        opacity: 0.8;
+        transform: translateY(-2px);
+    }
+</style>
+
+
+
+
+
+
+
 
 <!-- Container for centering and panel styling -->
 <div class="container" style="height: 100vh; display: flex; justify-content: center; align-items: center;">
@@ -635,8 +939,35 @@
             $(this).val($(this).val().replace(/[^0-9]/g, ''));
         });
     });
+    <%--function openModal(bkId) {
+        // Set the bk_id value in a hidden field or a label inside the modal
+        document.getElementById('<%= l1.ClientID %>').innerText = "Booking ID: " + bkId;
 
+        // Use Bootstrap's modal JavaScript to show the modal
+        var modal = new bootstrap.Modal(document.getElementById('fullscreenModal'));
+        modal.show();
+    }--%>
+    <%--function openModal(bkId) {
+        // Set the bk_id value in a hidden field or a label inside the modal
+        document.getElementById('<%= l1.ClientID %>').innerText = "Booking ID: " + bkId;
 
+        // Fetch details from the server using AJAX or use the data already fetched in RowDataBound
+
+        // Show the modal
+        var modal = new bootstrap.Modal(document.getElementById('fullscreenModal'));
+        modal.show();
+    }--%>
+
+<%--    function openModal(bkId) {
+        // Set the bk_id value in a hidden field or a label inside the modal
+        document.getElementById('<%= l1.ClientID %>').innerText = "Booking ID: " + bkId;
+        document.getElementById('<%= hiddenBookingID.ClientID %>').value = bkId;
+        // Fetch details from the server using AJAX or use the data already fetched in RowDataBound
+
+        // Show the modal
+        var modal = new bootstrap.Modal(document.getElementById('fullscreenModal'));
+        modal.show();
+        --%>
 
 </script>
 
@@ -736,6 +1067,8 @@
   </footer><!-- End Footer -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 
   <!-- Vendor JS Files -->
   <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>

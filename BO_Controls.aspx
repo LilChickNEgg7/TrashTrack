@@ -194,7 +194,7 @@
 
 
     /* Styling for GridView Tables */
-    #gridView1, #gridView2, #gridView3, #gridView4 {
+    #gridViewWaste, #gridView2, #gridView3, #gridView4 {
         width: 100%;
         border-collapse: separate; /* Allows styling of borders separately */
         border-spacing: 0; /* Removes additional spacing */
@@ -206,7 +206,7 @@
     }
 
         /* GridView Header Styling */
-        #gridView1 th, #gridView2 th, #gridView3 th, #gridView4 th {
+        #gridViewWaste th, #gridView2 th, #gridView3 th, #gridView4 th {
             background: #66CDAA; /* Luminous green for header */
             color: white;
             font-size: 16px; /* Slightly smaller font for a refined look */
@@ -217,7 +217,7 @@
         }
 
         /* GridView Row Styles */
-        #gridView1 td, #gridView2 td, #gridView3 td, #gridView4 td {
+        #gridViewWaste td, #gridView2 td, #gridView3 td, #gridView4 td {
             padding: 12px;
             font-size: 14px; /* Smaller font size */
             font-weight: 500; /* Medium weight for row text */
@@ -228,12 +228,12 @@
         }
 
         /* Hover Effect for GridView Rows */
-        #gridView1 tr:hover, #gridView2 tr:hover, #gridView3 tr:hover, #gridView4 tr:hover {
+        #gridViewWaste tr:hover, #gridView2 tr:hover, #gridView3 tr:hover, #gridView4 tr:hover {
             background: #eef8ee; /* Subtle hover effect */
         }
 
         /* Styling the GridView Footer */
-        #gridView1 .FooterStyle, #gridView2 .FooterStyle, #gridView3 .FooterStyle, #gridView4 .FooterStyle {
+        #gridViewWaste .FooterStyle, #gridView2 .FooterStyle, #gridView3 .FooterStyle, #gridView4 .FooterStyle {
             border-radius: 0 0 12px 12px; /* Rounded bottom corners */
             background: #66CDAA;
             color: #fff;
@@ -242,8 +242,8 @@
         }
 
         /* Optional: Styling for the Status and Action Buttons */
-        #gridView1 .btnUnsuspend, #gridView2 .btnUnsuspend, #gridView3 .btnUnsuspend, #gridView4 .btnUnsuspend,
-        #gridView1 .btnSuspend, #gridView2 .btnSuspend, #gridView3 .btnSuspend, #gridView4 .btnSuspend {
+        #gridViewWaste .btnUnsuspend, #gridView2 .btnUnsuspend, #gridView3 .btnUnsuspend, #gridView4 .btnUnsuspend,
+        #gridViewWaste .btnSuspend, #gridView2 .btnSuspend, #gridView3 .btnSuspend, #gridView4 .btnSuspend {
             font-size: 10px; /* Adjusted button font size */
             border-radius: 8px; /* Slightly rounded buttons */
             padding: 5px 10px; /* Comfortable padding */

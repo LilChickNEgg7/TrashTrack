@@ -25,6 +25,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Npgsql;
+using System.EnterpriseServices;
 
 
 namespace Capstone
@@ -49,6 +50,16 @@ namespace Capstone
                 //UpdateInterestAndTotalAmountForAllCustomers();
 
             }
+            //else
+            //{
+            //    // Check if the hidden field has a value, indicating a modal open request
+            //    if (!string.IsNullOrEmpty(hiddenBookingID.Value))
+            //    {
+            //        int bkId = Convert.ToInt32(hiddenBookingID.Value);
+            //        GetBookingDetails(bkId); // Load details for the specific booking
+            //    }
+            //}
+
         }
 
         private void LoadProfile()
@@ -166,7 +177,7 @@ namespace Capstone
                     cmd.CommandText = @"
                 SELECT bk_id, bk_date, bk_status, bk_province, bk_city, bk_brgy, bk_street, bk_postal
                 FROM public.booking
-                ORDER BY bk_date DESC";  // Sorting by date for recent bookings
+                ORDER BY bk_id, bk_date";  // Sorting by date for recent bookings
 
                     // Execute the query and bind the results to the GridView
                     DataTable bookingsDataTable = new DataTable();
@@ -314,7 +325,7 @@ namespace Capstone
         //    LoadCustomerBill();
         //}
 
-        protected void update_Click(object sender, EventArgs e)
+        protected void Update_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
 
@@ -508,6 +519,185 @@ namespace Capstone
             //LoadCustomerBill();
             PopulateWasteCategories();
         }
+
+
+        ////MUGANA NA JUD NI BESTT
+        //protected void try_Click(object sender, EventArgs e)
+        //{
+        //    LinkButton btn = sender as LinkButton;
+        //    //ImageButton btn = (ImageButton)sender;
+        //    //ImageButton btn = sender as ImageButton;
+
+        //    int id = Convert.ToInt32(btn.CommandArgument);
+        //    //txtbxID.Text = id.ToString();
+        //    GetCustomerInfo(id);
+        //    try
+        //    {
+        //        using (var db = new NpgsqlConnection(con))
+        //        {
+        //            db.Open();
+        //            using (var cmd = db.CreateCommand())
+        //            {
+        //                cmd.CommandType = CommandType.Text;
+        //                // Query to fetch specific booking data from the database based on bk_id
+        //                //    cmd.CommandText = @"
+        //                //SELECT bw_id, bw_name, bk_id
+        //                //FROM BOOKING_WASTE where bk_id = @bkId"; // Use parameterized query for security
+        //                cmd.CommandText = @"
+        //            SELECT bw.bw_id, bw.bw_name, bw.bw_unit, bw.bw_total_unit, bw.bw_price, bw.bw_total_price, bw.bk_id
+        //            FROM BOOKING_WASTE bw
+        //            INNER JOIN BOOKING b ON bw.bk_id = b.bk_id
+        //            WHERE bw.bk_id = @bkId AND b.bk_status != 'Completed'"; // Use parameterized query for security
+
+
+        //                // Add parameter to the command
+        //                cmd.Parameters.AddWithValue("@bkId", id);
+
+        //                // Execute the query and bind the results to the GridView
+        //                DataTable bookingsDataTable = new DataTable();
+        //                NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
+        //                bookingsAdapter.Fill(bookingsDataTable);
+
+        //                // Bind the data to the GridView within the modal
+        //                if (bookingsDataTable.Rows.Count > 0)
+        //                {
+        //                    gridView2.DataSource = bookingsDataTable;
+        //                    gridView2.DataBind();
+        //                }
+        //                else
+        //                {
+        //                    l1.Text = "No booking details found for ID: " + id;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle any errors
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
+        //            "swal('Unsuccessful!', '" + ex.Message + "', 'error')", true);
+        //        return; // Exit if there was an error
+        //    }
+
+        //    // Set the Booking ID label in the modal
+        //    l1.Text = "Booking ID: " + id.ToString();
+        //    this.ModalPopupExtender1.Show();
+        //    //LoadCustomerBill();
+        //    PopulateWasteCategories();
+        //}
+
+        protected void try_Click(object sender, EventArgs e)
+        {
+            LinkButton btn = sender as LinkButton;
+            int id = Convert.ToInt32(btn.CommandArgument);
+            GetCustomerInfo(id);
+
+            try
+            {
+                using (var db = new NpgsqlConnection(con))
+                {
+                    db.Open();
+
+                    // First query to get booking details and bind to the GridView
+                    using (var cmd = db.CreateCommand())
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandText = @"
+                SELECT bw.bw_id, bw.bw_name, bw.bw_unit, bw.bw_total_unit, bw.bw_price, bw.bw_total_price, bw.bk_id
+                FROM BOOKING_WASTE bw
+                INNER JOIN BOOKING b ON bw.bk_id = b.bk_id
+                WHERE bw.bk_id = @bkId AND b.bk_status != 'Completed'";
+
+                        cmd.Parameters.AddWithValue("@bkId", id);
+
+                        DataTable bookingsDataTable = new DataTable();
+                        NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
+                        bookingsAdapter.Fill(bookingsDataTable);
+
+                        if (bookingsDataTable.Rows.Count > 0)
+                        {
+                            gridView2.DataSource = bookingsDataTable;
+                            gridView2.DataBind();
+                        }
+                        else
+                        {
+                            l1.Text = "No booking details found for ID: " + id;
+                        }
+                    }
+
+                    // Second query to sum total price for the same booking ID and status != 'Completed'
+                    decimal totalPrice = 0;
+                    using (var cmdSum = db.CreateCommand())
+                    {
+                        cmdSum.CommandType = CommandType.Text;
+                        cmdSum.CommandText = @"
+        SELECT SUM(bw.bw_total_price) AS TotalPrice
+        FROM BOOKING_WASTE bw
+        INNER JOIN BOOKING b ON bw.bk_id = b.bk_id
+        WHERE bw.bk_id = @bkId AND b.bk_status != 'Completed'";
+
+                        cmdSum.Parameters.AddWithValue("@bkId", id);
+
+                        object result = cmdSum.ExecuteScalar(); // Get the sum of total price
+                        if (result != DBNull.Value)
+                        {
+                            totalPrice = Convert.ToDecimal(result);
+                            TextBox7.Text = totalPrice.ToString("N2"); // Display the sum in TextBox7
+                        }
+                        else
+                        {
+                            TextBox7.Text = "0"; // Log this event
+                            totalPrice = 0; // Ensure totalPrice remains 0
+                        }
+                    }
+
+                    // Third query to get the tax (pt_tax) from payment_term
+                    using (var cmdTax = db.CreateCommand())
+                    {
+                        cmdTax.CommandType = CommandType.Text;
+                        cmdTax.CommandText = @"
+        SELECT pt_tax
+        FROM payment_term"; // Assuming `bk_id` is related to the bill
+
+                        // Remove the unused parameter
+                        object taxResult = cmdTax.ExecuteScalar(); // Get the pt_tax value
+                        if (taxResult != DBNull.Value)
+                        {
+                            int ptTax = Convert.ToInt32(taxResult);
+                            if (ptTax > 0)
+                            {
+                                decimal taxAmount = (ptTax / 100m) * totalPrice;
+                                TextBox8.Text = taxAmount.ToString("N2"); // Display the calculated tax in TextBox8
+                            }
+                            else
+                            {
+                                TextBox8.Text = "0"; // Log if tax is 0 or invalid
+                            }
+                        }
+                        else
+                        {
+                            TextBox8.Text = "0"; // Log this event
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
+                    "swal('Unsuccessful!', '" + ex.Message + "', 'error')", true);
+                return;
+            }
+
+            l1.Text = "Booking ID: " + id.ToString();
+            this.ModalPopupExtender1.Show();
+            PopulateWasteCategories();
+        }
+
+
+
+
+
         private bool IsInitialLoad
         {
             get { return ViewState["IsInitialLoad"] as bool? ?? true; }
@@ -891,6 +1081,211 @@ namespace Capstone
 
         //        }
         //    }
+        //}
+        //protected void gridView3_RowDataBound(object sender, GridViewRowEventArgs e)
+        //{
+        //    if (e.Row.RowType == DataControlRowType.DataRow)
+        //    {
+        //        // Retrieve the bk_id from the DataKeys collection
+        //        string bkId = DataBinder.Eval(e.Row.DataItem, "bk_id").ToString();
+
+        //        // Set the onclick event to open the modal and pass the bk_id
+        //        e.Row.Attributes["onclick"] = $"openModal('{bkId}');";
+        //        e.Row.Attributes["style"] = "cursor: pointer;"; // Set pointer cursor for better UX
+
+        //        using (var db = new NpgsqlConnection(con))
+        //        {
+        //            db.Open();
+        //            using (var cmd = db.CreateCommand())
+        //            {
+        //                cmd.CommandType = CommandType.Text;
+        //                // Query to fetch booking data from the database
+        //                cmd.CommandText = @"
+        //        SELECT bk_id, bk_date, bk_status, bk_province, bk_city, bk_brgy, bk_street, bk_postal
+        //        FROM public.booking
+        //        ORDER BY bk_date DESC";  // Sorting by date for recent bookings
+
+        //                // Execute the query and bind the results to the GridView
+        //                DataTable bookingsDataTable = new DataTable();
+        //                NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
+        //                bookingsAdapter.Fill(bookingsDataTable);
+
+        //                // Bind the data to the GridView
+        //                gridView2.DataSource = bookingsDataTable;
+        //                gridView2.DataBind();
+        //            }
+        //            db.Close();
+        //        }
+
+        //    }
+        //}
+
+
+        //protected void gridView3_RowDataBound(object sender, GridViewRowEventArgs e)
+        //{
+
+        //    if (e.Row.RowType == DataControlRowType.DataRow)
+        //    {
+        //        // Retrieve the bk_id from the DataKeys collection
+        //        int bkId = Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "bk_id"));
+
+        //        // Set the onclick event to open the modal and pass the bk_id
+        //        e.Row.Attributes["onclick"] = $"openModal({bkId});";
+        //        e.Row.Attributes["style"] = "cursor: pointer;"; // Set pointer cursor for better UX
+        //                                                        // Only bind the specific booking details for the current row
+        //        using (var db = new NpgsqlConnection(con))
+        //        {
+        //            db.Open();
+        //            using (var cmd = db.CreateCommand())
+        //            {
+        //                cmd.CommandType = CommandType.Text;
+        //                // Query to fetch specific booking data from the database based on bk_id
+        //                cmd.CommandText = @"
+        //        SELECT bk_id, bk_date, bk_status, bk_province, bk_city, bk_brgy, bk_street, bk_postal
+        //        FROM booking
+        //        WHERE bk_id = @bkId ORDER BY bk_id"; // Use parameterized query for security
+
+        //                // Add parameter to the command
+        //                cmd.Parameters.AddWithValue("@bkId", bkID);
+        //                // Execute the query and bind the results to the GridView
+        //                DataTable bookingsDataTable = new DataTable();
+        //                NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
+        //                bookingsAdapter.Fill(bookingsDataTable);
+
+        //                // Bind the data to the GridView
+        //                gridView2.DataSource = bookingsDataTable;
+        //                gridView2.DataBind();
+        //                Response.Write($"<script>alert('{bkID}');</script>");
+        //            }
+        //            db.Close();
+        //        }
+        //    }            
+        //}
+
+        //MUGANAA LATEST
+        //protected void gridView3_RowDataBound(object sender, GridViewRowEventArgs e)
+        //{
+        //    if (e.Row.RowType == DataControlRowType.DataRow)
+        //    {
+        //        // Retrieve the bk_id from the DataKeys collection
+        //        int bkId = Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "bk_id"));
+
+        //        // Set the onclick event to open the modal and pass the bk_id
+        //        e.Row.Attributes["onclick"] = $"openModal({bkId});";
+        //        e.Row.Attributes["style"] = "cursor: pointer;"; // Set pointer cursor for better UX
+        //        GetBookingDetails(bkId);
+        //    }
+        //}
+
+        //protected void gridView3_RowDataBound(object sender, GridViewRowEventArgs e)
+        //{
+        //    if (e.Row.RowType == DataControlRowType.DataRow)
+        //    {
+        //        // Retrieve the bk_id from the DataKeys collection
+        //        int bkId = Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "bk_id"));
+
+        //        // Set the onclick event to open the modal and pass the bk_id
+        //        e.Row.Attributes["onclick"] = $"openModal({bkId});";
+        //        e.Row.Attributes["style"] = "cursor: pointer;";
+
+        //        // Store the selected Booking ID in the hidden field for later use
+        //        hiddenBookingID.Value = bkId.ToString();
+
+        //        // Set pointer cursor for better UX
+        //        //e.Row.Attributes["style"] = "cursor: pointer;";
+        //    }
+        //}
+
+
+
+        //// Method to get the booking details
+        //protected void GetBookingDetails(int bkId)
+        //{
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            // Query to fetch specific booking data from the database based on bk_id
+        //            cmd.CommandText = @"
+        //        SELECT bk_id, bk_date, bk_status, bk_province, bk_city, bk_brgy, bk_street, bk_postal
+        //        FROM booking
+        //        WHERE bk_id = @bkId";
+
+        //            // Add parameter to the command
+        //            cmd.Parameters.AddWithValue("@bkId", bkId);
+
+        //            // Execute the query and bind the results to the GridView
+        //            DataTable bookingsDataTable = new DataTable();
+        //            using (NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd))
+        //            {
+        //                bookingsAdapter.Fill(bookingsDataTable);
+        //            }
+
+        //            // Check if any data is returned
+        //            if (bookingsDataTable.Rows.Count > 0)
+        //            {
+        //                gridView2.DataSource = bookingsDataTable;
+        //                gridView2.DataBind();
+        //            }
+        //        }
+        //    }
+        //}
+
+        //protected void Update_Click(object sender, EventArgs e)
+        //{
+        //    LinkButton btn = sender as LinkButton;
+        //    int id = Convert.ToInt32(btn.CommandArgument); // Get the booking ID from the button's CommandArgument
+
+        //    try
+        //    {
+        //        using (var db = new NpgsqlConnection(con))
+        //        {
+        //            db.Open();
+        //            using (var cmd = db.CreateCommand())
+        //            {
+        //                cmd.CommandType = CommandType.Text;
+        //                // Query to fetch specific booking data from the database based on bk_id
+        //                cmd.CommandText = @"
+        //SELECT bk_id, bk_date, bk_status, bk_province, bk_city, bk_brgy, bk_street, bk_postal
+        //FROM booking
+        //WHERE bk_id = @bkId ORDER BY bk_id"; // Use parameterized query for security
+
+        //                // Add parameter to the command
+        //                cmd.Parameters.AddWithValue("@bkId", id);
+
+        //                // Execute the query and bind the results to the GridView
+        //                DataTable bookingsDataTable = new DataTable();
+        //                NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
+        //                bookingsAdapter.Fill(bookingsDataTable);
+
+        //                // Bind the data to the GridView within the modal
+        //                if (bookingsDataTable.Rows.Count > 0)
+        //                {
+        //                    gridView2.DataSource = bookingsDataTable;
+        //                    gridView2.DataBind();
+        //                }
+        //                else
+        //                {
+        //                    l1.Text = "No booking details found for ID: " + id;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle any errors
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
+        //            "swal('Unsuccessful!', '" + ex.Message + "', 'error')", true);
+        //        return; // Exit if there was an error
+        //    }
+
+        //    // Set the Booking ID label in the modal
+        //    l1.Text = "Booking ID: " + id.ToString();
+
+        //    // Trigger the modal popup from the server side
+        //    ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowModal", "$('#fullscreenModal').modal('show');", true);
         //}
 
 
