@@ -88,7 +88,7 @@
 
   <!-- ======= Header ======= -->    <%--#9ee2a0, #9ee2a0, #9ee2a0--%>
 <%--  <header style="background-image: linear-gradient(to right, #000000, #061f0d, #000000); height: 80px" id="header" class="header fixed-top d-flex align-items-center">--%>
-<header style="background-color: #052507; height: 80px" id="header" class="header fixed-top d-flex align-items-center">
+<header style="background-color: black; height: 80px" id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
       <a href="Customer_Dashboard.aspx" class="logo d-flex align-items-center">
@@ -235,10 +235,15 @@
                 </li>
             </ul>
         </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="BO_History.aspx">
+                    <i class="ri-secure-payment-line"></i><span>Transaction History</span>
+                </a>
 
-        <li class="nav-item">
+            </li>
+            <%--<li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#receipt-nav" data-bs-toggle="collapse" href="#">
-                <i class="ri-secure-payment-line"></i><span>Payment</span><i class="bi bi-chevron-down ms-auto"></i>
+                <i class="ri-secure-payment-line"></i><span>Transaction History</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="receipt-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
@@ -247,13 +252,8 @@
                     </a>
                 </li>
 
-                <%--<li>
-                    <a href="WAREHOUSE_STOCKS.aspx">
-                        <i class="bi bi-circle"></i><span>Stocks</span>
-                    </a>
-                </li>--%>
             </ul>
-        </li>
+        </li>--%>
     </ul>
   </aside><!-- End Sidebar-->
 
@@ -579,7 +579,7 @@
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer" style="border-top-color: chartreuse">
         <div class="copyright" style="color: #d4f3cf">
-            &copy; Copyright <strong><span style="color: #d4f3cf">Pinoy Basurero Corporation</span></strong>. All Rights Reserved
+            &copy; Copyright <strong><span style="color: #d4f3cf">TrashTrack</span></strong>. All Rights Reserved
         </div>
     </footer>
     <!-- End Footer -->

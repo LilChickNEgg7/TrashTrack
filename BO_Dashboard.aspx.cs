@@ -1,27 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
 using System.Linq;
-using System.Text.Json;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
-
-using MongoDB.Bson;
-using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using Npgsql;
-
+using System;
+using System.Data;
+using System.Web.UI;
+using Npgsql;
+using System.Web.Http; // Make sure to add a reference to System.Web.Http
 
 namespace Capstone
 {
@@ -35,15 +22,17 @@ namespace Capstone
             {
                 LoadProfile();
                 CustomerCount();
-                SAMCount();
-                AMCount();
-                //TotalAMCount();
-                //TotalCusCount();
-                //ActiveAMCount();
-                //ActiveCusCount();
+                //SAMCount();
+                //AMCount();
+                BOCount();
+                //ODCount();
+                //HaulerCount();
+                PaymentStatus();
+                TotalSalesPaidMonthly();
+                TotalSalesUnpaidMonthly();
             }
         }
-
+   
         private void LoadProfile()
         {
             try
@@ -166,7 +155,94 @@ namespace Capstone
             }
         }
 
-        protected void AMCount()
+        //protected void AMCount()
+        //{
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE ROLE_ID = 1";
+        //            //cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, Convert.ToInt32(Session["sam_id"]));
+
+        //            // Execute the command and read the data
+        //            int totalAccountManager = Convert.ToInt32(cmd.ExecuteScalar());
+
+        //            // For total customers, you might want a different query
+        //            cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE EMP_STATUS = 'Active' AND ROLE_ID = 1";
+        //            int activeAccountManager = Convert.ToInt32(cmd.ExecuteScalar());
+        //            // For total customers, you might want a different query
+        //            cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE EMP_STATUS = 'Suspended' AND ROLE_ID = 1";
+        //            int suspAccountManager = Convert.ToInt32(cmd.ExecuteScalar());
+
+        //            // Bind to labels
+        //            totalAM.Text = totalAccountManager.ToString();
+        //            activeAM.Text = activeAccountManager.ToString();
+        //            suspAM.Text = suspAccountManager.ToString();
+        //        }
+        //    }
+        //}
+
+        //protected void SAMCount()
+        //{
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE ROLE_ID = 2";
+        //            //cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, Convert.ToInt32(Session["sam_id"]));
+
+        //            // Execute the command and read the data
+        //            int totalSAMcount = Convert.ToInt32(cmd.ExecuteScalar());
+
+        //            // For total customers, you might want a different query
+        //            cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE EMP_STATUS = 'Active' AND ROLE_ID = 2";
+        //            int activeSAMcount = Convert.ToInt32(cmd.ExecuteScalar());
+        //            // For total customers, you might want a different query
+        //            cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE EMP_STATUS = 'Suspended' AND ROLE_ID = 2";
+        //            int suspSAMcount = Convert.ToInt32(cmd.ExecuteScalar());
+
+        //            // Bind to labels
+        //            totalSAM.Text = totalSAMcount.ToString();
+        //            activeSAM.Text = activeSAMcount.ToString();
+        //            suspSAM.Text = suspSAMcount.ToString();
+        //        }
+        //    }
+        //}
+
+        //protected void HaulerCount()
+        //{
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE ROLE_ID = 4";
+        //            //cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, Convert.ToInt32(Session["sam_id"]));
+
+        //            // Execute the command and read the data
+        //            int totalBOcount = Convert.ToInt32(cmd.ExecuteScalar());
+
+        //            // For total customers, you might want a different query
+        //            cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE EMP_STATUS = 'Active' AND ROLE_ID = 4";
+        //            int activeBOcount = Convert.ToInt32(cmd.ExecuteScalar());
+        //            // For total customers, you might want a different query
+        //            cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE EMP_STATUS = 'Suspended' AND ROLE_ID = 4";
+        //            int suspBOcount = Convert.ToInt32(cmd.ExecuteScalar());
+
+        //            // Bind to labels
+        //            totalHauler.Text = totalBOcount.ToString();
+        //            activeHauler.Text = activeBOcount.ToString();
+        //            suspHauler.Text = suspBOcount.ToString();
+        //        }
+        //    }
+        //}
+
+        protected void BOCount()
         {
             using (var db = new NpgsqlConnection(con))
             {
@@ -174,47 +250,245 @@ namespace Capstone
                 using (var cmd = db.CreateCommand())
                 {
                     cmd.CommandType = CommandType.Text;
-                    cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE ROLE_ID = 1";
+                    cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE ROLE_ID = 3";
                     //cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, Convert.ToInt32(Session["sam_id"]));
 
                     // Execute the command and read the data
-                    int totalAccountManager = Convert.ToInt32(cmd.ExecuteScalar());
+                    int totalBOcount = Convert.ToInt32(cmd.ExecuteScalar());
 
                     // For total customers, you might want a different query
-                    cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE EMP_STATUS = 'Active' AND ROLE_ID = 1";
-                    int activeAccountManager = Convert.ToInt32(cmd.ExecuteScalar());
+                    cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE EMP_STATUS = 'Active' AND ROLE_ID = 3";
+                    int activeBOcount = Convert.ToInt32(cmd.ExecuteScalar());
+                    // For total customers, you might want a different query
+                    cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE EMP_STATUS = 'Suspended' AND ROLE_ID = 3";
+                    int suspBOcount = Convert.ToInt32(cmd.ExecuteScalar());
 
                     // Bind to labels
-                    totalAM.Text = totalAccountManager.ToString();
-                    activeAM.Text = activeAccountManager.ToString();
+                    totalBO.Text = totalBOcount.ToString();
+                    activeBO.Text = activeBOcount.ToString();
+                    suspBO.Text = suspBOcount.ToString();
                 }
+            }
+        }
+        //protected void ODCount()
+        //{
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE ROLE_ID = 5";
+        //            //cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, Convert.ToInt32(Session["sam_id"]));
+
+        //            // Execute the command and read the data
+        //            int totalODcount = Convert.ToInt32(cmd.ExecuteScalar());
+
+        //            // For total customers, you might want a different query
+        //            cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE EMP_STATUS = 'Active' AND ROLE_ID = 5";
+        //            int activeODcount = Convert.ToInt32(cmd.ExecuteScalar());
+        //            // For total customers, you might want a different query
+        //            cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE EMP_STATUS = 'Suspended' AND ROLE_ID = 5";
+        //            int suspODcount = Convert.ToInt32(cmd.ExecuteScalar());
+
+        //            // Bind to labels
+        //            totalOD.Text = totalODcount.ToString();
+        //            activeOD.Text = activeODcount.ToString();
+        //            suspOD.Text = suspODcount.ToString();
+        //        }
+        //    }
+        //}
+
+        protected void PaymentStatus()
+        {
+            using (var db = new NpgsqlConnection(con))
+            {
+                db.Open();
+                int paidCount, unpaidCount;
+
+                // Retrieve count for paid payments
+                using (var cmd = new NpgsqlCommand("SELECT COUNT(*) FROM payment WHERE p_status = 'paid'", db))
+                {
+                    paidCount = Convert.ToInt32(cmd.ExecuteScalar());
+                }
+
+                // Retrieve count for unpaid payments
+                using (var cmd = new NpgsqlCommand("SELECT COUNT(*) FROM payment WHERE p_status = 'unpaid'", db))
+                {
+                    unpaidCount = Convert.ToInt32(cmd.ExecuteScalar());
+                }
+
+                // Register JavaScript to update the pie chart on the client side
+                string script = $"updatePieChart({paidCount}, {unpaidCount});";
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "updatePieChart", script, true);
             }
         }
 
 
-        protected void SAMCount()
+        //private void TotalSalesPaidMonthly()
+        //{
+        //    decimal[] monthlyTotalSalesPaid = new decimal[12]; // Array to hold totals for each month
+
+        //    using (var conn = new NpgsqlConnection(con))
+        //    {
+        //        conn.Open();
+
+        //        // Loop through each month
+        //        for (int month = 0; month < 12; month++)
+        //        {
+        //            DateTime startDate = new DateTime(2024, month + 1, 1); // Month is 0-based
+        //            DateTime endDate = startDate.AddMonths(1); // End date is the first of the next month
+
+        //            monthlyTotalSalesPaid[month] = GetTotalSales(conn, startDate, endDate, "paid");
+        //        }
+
+        //        // Pass the data to the client-side script
+        //        ClientScript.RegisterArrayDeclaration("monthlyTotalSalesPaid",
+        //            string.Join(",", monthlyTotalSalesPaid.Select(s => s.ToString())));
+        //    }
+        //}
+        //private void TotalSalesUnpaidMonthly()
+        //{
+        //    decimal[] monthlyTotalSalesUnpaid = new decimal[12]; // Array to hold totals for each month
+
+        //    using (var conn = new NpgsqlConnection(con))
+        //    {
+        //        conn.Open();
+
+        //        // Loop through each month
+        //        for (int month = 0; month < 12; month++)
+        //        {
+        //            DateTime startDate = new DateTime(2024, month + 1, 1); // Month is 0-based
+        //            DateTime endDate = startDate.AddMonths(1); // End date is the first of the next month
+
+        //            monthlyTotalSalesUnpaid[month] = GetTotalSales(conn, startDate, endDate, "unpaid");
+        //        }
+
+        //        // Pass the data to the client-side script
+        //        ClientScript.RegisterArrayDeclaration("monthlyTotalSalesUnpaid",
+        //            string.Join(",", monthlyTotalSalesUnpaid.Select(s => s.ToString())));
+        //    }
+        //}
+        //private decimal GetTotalSales(NpgsqlConnection conn, DateTime startDate, DateTime endDate, string billStatus)
+        //{
+        //    decimal totalBill = 0.00m;
+        //    string query = "SELECT SUM(p_amount) FROM public.payment WHERE p_updated_at >= @startDate AND p_updated_at < @endDate AND p_status = @billStatus";
+
+        //    using (var cmd = new NpgsqlCommand(query, conn))
+        //    {
+        //        cmd.Parameters.AddWithValue("startDate", startDate);
+        //        cmd.Parameters.AddWithValue("endDate", endDate);
+        //        cmd.Parameters.AddWithValue("billStatus", billStatus);
+
+        //        var result = cmd.ExecuteScalar();
+
+        //        if (result != DBNull.Value)
+        //        {
+        //            totalBill = Convert.ToDecimal(result);
+        //        }
+        //    }
+
+        //    return totalBill;
+        //}
+
+
+        private void TotalSalesPaidMonthly()
         {
-            using (var db = new NpgsqlConnection(con))
+            decimal[] monthlyTotalSalesPaid = new decimal[12]; // Array to hold totals for each month
+
+            using (var conn = new NpgsqlConnection(con))
             {
-                db.Open();
-                using (var cmd = db.CreateCommand())
+                conn.Open();
+
+                // Get the current date
+                DateTime currentDate = DateTime.Now;
+
+                // Loop through each month
+                for (int month = 0; month < 12; month++)
                 {
-                    cmd.CommandType = CommandType.Text;
-                    cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE ROLE_ID = 2";
-                    //cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, Convert.ToInt32(Session["sam_id"]));
+                    // Start date for the month
+                    DateTime startDate = new DateTime(currentDate.Year, month + 1, 1);
+                    // End date for the next month
+                    DateTime endDate = startDate.AddMonths(1);
 
-                    // Execute the command and read the data
-                    int totalSAMcount = Convert.ToInt32(cmd.ExecuteScalar());
+                    // Sum payments that were either paid in this month or were unpaid but are still open
+                    monthlyTotalSalesPaid[month] = GetTotalSales(conn, startDate, endDate, "paid");
+                    monthlyTotalSalesPaid[month] += GetTotalSales(conn, startDate, endDate, "unpaid", currentDate);
+                }
 
-                    // For total customers, you might want a different query
-                    cmd.CommandText = "SELECT COUNT(*) FROM EMPLOYEE WHERE EMP_STATUS = 'Active' AND ROLE_ID = 2";
-                    int activeSAMcount = Convert.ToInt32(cmd.ExecuteScalar());
+                // Pass the data to the client-side script
+                ClientScript.RegisterArrayDeclaration("monthlyTotalSalesPaid",
+                    string.Join(",", monthlyTotalSalesPaid.Select(s => s.ToString())));
+            }
+        }
 
-                    // Bind to labels
-                    totalSAM.Text = totalSAMcount.ToString();
-                    activeSAM.Text = activeSAMcount.ToString();
+        private void TotalSalesUnpaidMonthly()
+        {
+            decimal[] monthlyTotalSalesUnpaid = new decimal[12]; // Array to hold totals for each month
+
+            using (var conn = new NpgsqlConnection(con))
+            {
+                conn.Open();
+
+                // Get the current date
+                DateTime currentDate = DateTime.Now;
+
+                // Loop through each month
+                for (int month = 0; month < 12; month++)
+                {
+                    // Start date for the month
+                    DateTime startDate = new DateTime(currentDate.Year, month + 1, 1);
+                    // End date for the next month
+                    DateTime endDate = startDate.AddMonths(1);
+
+                    // Get the total unpaid payments for this month
+                    monthlyTotalSalesUnpaid[month] = GetTotalSales(conn, startDate, endDate, "unpaid", currentDate);
+                }
+
+                // Pass the data to the client-side script
+                ClientScript.RegisterArrayDeclaration("monthlyTotalSalesUnpaid",
+                    string.Join(",", monthlyTotalSalesUnpaid.Select(s => s.ToString())));
+            }
+        }
+
+        private decimal GetTotalSales(NpgsqlConnection conn, DateTime startDate, DateTime endDate, string billStatus, DateTime? currentDate = null)
+        {
+            decimal totalBill = 0.00m;
+            string query;
+
+            if (billStatus == "unpaid" && currentDate.HasValue)
+            {
+                // For unpaid payments, consider those created before the current month and unpaid till now
+                query = @"SELECT SUM(p_amount) 
+                  FROM public.payment 
+                  WHERE p_created_at < @currentDate 
+                    AND p_status = 'unpaid' 
+                    AND p_updated_at < @endDate";
+            }
+            else
+            {
+                query = "SELECT SUM(p_amount) FROM public.payment WHERE p_updated_at >= @startDate AND p_updated_at < @endDate AND p_status = @billStatus";
+            }
+
+            using (var cmd = new NpgsqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("startDate", startDate);
+                cmd.Parameters.AddWithValue("endDate", endDate);
+                if (currentDate.HasValue)
+                {
+                    cmd.Parameters.AddWithValue("currentDate", currentDate.Value);
+                }
+                cmd.Parameters.AddWithValue("billStatus", billStatus);
+
+                var result = cmd.ExecuteScalar();
+
+                if (result != DBNull.Value)
+                {
+                    totalBill = Convert.ToDecimal(result);
                 }
             }
+
+            return totalBill;
         }
 
 

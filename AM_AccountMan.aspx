@@ -346,40 +346,6 @@
     </style>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <%--start of searchbar script--%>
-    <%--<script type="text/javascript">
-        function search() {
-            var searchText = document.getElementById('<%= txtSearch.ClientID %>').value.toUpperCase();
-            var grid = document.getElementById('<%= gridViewAccountMan.ClientID %>');
-
-            for (var i = 1; i < grid.rows.length; i++) {
-                var row = grid.rows[i];
-                var id = row.cells[0].innerHTML.toUpperCase();
-                var firstname = row.cells[1].innerHTML.toUpperCase();
-                var mi = row.cells[2].innerHTML.toUpperCase();
-                var lastname = row.cells[3].innerHTML.toUpperCase();
-                var username = row.cells[4].innerHTML.toUpperCase();
-                var contact = row.cells[5].innerHTML.toUpperCase();
-                var email = row.cells[6].innerHTML.toUpperCase();
-                var created_at = row.cells[7].innerHTML.toUpperCase();
-                var updated_at = row.cells[8].innerHTML.toUpperCase();
-                var status = row.cells[9].innerHTML.toUpperCase();
-                //var date = row.cells[9].innerHTML.toUpperCase();
-                //var stock_level = row.cells[10].innerHTML.toUpperCase();
-                if (id.indexOf(searchText) > -1 || firstname.indexOf(searchText) > -1 || mi.indexOf(searchText) > -1 ||
-                    lastname.indexOf(searchText) > -1 || username.indexOf(searchText) > -1 ||
-                    contact.indexOf(searchText) > -1 || email.indexOf(searchText) > -1 ||
-                    created_at.indexOf(searchText) > -1 || updated_at.indexOf(searchText) > -1 ||
-                    status.indexOf(searchText) > -1) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            }
-        }
-
-
-    </script>--%>
-
     <script type="text/javascript">
         function search() {
             var searchText = document.getElementById('<%= txtSearch.ClientID %>').value.toUpperCase();
@@ -387,7 +353,6 @@
             // Array of your GridView IDs
             var gridViewIds = [
 
-            '<%= gridView1.ClientID %>',
             '<%= gridView2.ClientID %>',
             '<%= gridView3.ClientID %>',
             '<%= gridView4.ClientID %>'
@@ -409,35 +374,6 @@
             });
         }
     </script>
-
-    <%--end of searchbar script--%>
-
-    <%--<script type="text/javascript">
-        // Function to perform search on a specific GridView
-        function search(gridViewID, searchBoxID) {
-            var searchText = document.getElementById(searchBoxID).value.toUpperCase();
-            var grid = document.getElementById(gridViewID);
-
-            for (var i = 1; i < grid.rows.length; i++) {
-                var row = grid.rows[i];
-
-                // Collect the text content of each cell for comparison
-                var cellsText = [];
-                for (var j = 0; j < row.cells.length; j++) {
-                    cellsText.push(row.cells[j].innerHTML.toUpperCase());
-                }
-
-                // Check if the search text matches any of the cells in the row
-                var matchFound = cellsText.some(cellText => cellText.indexOf(searchText) > -1);
-
-                if (matchFound) {
-                    row.style.display = '';  // Show row if match is found
-                } else {
-                    row.style.display = 'none';  // Hide row otherwise
-                }
-            }
-        }
-</script>--%>
 </head>
 <form id="form2" runat="server" class="row g-3 needs-validation" novalidate>
     <div>
@@ -530,7 +466,7 @@
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="SAM_AccountSettings.aspx">
+                                    <a class="dropdown-item d-flex align-items-center" href="AM_AccountSettings.aspx">
                                         <i class="bi bi-gear"></i>
                                         <span>Account Settings</span>
                                     </a>
@@ -579,7 +515,7 @@
                 <ul class="sidebar-nav" id="sidebar-nav">
 
                     <li class="nav-item">
-                        <a class="nav-link collapsed" href="SAM_Dashboard.aspx">
+                        <a class="nav-link collapsed" href="AM_Dashboard.aspx">
                             <i class="bi bi-grid"></i>
                             <span>Dashboard</span>
                         </a>
@@ -596,39 +532,15 @@
                         </a>
                         <ul id="forms-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
                             <li>
-                                <a href="SAM_AccountMan.aspx" class="active">
+                                <a href="AM_AccountMan.aspx" class="active">
                                     <i class="bi bi-circle"></i><span>Employees</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="SAM_AccountManCustomers.aspx">
+                                <a href="AM_AccountManCustomers.aspx">
                                     <i class="bi bi-circle"></i><span>Customers</span>
                                 </a>
                             </li>
-
-                            <%--<li>
-                                <a href="WAREHOUSE_ADD_CATEGORY.aspx">
-                                    <i class="bi bi-circle"></i><span>Drivers</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="SAM_BO.aspx">
-                                    <i class="bi bi-circle"></i><span>Billing Officer</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="Admin_Manage_Customer.aspx">
-                                    <i class="bi bi-circle"></i><span>Non-Contractual</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="Admin_Manage_Customer.aspx">
-                                    <i class="bi bi-circle"></i><span>Contractual</span>
-                                </a>
-                            </li>--%>
                         </ul>
                     </li>
 
@@ -651,31 +563,7 @@
                         </ul>
                     </li>
 
-                    <%-- <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#receipt-nav" data-bs-toggle="collapse" href="#">
-                <i class="ri-secure-payment-line"></i><span>Payment</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="receipt-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="Admin_Payment_ViewPays.aspx">
-                        <i class="bi bi-circle"></i><span>View Payments</span>
-                    </a>
-                </li>
-            </ul>
-        </li>--%>
-
-
-                    <%--  <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-          <i class="ri-bar-chart-2-line"></i><span>Reports</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="components-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="WAREHOUSE_VIEW_REQUESTS.aspx">
-              <i class="bi bi-circle"></i><span>Requests</span>
-            </a>
-          </li>
-      </li>--%><!-- End Transaction Nav -->
+<!-- End Transaction Nav -->
                 </ul>
             </aside>
             <!-- End Sidebar-->
@@ -833,9 +721,9 @@
 
 
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
+                        <%--<li class="nav-item" role="presentation">
                             <button class="nav-link active" id="sam-tab" data-bs-toggle="tab" data-bs-target="#sam" type="button" role="tab" aria-controls="sam" aria-selected="true" style="color: #061f0d; font-weight: 900">Super Account Manager</button>
-                        </li>
+                        </li>--%>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="am-tab" data-bs-toggle="tab" data-bs-target="#am" type="button" role="tab" aria-controls="am" aria-selected="false" style="color: #061f0d; font-weight: 900">Account Manager</button>
                         </li>
@@ -853,12 +741,7 @@
 
                     <div id="myTabContent" class="tab-content pt-2">
 
-                        <div class="tab-pane fade show active" id="sam" role="tabpanel" aria-labelledby="sam-tab">
-                            <%--<div style="margin: 0">
-                                    <h1 style="color: #dda214; padding-top: 50px; padding-bottom: 0; font-family: 'Raleway',sans-serif; font-size: 62px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center; text-transform: uppercase;">Super Account Manager
-                                    </h1>
-                                </div>--%>
-                            <%--<div class="gridview-container">--%>
+                        <%--<div class="tab-pane fade show active" id="sam" role="tabpanel" aria-labelledby="sam-tab">
                             <asp:GridView Style="width: 100%; word-break: break-all; table-layout: fixed" ID="gridView1" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True"
                                 DataKeyNames="emp_id" AllowPaging="False" CellPadding="20" GridLines="None">
                                 <AlternatingRowStyle BackColor="white" ForeColor="Black" />
@@ -926,8 +809,7 @@
                                 <SortedDescendingCellStyle BackColor="Black" />
                                 <SortedDescendingHeaderStyle BackColor="#15524A" />
                             </asp:GridView>
-                            <%--</div>--%>
-                        </div>
+                        </div>--%>
 
 
                         <div class="tab-pane fade" id="am" role="tabpanel" aria-labelledby="am-tab">
@@ -981,10 +863,10 @@
                                     <asp:TemplateField HeaderText="Action">
                                         <ItemTemplate>
                                             <asp:LinkButton ID="update" runat="server" OnClick="Update_Click" CommandArgument='<%# Eval("emp_id") %>'>
-                                                <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
+                                                <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Style="margin-right: 10px; width: 2em; height: auto; max-height: 100%;"  AlternateText="Edit" />
                                             </asp:LinkButton>
                                             <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("emp_id") %>' OnClientClick="return confirm('Are you sure you want to remove this account manager?');">
-                                                <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
+                                                <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Style="margin-right: 10px; width: 2em; height: auto; max-height: 100%;"  AlternateText="Remove" />
                                             </asp:LinkButton>
                                         </ItemTemplate>
                                     </asp:TemplateField>
@@ -1936,21 +1818,6 @@
                 </style>
 
                 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-                <%--search bar--%>
-                <%--<script>
-                    $(document).ready(function () {
-                        $('#<%= gridViewAccountMan.ClientID %> .edit-button').on('click', function () {
-
-                            var rowIndex = $(this).closest('tr').index();
-                            $('#<%= gridViewAccountMan.ClientID %> tr').height('auto'); // Reset all rows to auto height
-                            $('#<%= gridViewAccountMan.ClientID %> tr:eq(' + rowIndex + ')').height($('#<%= gridViewAccountMan.ClientID %> tr:eq(' + rowIndex + ')').height());
-                        });
-                    });
-
-                </script>--%>
-                <%--end of searchbar--%>
-
-
 
 
                 <!-- End General Form Elements -->
@@ -1960,7 +1827,7 @@
             <!-- ======= Footer ======= -->
             <footer id="footer" class="footer" style="border-top-color: chartreuse">
                 <div class="copyright" style="color: #d4f3cf">
-                    &copy; Copyright <strong><span style="color: #d4f3cf">Pinoy Basurero Corporation</span></strong>. All Rights Reserved
+                    &copy; Copyright <strong><span style="color: #d4f3cf">TrashTrack</span></strong>. All Rights Reserved
                 </div>
             </footer>
             <!-- End Footer -->

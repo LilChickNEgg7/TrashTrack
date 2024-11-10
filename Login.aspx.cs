@@ -146,7 +146,7 @@ namespace Capstone
                 Session["od_rolename"] = roleName;
 
                 // Redirect to Admin dashboard
-                Response.Redirect("BO_Dashboard.aspx");
+                Response.Redirect("Dispatcher_Dashboard.aspx");
                 Response.Write($"<script>alert('Login Successful! WELCOME {roleName.ToUpper()}');</script>");
             }
             else
@@ -434,7 +434,7 @@ namespace Capstone
                 SELECT e.emp_id, e.emp_password, r.role_name 
                 FROM employee e
                 JOIN roles r ON e.role_id = r.role_id 
-                WHERE e.emp_email = @Email AND e.role_id = 4 AND e.emp_status = 'Active'";
+                WHERE e.emp_email = @Email AND e.role_id = 5 AND e.emp_status = 'Active'";
 
                         cmd.Parameters.AddWithValue("@Email", email);
 

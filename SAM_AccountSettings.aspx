@@ -199,26 +199,33 @@
 
 
         <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                  <i class="bi bi-people"></i><span>Manage Account</span><i class="bi bi-chevron-down ms-auto"></i>
+            <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-people"></i><span>Manage Account</span><i class="bi bi-chevron-down ms-auto"></i>
 
-        </a>
-        <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-            <li>
-                <a href="SAM_AccountMan.aspx">
-                    <i class="bi bi-circle"></i><span>Employees</span>
-                </a>
-            </li>
-            <li>
-                <a href="SAM_AccountManCustomers.aspx">
-                    <i class="bi bi-circle"></i><span>Customers</span>
-                </a>
-            </li>
+            </a>
+            <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a href="SAM_AccountMan.aspx">
+                        <i class="bi bi-circle"></i><span>Employees</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="SAM_AccountManCustomers.aspx">
+                        <i class="bi bi-circle"></i><span>Customers</span>
+                    </a>
+                </li>
 
-        </ul>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="SAM_Reports.aspx">
+                <i class="bi bi-grid"></i>
+                <span>Reports</span>
+            </a>
+
         </li>
 
-        <li class="nav-item">
+        <%--<li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
                 <i class="ri-bill-line"></i><span>Reports</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
@@ -235,7 +242,7 @@
                     </a>
                 </li>
             </ul>
-        </li>
+        </li>--%>
     </ul>
   </aside><!-- End Sidebar-->
 

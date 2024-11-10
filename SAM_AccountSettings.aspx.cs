@@ -737,164 +737,164 @@ namespace Capstone
 
 
 
-        //latest na gumagana without crop
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-            // Get employee ID from session
-            int empId = (int)Session["sam_id"];
+        ////latest na gumagana without crop
+        //protected void Button1_Click(object sender, EventArgs e)
+        //{
+        //    // Get employee ID from session
+        //    int empId = (int)Session["sam_id"];
 
-            // Extracting user input from the front-end form fields
-            string firstName = firstname.Text;
-            string middleInitial = m_initial.Text;
-            string lastName = lastname.Text;
-            string addr = address.Text;
-            string contact = phone.Text;
-            string email = this.email.Text;
+        //    // Extracting user input from the front-end form fields
+        //    string firstName = firstname.Text;
+        //    string middleInitial = m_initial.Text;
+        //    string lastName = lastname.Text;
+        //    string addr = address.Text;
+        //    string contact = phone.Text;
+        //    string email = this.email.Text;
 
-            // Check if the required fields are filled
-            if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName) &&
-                !string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(contact) &&
-                !string.IsNullOrEmpty(addr))
-            {
-                using (var db = new NpgsqlConnection(con))
-                {
-                    db.Open();
+        //    // Check if the required fields are filled
+        //    if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName) &&
+        //        !string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(contact) &&
+        //        !string.IsNullOrEmpty(addr))
+        //    {
+        //        using (var db = new NpgsqlConnection(con))
+        //        {
+        //            db.Open();
 
-                    // Query to get the current profile information
-                    string currentProfileQuery = "SELECT emp_fname, emp_mname, emp_lname, emp_contact, emp_address, emp_email, emp_profile FROM employee WHERE emp_id = @emp_id";
-                    DataRow currentValues;
+        //            // Query to get the current profile information
+        //            string currentProfileQuery = "SELECT emp_fname, emp_mname, emp_lname, emp_contact, emp_address, emp_email, emp_profile FROM employee WHERE emp_id = @emp_id";
+        //            DataRow currentValues;
 
-                    using (var command = new NpgsqlCommand(currentProfileQuery, db))
-                    {
-                        command.Parameters.AddWithValue("@emp_id", empId);
-                        using (var adapter = new NpgsqlDataAdapter(command))
-                        {
-                            DataTable dt = new DataTable();
-                            adapter.Fill(dt);
-                            currentValues = dt.Rows.Count > 0 ? dt.Rows[0] : null;
-                        }
-                    }
+        //            using (var command = new NpgsqlCommand(currentProfileQuery, db))
+        //            {
+        //                command.Parameters.AddWithValue("@emp_id", empId);
+        //                using (var adapter = new NpgsqlDataAdapter(command))
+        //                {
+        //                    DataTable dt = new DataTable();
+        //                    adapter.Fill(dt);
+        //                    currentValues = dt.Rows.Count > 0 ? dt.Rows[0] : null;
+        //                }
+        //            }
 
-                    if (currentValues != null)
-                    {
-                        // Build update query based on changes
-                        string updateQuery = "UPDATE employee SET ";
-                        bool hasChanges = false;
+        //            if (currentValues != null)
+        //            {
+        //                // Build update query based on changes
+        //                string updateQuery = "UPDATE employee SET ";
+        //                bool hasChanges = false;
 
-                        // Check for changes in other fields
-                        if (!string.Equals(currentValues["emp_fname"].ToString(), firstName, StringComparison.OrdinalIgnoreCase))
-                        {
-                            updateQuery += "emp_fname = @firstName, ";
-                            hasChanges = true;
-                        }
-                        if (!string.Equals(currentValues["emp_mname"].ToString(), middleInitial, StringComparison.OrdinalIgnoreCase))
-                        {
-                            updateQuery += "emp_mname = @middleInitial, ";
-                            hasChanges = true;
-                        }
-                        if (!string.Equals(currentValues["emp_lname"].ToString(), lastName, StringComparison.OrdinalIgnoreCase))
-                        {
-                            updateQuery += "emp_lname = @lastName, ";
-                            hasChanges = true;
-                        }
-                        if (!string.Equals(currentValues["emp_contact"].ToString(), contact, StringComparison.OrdinalIgnoreCase))
-                        {
-                            updateQuery += "emp_contact = @contact, ";
-                            hasChanges = true;
-                        }
-                        if (!string.Equals(currentValues["emp_address"].ToString(), addr, StringComparison.OrdinalIgnoreCase))
-                        {
-                            updateQuery += "emp_address = @address, ";
-                            hasChanges = true;
-                        }
-                        if (!string.Equals(currentValues["emp_email"].ToString(), email, StringComparison.OrdinalIgnoreCase))
-                        {
-                            updateQuery += "emp_email = @email, ";
-                            hasChanges = true;
-                        }
+        //                // Check for changes in other fields
+        //                if (!string.Equals(currentValues["emp_fname"].ToString(), firstName, StringComparison.OrdinalIgnoreCase))
+        //                {
+        //                    updateQuery += "emp_fname = @firstName, ";
+        //                    hasChanges = true;
+        //                }
+        //                if (!string.Equals(currentValues["emp_mname"].ToString(), middleInitial, StringComparison.OrdinalIgnoreCase))
+        //                {
+        //                    updateQuery += "emp_mname = @middleInitial, ";
+        //                    hasChanges = true;
+        //                }
+        //                if (!string.Equals(currentValues["emp_lname"].ToString(), lastName, StringComparison.OrdinalIgnoreCase))
+        //                {
+        //                    updateQuery += "emp_lname = @lastName, ";
+        //                    hasChanges = true;
+        //                }
+        //                if (!string.Equals(currentValues["emp_contact"].ToString(), contact, StringComparison.OrdinalIgnoreCase))
+        //                {
+        //                    updateQuery += "emp_contact = @contact, ";
+        //                    hasChanges = true;
+        //                }
+        //                if (!string.Equals(currentValues["emp_address"].ToString(), addr, StringComparison.OrdinalIgnoreCase))
+        //                {
+        //                    updateQuery += "emp_address = @address, ";
+        //                    hasChanges = true;
+        //                }
+        //                if (!string.Equals(currentValues["emp_email"].ToString(), email, StringComparison.OrdinalIgnoreCase))
+        //                {
+        //                    updateQuery += "emp_email = @email, ";
+        //                    hasChanges = true;
+        //                }
 
-                        // Handle profile image updates/removals
-                        byte[] profileImage = null;
+        //                // Handle profile image updates/removals
+        //                byte[] profileImage = null;
 
-                        // Check if a new image is uploaded
-                        if (formFile.HasFile)
-                        {
-                            // Save the uploaded profile image
-                            profileImage = formFile.FileBytes;
-                            updateQuery += "emp_profile = @profileImage, ";
-                            hasChanges = true;
-                        }
-                        // Check if the remove button was clicked via the hidden field
-                        else if (hfImageRemoved.Value == "true")
-                        {
-                            // Read the default profile image directly from the server path
-                            profileImage = File.ReadAllBytes(Server.MapPath("~/Pictures/blank_prof.png"));
-                            updateQuery += "emp_profile = @profileImage, ";
-                            hasChanges = true;
-                        }
+        //                // Check if a new image is uploaded
+        //                if (formFile.HasFile)
+        //                {
+        //                    // Save the uploaded profile image
+        //                    profileImage = formFile.FileBytes;
+        //                    updateQuery += "emp_profile = @profileImage, ";
+        //                    hasChanges = true;
+        //                }
+        //                // Check if the remove button was clicked via the hidden field
+        //                else if (hfImageRemoved.Value == "true")
+        //                {
+        //                    // Read the default profile image directly from the server path
+        //                    profileImage = File.ReadAllBytes(Server.MapPath("~/Pictures/blank_prof.png"));
+        //                    updateQuery += "emp_profile = @profileImage, ";
+        //                    hasChanges = true;
+        //                }
 
-                        // Always add emp_profile to the update query if there's an image to set
-                        if (profileImage != null)
-                        {
-                            // Finalize and execute the update if changes exist
-                            if (hasChanges)
-                            {
-                                updateQuery += "emp_updated_at = CURRENT_TIMESTAMP WHERE emp_id = @emp_id";
+        //                // Always add emp_profile to the update query if there's an image to set
+        //                if (profileImage != null)
+        //                {
+        //                    // Finalize and execute the update if changes exist
+        //                    if (hasChanges)
+        //                    {
+        //                        updateQuery += "emp_updated_at = CURRENT_TIMESTAMP WHERE emp_id = @emp_id";
 
-                                using (var updateCommand = new NpgsqlCommand(updateQuery, db))
-                                {
-                                    updateCommand.Parameters.AddWithValue("@emp_id", empId);
+        //                        using (var updateCommand = new NpgsqlCommand(updateQuery, db))
+        //                        {
+        //                            updateCommand.Parameters.AddWithValue("@emp_id", empId);
 
-                                    // Add parameters for updated fields
-                                    if (updateQuery.Contains("emp_fname"))
-                                        updateCommand.Parameters.Add("@firstName", NpgsqlTypes.NpgsqlDbType.Text).Value = firstName;
-                                    if (updateQuery.Contains("emp_mname"))
-                                        updateCommand.Parameters.Add("@middleInitial", NpgsqlTypes.NpgsqlDbType.Text).Value = middleInitial;
-                                    if (updateQuery.Contains("emp_lname"))
-                                        updateCommand.Parameters.Add("@lastName", NpgsqlTypes.NpgsqlDbType.Text).Value = lastName;
-                                    if (updateQuery.Contains("emp_contact"))
-                                        updateCommand.Parameters.Add("@contact", NpgsqlTypes.NpgsqlDbType.Text).Value = contact;
-                                    if (updateQuery.Contains("emp_address"))
-                                        updateCommand.Parameters.Add("@address", NpgsqlTypes.NpgsqlDbType.Text).Value = addr;
-                                    if (updateQuery.Contains("emp_email"))
-                                        updateCommand.Parameters.Add("@email", NpgsqlTypes.NpgsqlDbType.Text).Value = email;
+        //                            // Add parameters for updated fields
+        //                            if (updateQuery.Contains("emp_fname"))
+        //                                updateCommand.Parameters.Add("@firstName", NpgsqlTypes.NpgsqlDbType.Text).Value = firstName;
+        //                            if (updateQuery.Contains("emp_mname"))
+        //                                updateCommand.Parameters.Add("@middleInitial", NpgsqlTypes.NpgsqlDbType.Text).Value = middleInitial;
+        //                            if (updateQuery.Contains("emp_lname"))
+        //                                updateCommand.Parameters.Add("@lastName", NpgsqlTypes.NpgsqlDbType.Text).Value = lastName;
+        //                            if (updateQuery.Contains("emp_contact"))
+        //                                updateCommand.Parameters.Add("@contact", NpgsqlTypes.NpgsqlDbType.Text).Value = contact;
+        //                            if (updateQuery.Contains("emp_address"))
+        //                                updateCommand.Parameters.Add("@address", NpgsqlTypes.NpgsqlDbType.Text).Value = addr;
+        //                            if (updateQuery.Contains("emp_email"))
+        //                                updateCommand.Parameters.Add("@email", NpgsqlTypes.NpgsqlDbType.Text).Value = email;
 
-                                    // Set the profile image parameter (either the uploaded image or the default image)
-                                    updateCommand.Parameters.Add("@profileImage", NpgsqlTypes.NpgsqlDbType.Bytea).Value = profileImage;
+        //                            // Set the profile image parameter (either the uploaded image or the default image)
+        //                            updateCommand.Parameters.Add("@profileImage", NpgsqlTypes.NpgsqlDbType.Bytea).Value = profileImage;
 
-                                    // Execute the update command
-                                    int affectedRows = updateCommand.ExecuteNonQuery();
-                                    if (affectedRows >= 1)
-                                    {
-                                        Response.Write("<script>alert('Successfully Changed!')</script>");
-                                        LoadProfile();
-                                    }
-                                    else
-                                    {
-                                        Response.Write("<script>alert('Profile update failed!')</script>");
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                Response.Write("<script>alert('No changes detected.')</script>");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Response.Write("<script>alert('Employee not found.')</script>");
-                    }
+        //                            // Execute the update command
+        //                            int affectedRows = updateCommand.ExecuteNonQuery();
+        //                            if (affectedRows >= 1)
+        //                            {
+        //                                Response.Write("<script>alert('Successfully Changed!')</script>");
+        //                                LoadProfile();
+        //                            }
+        //                            else
+        //                            {
+        //                                Response.Write("<script>alert('Profile update failed!')</script>");
+        //                            }
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        Response.Write("<script>alert('No changes detected.')</script>");
+        //                    }
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Response.Write("<script>alert('Employee not found.')</script>");
+        //            }
 
-                    db.Close();
-                }
-            }
-            else
-            {
-                // Validation error: required fields are not filled
-                Response.Write("<script>alert('Please fill all required fields!')</script>");
-            }
-        }
+        //            db.Close();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        // Validation error: required fields are not filled
+        //        Response.Write("<script>alert('Please fill all required fields!')</script>");
+        //    }
+        //}
 
 
 
@@ -1214,95 +1214,164 @@ namespace Capstone
         //}
 
 
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            // Get employee ID from session
+            int empId = (int)Session["sam_id"];
 
-        //protected void Button1_Click(object sender, EventArgs e)
-        //{
-        //    //string uname = userName.Text;
-        //    string lname = lastname.Text;
-        //    string fname = firstname.Text;
-        //    string mi = m_initial.Text;
-        //    //string role = job.Text;
-        //    string addr = address.Text;
-        //    string phone_txt = phone.Text;
-        //    string e_mail = email.Text;
-        //    int ID;
-        //    var usern = (string)Session["ad_usern"];
-        //    var passw = (string)Session["ad_pass"];
+            // Extracting user input from the front-end form fields
+            string firstName = firstname.Text;
+            string middleInitial = m_initial.Text;
+            string lastName = lastname.Text;
+            string addr = address.Text;
+            string contact = phone.Text;
+            string email = this.email.Text;
 
-        //    //using (var db = new NpgsqlCommand(con))
-        //    //{
-        //    //    db.Open();
-        //    //    using (var cmd = db.CreateCommand())
-        //    //    {
-        //    //        cmd.CommandType = CommandType.Text;
-        //    //        cmd.CommandText = "SELECT * FROM ADMIN WHERE ADM_USERN = @username AND ADM_PASS = @password ";
-        //    //        cmd.Parameters.AddWithValue("@username", usern);
-        //    //        cmd.Parameters.AddWithValue("@password", passw);
+            // Check if the required fields are filled
+            if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName) &&
+                !string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(contact) &&
+                !string.IsNullOrEmpty(addr))
+            {
+                using (var db = new NpgsqlConnection(con))
+                {
+                    db.Open();
 
+                    // Query to get the current profile information
+                    string currentProfileQuery = "SELECT emp_fname, emp_mname, emp_lname, emp_contact, emp_address, emp_email, emp_profile FROM employee WHERE emp_id = @emp_id";
+                    DataRow currentValues;
 
-        //    //        using (SqlDataReader reader = cmd.ExecuteReader())
-        //    //        {
-        //    //            if (reader.Read())
-        //    //            {
-        //    //                ID = reader.GetInt32(reader.GetOrdinal("ADM_ID"));
-        //    //                //lname = reader["ADM_LNAME"].ToString();
-        //    //                using (var command = db.CreateCommand())
-        //    //                {
-        //    //                    command.CommandType = CommandType.Text;
-        //    //                    command.CommandText = "SELECT * FROM ADMIN WHERE ADM_USERN = @username";
-        //    //                    command.Parameters.AddWithValue("@username", uname);
-        //    //                    if (reader.Read())
-        //    //                    {
-        //    //                        Response.Write("<script>alert('Username Already Taken!')</script>");
+                    using (var command = new NpgsqlCommand(currentProfileQuery, db))
+                    {
+                        command.Parameters.AddWithValue("@emp_id", empId);
+                        using (var adapter = new NpgsqlDataAdapter(command))
+                        {
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
+                            currentValues = dt.Rows.Count > 0 ? dt.Rows[0] : null;
+                        }
+                    }
 
-        //    //                    }
-        //    //                    else
-        //    //                    {
-        //    //                        using (var cmdd = db.CreateCommand())
-        //    //                        {
-        //    //                            cmdd.CommandType = CommandType.Text;
-        //    //                            cmdd.CommandText = "UPDATE ADMIN SET ADM_USERN = @username, ADM_FNAME = @fname, ADM_LNAME = @lname, ADM_MI = @mi, ADM_CONTACT = @contact, ADM_ADDRESS = @address, ADM_EMAIL = @email WHERE ADM_ID = @id";
-        //    //                            cmdd.Parameters.AddWithValue("@username", uname);
-        //    //                            cmdd.Parameters.AddWithValue("@fname", fname);
-        //    //                            cmdd.Parameters.AddWithValue("@lname", lname);
-        //    //                            cmdd.Parameters.AddWithValue("@mi", mi);
-        //    //                            cmdd.Parameters.AddWithValue("@contact", phone_txt);
-        //    //                            cmdd.Parameters.AddWithValue("@address", addr);
-        //    //                            cmdd.Parameters.AddWithValue("@email", e_mail);
-        //    //                            cmdd.Parameters.AddWithValue("@id", ID);
-        //    //                            reader.Close();
-        //    //                            var ctr = cmdd.ExecuteNonQuery();
-        //    //                            if (ctr >= 1)
-        //    //                            {
+                    if (currentValues != null)
+                    {
+                        // Build update query based on changes
+                        string updateQuery = "UPDATE employee SET ";
+                        bool hasChanges = false;
 
-        //    //                                Response.Write("<script>alert('Profile Updated!')</script>");
-        //    //                                Session["ad_usern"] = uname;
-        //    //                                //Session["ad_pass"] = ;
-        //    //                                AdminProfile();
-        //    //                            }
-        //    //                            else
-        //    //                            {
-        //    //                                Response.Write("<script>alert('Not Updated!')</script>");
-        //    //                                AdminProfile();
-        //    //                            }
+                        // Check for changes in other fields
+                        if (!string.Equals(currentValues["emp_fname"].ToString(), firstName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            updateQuery += "emp_fname = @firstName, ";
+                            hasChanges = true;
+                        }
+                        if (!string.Equals(currentValues["emp_mname"].ToString(), middleInitial, StringComparison.OrdinalIgnoreCase))
+                        {
+                            updateQuery += "emp_mname = @middleInitial, ";
+                            hasChanges = true;
+                        }
+                        if (!string.Equals(currentValues["emp_lname"].ToString(), lastName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            updateQuery += "emp_lname = @lastName, ";
+                            hasChanges = true;
+                        }
+                        if (!string.Equals(currentValues["emp_contact"].ToString(), contact, StringComparison.OrdinalIgnoreCase))
+                        {
+                            updateQuery += "emp_contact = @contact, ";
+                            hasChanges = true;
+                        }
+                        if (!string.Equals(currentValues["emp_address"].ToString(), addr, StringComparison.OrdinalIgnoreCase))
+                        {
+                            updateQuery += "emp_address = @address, ";
+                            hasChanges = true;
+                        }
+                        if (!string.Equals(currentValues["emp_email"].ToString(), email, StringComparison.OrdinalIgnoreCase))
+                        {
+                            updateQuery += "emp_email = @email, ";
+                            hasChanges = true;
+                        }
 
-        //    //                        }
-        //    //                    }
+                        // Handle profile image updates/removals
+                        byte[] profileImage = null;
 
-        //    //                }
+                        // Check if a new image is uploaded
+                        if (formFile.HasFile)
+                        {
+                            // Save the uploaded profile image
+                            profileImage = formFile.FileBytes;
+                            updateQuery += "emp_profile = @profileImage, ";
+                            hasChanges = true;
+                        }
+                        // Check if the remove button was clicked via the hidden field
+                        else if (hfImageRemoved.Value == "true")
+                        {
+                            // Read the default profile image directly from the server path
+                            profileImage = File.ReadAllBytes(Server.MapPath("~/Pictures/blank_prof.png"));
+                            updateQuery += "emp_profile = @profileImage, ";
+                            hasChanges = true;
+                        }
 
+                        // Always add emp_profile to the update query if there's an image to set
+                        if (profileImage != null)
+                        {
+                            // Finalize and execute the update if changes exist
+                            if (hasChanges)
+                            {
+                                updateQuery += "emp_updated_at = CURRENT_TIMESTAMP WHERE emp_id = @emp_id";
 
+                                using (var updateCommand = new NpgsqlCommand(updateQuery, db))
+                                {
+                                    updateCommand.Parameters.AddWithValue("@emp_id", empId);
 
+                                    // Add parameters for updated fields
+                                    if (updateQuery.Contains("emp_fname"))
+                                        updateCommand.Parameters.Add("@firstName", NpgsqlTypes.NpgsqlDbType.Text).Value = firstName;
+                                    if (updateQuery.Contains("emp_mname"))
+                                        updateCommand.Parameters.Add("@middleInitial", NpgsqlTypes.NpgsqlDbType.Text).Value = middleInitial;
+                                    if (updateQuery.Contains("emp_lname"))
+                                        updateCommand.Parameters.Add("@lastName", NpgsqlTypes.NpgsqlDbType.Text).Value = lastName;
+                                    if (updateQuery.Contains("emp_contact"))
+                                        updateCommand.Parameters.Add("@contact", NpgsqlTypes.NpgsqlDbType.Text).Value = contact;
+                                    if (updateQuery.Contains("emp_address"))
+                                        updateCommand.Parameters.Add("@address", NpgsqlTypes.NpgsqlDbType.Text).Value = addr;
+                                    if (updateQuery.Contains("emp_email"))
+                                        updateCommand.Parameters.Add("@email", NpgsqlTypes.NpgsqlDbType.Text).Value = email;
 
+                                    // Set the profile image parameter (either the uploaded image or the default image)
+                                    updateCommand.Parameters.Add("@profileImage", NpgsqlTypes.NpgsqlDbType.Bytea).Value = profileImage;
 
-        //    //            }
-        //    //        }
-        //    //    }
-        //    //}
+                                    // Execute the update command
+                                    int affectedRows = updateCommand.ExecuteNonQuery();
+                                    if (affectedRows >= 1)
+                                    {
+                                        Response.Write("<script>alert('Successfully Changed!')</script>");
+                                        LoadProfile();
+                                    }
+                                    else
+                                    {
+                                        Response.Write("<script>alert('Profile update failed!')</script>");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Response.Write("<script>alert('No changes detected.')</script>");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Response.Write("<script>alert('Employee not found.')</script>");
+                    }
 
+                    db.Close();
+                }
+            }
+            else
+            {
+                // Validation error: required fields are not filled
+                Response.Write("<script>alert('Please fill all required fields!')</script>");
+            }
+        }
 
-
-        //}
 
 
     }

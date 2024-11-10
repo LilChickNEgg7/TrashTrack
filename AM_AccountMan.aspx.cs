@@ -27,7 +27,7 @@ namespace Capstone
                 BindNotifications();
                 LoadRoles();
                 AccountManList();
-                SupAccountManList();
+                //SupAccountManList();
                 BillinOfficerList();
                 OperationalDispList();
                 HaulerList();
@@ -156,7 +156,7 @@ namespace Capstone
         {
             using (NpgsqlConnection conn = new NpgsqlConnection(con))
             {
-                string query = "SELECT role_id, role_name FROM roles ORDER BY role_id";
+                string query = "SELECT role_id, role_name FROM roles WHERE role_name != 'Super Account Manager' ORDER BY role_id";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
 
                 try
@@ -191,15 +191,15 @@ namespace Capstone
         {
             try
             {
-                if (Session["sam_id"] == null)
+                if (Session["am_id"] == null)
                 {
                     // Session expired or not set, redirect to login
                     Response.Redirect("LoginPage.aspx");
                     return;
                 }
 
-                int adminId = (int)Session["sam_id"];  // Retrieve admin ID from session
-                string roleName = (string)Session["sam_rolename"];
+                int adminId = (int)Session["am_id"];  // Retrieve admin ID from session
+                string roleName = (string)Session["am_rolename"];
 
 
                 byte[] imageData = null;  // Initialize imageData
@@ -281,31 +281,31 @@ namespace Capstone
 
 
 
-        protected void SupAccountManList()
-        {
-            using (var db = new NpgsqlConnection(con))
-            {
-                db.Open();
-                using (var cmd = db.CreateCommand())
-                {
-                    cmd.CommandType = CommandType.Text;
-                    // Modified the query to match the column names in the account_manager table
-                    cmd.CommandText = "SELECT * FROM employee WHERE emp_status != 'Deleted' AND role_id = 2 AND emp_id != @id ORDER BY emp_id, emp_status";
+        //protected void SupAccountManList()
+        //{
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            // Modified the query to match the column names in the account_manager table
+        //            cmd.CommandText = "SELECT * FROM employee WHERE emp_status != 'Deleted' AND role_id = 2 AND emp_id != @id ORDER BY emp_id, emp_status";
 
-                    // Ensure the parameter type is correct (assuming emp_id is an integer)
-                    cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, Convert.ToInt32(Session["sam_id"]));
+        //            // Ensure the parameter type is correct (assuming emp_id is an integer)
+        //            cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, Convert.ToInt32(Session["sam_id"]));
 
-                    // Execute the query and bind to the GridView
-                    DataTable admin_datatable = new DataTable();
-                    NpgsqlDataAdapter admin_sda = new NpgsqlDataAdapter(cmd);
-                    admin_sda.Fill(admin_datatable);
+        //            // Execute the query and bind to the GridView
+        //            DataTable admin_datatable = new DataTable();
+        //            NpgsqlDataAdapter admin_sda = new NpgsqlDataAdapter(cmd);
+        //            admin_sda.Fill(admin_datatable);
 
-                    gridView1.DataSource = admin_datatable;
-                    gridView1.DataBind();
-                }
-                db.Close();
-            }
-        }
+        //            gridView1.DataSource = admin_datatable;
+        //            gridView1.DataBind();
+        //        }
+        //        db.Close();
+        //    }
+        //}
 
 
 
@@ -1140,7 +1140,7 @@ namespace Capstone
 
                                 Response.Write("<script>alert('Admin information updated successfully!')</script>");
                                 AccountManList();
-                                SupAccountManList();
+                                //SupAccountManList();
                                 BillinOfficerList();
                                 OperationalDispList();
                                 HaulerList();
@@ -1167,7 +1167,7 @@ namespace Capstone
         protected void submitBtn_Click(object sender, EventArgs e)
         {
 
-            int adminId = (int)Session["sam_id"];
+            int adminId = (int)Session["am_id"];
 
             // Extracting user input
             string roleIdString = emp_role.SelectedValue; // Get selected role_id
@@ -1283,7 +1283,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                             // Success: Account Manager added
                             Response.Write("<script>alert('Account Manager Added!')</script>");
                             AccountManList();
-                            SupAccountManList();
+                            //SupAccountManList();
                             BillinOfficerList();
                             OperationalDispList();
                             HaulerList();
@@ -1294,7 +1294,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                             // Failure: Account Manager registration failed
                             Response.Write("<script>alert('Account Manager failed to Register!')</script>");
                             AccountManList();
-                            SupAccountManList();
+                            //SupAccountManList();
                             BillinOfficerList();
                             OperationalDispList();
                             HaulerList();
@@ -1721,7 +1721,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                         }
                     }
                     AccountManList();
-                    SupAccountManList();
+                    //SupAccountManList();
                     BillinOfficerList();
                     OperationalDispList();
                     HaulerList();
@@ -1761,7 +1761,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
                                 "swal('Unsuspended!', 'Account Manager Unsuspended Successfully!', 'success')", true);
                             AccountManList();
-                            SupAccountManList();
+                            //SupAccountManList();
                             BillinOfficerList();
                             OperationalDispList();
                             HaulerList();
@@ -1772,7 +1772,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                             Response.Write("<script>alert('Can't unsuspend');</script>");
                         }
                         AccountManList();
-                        SupAccountManList();
+                        //SupAccountManList();
                         BillinOfficerList();
                         OperationalDispList();
                         HaulerList();
@@ -1781,7 +1781,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                     db.Close();
                 }
                 AccountManList();
-                SupAccountManList();
+                //SupAccountManList();
                 BillinOfficerList();
                 OperationalDispList();
                 HaulerList();

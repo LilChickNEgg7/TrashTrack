@@ -143,7 +143,7 @@ namespace Capstone
                 {
                     cmd.CommandType = CommandType.Text;
                     // Modified the query to fetch only required fields and avoid deleted records
-                    cmd.CommandText = "SELECT wc_id, wc_name, wc_price, wc_unit FROM waste_category WHERE wc_status != 'Deleted'";
+                    cmd.CommandText = "SELECT wc_id, wc_name, wc_price, wc_unit, wc_max FROM waste_category WHERE wc_status != 'Deleted' order by wc_id";
 
                     // Assuming that 'emp_id' is associated with the current session user's ID
                     cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, Convert.ToInt32(Session["bo_id"]));
@@ -196,8 +196,8 @@ namespace Capstone
 
                 // Insert the new waste category into the PostgreSQL database
                 string insertQuery = @"
-            INSERT INTO waste_category (wc_name, wc_unit, wc_price, wc_status, emp_id) 
-            VALUES (@name, @unit, @price, 'Active', @empId)";
+            INSERT INTO waste_category (wc_name, wc_unit, wc_price, wc_status, emp_id, wc_max) 
+            VALUES (@name, @unit, @price, 'Active', @empId, @max)";
 
                 using (var insertCmd = new NpgsqlCommand(insertQuery, conn))
                 {
@@ -205,6 +205,7 @@ namespace Capstone
                     insertCmd.Parameters.AddWithValue("@unit", unit.Text);
                     insertCmd.Parameters.AddWithValue("@price", wastePrice);
                     insertCmd.Parameters.AddWithValue("@empId", Convert.ToInt32(Session["bo_id"])); // Assuming 'emp_id' is stored in the session
+                    insertCmd.Parameters.AddWithValue("@max", Convert.ToInt32(max.Text));
 
                     insertCmd.ExecuteNonQuery();
                     Response.Write("<script>alert('Waste added!')</script>");
@@ -245,7 +246,7 @@ namespace Capstone
                         UPDATE PAYMENT_TERM 
                         SET pt_interest = @interestValue, 
                             pt_lead_days = @leadDays,
-                            pt_vat = @vatValue,
+                            pt_tax = @vatValue,
                             pt_accrual_period = @accrualPeriod,
                             pt_susp_period = @suspensionPeriod,
                             pt_updated_at = NOW()"; // Specify the control_id or appropriate condition
@@ -268,7 +269,7 @@ namespace Capstone
                         {
                             // Insert a new record if no records exist
                             string insertQuery = @"
-                        INSERT INTO PAYMENT_TERM (pt_interest, pt_lead_days, pt_vat, pt_accrual_period, pt_susp_period, emp_id, pt_created_at, pt_updated_at) 
+                        INSERT INTO PAYMENT_TERM (pt_interest, pt_lead_days, pt_tax, pt_accrual_period, pt_susp_period, emp_id, pt_created_at, pt_updated_at) 
                         VALUES (@interestValue, @leadDays, @vatValue, @accrualPeriod, @suspensionPeriod, @empId, NOW(), NOW())";
 
                             using (var insertCmd = new NpgsqlCommand(insertQuery, conn))
@@ -331,6 +332,7 @@ namespace Capstone
                                 txtbxnewName.Text = reader["wc_name"].ToString();
                                 txtbxnewUnit.Text = reader["wc_unit"].ToString();
                                 txtbxnewPrice.Text = reader["wc_price"].ToString();
+                                txtLimit.Text = reader["wc_max"].ToString();
                                 //byte[] imageData = reader["emp_profile"] as byte[];  // Retrieve profile image data (byte array)
                                 showPaymentTerm();
                                 WasteCatList();
@@ -419,7 +421,7 @@ namespace Capstone
                 conn.Open();
 
                 // Query to get all relevant fields from the PAYMENT_TERM table
-                string query = "SELECT pt_lead_days, pt_interest, pt_vat, pt_accrual_period, pt_susp_period FROM PAYMENT_TERM";
+                string query = "SELECT pt_lead_days, pt_interest, pt_tax, pt_accrual_period, pt_susp_period FROM PAYMENT_TERM";
 
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
@@ -430,7 +432,7 @@ namespace Capstone
                             // Set the values for lead days, interest, VAT, accrual period, and suspension period
                             leaddays.Text = reader["pt_lead_days"] != DBNull.Value ? reader["pt_lead_days"].ToString() : "0";
                             interest.Text = reader["pt_interest"] != DBNull.Value ? reader["pt_interest"].ToString() : "0";
-                            vat.Text = reader["pt_vat"] != DBNull.Value ? reader["pt_vat"].ToString() : "0";
+                            vat.Text = reader["pt_tax"] != DBNull.Value ? reader["pt_tax"].ToString() : "0";
                             acc_per.Text = reader["pt_accrual_period"] != DBNull.Value ? reader["pt_accrual_period"].ToString() : "0";
                             susp_per.Text = reader["pt_susp_period"] != DBNull.Value ? reader["pt_susp_period"].ToString() : "0";
                         }
@@ -456,12 +458,13 @@ namespace Capstone
             //int id = int.Parse(txtbxID.Text);
             string name = txtbxnewName.Text;
             string unit = txtbxnewUnit.Text;
+            double limit = double.Parse(txtLimit.Text);
             decimal price = decimal.Parse(txtbxnewPrice.Text);
 
             using (var conn = new NpgsqlConnection(con))
             {
                 conn.Open();
-                string updateQuery = "UPDATE waste_category SET wc_name = @name, wc_unit = @unit, wc_price = @price WHERE wc_id = @id";
+                string updateQuery = "UPDATE waste_category SET wc_name = @name, wc_unit = @unit, wc_price = @price, wc_max = @max WHERE wc_id = @id";
 
                 using (var updateCmd = new NpgsqlCommand(updateQuery, conn))
                 {
@@ -469,6 +472,7 @@ namespace Capstone
                     updateCmd.Parameters.AddWithValue("@unit", unit);
                     updateCmd.Parameters.AddWithValue("@price", price);
                     updateCmd.Parameters.AddWithValue("@id", id);
+                    updateCmd.Parameters.AddWithValue("@max", limit);
 
                     updateCmd.ExecuteNonQuery();
                     showPaymentTerm();

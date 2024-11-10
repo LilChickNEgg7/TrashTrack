@@ -114,6 +114,24 @@ namespace Capstone
         protected global::System.Web.UI.WebControls.TextBox price;
 
         /// <summary>
+        /// Label12 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label12;
+
+        /// <summary>
+        /// max control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox max;
+
+        /// <summary>
         /// submitBtn control.
         /// </summary>
         /// <remarks>
@@ -291,7 +309,7 @@ namespace Capstone
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel updatePanel;
+        protected global::System.Web.UI.UpdatePanel updatePanel;
 
         /// <summary>
         /// txtbxID control.
@@ -328,6 +346,15 @@ namespace Capstone
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtbxnewPrice;
+
+        /// <summary>
+        /// txtLimit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtLimit;
 
         /// <summary>
         /// btncancel control.

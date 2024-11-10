@@ -362,8 +362,7 @@
         // Array of your GridView IDs
         var gridViewIds = [
 
-            '<%= gridView1.ClientID %>',
-            '<%= gridView2.ClientID %>'
+            '<%= gridView1.ClientID %>'
             ];
 
             gridViewIds.forEach(function (gridId) {
@@ -585,6 +584,14 @@
                     </li>
 
                     <li class="nav-item">
+                        <a class="nav-link collapsed" href="SAM_Reports.aspx">
+                            <i class="bi bi-grid"></i>
+                            <span>Reports</span>
+                        </a>
+
+                    </li>
+
+                    <%--<li class="nav-item">
                         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
                             <i class="ri-bill-line"></i><span>Reports</span><i class="bi bi-chevron-down ms-auto"></i>
                         </a>
@@ -601,7 +608,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li>--%>
 
                     <%-- <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#receipt-nav" data-bs-toggle="collapse" href="#">
@@ -743,7 +750,7 @@
                                     </asp:DropDownList>
                                     <div class="invalid-feedback">Please select a role.</div>
                                 </div>--%>
-                                <div class="mb-3">
+                                <%--<div class="mb-3">
                                     <asp:Label ID="Label6" runat="server" Text="Role" for="inputText" Style="color: chartreuse"></asp:Label>
                                     <asp:DropDownList ID="emp_role" class="form-select" aria-label="Default select example" runat="server" onChange="validateRole()">
                                         <asp:ListItem Text="-- Select Type --" Value="" Selected="True" disabled />
@@ -751,7 +758,7 @@
                                         <asp:ListItem Text="Non-Contractual" Value="Non-Contractual" />
                                     </asp:DropDownList>
                                     <div class="invalid-feedback">Please select a type.</div>
-                                </div>
+                                </div>--%>
 
 
                                 <!-- File Upload (with Image Preview) -->
@@ -793,7 +800,7 @@
                     <%-- START TABS DESIGN GRIDVIEW--%>
 
 
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <%--<ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="sam-tab" data-bs-toggle="tab" data-bs-target="#sam" type="button" role="tab" aria-controls="sam" aria-selected="true" style="color: #061f0d; font-weight: 900">Contractual</button>
                         </li>
@@ -803,7 +810,7 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="apply-tab" data-bs-toggle="tab" data-bs-target="#apply" type="button" role="tab" aria-controls="apply" aria-selected="false" style="color: #061f0d; font-weight: 900">Requests for Contractual</button>
                         </li>
-                    </ul>
+                    </ul>--%>
 
 
                     <div id="myTabContent" class="tab-content pt-2">
@@ -885,10 +892,8 @@
                             </div>
 
 
-                        <div class="tab-pane fade" id="am" role="tabpanel" aria-labelledby="am-tab">
-                            <%--<h1 style="color: #f40f0f; padding-top: 50px; padding-bottom: 0; font-family: 'Raleway',sans-serif; font-size: 62px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center; text-transform: uppercase;">Account Manager
-                            </h1>--%>
-                            <%--<div class="gridview-container">--%>
+                        <%--<div class="tab-pane fade" id="am" role="tabpanel" aria-labelledby="am-tab">
+                           
                                 <asp:GridView Style="width: 100%; word-break: break-all; table-layout: fixed" ID="gridView2" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True"
                                     DataKeyNames="cus_id" AllowPaging="False" CellPadding="20" GridLines="None">
                                     <AlternatingRowStyle BackColor="white" ForeColor="Black" />
@@ -956,7 +961,6 @@
                                     <SortedDescendingCellStyle BackColor="Black" />
                                     <SortedDescendingHeaderStyle BackColor="#15524A" />
                                 </asp:GridView>
-                            <%--</div>--%>
                         </div>
 
 
@@ -1011,7 +1015,7 @@
                                 <SortedDescendingCellStyle BackColor="Black" />
                                 <SortedDescendingHeaderStyle BackColor="#15524A" />
                             </asp:GridView>
-                        </div>
+                        </div>--%>
 
 
                     </div>
@@ -1081,14 +1085,12 @@
                                 </div>
 
                                 <!-- Body Section -->
-                                <div class="card-body" style="background-color: #052507;">
+                                <div class="card-body" style="background-color: #052507; padding-top: 10px">
                                     <div class="row">
                                         <!-- ID (Disabled) -->
                                         <div class="col-12 mb-3">
                                             <div class="input-group input-group-sm">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">ID</span>
-                                                </div>
+                                                    <span class="input-group-text" style="padding: 10px; ">ID</span>
                                                 <asp:TextBox ID="txtbxID" runat="server" CssClass="form-control" ClientIDMode="Static" Enabled="false"></asp:TextBox>
                                             </div>
                                         </div>
@@ -1161,7 +1163,7 @@
                                     <!-- Picture Upload -->
                                     <div class="col-12 mb-3">
                                         <asp:Label ID="Label20" runat="server" Text="Picture" Style="color: chartreuse"></asp:Label>
-                                        <asp:FileUpload ID="FileUpload1" accept="image/*" class="form-control" runat="server" OnChange="previewUpdateImage();" />
+                                        <asp:FileUpload ID="FileUpload1" accept="image/*" class="form-control" runat="server" OnChange="previewImageUpdate()" />
                                         <asp:Image ID="imagePreviewUpdate" runat="server" AlternateText="Image Preview" CssClass="img-thumbnail mt-2" Style="max-width: 150px;" />
                                         <span id="fileErrorUpdate" class="text-danger" style="display: none;">File uploaded is not an image.</span>
                                     </div>
@@ -1187,7 +1189,7 @@
 
                 <script>
                     /*fullscreen modal*/
-                    document.querySelectorAll('#<%= gridView3.ClientID %> tr').forEach(function (row) {
+                    <%--document.querySelectorAll('#<%= gridView3.ClientID %> tr').forEach(function (row) {
                         row.addEventListener('click', function () {
                             // Get the values from the row
                             var cells = row.getElementsByTagName('td');
@@ -1206,7 +1208,7 @@
                             var myModal = new bootstrap.Modal(document.getElementById('fullscreenModal'));
                             myModal.show();
                         });
-                    });
+                    });--%>
                     /*end of full screen modal*/
                     /*modal for failed description*/
                     var currentContId;
@@ -1354,7 +1356,7 @@
                         }
                     }
 
-                    function validateRole() {
+                    <%--function validateRole() {
                         const role = document.getElementById('<%= emp_role.ClientID %>');
                         if (role.value === "") {
                             role.classList.add('is-invalid');
@@ -1363,7 +1365,7 @@
                             role.classList.remove('is-invalid');
                             role.classList.add('is-valid');
                         }
-                    }
+                    }--%>
 
                     function previewImage1() {
                         const fileInput = document.getElementById('<%= formFile.ClientID %>');
@@ -1506,7 +1508,8 @@
 
 
 
-                    function previewImageUpdate() {
+
+                    <%--function previewImageUpdate() {
                         const fileInput = document.getElementById('<%=FileUpload1.ClientID%>');
                         const imagePreview = document.getElementById('<%=imagePreviewUpdate.ClientID%>');
                         const file = fileInput.files[0];
@@ -1524,6 +1527,26 @@
                             imagePreview.src = "";
                             fileError.style.display = 'block';
                         }
+                    }--%>
+
+                    function previewImageUpdate() {
+                        const fileInput = document.getElementById('<%=FileUpload1.ClientID%>');
+                        const imagePreview = document.getElementById('<%=imagePreviewUpdate.ClientID%>');
+                        const file = fileInput.files[0];
+                        const allowedExtensions = ["image/jpeg", "image/png", "image/gif"];
+                        const fileError = document.getElementById('fileErrorUpdate');
+
+                        if (file && allowedExtensions.includes(file.type)) {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                imagePreview.src = e.target.result;
+                                fileError.style.display = 'none';
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            /*imagePreview.src = "";*/
+                            style.display = 'block';
+                        }
                     }
 
 
@@ -1535,7 +1558,7 @@
                         validateUpdateLastname();
                         validateUpdateEmail();
                         validateUpdateContact();
-                        validateUpdatePassword();
+                        //validateUpdatePassword();
                         previewImageUpdate();
 
                         if (document.querySelectorAll('.is-invalid').length > 0) {
@@ -1671,7 +1694,7 @@
             <!-- ======= Footer ======= -->
             <footer id="footer" class="footer" style="border-top-color: chartreuse">
                 <div class="copyright" style="color: #d4f3cf">
-                    &copy; Copyright <strong><span style="color: #d4f3cf">Pinoy Basurero Corporation</span></strong>. All Rights Reserved
+                    &copy; Copyright <strong><span style="color: #d4f3cf">TrashTrack</span></strong>. All Rights Reserved
                 </div>
             </footer>
             <!-- End Footer -->

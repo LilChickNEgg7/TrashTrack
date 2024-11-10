@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     
-    <meta charset="utf-8">  
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -24,11 +24,6 @@
 
       <%--hide unhide pass--%>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-
-
-<!-- Favicons -->
-<%--<link href="assets/img/favicon.png" rel="icon">
-<link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">--%>
 
 <link href="Pictures/logo_bgRM.png" rel="icon">
 <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
@@ -50,8 +45,6 @@
 
 <!-- Template Main CSS File -->
 <link href="assets/css/style.css" rel="stylesheet">
-
-
 
 
     <style>
@@ -240,12 +233,12 @@
                                         </div>
 
                                         <!-- Remember Me Checkbox -->
-                                        <div class="form-group">
+                                        <%--<div class="form-group">
                                             <div class="custom-control custom-checkbox small">
                                                 <input type="checkbox" class="custom-control-input" id="customCheck" style="background-color: #2ba352" onchange="toggleRememberMe()">
                                                 <label class="custom-control-label" for="customCheck" style="color: gray;">Remember Me</label>
                                             </div>
-                                        </div>
+                                        </div>--%>
 
                                         <!-- Login Button -->
                                         <asp:Button ID="login_btn" runat="server" class="btn btn-primary btn-user btn-block hover-toggle"

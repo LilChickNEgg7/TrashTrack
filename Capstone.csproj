@@ -52,8 +52,62 @@
     <Reference Include="AWSSDK.SecurityToken, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
       <HintPath>packages\AWSSDK.SecurityToken.3.7.100.14\lib\net45\AWSSDK.SecurityToken.dll</HintPath>
     </Reference>
+    <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
+      <HintPath>packages\BouncyCastle.Cryptography.2.4.0\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
+    </Reference>
     <Reference Include="DnsClient, Version=1.6.1.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
       <HintPath>packages\DnsClient.1.6.1\lib\net471\DnsClient.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.barcodes, Version=8.0.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>packages\itext.8.0.5\lib\net461\itext.barcodes.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.bouncy-castle-adapter, Version=8.0.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>packages\itext.bouncy-castle-adapter.8.0.5\lib\net461\itext.bouncy-castle-adapter.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.bouncy-castle-connector, Version=8.0.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>packages\itext.8.0.5\lib\net461\itext.bouncy-castle-connector.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.commons, Version=8.0.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>packages\itext.commons.8.0.5\lib\net461\itext.commons.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.forms, Version=8.0.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>packages\itext.8.0.5\lib\net461\itext.forms.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.html2pdf, Version=5.0.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>packages\itext.pdfhtml.5.0.5\lib\net461\itext.html2pdf.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.io, Version=8.0.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>packages\itext.8.0.5\lib\net461\itext.io.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.kernel, Version=8.0.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>packages\itext.8.0.5\lib\net461\itext.kernel.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.layout, Version=8.0.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>packages\itext.8.0.5\lib\net461\itext.layout.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.pdfa, Version=8.0.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>packages\itext.8.0.5\lib\net461\itext.pdfa.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.pdfua, Version=8.0.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>packages\itext.8.0.5\lib\net461\itext.pdfua.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.sign, Version=8.0.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>packages\itext.8.0.5\lib\net461\itext.sign.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.styledxmlparser, Version=8.0.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>packages\itext.8.0.5\lib\net461\itext.styledxmlparser.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.svg, Version=8.0.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>packages\itext.8.0.5\lib\net461\itext.svg.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.4, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>packages\iTextSharp.5.5.13.4\lib\net461\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.4.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.SignalR.Core.2.4.3\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.4.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.SignalR.SystemWeb.2.4.3\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -62,11 +116,32 @@
       <HintPath>packages\Microsoft.Bcl.HashCode.1.1.1\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.DependencyInjection.5.0.0\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Extensions.DependencyInjection.Abstractions.8.0.0\lib\net462\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Extensions.Logging, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Logging.5.0.0\lib\net461\Microsoft.Extensions.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Extensions.Logging.Abstractions.8.0.0\lib\net462\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Options.5.0.0\lib\net461\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Primitives.5.0.0\lib\net461\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Owin.4.2.2\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Owin.Host.SystemWeb.4.2.2\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Win32.Registry, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Win32.Registry.5.0.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
@@ -83,8 +158,17 @@
     <Reference Include="MongoDB.Libmongocrypt, Version=1.11.0.0, Culture=neutral, PublicKeyToken=94992a530f44e321, processorArchitecture=MSIL">
       <HintPath>packages\MongoDB.Libmongocrypt.1.11.0\lib\net472\MongoDB.Libmongocrypt.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Bson, Version=1.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.Bson.1.0.2\lib\net45\Newtonsoft.Json.Bson.dll</HintPath>
+    </Reference>
     <Reference Include="Npgsql, Version=8.0.3.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>packages\Npgsql.8.0.3\lib\netstandard2.0\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="SharpCompress, Version=0.30.1.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
       <HintPath>packages\SharpCompress.0.30.1\lib\net461\SharpCompress.dll</HintPath>
@@ -115,6 +199,9 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebApi.Client.6.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
@@ -132,6 +219,7 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Security" />
     <Reference Include="System.Security.AccessControl, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Security.AccessControl.5.0.0\lib\net461\System.Security.AccessControl.dll</HintPath>
     </Reference>
@@ -185,6 +273,12 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebApi.Core.5.3.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebApi.WebHost.5.3.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -210,7 +304,19 @@
     <Content Include="BO_Billing.aspx" />
     <Content Include="BO_Controls.aspx" />
     <Content Include="BO_Dashboard.aspx" />
+    <Content Include="BO_History.aspx" />
+    <Content Include="Dispatcher_AccountSettings.aspx" />
+    <Content Include="Dispatcher_AddSchedule.aspx" />
+    <Content Include="Dispatcher_AddSlip.aspx" />
+    <Content Include="Dispatcher_Dashboard.aspx" />
+    <Content Include="fonts\Roboto\LICENSE.txt" />
+    <Content Include="Global.asax" />
     <Content Include="mongocrypt.dll" />
+    <Content Include="OD_manage.aspx" />
+    <Content Include="Pictures\category.png" />
+    <Content Include="Pictures\customer.png" />
+    <Content Include="Pictures\dot.gif" />
+    <Content Include="Pictures\driver.png" />
     <Content Include="Pictures\fog.png" />
     <Content Include="Pictures\logo.png" />
     <Content Include="Pictures\logo_bgRM.png" />
@@ -220,8 +326,11 @@
     <Content Include="Pictures\logo_tt.png" />
     <Content Include="Pictures\logo_up.jpg" />
     <Content Include="Pictures\nature_deer.png" />
+    <Content Include="Pictures\search.png" />
     <Content Include="Pictures\title_logo.png" />
     <Content Include="Pictures\title_logoo.png" />
+    <Content Include="Pictures\working_man.png" />
+    <Content Include="Re_AssignVehicle.aspx" />
     <Content Include="SAM_AccountManCustomers.aspx" />
     <Content Include="SAM_AccountSettings.aspx" />
     <Content Include="SAM_Dashboard.aspx" />
@@ -554,7 +663,31 @@
     <Content Include="Pictures\white.jpg" />
     <Content Include="libmongocrypt.so" />
     <Content Include="libmongocrypt.dylib" />
+    <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
+    <Content Include="SAM_Reports.aspx" />
+    <Content Include="Scripts\jquery-1.6.4.js" />
+    <Content Include="Scripts\jquery-1.6.4.min.js" />
+    <Content Include="Scripts\jquery.signalR-2.4.3.js" />
+    <Content Include="Scripts\jquery.signalR-2.4.3.min.js" />
+    <Content Include="Z1.aspx" />
+    <Content Include="Z2.aspx" />
+    <Content Include="Z3.aspx" />
+    <Content Include="Z4.aspx" />
+    <Content Include="Z5.aspx" />
     <Content Include="Z_Trial.aspx" />
+    <Content Include="fonts\arial-unicode-ms.ttf" />
+    <Content Include="fonts\Roboto\Roboto-Black.ttf" />
+    <Content Include="fonts\Roboto\Roboto-BlackItalic.ttf" />
+    <Content Include="fonts\Roboto\Roboto-Bold.ttf" />
+    <Content Include="fonts\Roboto\Roboto-BoldItalic.ttf" />
+    <Content Include="fonts\Roboto\Roboto-Italic.ttf" />
+    <Content Include="fonts\Roboto\Roboto-Light.ttf" />
+    <Content Include="fonts\Roboto\Roboto-LightItalic.ttf" />
+    <Content Include="fonts\Roboto\Roboto-Medium.ttf" />
+    <Content Include="fonts\Roboto\Roboto-MediumItalic.ttf" />
+    <Content Include="fonts\Roboto\Roboto-Regular.ttf" />
+    <Content Include="fonts\Roboto\Roboto-Thin.ttf" />
+    <Content Include="fonts\Roboto\Roboto-ThinItalic.ttf" />
     <None Include="Scripts\jquery-1.8.0.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.0.js" />
     <Content Include="Scripts\jquery-1.8.0.min.js" />
@@ -2290,6 +2423,60 @@
     <Compile Include="BO_Dashboard.aspx.designer.cs">
       <DependentUpon>BO_Dashboard.aspx</DependentUpon>
     </Compile>
+    <Compile Include="BO_History.aspx.cs">
+      <DependentUpon>BO_History.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BO_History.aspx.designer.cs">
+      <DependentUpon>BO_History.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Dispatcher_AccountSettings.aspx.cs">
+      <DependentUpon>Dispatcher_AccountSettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Dispatcher_AccountSettings.aspx.designer.cs">
+      <DependentUpon>Dispatcher_AccountSettings.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Dispatcher_AddSchedule.aspx.cs">
+      <DependentUpon>Dispatcher_AddSchedule.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Dispatcher_AddSchedule.aspx.designer.cs">
+      <DependentUpon>Dispatcher_AddSchedule.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Dispatcher_AddSlip.aspx.cs">
+      <DependentUpon>Dispatcher_AddSlip.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Dispatcher_AddSlip.aspx.designer.cs">
+      <DependentUpon>Dispatcher_AddSlip.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Dispatcher_Dashboard.aspx.cs">
+      <DependentUpon>Dispatcher_Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Dispatcher_Dashboard.aspx.designer.cs">
+      <DependentUpon>Dispatcher_Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="OD_manage.aspx.cs">
+      <DependentUpon>OD_manage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OD_manage.aspx.designer.cs">
+      <DependentUpon>OD_manage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentController.cs" />
+    <Compile Include="PaymentWebSocketHandler.cs" />
+    <Compile Include="Re_AssignVehicle.aspx.cs">
+      <DependentUpon>Re_AssignVehicle.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Re_AssignVehicle.aspx.designer.cs">
+      <DependentUpon>Re_AssignVehicle.aspx</DependentUpon>
+    </Compile>
     <Compile Include="SAM_AccountManCustomers.aspx.cs">
       <DependentUpon>SAM_AccountManCustomers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2333,12 +2520,56 @@
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SAM_Reports.aspx.cs">
+      <DependentUpon>SAM_Reports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SAM_Reports.aspx.designer.cs">
+      <DependentUpon>SAM_Reports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Startup.cs" />
     <Compile Include="Trial.aspx.cs">
       <DependentUpon>Trial.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Trial.aspx.designer.cs">
       <DependentUpon>Trial.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebApiConfig.cs" />
+    <Compile Include="Z1.aspx.cs">
+      <DependentUpon>Z1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Z1.aspx.designer.cs">
+      <DependentUpon>Z1.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Z2.aspx.cs">
+      <DependentUpon>Z2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Z2.aspx.designer.cs">
+      <DependentUpon>Z2.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Z3.aspx.cs">
+      <DependentUpon>Z3.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Z3.aspx.designer.cs">
+      <DependentUpon>Z3.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Z4.aspx.cs">
+      <DependentUpon>Z4.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Z4.aspx.designer.cs">
+      <DependentUpon>Z4.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Z5.aspx.cs">
+      <DependentUpon>Z5.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Z5.aspx.designer.cs">
+      <DependentUpon>Z5.aspx</DependentUpon>
     </Compile>
     <Compile Include="Z_Trial.aspx.cs">
       <DependentUpon>Z_Trial.aspx</DependentUpon>
