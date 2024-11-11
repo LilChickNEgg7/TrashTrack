@@ -636,6 +636,400 @@ namespace Capstone
         //    }
         //}
 
+        //without scriptmanager and confusing but latest
+        //protected void UpdateCustomerInfo(object sender, EventArgs e)
+        //{
+        //    int id;
+        //    if (!int.TryParse(txtbxID.Text, out id))
+        //    {
+        //        ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //            "Swal.fire({ icon: 'error', title: 'Invalid ID Format', text: 'Please enter a valid ID format.', background: '#f8d7da', confirmButtonColor: '#dc3545' });", true);
+        //        return;
+        //    }
+
+        //    string firstname = txtbfirstname.Text;
+        //    string mi = txtmi.Text;
+        //    string lastname = txtLastname.Text;
+        //    string contact = txtContact.Text;
+        //    string email = txtEmail.Text;
+        //    string pass = TextBox1.Text;
+
+        //    byte[] uploadedImageData = null;
+        //    if (FileUpload1.HasFile)
+        //    {
+        //        try
+        //        {
+        //            string fileExtension = Path.GetExtension(FileUpload1.PostedFile.FileName).ToLower();
+        //            string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+        //            if (allowedExtensions.Contains(fileExtension))
+        //            {
+        //                uploadedImageData = FileUpload1.FileBytes;
+        //            }
+        //            else
+        //            {
+        //                ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                $"Swal.fire({{ icon: 'info', title: 'Invalid File Type', text: 'Only image files are allowed (jpg, jpeg, png, gif).', background: '#e9ecef', confirmButtonColor: '#6c757d' }});", true);
+
+        //                return;
+
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                        $"Swal.fire({{ icon: 'error', title: 'Upload Failed', text: 'Error uploading image.', background: '#f8d7da', confirmButtonColor: '#dc3545' }});", true);
+        //            //Response.Write("<script>alert('Error uploading image: " + ex.Message + "')</script>");
+        //            return;
+        //        }
+        //    }
+
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+
+        //        // Check if the email already exists (excluding the current admin's email)
+        //        string emailCheckQuery = "SELECT COUNT(*) FROM customer WHERE cus_email = @newEmail AND cus_id <> @id";
+        //        using (var cmdCheckEmail = new NpgsqlCommand(emailCheckQuery, db))
+        //        {
+        //            cmdCheckEmail.Parameters.AddWithValue("@newEmail", email);
+        //            cmdCheckEmail.Parameters.AddWithValue("@id", id);
+
+        //            int emailExists = Convert.ToInt32(cmdCheckEmail.ExecuteScalar());
+        //            if (emailExists > 0)
+        //            {
+        //                ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                $"Swal.fire({{ icon: 'info', title: 'Email Taken', text: 'Email is already taken. Please use a different email.', background: '#e9ecef', confirmButtonColor: '#6c757d' }});", true);
+        //                //Response.Write("<script>alert('Email is already taken. Please use a different email.')</script>");
+        //                return;
+        //            }
+        //        }
+
+        //        // Get current data for the admin based on the ID
+        //        string selectQuery = "SELECT * FROM customer WHERE cus_id = @id";
+        //        using (var cmdSelect = new NpgsqlCommand(selectQuery, db))
+        //        {
+        //            cmdSelect.Parameters.AddWithValue("@id", id);
+
+        //            string originalFirstname = null;
+        //            string originalMi = null;
+        //            string originalLastname = null;
+        //            string originalContact = null;
+        //            string originalEmail = null;
+        //            string originalPassword = null;
+        //            byte[] originalProfileImage = null;
+
+        //            using (var reader = cmdSelect.ExecuteReader())
+        //            {
+        //                if (reader.Read())
+        //                {
+        //                    originalFirstname = reader["cus_fname"].ToString();
+        //                    originalMi = reader["cus_mname"].ToString();
+        //                    originalLastname = reader["cus_lname"].ToString();
+        //                    originalContact = reader["cus_contact"].ToString();
+        //                    originalEmail = reader["cus_email"].ToString();
+        //                    originalPassword = reader["cus_password"].ToString();
+        //                    originalProfileImage = reader["cus_profile"] as byte[];
+        //                }
+        //                else
+        //                {
+        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                        $"Swal.fire({{ icon: 'error', title: 'Info Not Found', text: 'No data found for the specified ID.', background: '#f8d7da', confirmButtonColor: '#dc3545' }});", true);
+        //                    //Response.Write("<script>alert('No data found for the specified ID.')</script>");
+        //                    return;
+        //                }
+        //            }
+
+        //            var updateFields = new List<string>();
+        //            var updateParams = new List<NpgsqlParameter>();
+        //            var changes = new List<string>();
+
+        //            // Check and update each field
+        //            if (!string.IsNullOrEmpty(firstname) && firstname != originalFirstname)
+        //            {
+        //                updateFields.Add("cus_fname = @firstname");
+        //                updateParams.Add(new NpgsqlParameter("@firstname", firstname));
+        //                changes.Add($"First Name: {originalFirstname} → {firstname}");
+        //            }
+        //            if (!string.IsNullOrEmpty(mi) && mi != originalMi)
+        //            {
+        //                updateFields.Add("cus_mname = @mi");
+        //                updateParams.Add(new NpgsqlParameter("@mi", mi));
+        //                changes.Add($"Middle Initial: {originalMi} → {mi}");
+        //            }
+        //            if (!string.IsNullOrEmpty(lastname) && lastname != originalLastname)
+        //            {
+        //                updateFields.Add("cus_lname = @lastname");
+        //                updateParams.Add(new NpgsqlParameter("@lastname", lastname));
+        //                changes.Add($"Last Name: {originalLastname} → {lastname}");
+        //            }
+        //            if (!string.IsNullOrEmpty(contact) && contact != originalContact)
+        //            {
+        //                updateFields.Add("cus_contact = @contact");
+        //                updateParams.Add(new NpgsqlParameter("@contact", contact));
+        //                changes.Add($"Contact: {originalContact} → {contact}");
+        //            }
+        //            if (!string.IsNullOrEmpty(email) && email != originalEmail)
+        //            {
+        //                updateFields.Add("cus_email = @email");
+        //                updateParams.Add(new NpgsqlParameter("@email", email));
+        //                changes.Add($"Email: {originalEmail} → {email}");
+        //            }
+        //            if (!string.IsNullOrEmpty(pass) && pass != originalPassword)
+        //            {
+        //                string hashedPassword = HashPassword(pass);
+        //                updateFields.Add("cus_password = @password");
+        //                updateParams.Add(new NpgsqlParameter("@password", hashedPassword));
+        //                changes.Add("Password: (Updated)");
+        //            }
+
+        //            if (uploadedImageData != null)
+        //            {
+        //                updateFields.Add("cus_profile = @profile");
+        //                updateParams.Add(new NpgsqlParameter("@profile", uploadedImageData));
+        //                changes.Add("Profile Picture: Updated");
+        //            }
+
+        //            if (updateFields.Count > 0)
+        //            {
+        //                string updateQuery = $"UPDATE customer SET {string.Join(", ", updateFields)} WHERE cus_id = @id";
+        //                using (var cmdUpdate = new NpgsqlCommand(updateQuery, db))
+        //                {
+        //                    cmdUpdate.Parameters.AddWithValue("@id", id);
+        //                    cmdUpdate.Parameters.AddRange(updateParams.ToArray());
+
+        //                    int updatedRows = cmdUpdate.ExecuteNonQuery();
+        //                    if (updatedRows > 0)
+        //                    {
+        //                        // Notify changes via email
+        //                        string changeDetails = string.Join("\n", changes);
+        //                        string subject = "Account Information Update Notification";
+        //                        string body = $"Dear Admin,\n\nYour account information has been updated. Below are the details of the changes:\n\n{changeDetails}\n\nIf you did not request these changes, please contact support immediately.\n\nBest regards,\nThe Account Manager Team";
+
+        //                        if (!string.IsNullOrEmpty(email) && email != originalEmail)
+        //                        {
+        //                            Send_Email(originalEmail, subject, body);
+        //                            Send_Email(email, subject, body);
+        //                        }
+        //                        else
+        //                        {
+        //                            Send_Email(originalEmail, subject, body);
+        //                        }
+        //                        ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                        $"Swal.fire({{ icon: 'success', title: 'Customer Update Success', text: 'Customer information updated successfully!', background: '#e9f7ef', confirmButtonColor: '#28a745' }});", true);
+
+        //                        //Response.Write("<script>alert('Customer information updated successfully!')</script>");
+        //                    }
+        //                    else
+        //                    {
+        //                        ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                        $"Swal.fire({{ icon: 'error', title: 'Customer Update Failed: 'Failed to update customer information.', background: '#f8d7da', confirmButtonColor: '#dc3545' }});", true);
+        //                        //Response.Write("<script>alert('Failed to update customer information.')</script>");
+        //                    }
+        //                }
+        //            }
+        //            else
+        //            {
+        //                ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                $"Swal.fire({{ icon: 'info', title: 'No Changes Detected', text: 'No changes detected in the customer information.', background: '#e9ecef', confirmButtonColor: '#6c757d' }});", true);
+
+        //            }
+        //        }
+        //    }
+        //}
+
+        //protected void UpdateCustomerInfo(object sender, EventArgs e)
+        //{
+        //    int id;
+        //    if (!int.TryParse(txtbxID.Text, out id))
+        //    {
+        //        ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //            "Swal.fire({ icon: 'error', title: 'Invalid ID Format', text: 'Please enter a valid ID format.', background: '#f8d7da', confirmButtonColor: '#dc3545' });", true);
+        //        return;
+        //    }
+
+        //    string firstname = txtbfirstname.Text;
+        //    string mi = txtmi.Text;
+        //    string lastname = txtLastname.Text;
+        //    string contact = txtContact.Text;
+        //    string email = txtEmail.Text;
+        //    string pass = TextBox1.Text;
+
+        //    byte[] uploadedImageData = null;
+        //    if (FileUpload1.HasFile)
+        //    {
+        //        try
+        //        {
+        //            string fileExtension = Path.GetExtension(FileUpload1.PostedFile.FileName).ToLower();
+        //            string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+        //            if (allowedExtensions.Contains(fileExtension))
+        //            {
+        //                uploadedImageData = FileUpload1.FileBytes;
+        //            }
+        //            else
+        //            {
+        //                ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                $"Swal.fire({{ icon: 'info', title: 'Invalid File Type', text: 'Only image files are allowed (jpg, jpeg, png, gif).', background: '#e9ecef', confirmButtonColor: '#6c757d' }});", true);
+        //                return;
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                        $"Swal.fire({{ icon: 'error', title: 'Upload Failed', text: 'Error uploading image.', background: '#f8d7da', confirmButtonColor: '#dc3545' }});", true);
+        //            return;
+        //        }
+        //    }
+
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+
+        //        // Check if the email already exists (excluding the current customer's email)
+        //        string emailCheckQuery = "SELECT COUNT(*) FROM customer WHERE cus_email = @newEmail AND cus_id <> @id";
+        //        using (var cmdCheckEmail = new NpgsqlCommand(emailCheckQuery, db))
+        //        {
+        //            cmdCheckEmail.Parameters.AddWithValue("@newEmail", email);
+        //            cmdCheckEmail.Parameters.AddWithValue("@id", id);
+
+        //            int emailExists = Convert.ToInt32(cmdCheckEmail.ExecuteScalar());
+        //            if (emailExists > 0)
+        //            {
+        //                ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                $"Swal.fire({{ icon: 'info', title: 'Email Taken', text: 'Email is already taken. Please use a different email.', background: '#e9ecef', confirmButtonColor: '#6c757d' }});", true);
+        //                return;
+        //            }
+        //        }
+
+        //        // Get current data for the customer based on the ID
+        //        string selectQuery = "SELECT * FROM customer WHERE cus_id = @id";
+        //        using (var cmdSelect = new NpgsqlCommand(selectQuery, db))
+        //        {
+        //            cmdSelect.Parameters.AddWithValue("@id", id);
+
+        //            string originalFirstname = null;
+        //            string originalMi = null;
+        //            string originalLastname = null;
+        //            string originalContact = null;
+        //            string originalEmail = null;
+        //            string originalPassword = null;
+        //            byte[] originalProfileImage = null;
+
+        //            using (var reader = cmdSelect.ExecuteReader())
+        //            {
+        //                if (reader.Read())
+        //                {
+        //                    originalFirstname = reader["cus_fname"].ToString();
+        //                    originalMi = reader["cus_mname"].ToString();
+        //                    originalLastname = reader["cus_lname"].ToString();
+        //                    originalContact = reader["cus_contact"].ToString();
+        //                    originalEmail = reader["cus_email"].ToString();
+        //                    originalPassword = reader["cus_password"].ToString();
+        //                    originalProfileImage = reader["cus_profile"] as byte[];
+        //                }
+        //                else
+        //                {
+        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                        $"Swal.fire({{ icon: 'error', title: 'Info Not Found', text: 'No data found for the specified ID.', background: '#f8d7da', confirmButtonColor: '#dc3545' }});", true);
+        //                    return;
+        //                }
+        //            }
+
+        //            var updateFields = new List<string>();
+        //            var updateParams = new List<NpgsqlParameter>();
+        //            var changes = new List<string>();
+
+        //            // Check and update each field
+        //            if (!string.IsNullOrEmpty(firstname) && firstname != originalFirstname)
+        //            {
+        //                updateFields.Add("cus_fname = @firstname");
+        //                updateParams.Add(new NpgsqlParameter("@firstname", firstname));
+        //                changes.Add($"First Name: {originalFirstname} → {firstname}");
+        //            }
+        //            if (!string.IsNullOrEmpty(mi) && mi != originalMi)
+        //            {
+        //                updateFields.Add("cus_mname = @mi");
+        //                updateParams.Add(new NpgsqlParameter("@mi", mi));
+        //                changes.Add($"Middle Initial: {originalMi} → {mi}");
+        //            }
+        //            if (!string.IsNullOrEmpty(lastname) && lastname != originalLastname)
+        //            {
+        //                updateFields.Add("cus_lname = @lastname");
+        //                updateParams.Add(new NpgsqlParameter("@lastname", lastname));
+        //                changes.Add($"Last Name: {originalLastname} → {lastname}");
+        //            }
+        //            if (!string.IsNullOrEmpty(contact) && contact != originalContact)
+        //            {
+        //                updateFields.Add("cus_contact = @contact");
+        //                updateParams.Add(new NpgsqlParameter("@contact", contact));
+        //                changes.Add($"Contact: {originalContact} → {contact}");
+        //            }
+        //            if (!string.IsNullOrEmpty(email) && email != originalEmail)
+        //            {
+        //                updateFields.Add("cus_email = @email");
+        //                updateParams.Add(new NpgsqlParameter("@email", email));
+        //                changes.Add($"Email: {originalEmail} → {email}");
+        //            }
+        //            if (!string.IsNullOrEmpty(pass) && pass != originalPassword)
+        //            {
+        //                string hashedPassword = HashPassword(pass);
+        //                updateFields.Add("cus_password = @password");
+        //                updateParams.Add(new NpgsqlParameter("@password", hashedPassword));
+        //                changes.Add("Password: (Updated)");
+        //            }
+
+        //            if (uploadedImageData != null)
+        //            {
+        //                updateFields.Add("cus_profile = @profile");
+        //                updateParams.Add(new NpgsqlParameter("@profile", uploadedImageData));
+        //                changes.Add("Profile Picture: Updated");
+        //            }
+
+        //            if (updateFields.Count > 0)
+        //            {
+        //                string updateQuery = $"UPDATE customer SET {string.Join(", ", updateFields)} WHERE cus_id = @id";
+        //                using (var cmdUpdate = new NpgsqlCommand(updateQuery, db))
+        //                {
+        //                    cmdUpdate.Parameters.AddWithValue("@id", id);
+        //                    cmdUpdate.Parameters.AddRange(updateParams.ToArray());
+
+        //                    int updatedRows = cmdUpdate.ExecuteNonQuery();
+        //                    if (updatedRows > 0)
+        //                    {
+        //                        // Notify changes via email
+        //                        string changeDetails = string.Join("\n", changes);
+        //                        string subject = "Account Information Update Notification";
+        //                        string body = $"Dear Customer,\n\nYour account information has been updated. Below are the details of the changes:\n\n{changeDetails}\n\nIf you did not request these changes, please contact support immediately.\n\nBest regards,\nThe Customer Support Team";
+
+        //                        if (!string.IsNullOrEmpty(email) && email != originalEmail)
+        //                        {
+        //                            Send_Email(originalEmail, subject, body);
+        //                            Send_Email(email, subject, body);
+        //                        }
+        //                        else
+        //                        {
+        //                            Send_Email(originalEmail, subject, body);
+        //                        }
+        //                        ContractList();
+        //                        ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                        $"Swal.fire({{ icon: 'success', title: 'Customer Update Success', text: 'Customer information updated successfully!', background: '#e9f7ef', confirmButtonColor: '#28a745' }});", true);
+        //                    }
+        //                    else
+        //                    {
+        //                        ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                        $"Swal.fire({{ icon: 'error', title: 'Customer Update Failed', text: 'Failed to update customer information.', background: '#f8d7da', confirmButtonColor: '#dc3545' }});", true);
+        //                    }
+        //                }
+        //            }
+        //            else
+        //            {
+        //                ContractList();
+        //                ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                $"Swal.fire({{ icon: 'info', title: 'No Changes Detected', text: 'No changes detected in the customer information.', background: '#e9ecef', confirmButtonColor: '#6c757d' }});", true);
+        //            }
+        //        }
+        //    }
+        //}
+
 
         protected void UpdateCustomerInfo(object sender, EventArgs e)
         {
@@ -652,7 +1046,6 @@ namespace Capstone
             string lastname = txtLastname.Text;
             string contact = txtContact.Text;
             string email = txtEmail.Text;
-            string pass = TextBox1.Text;
 
             byte[] uploadedImageData = null;
             if (FileUpload1.HasFile)
@@ -668,17 +1061,14 @@ namespace Capstone
                     else
                     {
                         ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-                        $"Swal.fire({{ icon: 'info', title: 'Invalid File Type', text: 'Only image files are allowed (jpg, jpeg, png, gif).', background: '#e9ecef', confirmButtonColor: '#6c757d' }});", true);
-                        
+                        "Swal.fire({ icon: 'info', title: 'Invalid File Type', text: 'Only image files are allowed (jpg, jpeg, png, gif).', background: '#e9ecef', confirmButtonColor: '#6c757d' });", true);
                         return;
-
                     }
                 }
                 catch (Exception ex)
                 {
                     ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-                                $"Swal.fire({{ icon: 'error', title: 'Upload Failed', text: 'Error uploading image.', background: '#f8d7da', confirmButtonColor: '#dc3545' }});", true);
-                    //Response.Write("<script>alert('Error uploading image: " + ex.Message + "')</script>");
+                                "Swal.fire({ icon: 'error', title: 'Upload Failed', text: 'Error uploading image.', background: '#f8d7da', confirmButtonColor: '#dc3545' });", true);
                     return;
                 }
             }
@@ -687,7 +1077,7 @@ namespace Capstone
             {
                 db.Open();
 
-                // Check if the email already exists (excluding the current admin's email)
+                // Check if the email already exists (excluding the current customer's email)
                 string emailCheckQuery = "SELECT COUNT(*) FROM customer WHERE cus_email = @newEmail AND cus_id <> @id";
                 using (var cmdCheckEmail = new NpgsqlCommand(emailCheckQuery, db))
                 {
@@ -698,13 +1088,12 @@ namespace Capstone
                     if (emailExists > 0)
                     {
                         ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-                        $"Swal.fire({{ icon: 'info', title: 'Email Taken', text: 'Email is already taken. Please use a different email.', background: '#e9ecef', confirmButtonColor: '#6c757d' }});", true);
-                        //Response.Write("<script>alert('Email is already taken. Please use a different email.')</script>");
+                        "Swal.fire({ icon: 'info', title: 'Email Taken', text: 'Email is already taken. Please use a different email.', background: '#e9ecef', confirmButtonColor: '#6c757d' });", true);
                         return;
                     }
                 }
 
-                // Get current data for the admin based on the ID
+                // Get current data for the customer based on the ID
                 string selectQuery = "SELECT * FROM customer WHERE cus_id = @id";
                 using (var cmdSelect = new NpgsqlCommand(selectQuery, db))
                 {
@@ -715,7 +1104,6 @@ namespace Capstone
                     string originalLastname = null;
                     string originalContact = null;
                     string originalEmail = null;
-                    string originalPassword = null;
                     byte[] originalProfileImage = null;
 
                     using (var reader = cmdSelect.ExecuteReader())
@@ -727,14 +1115,12 @@ namespace Capstone
                             originalLastname = reader["cus_lname"].ToString();
                             originalContact = reader["cus_contact"].ToString();
                             originalEmail = reader["cus_email"].ToString();
-                            originalPassword = reader["cus_password"].ToString();
                             originalProfileImage = reader["cus_profile"] as byte[];
                         }
                         else
                         {
                             ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-                                $"Swal.fire({{ icon: 'error', title: 'Info Not Found', text: 'No data found for the specified ID.', background: '#f8d7da', confirmButtonColor: '#dc3545' }});", true);
-                            //Response.Write("<script>alert('No data found for the specified ID.')</script>");
+                                "Swal.fire({ icon: 'error', title: 'Info Not Found', text: 'No data found for the specified ID.', background: '#f8d7da', confirmButtonColor: '#dc3545' });", true);
                             return;
                         }
                     }
@@ -774,13 +1160,6 @@ namespace Capstone
                         updateParams.Add(new NpgsqlParameter("@email", email));
                         changes.Add($"Email: {originalEmail} → {email}");
                     }
-                    if (!string.IsNullOrEmpty(pass) && pass != originalPassword)
-                    {
-                        string hashedPassword = HashPassword(pass);
-                        updateFields.Add("cus_password = @password");
-                        updateParams.Add(new NpgsqlParameter("@password", hashedPassword));
-                        changes.Add("Password: (Updated)");
-                    }
 
                     if (uploadedImageData != null)
                     {
@@ -803,7 +1182,7 @@ namespace Capstone
                                 // Notify changes via email
                                 string changeDetails = string.Join("\n", changes);
                                 string subject = "Account Information Update Notification";
-                                string body = $"Dear Admin,\n\nYour account information has been updated. Below are the details of the changes:\n\n{changeDetails}\n\nIf you did not request these changes, please contact support immediately.\n\nBest regards,\nThe Account Manager Team";
+                                string body = $"Dear Customer,\n\nYour account information has been updated. Below are the details of the changes:\n\n{changeDetails}\n\nIf you did not request these changes, please contact support immediately.\n\nBest regards,\nThe Customer Support Team";
 
                                 if (!string.IsNullOrEmpty(email) && email != originalEmail)
                                 {
@@ -814,29 +1193,175 @@ namespace Capstone
                                 {
                                     Send_Email(originalEmail, subject, body);
                                 }
+                                ContractList();
                                 ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-                                $"Swal.fire({{ icon: 'success', title: 'Customer Update Success', text: 'Customer information updated successfully!', background: '#e9f7ef', confirmButtonColor: '#28a745' }});", true);
-
-                                //Response.Write("<script>alert('Customer information updated successfully!')</script>");
+                                "Swal.fire({ icon: 'success', title: 'Customer Update Success', text: 'Customer information updated successfully!', background: '#e9f7ef', confirmButtonColor: '#28a745' });", true);
                             }
                             else
                             {
                                 ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-                                $"Swal.fire({{ icon: 'error', title: 'Customer Update Failed: 'Failed to update customer information.', background: '#f8d7da', confirmButtonColor: '#dc3545' }});", true);
-                                //Response.Write("<script>alert('Failed to update customer information.')</script>");
+                                "Swal.fire({ icon: 'error', title: 'Customer Update Failed', text: 'Failed to update customer information.', background: '#f8d7da', confirmButtonColor: '#dc3545' });", true);
                             }
                         }
                     }
                     else
                     {
+                        ContractList();
                         ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-                        $"Swal.fire({{ icon: 'info', title: 'No Changes Detected', text: 'No changes detected in the customer information.', background: '#e9ecef', confirmButtonColor: '#6c757d' }});", true);
-
+                        "Swal.fire({ icon: 'info', title: 'No Changes Detected', text: 'No changes detected in the customer information.', background: '#e9ecef', confirmButtonColor: '#6c757d' });", true);
                     }
                 }
             }
         }
 
+        //        protected void submitBtn_Click(object sender, EventArgs e)
+        //        {
+        //            int adminId = (int)Session["sam_id"];
+
+        //            // Extracting user input
+        //            //string customerType = emp_role.SelectedValue; // Get selected customer type
+        //            string hashedPassword = HashPassword(emp_pass.Text);  // Hashing the password
+        //            byte[] defaultImageData = File.ReadAllBytes(Server.MapPath("Pictures\\blank_prof.png"));  // Default profile image
+        //            byte[] imageData = formFile.HasFile ? formFile.FileBytes : defaultImageData;  // Use uploaded image or default image
+        //            string email = emp_email.Text;
+
+        //            bool emailExists = false;
+        //            bool isEmailSuspendedOrInactive = false;
+
+        //            // Email Message
+        //            string toAddress = email;
+        //            string subject = "Important: Your Login Credentials for Completing Registration";
+        //            string body = $"Dear Staff and Good Day!,\n\n" +
+        //                $"As a part of our onboarding process, we have generated your initial login credentials. Please use the following information to access the designated registration website and complete your profile:\n\n" +
+        //                $"Email: {email}\n" +
+        //                $"Password: {emp_pass.Text}\n\n" +
+        //                $"Visit the registration page on our main login page.\n\n" +
+        //                $"Once you log in, kindly fill out the remaining information required to complete your registration. After completing this step, these credentials will serve as your permanent login information for daily use in our system.\n\n" +
+        //                $"If you encounter any issues or have any questions, please do not hesitate to contact our support team.\n\n" +
+        //                $"Best regards,\n" +
+        //                $"The Account Manager Team\n" +
+        //                $"TrashTrack";
+
+
+        //            if (!string.IsNullOrEmpty(emp_firstname.Text) &&
+        //                !string.IsNullOrEmpty(emp_lastname.Text) &&
+        //                !string.IsNullOrEmpty(emp_email.Text) &&
+        //                !string.IsNullOrEmpty(emp_pass.Text) &&
+        //                !string.IsNullOrEmpty(emp_address.Text) &&
+        //                !string.IsNullOrEmpty(emp_contact.Text)) // Check if a valid type is selected
+        //            // Validation: Ensure all required fields are filled
+        //            //if (!string.IsNullOrEmpty(emp_firstname.Text) &&
+        //            //    !string.IsNullOrEmpty(emp_lastname.Text) &&
+        //            //    !string.IsNullOrEmpty(emp_email.Text) &&
+        //            //    !string.IsNullOrEmpty(emp_pass.Text) &&
+        //            //    !string.IsNullOrEmpty(emp_address.Text) &&
+        //            //    !string.IsNullOrEmpty(emp_contact.Text) &&
+        //            //    !string.IsNullOrEmpty(customerType) && // Validate that a customer type is selected
+        //            //    customerType != "") // Check if a valid type is selected
+        //            {
+        //                // Connect to PostgreSQL
+        //                using (var db = new NpgsqlConnection(con))
+        //                {
+        //                    db.Open();
+
+        //                    // SQL query to check if the email exists in any relevant table and retrieve status
+        //                    string emailCheckQuery = @"
+        //SELECT cus_email AS email, cus_status AS status FROM customer WHERE cus_email = @emp_email
+        //UNION ALL
+        //SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = @emp_email";
+
+        //                    using (var cmd = new NpgsqlCommand(emailCheckQuery, db))
+        //                    {
+        //                        cmd.Parameters.AddWithValue("@emp_email", email);
+
+        //                        using (var reader = cmd.ExecuteReader())
+        //                        {
+        //                            // Check if the email exists in any table and check its status
+        //                            while (reader.Read())
+        //                            {
+        //                                emailExists = true;  // Email exists
+        //                                string status = reader["status"].ToString().ToLower();
+
+        //                                // Email is inactive or suspended
+        //                                if (status == "inactive" || status == "suspend")
+        //                                {
+        //                                    isEmailSuspendedOrInactive = true;
+        //                                    break;
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+
+        //                    // If email exists and is suspended/inactive, prevent the addition of a new customer
+        //                    if (emailExists)
+        //                    {
+        //                        if (isEmailSuspendedOrInactive)
+        //                        {
+        //                            Response.Write("<script>alert('The email is associated with an inactive or suspended account. Please use a different email.')</script>");
+        //                        }
+        //                        return;  // Exit the function if the email is invalid or already exists
+        //                    }
+
+        //                    // Proceed to insert the new customer
+        //                    using (var cmd = new NpgsqlCommand(
+        //                        @"INSERT INTO customer 
+        //                (cus_fname, cus_mname, cus_lname, cus_contact, cus_address, cus_email, cus_password, cus_profile, emp_id, cus_created_at, cus_updated_at, cus_otp) 
+        //                VALUES (@emp_fname, @emp_mname, @emp_lname, @emp_contact, @emp_address, @emp_email, @emp_password, @emp_profile, @acc_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, @emp_otp)", db))
+        //                    {
+        //                        // Adding parameters to prevent SQL injection
+        //                        cmd.Parameters.AddWithValue("@emp_fname", emp_firstname.Text);
+        //                        cmd.Parameters.AddWithValue("@emp_mname", emp_mi.Text);
+        //                        cmd.Parameters.AddWithValue("@emp_lname", emp_lastname.Text);
+        //                        cmd.Parameters.AddWithValue("@emp_contact", emp_contact.Text);
+        //                        cmd.Parameters.AddWithValue("@emp_address", emp_address.Text);
+        //                        cmd.Parameters.AddWithValue("@emp_email", email);
+        //                        cmd.Parameters.AddWithValue("@emp_password", hashedPassword);
+        //                        cmd.Parameters.AddWithValue("@emp_profile", imageData);  // Profile image as byte array
+        //                        cmd.Parameters.AddWithValue("@acc_id", adminId);  // Handle nullable acc_id
+        //                        cmd.Parameters.AddWithValue("@emp_otp", (object)null ?? DBNull.Value);  // Handle nullable emp_otp
+
+        //                        // Execute the query and check how many rows were affected
+        //                        int ctr = cmd.ExecuteNonQuery();
+        //                        if (ctr >= 1)
+        //                        {
+        //                            // Success: Customer added
+        //                            Response.Write("<script>alert('Customer Added!')</script>");
+        //                            ContractList();  // Reload or update the list of Customers
+        //                            //NonContractList();
+        //                            Send_Email(toAddress, subject, body);  // Optionally send a welcome email
+        //                        }
+        //                        else
+        //                        {
+        //                            // Failure: Customer registration failed
+        //                            Response.Write("<script>alert('Customer failed to Register!')</script>");
+        //                            ContractList();  // Reload or update the list of Customers
+        //                            //NonContractList();
+        //                        }
+        //                    }
+
+        //                    db.Close();
+        //                }
+        //            }
+        //            else
+        //            {
+        //                // Validation error: Required fields are not filled
+        //                Response.Write("<script>alert('Please fill up all the required fields!')</script>");
+        //            }
+        //        }
+
+        private string GenerateRandomPassword(int length)
+        {
+            const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()";
+            StringBuilder password = new StringBuilder();
+            Random random = new Random();
+
+            for (int i = 0; i < length; i++)
+            {
+                password.Append(validChars[random.Next(validChars.Length)]);
+            }
+
+            return password.ToString();
+        }
 
 
         protected void submitBtn_Click(object sender, EventArgs e)
@@ -844,8 +1369,6 @@ namespace Capstone
             int adminId = (int)Session["sam_id"];
 
             // Extracting user input
-            //string customerType = emp_role.SelectedValue; // Get selected customer type
-            string hashedPassword = HashPassword(emp_pass.Text);  // Hashing the password
             byte[] defaultImageData = File.ReadAllBytes(Server.MapPath("Pictures\\blank_prof.png"));  // Default profile image
             byte[] imageData = formFile.HasFile ? formFile.FileBytes : defaultImageData;  // Use uploaded image or default image
             string email = emp_email.Text;
@@ -853,13 +1376,17 @@ namespace Capstone
             bool emailExists = false;
             bool isEmailSuspendedOrInactive = false;
 
+            // Generate a random password for the customer (no input from the user)
+            string randomPassword = GenerateRandomPassword(12);  // You can specify the length here
+            string hashedPassword = HashPassword(randomPassword);  // Hashing the generated password
+
             // Email Message
             string toAddress = email;
             string subject = "Important: Your Login Credentials for Completing Registration";
-            string body = $"Dear Staff and Good Day!,\n\n" +
-                $"As a part of our onboarding process, we have generated your initial login credentials. Please use the following information to access the designated registration website and complete your profile:\n\n" +
+            string body = $"Dear Customer,\n\n" +
+                $"As part of our onboarding process, we have generated your initial login credentials. Please use the following information to access the designated registration website and complete your profile:\n\n" +
                 $"Email: {email}\n" +
-                $"Password: {emp_pass.Text}\n\n" +
+                $"Password: {randomPassword}\n\n" +
                 $"Visit the registration page on our main login page.\n\n" +
                 $"Once you log in, kindly fill out the remaining information required to complete your registration. After completing this step, these credentials will serve as your permanent login information for daily use in our system.\n\n" +
                 $"If you encounter any issues or have any questions, please do not hesitate to contact our support team.\n\n" +
@@ -867,22 +1394,12 @@ namespace Capstone
                 $"The Account Manager Team\n" +
                 $"TrashTrack";
 
-
+            // Validation: Ensure all required fields are filled
             if (!string.IsNullOrEmpty(emp_firstname.Text) &&
                 !string.IsNullOrEmpty(emp_lastname.Text) &&
                 !string.IsNullOrEmpty(emp_email.Text) &&
-                !string.IsNullOrEmpty(emp_pass.Text) &&
                 !string.IsNullOrEmpty(emp_address.Text) &&
-                !string.IsNullOrEmpty(emp_contact.Text)) // Check if a valid type is selected
-            // Validation: Ensure all required fields are filled
-            //if (!string.IsNullOrEmpty(emp_firstname.Text) &&
-            //    !string.IsNullOrEmpty(emp_lastname.Text) &&
-            //    !string.IsNullOrEmpty(emp_email.Text) &&
-            //    !string.IsNullOrEmpty(emp_pass.Text) &&
-            //    !string.IsNullOrEmpty(emp_address.Text) &&
-            //    !string.IsNullOrEmpty(emp_contact.Text) &&
-            //    !string.IsNullOrEmpty(customerType) && // Validate that a customer type is selected
-            //    customerType != "") // Check if a valid type is selected
+                !string.IsNullOrEmpty(emp_contact.Text))
             {
                 // Connect to PostgreSQL
                 using (var db = new NpgsqlConnection(con))
@@ -930,8 +1447,8 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                     // Proceed to insert the new customer
                     using (var cmd = new NpgsqlCommand(
                         @"INSERT INTO customer 
-                (cus_fname, cus_mname, cus_lname, cus_contact, cus_address, cus_email, cus_password, cus_profile, emp_id, cus_created_at, cus_updated_at, cus_otp) 
-                VALUES (@emp_fname, @emp_mname, @emp_lname, @emp_contact, @emp_address, @emp_email, @emp_password, @emp_profile, @acc_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, @emp_otp)", db))
+                    (cus_fname, cus_mname, cus_lname, cus_contact, cus_address, cus_email, cus_password, cus_profile, emp_id, cus_created_at, cus_updated_at, cus_otp) 
+                    VALUES (@emp_fname, @emp_mname, @emp_lname, @emp_contact, @emp_address, @emp_email, @emp_password, @emp_profile, @acc_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, @emp_otp)", db))
                     {
                         // Adding parameters to prevent SQL injection
                         cmd.Parameters.AddWithValue("@emp_fname", emp_firstname.Text);
@@ -940,7 +1457,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                         cmd.Parameters.AddWithValue("@emp_contact", emp_contact.Text);
                         cmd.Parameters.AddWithValue("@emp_address", emp_address.Text);
                         cmd.Parameters.AddWithValue("@emp_email", email);
-                        cmd.Parameters.AddWithValue("@emp_password", hashedPassword);
+                        cmd.Parameters.AddWithValue("@emp_password", hashedPassword);  // Storing hashed random password
                         cmd.Parameters.AddWithValue("@emp_profile", imageData);  // Profile image as byte array
                         cmd.Parameters.AddWithValue("@acc_id", adminId);  // Handle nullable acc_id
                         cmd.Parameters.AddWithValue("@emp_otp", (object)null ?? DBNull.Value);  // Handle nullable emp_otp
@@ -952,15 +1469,12 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                             // Success: Customer added
                             Response.Write("<script>alert('Customer Added!')</script>");
                             ContractList();  // Reload or update the list of Customers
-                            //NonContractList();
                             Send_Email(toAddress, subject, body);  // Optionally send a welcome email
                         }
                         else
                         {
                             // Failure: Customer registration failed
                             Response.Write("<script>alert('Customer failed to Register!')</script>");
-                            ContractList();  // Reload or update the list of Customers
-                            //NonContractList();
                         }
                     }
 
@@ -972,6 +1486,57 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                 // Validation error: Required fields are not filled
                 Response.Write("<script>alert('Please fill up all the required fields!')</script>");
             }
+        }
+
+        protected void btnResetPass_Click(object sender, EventArgs e)
+        {
+            string userEmail = txtEmail.Text; // Get the user's email
+            string newPassword = GenerateRandomPassword(12); // Generate a new random password (or you can take input from the user)
+            string hashedPassword = HashPassword(newPassword); // Hash the new password
+
+            // Update the password in the database
+            using (var db = new NpgsqlConnection(con))
+            {
+                db.Open();
+
+                // SQL query to update the password of the user by their email (for customer table)
+                string updatePasswordQuery = "UPDATE customer SET cus_password = @newPassword WHERE cus_email = @userEmail";
+
+                using (var cmd = new NpgsqlCommand(updatePasswordQuery, db))
+                {
+                    cmd.Parameters.AddWithValue("@newPassword", hashedPassword); // Add hashed password to query
+                    cmd.Parameters.AddWithValue("@userEmail", userEmail); // Add email parameter to identify the user
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        // Successfully updated password
+                        ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+                            "Swal.fire({ icon: 'success', title: 'Password Reset', text: 'Password has been successfully reset.', background: '#e9f7ef', confirmButtonColor: '#28a745' });", true);
+                    }
+                    else
+                    {
+                        // Failure: Email not found or update failed
+                        ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+                            "Swal.fire({ icon: 'error', title: 'Password Reset Failed', text: 'The email address was not found or there was an error.', background: '#f8d7da', confirmButtonColor: '#dc3545' });", true);
+                    }
+                }
+
+                db.Close();
+            }
+
+            // Optionally, you can also send an email to the customer with the new password
+            string subject = "Your Password Has Been Reset";
+            string body = $"Dear {txtbfirstname.Text},\n\n" +
+                          $"Your password has been successfully reset. Your new login details are as follows:\n" +
+                          $"Email: {txtEmail.Text}\n" +
+                          $"New Password: {newPassword}\n\n" +
+                          "Please log in and change your password after your first login.\n\n" +
+                          "Best regards,\n" +
+                          "The Support Team";
+
+            Send_Email(txtEmail.Text, subject, body); // Function to send email with new password
         }
 
 
@@ -1018,7 +1583,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
             emp_firstname.Text = "";
             emp_lastname.Text = "";
             emp_email.Text = "";
-            emp_pass.Text = "";
+            //emp_pass.Text = "";
             emp_contact.Text = "";
             //emp_role.SelectedIndex = 0;
             //lblErrorMessage.Text = ""; // Clear any error messages

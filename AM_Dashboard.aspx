@@ -308,23 +308,12 @@
                         </ul>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-                            <i class="ri-bill-line"></i><span>Reports</span><i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <ul id="tables-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                            <li>
-                                <a href="Admin_Billing_GenerateBill.aspx">
-                                    <i class="bi bi-circle"></i><span>Generate Bill</span>
-                                </a>
-                            </li>
 
-                            <li>
-                                <a href="Admin_Billing_Controls.aspx">
-                                    <i class="bi bi-circle"></i><span>Controls</span>
-                                </a>
-                            </li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="AM_Reports.aspx">
+                            <i class="ri-bill-line"></i><span>Reports</span>
+                        </a>
+
                     </li>
 
 
@@ -338,7 +327,6 @@
                     <h1 style="padding-top: 20px; color: chartreuse">Dashboard</h1>
                     <nav>
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="WAREHOUSE_DASHBOARD.aspx">Dashboard</a></li>
                             <%--<li class="breadcrumb-item">Add Item</li>--%>
                         </ol>
                     </nav>
@@ -378,47 +366,9 @@
                             <div class="col-lg-12">
                                 <div class="row">
 
-                                    <!-- Sales Card -->
-                                    <%--<div class="col-lg-6" style="background-color: #052507">
-                                        <div class="card info-card sales-card" style="background-color: #052507">
-                                            <div class="card-body" style="background-color: #053203; border-radius: 15px">
-                                                <h5 class="card-title" style="color: chartreuse">Total Customers </h5>
-
-                                                <div class="d-flex align-items-center">
-                                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
-                                                        <i class="bi bi-people" style="color: #cb3ee4;"></i>
-                                                    </div>
-                                                    <div class="ps-3" style="background-color: #053203">
-                                                        <style>
-                                                            #totalcustomer {
-                                                                border: none; /* Remove border if not needed */
-                                                            }
-                                                        </style>
-                                                        <h6>
-                                                            <asp:Label ID="totalcustomer" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
-                                                        </h6>
-                                                    </div>
-                                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
-                                                        <i class="bi bi-people" style="color: #cb3ee4;"></i>
-                                                    </div>
-                                                    <div class="ps-3" style="background-color: #053203">
-                                                        <style>
-                                                            #totalcustomer2 {
-                                                                border: none; /* Remove border if not needed */
-                                                            }
-                                                        </style>
-                                                        <h6>
-                                                            <asp:Label ID="totalcustomer2" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
-                                                        </h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>--%>
                                     <div class="col-lg-6" style="background-color: #052507">
-                                        <div class="card info-card sales-card" style="background-color: #052507">
-                                            <div class="card-body p-3" style="background-color: #053203; border-radius: 15px">
+                                        <div class="card info-card customers-card" style="background-color: #052507">
+                                            <div class="card-body" style="background-color: #053203; border-radius: 15px">
                                                 <!-- Adjusted padding to p-3 for smaller gap -->
                                                 <h5 class="card-title" style="color: chartreuse">Customers</h5>
 
@@ -438,17 +388,17 @@
                                                                 }
                                                             </style>
                                                             <h6 class="mb-0 ps-2">
-                                                                <asp:Label ID="totalcustomer" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                                <asp:Label ID="totalcustomer" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: #cb3ee4; font-size: 30px; font-weight: 800"></asp:Label>
                                                             </h6>
                                                         </div>
-                                                        <small class="text-center" style="color: chartreuse;">Total</small>
+                                                        <small class="text-center" style="color: darkgray;">Total</small>
                                                     </div>
 
                                                     <!-- Second Icon and Count for Total Customers -->
                                                     <div class="d-flex flex-column align-items-center" style="background-color: #053203">
                                                         <div class="d-flex align-items-center">
                                                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
-                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                                <i class="bi bi-people" style="color: #1187e8;"></i>
                                                             </div>
                                                             <style>
                                                                 #activecustomer {
@@ -456,17 +406,17 @@
                                                                 }
                                                             </style>
                                                             <h6 class="mb-0 ps-2">
-                                                                <asp:Label ID="activecustomer" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                                <asp:Label ID="activecustomer" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: #1187e8; font-size: 30px; font-weight: 800"></asp:Label>
                                                             </h6>
                                                         </div>
-                                                        <small class="text-center" style="color: chartreuse;">Active</small>
+                                                        <small class="text-center" style="color: darkgray;">Active</small>
                                                     </div>
 
                                                     <!-- Third Icon and Count for Suspended Customers -->
                                                     <div class="d-flex flex-column align-items-center" style="background-color: #053203">
                                                         <div class="d-flex align-items-center">
                                                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
-                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                                <i class="bi bi-people" style="color: red;"></i>
                                                             </div>
                                                             <style>
                                                                 #suspcustomer {
@@ -474,10 +424,10 @@
                                                                 }
                                                             </style>
                                                             <h6 class="mb-0 ps-2">
-                                                                <asp:Label ID="suspcustomer" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                                <asp:Label ID="suspcustomer" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: red; font-size: 30px; font-weight: 800"></asp:Label>
                                                             </h6>
                                                         </div>
-                                                        <small class="text-center" style="color: chartreuse;">Suspended</small>
+                                                        <small class="text-center" style="color: darkgray;">Suspended</small>
                                                     </div>
 
                                                 </div>
@@ -492,7 +442,7 @@
                                     <!-- Sales Card -->
                                     <div class="col-lg-6" style="background-color: #052507">
                                         <div class="card info-card sales-card" style="background-color: #052507">
-                                            <div class="card-body p-3" style="background-color: #053203; border-radius: 15px">
+                                            <div class="card-body" style="background-color: #053203; border-radius: 15px">
                                                 <!-- Adjusted padding to p-3 for smaller gap -->
                                                 <h5 class="card-title" style="color: chartreuse">Super Account Managers</h5>
 
@@ -512,17 +462,17 @@
                                                                 }
                                                             </style>
                                                             <h6 class="mb-0 ps-2">
-                                                                <asp:Label ID="totalSAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                                <asp:Label ID="totalSAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: #cb3ee4; font-size: 30px; font-weight: 800"></asp:Label>
                                                             </h6>
                                                         </div>
-                                                        <small class="text-center" style="color: chartreuse;">Active</small>
+                                                        <small class="text-center" style="color: darkgray;">Total</small>
                                                     </div>
 
                                                     <!-- Second Icon and Count for Total Customers -->
                                                     <div class="d-flex flex-column align-items-center" style="background-color: #053203">
                                                         <div class="d-flex align-items-center">
                                                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
-                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                                <i class="bi bi-people" style="color: #1187e8;"></i>
                                                             </div>
                                                             <style>
                                                                 #activeSAM {
@@ -530,17 +480,17 @@
                                                                 }
                                                             </style>
                                                             <h6 class="mb-0 ps-2">
-                                                                <asp:Label ID="activeSAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                                <asp:Label ID="activeSAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: #1187e8; font-size: 30px; font-weight: 800"></asp:Label>
                                                             </h6>
                                                         </div>
-                                                        <small class="text-center" style="color: chartreuse;">Total</small>
+                                                        <small class="text-center" style="color: darkgray;">Active</small>
                                                     </div>
 
                                                     <!-- Third Icon and Count for Suspended Customers -->
                                                     <div class="d-flex flex-column align-items-center" style="background-color: #053203">
                                                         <div class="d-flex align-items-center">
                                                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
-                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                                <i class="bi bi-people" style="color: red;"></i>
                                                             </div>
                                                             <style>
                                                                 #suspSAM {
@@ -548,28 +498,25 @@
                                                                 }
                                                             </style>
                                                             <h6 class="mb-0 ps-2">
-                                                                <asp:Label ID="suspSAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                                <asp:Label ID="suspSAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: red; font-size: 30px; font-weight: 800"></asp:Label>
                                                             </h6>
                                                         </div>
-                                                        <small class="text-center" style="color: chartreuse;">Suspended</small>
+                                                        <small class="text-center" style="color: darkgray;">Suspended</small>
                                                     </div>
 
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-
-
                                     <!-- End Sales Card -->
 
 
                                     <!-- Customers Card -->
                                     <div class="col-lg-6" style="background-color: #052507">
                                         <div class="card info-card sales-card" style="background-color: #052507">
-                                            <div class="card-body p-3" style="background-color: #053203; border-radius: 15px">
+                                            <div class="card-body" style="background-color: #053203; border-radius: 15px">
                                                 <!-- Adjusted padding to p-3 for smaller gap -->
-                                                <h5 class="card-title" style="color: chartreuse">Super Account Managers</h5>
+                                                <h5 class="card-title" style="color: chartreuse">Account Managers</h5>
 
                                                 <!-- Adjusted d-flex container for smaller gaps -->
                                                 <div class="d-flex align-items-center gap-5">
@@ -587,17 +534,17 @@
                                                                 }
                                                             </style>
                                                             <h6 class="mb-0 ps-2">
-                                                                <asp:Label ID="totalAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                                <asp:Label ID="totalAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: #cb3ee4; font-size: 30px; font-weight: 800"></asp:Label>
                                                             </h6>
                                                         </div>
-                                                        <small class="text-center" style="color: chartreuse;">Active</small>
+                                                        <small class="text-center" style="color: darkgray;">Total</small>
                                                     </div>
 
                                                     <!-- Second Icon and Count for Total Customers -->
                                                     <div class="d-flex flex-column align-items-center" style="background-color: #053203">
                                                         <div class="d-flex align-items-center">
                                                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
-                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                                <i class="bi bi-people" style="color: #1187e8;"></i>
                                                             </div>
                                                             <style>
                                                                 #activeAM {
@@ -605,17 +552,17 @@
                                                                 }
                                                             </style>
                                                             <h6 class="mb-0 ps-2">
-                                                                <asp:Label ID="activeAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                                <asp:Label ID="activeAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: #1187e8; font-size: 30px; font-weight: 800"></asp:Label>
                                                             </h6>
                                                         </div>
-                                                        <small class="text-center" style="color: chartreuse;">Total</small>
+                                                        <small class="text-center" style="color: darkgray;">Active</small>
                                                     </div>
 
                                                     <!-- Third Icon and Count for Suspended Customers -->
                                                     <div class="d-flex flex-column align-items-center" style="background-color: #053203">
                                                         <div class="d-flex align-items-center">
                                                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
-                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                                <i class="bi bi-people" style="color: red;"></i>
                                                             </div>
                                                             <style>
                                                                 #suspAM {
@@ -623,10 +570,10 @@
                                                                 }
                                                             </style>
                                                             <h6 class="mb-0 ps-2">
-                                                                <asp:Label ID="suspAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                                <asp:Label ID="suspAM" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: red; font-size: 30px; font-weight: 800"></asp:Label>
                                                             </h6>
                                                         </div>
-                                                        <small class="text-center" style="color: chartreuse;">Suspended</small>
+                                                        <small class="text-center" style="color: darkgray;">Suspended</small>
                                                     </div>
 
                                                 </div>
@@ -634,17 +581,19 @@
                                         </div>
                                     </div>
                                     <!-- End Customers Card -->
-
-                                    <!-- Customers Card -->
+                                    <!-- BO Card -->
                                     <div class="col-lg-6" style="background-color: #052507">
-
-                                        <div class="card info-card customers-card" style="background-color: #052507">
-
+                                        <div class="card info-card sales-card" style="background-color: #052507">
                                             <div class="card-body" style="background-color: #053203; border-radius: 15px">
+                                                <!-- Adjusted padding to p-3 for smaller gap -->
                                                 <h5 class="card-title" style="color: chartreuse">Billing Officer</h5>
 
-                                                <div class="d-flex align-items-center">
-                                                    <div class="d-flex flex-column align-items-center me-4" style="background-color: #053203">
+                                                <!-- Adjusted d-flex container for smaller gaps -->
+                                                <div class="d-flex align-items-center gap-5">
+                                                    <!-- Added gap-2 for smaller uniform spacing -->
+
+                                                    <!-- First Icon and Count for Active Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
                                                         <div class="d-flex align-items-center">
                                                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
                                                                 <i class="bi bi-people" style="color: #cb3ee4;"></i>
@@ -655,37 +604,197 @@
                                                                 }
                                                             </style>
                                                             <h6 class="mb-0 ps-2">
-                                                                <asp:Label ID="totalBO" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                                <asp:Label ID="totalBO" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: #cb3ee4; font-size: 30px; font-weight: 800"></asp:Label>
                                                             </h6>
                                                         </div>
-                                                        <small class="text-center" style="color: chartreuse;">Active</small>
+                                                        <small class="text-center" style="color: darkgray;">Total</small>
                                                     </div>
 
+                                                    <!-- Second Icon and Count for Total Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: #1187e8;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #activeBO {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="activeBO" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: #1187e8; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: darkgray;">Active</small>
+                                                    </div>
+
+                                                    <!-- Third Icon and Count for Suspended Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: red;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #suspBO {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="suspBO" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: red; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: darkgray;">Suspended</small>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End BO Card -->
+
+                                    <!-- OD Card -->
+                                    <div class="col-lg-6" style="background-color: #052507">
+                                        <div class="card info-card sales-card" style="background-color: #052507">
+                                            <div class="card-body" style="background-color: #053203; border-radius: 15px">
+                                                <!-- Adjusted padding to p-3 for smaller gap -->
+                                                <h5 class="card-title" style="color: chartreuse">Operational DIspatcher</h5>
+
+                                                <!-- Adjusted d-flex container for smaller gaps -->
+                                                <div class="d-flex align-items-center gap-5">
+                                                    <!-- Added gap-2 for smaller uniform spacing -->
+
+                                                    <!-- First Icon and Count for Active Customers -->
                                                     <div class="d-flex flex-column align-items-center" style="background-color: #053203">
                                                         <div class="d-flex align-items-center">
                                                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
                                                                 <i class="bi bi-people" style="color: #cb3ee4;"></i>
                                                             </div>
                                                             <style>
-                                                                #activeBO{
+                                                                #totalOD {
                                                                     border: none; /* Remove border if not needed */
                                                                 }
                                                             </style>
                                                             <h6 class="mb-0 ps-2">
-                                                                <asp:Label ID="activeBO" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: aquamarine; font-size: 30px; font-weight: 800"></asp:Label>
+                                                                <asp:Label ID="totalOD" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: #cb3ee4; font-size: 30px; font-weight: 800"></asp:Label>
                                                             </h6>
                                                         </div>
-                                                        <small class="text-center" style="color: chartreuse;">Total</small>
+                                                        <small class="text-center" style="color: darkgray;">Total</small>
+                                                    </div>
+
+                                                    <!-- Second Icon and Count for Total Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: #1187e8;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #activeOD {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="activeOD" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: #1187e8; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: darkgray;">Active</small>
+                                                    </div>
+
+                                                    <!-- Third Icon and Count for Suspended Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: red;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #suspOD {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="suspOD" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: red; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: darkgray;">Suspended</small>
                                                     </div>
 
                                                 </div>
                                             </div>
-
                                         </div>
-                                    <!-- End Customers Card -->
+                                    </div>
+                                    <!-- End OD Card -->
+                                    <!-- OD Card -->
+                                    <div class="col-lg-6" style="background-color: #052507">
+                                        <div class="card info-card sales-card" style="background-color: #052507">
+                                            <div class="card-body" style="background-color: #053203; border-radius: 15px">
+                                                <!-- Adjusted padding to p-3 for smaller gap -->
+                                                <h5 class="card-title" style="color: chartreuse">Hauler</h5>
+
+                                                <!-- Adjusted d-flex container for smaller gaps -->
+                                                <div class="d-flex align-items-center gap-5">
+                                                    <!-- Added gap-2 for smaller uniform spacing -->
+
+                                                    <!-- First Icon and Count for Active Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: #cb3ee4;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #totalHauler {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="totalHauler" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: #cb3ee4; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: darkgray;">Total</small>
+                                                    </div>
+
+                                                    <!-- Second Icon and Count for Total Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: #1187e8;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #activeHauler {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="activeHauler" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: #1187e8; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: darkgray;">Active</small>
+                                                    </div>
+
+                                                    <!-- Third Icon and Count for Suspended Customers -->
+                                                    <div class="d-flex flex-column align-items-center" style="background-color: #053203">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background-color: #053203">
+                                                                <i class="bi bi-people" style="color: red;"></i>
+                                                            </div>
+                                                            <style>
+                                                                #suspHauler {
+                                                                    border: none; /* Remove border if not needed */
+                                                                }
+                                                            </style>
+                                                            <h6 class="mb-0 ps-2">
+                                                                <asp:Label ID="suspHauler" runat="server" CssClass="form-control" ReadOnly="true" Style="background-color: transparent; color: red; font-size: 30px; font-weight: 800"></asp:Label>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-center" style="color: darkgray;">Suspended</small>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End OD Card -->
 
                                     <!-- Revenue Card -->
-                                    <div class="col-lg-16" style="background-color: #052507">
+                                    <%--<div class="col-lg-16" style="background-color: #052507">
 
                                         <div class="card info-card revenue-card" style="background-color: #052507">
 
@@ -710,195 +819,336 @@
                                             </div>
 
                                         </div>
-                                    </div>
+                                    </div>--%>
 
                                     <!-- End Revenue Card -->
 
-
-                                    <div class="col-lg-16" style="background-color: #052507">
+                                    <%--PAYMENT STATUS LATESTT--%>
+                                    <%--<div class="col-lg-16" style="background-color: #052507">
                                         <div class="card" style="background-color: #052507">
                                             <div class="card-body" style="background-color: #053203; border-radius: 15px">
-                                                <h5 class="card-title" style="color: chartreuse">Users Chart</h5>
+                                                <h5 class="card-title" style="color: chartreuse">Payment Status Chart</h5>
 
                                                 <!-- Pie Chart -->
                                                 <canvas id="pieChart" style="max-height: 400px;"></canvas>
                                                 <div style="display: flex; justify-content: space-around; margin-top: 10px; text-align: left;">
                                                     <div>
-                                                        <span id="activeUsersLabel" style="color: aquamarine; font-weight: 400; font-size: 13px; text-shadow: 1px 1px 2px #000; display: inline-block;">Active Users: </span>
-                                                        <span id="activeUsersCount" style="color: aquamarine; font-weight: 400; font-size: 13px; text-shadow: 1px 1px 2px #000; display: inline-block;">0</span>
+                                                        <span id="paidPaymentLabel" style="color: aquamarine; font-weight: 400; font-size: 13px; text-shadow: 1px 1px 2px #000;">Paid: </span>
+                                                        <span id="paidPaymentCount" style="color: aquamarine; font-weight: 400; font-size: 13px; text-shadow: 1px 1px 2px #000;">0</span>
                                                     </div>
 
                                                     <div style="text-align: right;">
-                                                        <span id="inactiveUsersLabel" style="color: aquamarine; font-weight: 400; font-size: 13px; text-shadow: 1px 1px 2px #000;">Inactive Users: </span>
-                                                        <span id="inactiveUsersCount" style="color: aquamarine; font-weight: 400; font-size: 13px; text-shadow: 1px 1px 2px #000;">0</span>
+                                                        <span id="unpaidPaymentLabel" style="color: aquamarine; font-weight: 400; font-size: 13px; text-shadow: 1px 1px 2px #000;">Unpaid: </span>
+                                                        <span id="unpaidPaymentCount" style="color: aquamarine; font-weight: 400; font-size: 13px; text-shadow: 1px 1px 2px #000;">0</span>
                                                     </div>
                                                 </div>
 
+                                                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                                                 <script>
-                                                    function updatePieChart(activeCount, inactiveCount) {
-                                                        new Chart(document.querySelector('#pieChart'), {
-                                                            type: 'pie',
-                                                            data: {
-                                                                labels: ['Active', 'Inactive'],
-                                                                datasets: [{
-                                                                    label: 'User Status',
-                                                                    data: [activeCount, inactiveCount],
-                                                                    backgroundColor: [
-                                                                        'rgb(75, 192, 192)', // Active color
-                                                                        'rgb(255, 99, 132)'  // Inactive color
-                                                                    ],
-                                                                    borderColor: '#052507', // Border color (green)
-                                                                    borderWidth: 2, // Border width
-                                                                    hoverOffset: 4
-                                                                }]
-                                                            },
-                                                            options: {
-                                                                plugins: {
-                                                                    legend: {
-                                                                        labels: {
-                                                                            color: 'white' // Text color for labels
+                                                    let myChart;
+
+                                                    // Function to update the pie chart with new data
+                                                    function updatePieChart(paidAmount, unpaidAmount) {
+                                                        const ctx = document.querySelector('#pieChart');
+
+                                                        // If the chart already exists, just update it
+                                                        if (myChart) {
+                                                            myChart.data.datasets[0].data = [paidAmount, unpaidAmount];
+                                                            myChart.update();
+                                                        } else {
+                                                            // Create a new chart
+                                                            myChart = new Chart(ctx, {
+                                                                type: 'pie',
+                                                                data: {
+                                                                    labels: ['Paid', 'Unpaid'],
+                                                                    datasets: [{
+                                                                        label: 'Amount',
+                                                                        data: [paidAmount, unpaidAmount],
+                                                                        backgroundColor: [
+                                                                            'rgb(75, 192, 192)', // Paid color
+                                                                            'rgb(255, 99, 132)'  // Unpaid color
+                                                                        ],
+                                                                        borderColor: '#052507',
+                                                                        borderWidth: 2,
+                                                                        hoverOffset: 4
+                                                                    }]
+                                                                },
+                                                                options: {
+                                                                    plugins: {
+                                                                        legend: {
+                                                                            labels: {
+                                                                                color: 'white' // Label color
+                                                                            }
                                                                         }
                                                                     }
                                                                 }
-                                                            }
-                                                        });
+                                                            });
+                                                        }
 
-                                                        // Update active and inactive user counts
-                                                        document.getElementById('activeUsersCount').textContent = activeCount;
-                                                        document.getElementById('inactiveUsersCount').textContent = inactiveCount;
+                                                        // Update user counts in the labels
+                                                        document.getElementById('paidPaymentCount').textContent = paidAmount.toFixed(2);
+                                                        document.getElementById('unpaidPaymentCount').textContent = unpaidAmount.toFixed(2);
                                                     }
 
+                                                    // Function to fetch the payment status from the API
+                                                    function fetchPaymentStatus() {
+                                                        fetch('/api/payment/monthlyTotals')
+                                                            .then(response => response.json())
+                                                            .then(data => {
+                                                                console.log('Payment Status Data:', data); // Log the API response
+                                                                const totalPaid = data.monthlyTotalSalesPaid.reduce((sum, amount) => sum + amount, 0);
+                                                                const totalUnpaid = data.monthlyTotalSalesUnpaid.reduce((sum, amount) => sum + amount, 0);
+
+                                                                console.log('Total Paid:', totalPaid); // Log the total paid value
+                                                                console.log('Total Unpaid:', totalUnpaid); // Log the total unpaid value
+
+                                                                // Update chart with new values
+                                                                updatePieChart(totalPaid, totalUnpaid);
+                                                            })
+                                                            .catch(error => console.error('Error fetching payment status:', error));
+                                                    }
+
+
+                                                    // Event listener for DOMContentLoaded to initiate the chart
                                                     document.addEventListener("DOMContentLoaded", () => {
-                                                        // Load initial chart with placeholder data
-                                                        updatePieChart(0, 0);
+                                                        // Initial load
+                                                        fetchPaymentStatus();
+
+                                                        // Polling every 1 second (1000 ms)
+                                                        setInterval(fetchPaymentStatus, 1000);
+                                                    });
+
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </div>--%>
+                                    <div class="col-lg-16" style="background-color: #052507">
+                                        <div class="card" style="background-color: #052507">
+                                            <div class="card-body" style="background-color: #053203; border-radius: 15px">
+                                                <h5 class="card-title" style="color: chartreuse">Payment Status Chart</h5>
+
+                                                <!-- Pie Chart -->
+                                                <canvas id="pieChart" style="max-height: 400px;"></canvas>
+                                                <div style="display: flex; justify-content: space-around; margin-top: 10px; text-align: left;">
+                                                    <div>
+                                                        <span id="paidPaymentLabel" style="color: aquamarine; font-weight: 400; font-size: 13px; text-shadow: 1px 1px 2px #000;">Paid: </span>
+                                                        <span id="paidCount" style="color: aquamarine; font-weight: 400; font-size: 13px; text-shadow: 1px 1px 2px #000;">(0)</span>
+                                                    </div>
+
+                                                    <div style="text-align: right;">
+                                                        <span id="unpaidPaymentLabel" style="color: aquamarine; font-weight: 400; font-size: 13px; text-shadow: 1px 1px 2px #000;">Unpaid: </span>
+                                                        <span id="unpaidCount" style="color: aquamarine; font-weight: 400; font-size: 13px; text-shadow: 1px 1px 2px #000;">(0)</span>
+                                                    </div>
+                                                </div>
+
+                                                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                                <script>
+                                                    let myChart;
+
+                                                    // Function to fetch the payment status from the API
+                                                    function fetchPaymentStatus() {
+                                                        fetch('/api/payment/status')
+                                                            .then(response => response.json())
+                                                            .then(data => {
+                                                                console.log('Payment Status Data:', data); // Log the data received from API
+
+                                                                const paidCount = data.paidCount; // Fetch paid count
+                                                                const unpaidCount = data.unpaidCount; // Fetch unpaid count
+
+                                                                console.log('Paid Count:', paidCount); // Log the count
+                                                                console.log('Unpaid Count:', unpaidCount); // Log the count
+
+                                                                // Ensure the values are valid and update the chart/labels
+                                                                if (!isNaN(paidCount) && !isNaN(unpaidCount)) {
+                                                                    updatePieChart(data.totalPaidAmount, data.totalUnpaidAmount);
+                                                                    document.getElementById('paidCount').textContent = ` (${paidCount})`; // Update paid count
+                                                                    document.getElementById('unpaidCount').textContent = ` (${unpaidCount})`; // Update unpaid count
+                                                                } else {
+                                                                    console.error('Invalid data returned from the API.');
+                                                                }
+                                                            })
+                                                            .catch(error => console.error('Error fetching payment status:', error));
+                                                    }
+
+                                                    // Function to update the pie chart with new data
+                                                    function updatePieChart(paidAmount, unpaidAmount) {
+                                                        const ctx = document.querySelector('#pieChart');
+
+                                                        // If the chart already exists, just update it
+                                                        if (myChart) {
+                                                            myChart.data.datasets[0].data = [paidAmount, unpaidAmount];
+                                                            myChart.update();
+                                                        } else {
+                                                            // Create a new chart
+                                                            myChart = new Chart(ctx, {
+                                                                type: 'pie',
+                                                                data: {
+                                                                    labels: ['Paid', 'Unpaid'],
+                                                                    datasets: [{
+                                                                        label: 'Amount',
+                                                                        data: [paidAmount, unpaidAmount],
+                                                                        backgroundColor: [
+                                                                            'rgb(75, 192, 192)', // Paid color
+                                                                            'rgb(255, 99, 132)'  // Unpaid color
+                                                                        ],
+                                                                        borderColor: '#052507',
+                                                                        borderWidth: 2,
+                                                                        hoverOffset: 4
+                                                                    }]
+                                                                },
+                                                                options: {
+                                                                    plugins: {
+                                                                        legend: {
+                                                                            labels: {
+                                                                                color: 'white' // Label color
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+
+                                                    // Event listener for DOMContentLoaded to initiate the chart
+                                                    document.addEventListener("DOMContentLoaded", () => {
+                                                        // Initial load
+                                                        fetchPaymentStatus();
+
+                                                        // Polling every 5 seconds (5000 ms) to reduce unnecessary calls
+                                                        setInterval(fetchPaymentStatus, 2000);
                                                     });
                                                 </script>
                                             </div>
                                         </div>
                                     </div>
+
+
+
+
+
+
+
+
+
+
+
+
                                 </div>
                             </div>
-                        </div>
 
+                            <div class="col-lg-16">
+                                <div class="card" style="background-color: #053203">
+                                    <div class="card-body" style="border-radius: 15px">
+                                        <h5 class="card-title" style="color: chartreuse">Payments for Each Month</h5>
 
-                        <div class="col-lg-16">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Pending Payments Total for a Specific Month</h5>
+                                        <!-- Bar Chart -->
+                                        <canvas id="barChartPayments" style="max-height: 400px;"></canvas>
+                                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                        <script>
+                                            let myBarChart;
+                                            let lastMonthlyTotalsPaid = [];
+                                            let lastMonthlyTotalsUnpaid = [];
 
+                                            function updateBarChart(monthlyTotalSalesPaid, monthlyTotalSalesUnpaid) {
+                                                const labels = [
+                                                    'January', 'February', 'March', 'April', 'May', 'June',
+                                                    'July', 'August', 'September', 'October', 'November', 'December'
+                                                ];
 
-                                    <!-- Bar Chart -->
-                                    <canvas id="barChart" style="max-height: 400px;"></canvas>
-                                    <script>
-                                        document.addEventListener("DOMContentLoaded", () => {
-                                            const allMonthsData = monthlyTotalSales;
+                                                const backgroundColors = [
+                                                    'rgba(54, 162, 235, 0.2)', // Blue for Paid
+                                                    'rgba(255, 99, 132, 0.2)'  // Red for Unpaid
+                                                ];
 
-                                            const chart = new Chart(document.querySelector('#barChart'), {
-                                                type: 'bar',
-                                                data: {
-                                                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                                                    datasets: [{
-                                                        label: 'Bar Chart',
-                                                        data: allMonthsData,
-                                                        backgroundColor: [
-                                                            'rgba(255, 99, 132, 0.2)',
-                                                            'rgba(255, 159, 64, 0.2)',
-                                                            'rgba(255, 205, 86, 0.2)',
-                                                            'rgba(75, 192, 192, 0.2)',
-                                                            'rgba(54, 162, 235, 0.2)',
-                                                            'rgba(153, 102, 255, 0.2)',
-                                                            'rgba(201, 203, 207, 0.2)'
-                                                        ],
-                                                        borderColor: [
-                                                            'rgb(255, 99, 132)',
-                                                            'rgb(255, 159, 64)',
-                                                            'rgb(255, 205, 86)',
-                                                            'rgb(75, 192, 192)',
-                                                            'rgb(54, 162, 235)',
-                                                            'rgb(153, 102, 255)',
-                                                            'rgb(201, 203, 207)'
-                                                        ],
+                                                const borderColors = [
+                                                    'rgb(54, 162, 235)', // Blue for Paid
+                                                    'rgb(255, 99, 132)'  // Red for Unpaid
+                                                ];
+
+                                                const datasets = [
+                                                    {
+                                                        label: 'Total Paid Payments',
+                                                        data: monthlyTotalSalesPaid,
+                                                        backgroundColor: backgroundColors[0],
+                                                        borderColor: borderColors[0],
                                                         borderWidth: 1
-                                                    }]
-                                                },
-                                                options: {
-                                                    scales: {
-                                                        y: {
-                                                            beginAtZero: true
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                        });
-
-                                    </script>
-                                    <!-- End Bar Chart -->
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-16">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Paid Payments Total for a Specific Month</h5>
-
-                                    <!-- Bar Chart -->
-                                    <canvas id="barChartpaid" style="max-height: 400px;"></canvas>
-                                    <script>
-                                        document.addEventListener("DOMContentLoaded", () => {
-                                            const allMonthsData = monthlyTotalSalesPaid;
-
-                                            const chart = new Chart(document.querySelector('#barChartpaid'), {
-                                                type: 'bar',
-                                                data: {
-                                                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                                                    datasets: [{
-                                                        label: 'Bar Chart',
-                                                        data: allMonthsData,
-                                                        backgroundColor: [
-                                                            'rgba(255, 99, 132, 0.2)',
-                                                            'rgba(255, 159, 64, 0.2)',
-                                                            'rgba(255, 205, 86, 0.2)',
-                                                            'rgba(75, 192, 192, 0.2)',
-                                                            'rgba(54, 162, 235, 0.2)',
-                                                            'rgba(153, 102, 255, 0.2)',
-                                                            'rgba(201, 203, 207, 0.2)'
-                                                        ],
-                                                        borderColor: [
-                                                            'rgb(255, 99, 132)',
-                                                            'rgb(255, 159, 64)',
-                                                            'rgb(255, 205, 86)',
-                                                            'rgb(75, 192, 192)',
-                                                            'rgb(54, 162, 235)',
-                                                            'rgb(153, 102, 255)',
-                                                            'rgb(201, 203, 207)'
-                                                        ],
+                                                    },
+                                                    {
+                                                        label: 'Total Unpaid Payments',
+                                                        data: monthlyTotalSalesUnpaid,
+                                                        backgroundColor: backgroundColors[1],
+                                                        borderColor: borderColors[1],
                                                         borderWidth: 1
-                                                    }]
-                                                },
-                                                options: {
-                                                    scales: {
-                                                        y: {
-                                                            beginAtZero: true
-                                                        }
                                                     }
+                                                ];
+
+                                                if (JSON.stringify(lastMonthlyTotalsPaid) !== JSON.stringify(monthlyTotalSalesPaid) ||
+                                                    JSON.stringify(lastMonthlyTotalsUnpaid) !== JSON.stringify(monthlyTotalSalesUnpaid)) {
+
+                                                    if (myBarChart) {
+                                                        myBarChart.data.datasets = datasets;
+                                                        myBarChart.update();
+                                                    } else {
+                                                        myBarChart = new Chart(document.querySelector('#barChartPayments'), {
+                                                            type: 'bar',
+                                                            data: {
+                                                                labels: labels,
+                                                                datasets: datasets
+                                                            },
+                                                            options: {
+                                                                scales: {
+                                                                    x: {
+                                                                        ticks: {
+                                                                            color: 'white' // Set color of x-axis labels (months)
+                                                                        },
+                                                                        grid: {
+                                                                            color: 'rgba(128, 128, 128, 0.2)' // Set color of x-axis grid lines to gray
+                                                                        }
+                                                                    },
+                                                                    y: {
+                                                                        beginAtZero: true,
+                                                                        ticks: {
+                                                                            color: 'white' // Set color of y-axis numbers
+                                                                        },
+                                                                        grid: {
+                                                                            color: 'rgba(128, 128, 128, 0.2)' // Set color of y-axis grid lines to gray
+                                                                        }
+                                                                    }
+                                                                },
+                                                                plugins: {
+                                                                    legend: {
+                                                                        labels: {
+                                                                            color: 'white' // Set color of legend text
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+
+                                                    lastMonthlyTotalsPaid = monthlyTotalSalesPaid;
+                                                    lastMonthlyTotalsUnpaid = monthlyTotalSalesUnpaid;
                                                 }
+                                            }
+
+                                            function fetchMonthlyTotals() {
+                                                fetch('/api/payment/monthlyTotals')
+                                                    .then(response => response.json())
+                                                    .then(data => {
+                                                        updateBarChart(data.monthlyTotalSalesPaid, data.monthlyTotalSalesUnpaid);
+                                                    })
+                                                    .catch(error => console.error('Error fetching monthly totals:', error));
+                                            }
+
+                                            document.addEventListener("DOMContentLoaded", () => {
+                                                fetchMonthlyTotals();
+                                                setInterval(fetchMonthlyTotals, 2000);
                                             });
-                                        });
-
-                                    </script>
-                                    <!-- End Bar Chart -->
-
-
-
-
-
-
-
+                                        </script>
+                                        <!-- End Bar Chart -->
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                     </section>
                 </section>
 

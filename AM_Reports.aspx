@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SAM_Reports.aspx.cs" Inherits="Capstone.SAM_Reports" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AM_Reports.aspx.cs" Inherits="Capstone.AM_Reports" %>
 
 <!DOCTYPE html>
 
@@ -471,7 +471,7 @@
           <ul class="sidebar-nav" id="sidebar-nav">
 
               <li class="nav-item">
-                  <a class="nav-link collapsed" href="SAM_Dashboard.aspx">
+                  <a class="nav-link collapsed" href="AM_Dashboard.aspx">
                       <i class="bi bi-grid"></i>
                       <span>Dashboard</span>
                   </a>
@@ -487,19 +487,19 @@
                   </a>
                   <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                       <li>
-                          <a href="SAM_AccountMan.aspx">
+                          <a href="AM_AccountMan.aspx">
                               <i class="bi bi-circle"></i><span>Employees</span>
                           </a>
                       </li>
                       <li>
-                          <a href="SAM_AccountManCustomers.aspx">
+                          <a href="AM_AccountManCustomers.aspx">
                               <i class="bi bi-circle"></i><span>Customers</span>
                           </a>
                       </li>
                   </ul>
               </li>
               <li class="nav-item">
-                  <a class="nav-link" href="SAM_Reports.aspx">
+                  <a class="nav-link" href="AM_Reports.aspx">
                       <i class="bi bi-grid"></i>
                       <span>Reports</span>
                   </a>

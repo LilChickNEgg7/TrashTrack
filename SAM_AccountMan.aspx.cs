@@ -1446,7 +1446,223 @@ namespace Capstone
         //    }
         //}
 
-        //WITH RANDOM PASSWORD WITHOUT TEXTBOX FOR PASSWORD
+        //    //WITH RANDOM PASSWORD WITHOUT TEXTBOX FOR PASSWORD
+        //    protected void UpdateAdminInfo(object sender, EventArgs e)
+        //    {
+        //        int id;
+        //        if (!int.TryParse(txtbxID.Text, out id))
+        //        {
+        //            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                "Swal.fire({ icon: 'error', title: 'Invalid ID Format', text: 'Please enter a valid ID format.', background: '#f8d7da', confirmButtonColor: '#dc3545' });", true);
+        //            return;
+        //        }
+
+        //        string firstname = txtbfirstname.Text;
+        //        string mi = txtmi.Text;
+        //        string lastname = txtLastname.Text;
+        //        string contact = txtContact.Text;
+        //        string email = txtEmail.Text;
+
+        //        bool emailExists = false;
+        //        bool isEmailSuspendedOrInactive = false;
+
+        //        // Get selected role from the dropdown list
+        //        int roleId = Convert.ToInt32(promoteddl.SelectedValue);
+        //        string rolee = "Employee";
+
+        //        byte[] uploadedImageData = null;
+        //        if (FileUpload1.HasFile)
+        //        {
+        //            try
+        //            {
+        //                string fileExtension = Path.GetExtension(FileUpload1.PostedFile.FileName).ToLower();
+        //                string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+        //                if (allowedExtensions.Contains(fileExtension))
+        //                {
+        //                    uploadedImageData = FileUpload1.FileBytes;
+        //                }
+        //                else
+        //                {
+        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                    "Swal.fire({ icon: 'error', title: 'Invalid File Type', text: 'Only image files are allowed (jpg, jpeg, png, gif).', background: '#f8d7da', confirmButtonColor: '#dc3545' });", true);
+        //                    return;
+        //                }
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                Response.Write("<script>alert('Error uploading image: " + ex.Message + "')</script>");
+        //                return;
+        //            }
+        //        }
+
+        //        // Connect to PostgreSQL
+        //        using (var db = new NpgsqlConnection(con))
+        //        {
+        //            db.Open();
+
+        //            // SQL query to check if the email exists in any relevant table and retrieve status
+        //            string emailCheckQuery = @"
+        //SELECT cus_email AS email, cus_status AS status FROM customer WHERE cus_email = @emp_email
+        //UNION ALL
+        //SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = @emp_email";
+
+        //            using (var cmd = new NpgsqlCommand(emailCheckQuery, db))
+        //            {
+        //                cmd.Parameters.AddWithValue("@emp_email", email);
+
+        //                using (var reader = cmd.ExecuteReader())
+        //                {
+        //                    while (reader.Read())
+        //                    {
+        //                        emailExists = true;  // Email exists
+        //                        string status = reader["status"].ToString().ToLower();
+
+        //                        // Email is inactive or suspended
+        //                        if (status == "inactive" || status == "suspend")
+        //                        {
+        //                            isEmailSuspendedOrInactive = true;
+        //                            break;
+        //                        }
+        //                    }
+        //                }
+        //            }
+
+        //            if (emailExists && isEmailSuspendedOrInactive)
+        //            {
+        //                ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                "Swal.fire({ icon: 'info', title: 'Inactive or Suspended Account', text: 'The email is associated with an inactive or suspended account. Please use a different email.', background: '#e9ecef', confirmButtonColor: '#6c757d' });", true);
+        //                return;
+        //            }
+
+        //            string selectQuery = "SELECT * FROM employee WHERE emp_id = @id";
+        //            using (var cmdSelect = new NpgsqlCommand(selectQuery, db))
+        //            {
+        //                cmdSelect.Parameters.AddWithValue("@id", id);
+
+        //                string originalFirstname = null;
+        //                string originalMi = null;
+        //                string originalLastname = null;
+        //                string originalContact = null;
+        //                string originalEmail = null;
+        //                string originalPassword = null;
+        //                byte[] originalProfileImage = null;
+        //                int originalRoleId = 0;
+
+        //                using (var reader = cmdSelect.ExecuteReader())
+        //                {
+        //                    if (reader.Read())
+        //                    {
+        //                        originalFirstname = reader["emp_fname"].ToString();
+        //                        originalMi = reader["emp_mname"].ToString();
+        //                        originalLastname = reader["emp_lname"].ToString();
+        //                        originalContact = reader["emp_contact"].ToString();
+        //                        originalEmail = reader["emp_email"].ToString();
+        //                        originalPassword = reader["emp_password"].ToString();
+        //                        originalProfileImage = reader["emp_profile"] as byte[];
+        //                        originalRoleId = Convert.ToInt32(reader["role_id"]);
+        //                    }
+        //                    else
+        //                    {
+        //                        ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                                "Swal.fire({ icon: 'error', title: 'No Data Found', text: 'No data found for the specified ID.', background: '#f8d7da', confirmButtonColor: '#dc3545' });", true);
+        //                        return;
+        //                    }
+        //                }
+
+        //                var updateFields = new List<string>();
+        //                var updateParams = new List<NpgsqlParameter>();
+        //                var changes = new List<string>();
+
+        //                // Check and update each field (excluding password)
+        //                if (!string.IsNullOrEmpty(firstname) && firstname != originalFirstname)
+        //                {
+        //                    updateFields.Add("emp_fname = @firstname");
+        //                    updateParams.Add(new NpgsqlParameter("@firstname", firstname));
+        //                    changes.Add($"First Name: {originalFirstname} → {firstname}");
+        //                }
+        //                if (!string.IsNullOrEmpty(mi) && mi != originalMi)
+        //                {
+        //                    updateFields.Add("emp_mname = @mi");
+        //                    updateParams.Add(new NpgsqlParameter("@mi", mi));
+        //                    changes.Add($"Middle Initial: {originalMi} → {mi}");
+        //                }
+        //                if (!string.IsNullOrEmpty(lastname) && lastname != originalLastname)
+        //                {
+        //                    updateFields.Add("emp_lname = @lastname");
+        //                    updateParams.Add(new NpgsqlParameter("@lastname", lastname));
+        //                    changes.Add($"Last Name: {originalLastname} → {lastname}");
+        //                }
+        //                if (!string.IsNullOrEmpty(contact) && contact != originalContact)
+        //                {
+        //                    updateFields.Add("emp_contact = @contact");
+        //                    updateParams.Add(new NpgsqlParameter("@contact", contact));
+        //                    changes.Add($"Contact: {originalContact} → {contact}");
+        //                }
+        //                if (!string.IsNullOrEmpty(email) && email != originalEmail)
+        //                {
+        //                    updateFields.Add("emp_email = @email");
+        //                    updateParams.Add(new NpgsqlParameter("@email", email));
+        //                    changes.Add($"Email: {originalEmail} → {email}");
+        //                }
+        //                if (uploadedImageData != null)
+        //                {
+        //                    updateFields.Add("emp_profile = @profile");
+        //                    updateParams.Add(new NpgsqlParameter("@profile", uploadedImageData));
+        //                    changes.Add("Profile Picture: Updated");
+        //                }
+
+        //                // Update role if it has changed
+        //                if (roleId != originalRoleId)
+        //                {
+        //                    updateFields.Add("role_id = @roleId");
+        //                    updateParams.Add(new NpgsqlParameter("@roleId", roleId));
+        //                    changes.Add($"Role: {originalRoleId} → {roleId}");
+        //                }
+
+        //                if (updateFields.Count > 0)
+        //                {
+        //                    string updateQuery = $"UPDATE employee SET {string.Join(", ", updateFields)} WHERE emp_id = @id";
+        //                    using (var cmdUpdate = new NpgsqlCommand(updateQuery, db))
+        //                    {
+        //                        cmdUpdate.Parameters.AddWithValue("@id", id);
+        //                        cmdUpdate.Parameters.AddRange(updateParams.ToArray());
+
+        //                        int updatedRows = cmdUpdate.ExecuteNonQuery();
+        //                        if (updatedRows > 0)
+        //                        {
+        //                            string changeDetails = string.Join("\n", changes);
+        //                            string subject = "Account Information Update Notification";
+        //                            string body = $"Dear Staff,\n\nYour account information has been updated. Below are the details of the changes:\n\n{changeDetails}\n\nIf you did not request these changes, please contact support immediately.\n\nBest regards,\nThe Account Manager Team";
+
+        //                            if (!string.IsNullOrEmpty(email) && email != originalEmail)
+        //                            {
+        //                                Send_Email(originalEmail, subject, body);
+        //                                Send_Email(email, subject, body);
+        //                            }
+        //                            else
+        //                            {
+        //                                Send_Email(originalEmail, subject, body);
+        //                            }
+        //                            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                            $"Swal.fire({{ icon: 'success', title: 'Update Successful', text: '{rolee} information updated successfully!', background: '#e9f7ef', confirmButtonColor: '#28a745' }});", true);
+        //                        }
+        //                        else
+        //                        {
+        //                            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                            $"Swal.fire({{ icon: 'error', title: 'Update Failed', text: '{rolee} information.', background: '#f8d7da', confirmButtonColor: '#dc3545' }});", true);
+        //                        }
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                    $"Swal.fire({{ icon: 'info', title: 'No Changes Detected', text: 'No changes detected in the {rolee} information.', background: '#e9ecef', confirmButtonColor: '#6c757d' }});", true);
+        //                }
+        //            }
+        //            db.Close();
+        //        }
+        //    }
+
         protected void UpdateAdminInfo(object sender, EventArgs e)
         {
             int id;
@@ -1638,11 +1854,21 @@ namespace Capstone
                                 {
                                     Send_Email(originalEmail, subject, body);
                                     Send_Email(email, subject, body);
+                                    SupAccountManList();
+                                    AccountManList();
+                                    BillinOfficerList();
+                                    OperationalDispList();
+                                    HaulerList();
                                 }
                                 else
                                 {
                                     Send_Email(originalEmail, subject, body);
                                 }
+                                SupAccountManList();
+                                AccountManList();
+                                BillinOfficerList();
+                                OperationalDispList();
+                                HaulerList();
                                 ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
                                 $"Swal.fire({{ icon: 'success', title: 'Update Successful', text: '{rolee} information updated successfully!', background: '#e9f7ef', confirmButtonColor: '#28a745' }});", true);
                             }
@@ -1662,6 +1888,7 @@ namespace Capstone
                 db.Close();
             }
         }
+
 
         protected void btnResetPass_Click(object sender, EventArgs e)
         {

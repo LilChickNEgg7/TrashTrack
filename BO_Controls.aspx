@@ -492,7 +492,7 @@
 
                     <li class="nav-item">
                         <a class="nav-link" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-                            <i class="ri-bill-line"></i><span>Controls</span><i class="bi bi-chevron-down ms-auto"></i>
+                            <i class="ri-bill-line"></i><span>Billing</span><i class="bi bi-chevron-down ms-auto"></i>
                         </a>
                         <ul id="tables-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
                             <li>

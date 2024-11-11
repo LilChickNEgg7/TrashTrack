@@ -232,11 +232,13 @@
                                             </span>
                                         </div>
 
-                                        <!-- Remember Me Checkbox -->
-                                        <%--<div class="form-group">
+                                        <%--<!-- Remember Me Checkbox -->
+                                        <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
                                                 <input type="checkbox" class="custom-control-input" id="customCheck" style="background-color: #2ba352" onchange="toggleRememberMe()">
                                                 <label class="custom-control-label" for="customCheck" style="color: gray;">Remember Me</label>
+                                                <div id="feedbackMessage" style="display:none; color: #2ba352; text-align:center; margin-top: 10px;"></div>
+
                                             </div>
                                         </div>--%>
 
@@ -282,6 +284,68 @@
                 toggleIcon.classList.add("fa-eye");
             }
         }--%>
+        // Function to handle Remember Me functionality with expiration
+        function toggleRememberMe() {
+            const emailField = document.getElementById('<%= exampleInputEmail.ClientID %>');
+            const rememberMe = document.getElementById('customCheck');
+
+            if (rememberMe.checked) {
+                // Save email to localStorage with an expiration time
+                const email = emailField.value;
+                const expirationTime = new Date().getTime() + (7 * 24 * 60 * 60 * 1000); // 7 days from now
+                localStorage.setItem('rememberedEmail', email);
+                localStorage.setItem('emailExpiration', expirationTime);
+            } else {
+                // Clear remembered email and expiration if unchecked
+                localStorage.removeItem('rememberedEmail');
+                localStorage.removeItem('emailExpiration');
+            }
+        }
+
+        // On page load, check if there's a remembered email and if it's still valid
+        window.onload = function () {
+            const rememberedEmail = localStorage.getItem('rememberedEmail');
+            const expirationTime = localStorage.getItem('emailExpiration');
+            const currentTime = new Date().getTime();
+
+            if (rememberedEmail && expirationTime && currentTime < expirationTime) {
+                document.getElementById('<%= exampleInputEmail.ClientID %>').value = rememberedEmail;
+                document.getElementById('customCheck').checked = true;
+            } else {
+                // Clear expired data
+                localStorage.removeItem('rememberedEmail');
+                localStorage.removeItem('emailExpiration');
+            }
+        };
+        function showFeedbackMessage(message) {
+            const feedbackMessage = document.getElementById('feedbackMessage');
+            feedbackMessage.textContent = message;
+            feedbackMessage.style.display = 'block';
+            setTimeout(() => {
+                feedbackMessage.style.display = 'none';
+            }, 2000); // Hide after 2 seconds
+        }
+
+        function toggleRememberMe() {
+            const emailField = document.getElementById('<%= exampleInputEmail.ClientID %>');
+            const rememberMe = document.getElementById('customCheck');
+
+            if (rememberMe.checked) {
+                // Save email to localStorage with expiration time
+                const email = emailField.value;
+                const expirationTime = new Date().getTime() + (7 * 24 * 60 * 60 * 1000);
+                localStorage.setItem('rememberedEmail', email);
+                localStorage.setItem('emailExpiration', expirationTime);
+                showFeedbackMessage("Email remembered!");
+            } else {
+                // Clear remembered email and expiration if unchecked
+                localStorage.removeItem('rememberedEmail');
+                localStorage.removeItem('emailExpiration');
+                showFeedbackMessage("Email forgotten.");
+            }
+        }
+
+
 
         function togglePassword() {
             const password = document.getElementById('<%= exampleInputPassword.ClientID %>');
@@ -343,7 +407,7 @@
             // You can also add more animations here, like redirecting to a new page after the confetti ends
         }
 
-</script>
+    </script>
      <!-- Canvas Confetti Script -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 

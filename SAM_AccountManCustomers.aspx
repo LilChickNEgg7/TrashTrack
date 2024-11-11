@@ -722,7 +722,7 @@
                                     <div class="invalid-feedback">Please provide a valid email address.</div>
                                 </div>
 
-                                <!-- Password -->
+                                <%--<!-- Password -->
                                 <div class="col-12 mb-3">
                                     <asp:Label ID="Label7" runat="server" Text="Password" for="inputText" Style="color: chartreuse"></asp:Label>
                                     <div class="input-group">
@@ -732,7 +732,21 @@
                                         </span>
                                     </div>
                                     <div class="invalid-feedback">Password must be at least 6 characters long and contain at least one uppercase letter, one number, and one special character.</div>
-                                </div>
+                                </div>--%>
+                                <!-- Password -->
+                                    <%--<div class="col-12 mb-3">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text" style="padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Password</span>                                            
+                                                <asp:Button
+                                                    ID="btnResetPass"
+                                                    CssClass="form-control"
+                                                    runat="server"
+                                                    Text="Reset Password"
+                                                    OnClick="btnResetPass_Click"
+                                                    OnClientClick="return confirm('Are you sure you want to update category?');"
+                                                    Style="background-color: green; color: white;border-bottom-right-radius: 5px; border-top-right-radius: 5px" />
+                                        </div>
+                                    </div>--%>
 
 
                                 <!-- Contact No. -->
@@ -1147,7 +1161,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Password -->
+                                    <%--<!-- Password -->
                                     <div class="col-12 mb-3">
 
                                         <asp:Label ID="Label19" runat="server" Text="Password" Style="color: chartreuse"></asp:Label>
@@ -1158,7 +1172,21 @@
                                             </span>
                                         </div>
                                         <div class="invalid-feedback">Password must be at least 6 characters long and contain at least one uppercase letter, one number, and one special character.</div>
+                                    </div>--%>
+                                    <div class="col-12 mb-3">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text" style="padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Password</span>
+                                            <asp:Button
+                                                ID="btnResetPass"
+                                                CssClass="form-control"
+                                                runat="server"
+                                                Text="Reset Password"
+                                                OnClick="btnResetPass_Click"
+                                                OnClientClick="return confirm('Are you sure you want to update category?');"
+                                                Style="background-color: green; color: white; border-bottom-right-radius: 5px; border-top-right-radius: 5px" />
+                                        </div>
                                     </div>
+
 
                                     <!-- Picture Upload -->
                                     <div class="col-12 mb-3">
@@ -1331,7 +1359,7 @@
                         }
                     }
 
-                    function validatePassword() {
+                    <%--function validatePassword() {
                         const password = document.getElementById('<%= emp_pass.ClientID %>');
                         const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
                         if (!passwordPattern.test(password.value)) {
@@ -1354,7 +1382,7 @@
                             passIcon.classList.remove("fa-eye");
                             passIcon.classList.add("fa-eye-slash");
                         }
-                    }
+                    }--%>
 
                     <%--function validateRole() {
                         const role = document.getElementById('<%= emp_role.ClientID %>');
@@ -1479,7 +1507,7 @@
                     }
 
 
-                    function validateUpdatePassword() {
+                    <%--function validateUpdatePassword() {
                         const password = document.getElementById('<%= TextBox1.ClientID %>');
                         const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
                         if (!passwordPattern.test(password.value)) {
@@ -1504,7 +1532,7 @@
                             icon.classList.remove("fa-eye");
                             icon.classList.add("fa-eye-slash");
                         }
-                    }
+                    }--%>
 
 
 

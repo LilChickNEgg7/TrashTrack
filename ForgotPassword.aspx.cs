@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Net.Mail;
 using System.Net;
 using System.Xml.Linq;
+using iText.Layout.Element;
 
 namespace Capstone
 {
@@ -54,29 +55,50 @@ namespace Capstone
             using (var conn = new NpgsqlConnection(con))
             {
                 conn.Open();
-                using (var cmd = new NpgsqlCommand("SELECT acc_email FROM account_manager WHERE acc_email = @Email", conn))
+                using (var cmd = new NpgsqlCommand("SELECT emp_email FROM employee WHERE emp_email = @Email", conn))
                 {
                     cmd.Parameters.AddWithValue("Email", client_email);
                     var reader = cmd.ExecuteReader();
                     if (reader.Read())
                     {
                         reader.Close();
-                        using (var updateCmd = new NpgsqlCommand("UPDATE account_manager SET acc_otp = @Otp WHERE acc_email = @Email", conn))
+                        using (var updateCmd = new NpgsqlCommand("UPDATE employee SET emp_otp = @Otp WHERE emp_email = @Email", conn))
                         {
                             updateCmd.Parameters.AddWithValue("Otp", otp);
                             updateCmd.Parameters.AddWithValue("Email", client_email);
                             updateCmd.ExecuteNonQuery();
                             SendEmail(client_email, "Your OTP for Password Reset", $"Your OTP is: {otp}");
                             EnableOtpInputs(true);
+                            EnableSendEmail(false);
+                            EnableEmailInput(false);
+                            
                         }
                         Response.Write("<script>alert('OTP sent to your email.')</script>");
                     }
                     else
                     {
                         Response.Write("<script>alert('Email not found!')</script>");
+                        DisableOtpInputs();
                     }
                 }
             }
+        }
+
+        //protected void DisableEmailInput(bool enable)DisableEmailInput() EnableSubmitOTP(bool enable)
+        //{
+        //    emailtxt.Enabled = disabled;
+        //}
+        protected void EnableSubmitOTP(bool enable)
+        {
+            Button2.Enabled = enable;
+        }
+        protected void EnableSendEmail(bool enable)
+        {
+            Button1.Enabled = enable;
+        }
+        protected void EnableEmailInput(bool enable)
+        {
+            emailtxt.Enabled = enable;
         }
 
         protected void EnableOtpInputs(bool enable)
@@ -84,7 +106,21 @@ namespace Capstone
             OTPtxt1.Enabled = OTPtxt2.Enabled = OTPtxt3.Enabled = OTPtxt4.Enabled = OTPtxt5.Enabled = OTPtxt6.Enabled = enable;
         }
 
-        public static void SendEmail(string toAddress, string subject, string body)
+        protected void DisableOtpInputs()
+        {
+            OTPtxt1.Enabled = OTPtxt2.Enabled = OTPtxt3.Enabled = OTPtxt4.Enabled = OTPtxt5.Enabled = OTPtxt6.Enabled = false;
+        }
+
+        protected void DisablePasswordTextBoxes()
+        {
+            changetxt.Enabled = confirmtxt.Enabled = false;
+        }
+        protected void EnablePasswordTextBoxes(bool enable)
+        {
+            changetxt.Enabled = confirmtxt.Enabled = enable;
+        }
+
+        public static void SendEmail(string toAddress, string subject, string body) 
         {
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com");
             smtpClient.UseDefaultCredentials = false;
@@ -112,18 +148,34 @@ namespace Capstone
             }
         }
 
+        public void VerifyOTP()
+        {
+            string enteredOTP = Request.Form["otpValue"]; // Get the OTP value from the request
+            string storedOTP = Session["OTP"].ToString(); // Assuming OTP is stored in Session
 
-        //[System.Web.Services.WebMethod]
-        //public static string VerifyOTP(string otpInput)
+            if (enteredOTP == storedOTP)
+            {
+                // OTP is correct; enable password fields
+                ClientScript.RegisterStartupScript(this.GetType(), "EnableFields", "enablePasswordFields();", true);
+            }
+            else
+            {
+                // Incorrect OTP
+                lblOTPMessage.Text = "Invalid OTP. Please try again.";
+            }
+        }
+
+
+        //protected void VerifyOTP(object sender, EventArgs e)
         //{
-        //    string otp_input = otpInput; // directly use the input OTP
-        //                                 // Assume you have access to the user's email from the session or another method
-        //    var client_email = HttpContext.Current.Session["UserEmail"].ToString();
+        //    // Combine OTP fields into a single string
+        //    string otp_input = OTPtxt1.Text + OTPtxt2.Text + OTPtxt3.Text + OTPtxt4.Text + OTPtxt5.Text + OTPtxt6.Text;
+        //    var client_email = emailtxt.Text.Trim();
 
         //    using (var conn = new NpgsqlConnection(con))
         //    {
         //        conn.Open();
-        //        using (var cmd = new NpgsqlCommand("SELECT acc_otp FROM account_manager WHERE acc_email = @Email", conn))
+        //        using (var cmd = new NpgsqlCommand("SELECT emp_otp FROM employee WHERE emp_email = @Email", conn))
         //        {
         //            cmd.Parameters.AddWithValue("Email", client_email);
         //            var reader = cmd.ExecuteReader();
@@ -134,23 +186,33 @@ namespace Capstone
 
         //                if (otp_input == stored_otp)
         //                {
-        //                    // OTP verified successfully
-        //                    return "OTP Verified. You can now change your password.";
+        //                    // OTP is correct, enable password fields
+        //                    EnablePasswordFields(true);
+        //                    lblOTPMessage.Text = "OTP Verified. You can now change your password.";
+        //                    lblOTPMessage.ForeColor = System.Drawing.Color.Green;
         //                }
         //                else
         //                {
-        //                    return "Invalid OTP.";
+        //                    // OTP is incorrect, disable password fields and show error message
+        //                    EnablePasswordFields(false);
+        //                    lblOTPMessage.Text = "Incorrect OTP. Please try again.";
+        //                    lblOTPMessage.ForeColor = System.Drawing.Color.Red;
+
+        //                    // Clear OTP fields to prompt user to try again
+        //                    OTPtxt1.Text = OTPtxt2.Text = OTPtxt3.Text = OTPtxt4.Text = OTPtxt5.Text = OTPtxt6.Text = string.Empty;
         //                }
         //            }
         //            else
         //            {
-        //                return "Email not found.";
+        //                // No matching email found, keep fields disabled
+        //                lblOTPMessage.Text = "Email not found. Please check your email.";
+        //                lblOTPMessage.ForeColor = System.Drawing.Color.Red;
+        //                EnablePasswordFields(false);
         //            }
         //        }
         //    }
         //}
-
-        public void VerifyOTP()
+        protected void VerifyOTP(object sender, EventArgs e)
         {
             string otp_input = OTPtxt1.Text + OTPtxt2.Text + OTPtxt3.Text + OTPtxt4.Text + OTPtxt5.Text + OTPtxt6.Text;
             var client_email = emailtxt.Text.Trim();
@@ -158,7 +220,7 @@ namespace Capstone
             using (var conn = new NpgsqlConnection(con))
             {
                 conn.Open();
-                using (var cmd = new NpgsqlCommand("SELECT acc_otp FROM account_manager WHERE acc_email = @Email", conn))
+                using (var cmd = new NpgsqlCommand("SELECT emp_otp FROM employee WHERE emp_email = @Email", conn))
                 {
                     cmd.Parameters.AddWithValue("Email", client_email);
                     var reader = cmd.ExecuteReader();
@@ -169,13 +231,30 @@ namespace Capstone
 
                         if (otp_input == stored_otp)
                         {
+                            // OTP is correct, enable password fields
                             EnablePasswordFields(true);
-                            Response.Write("<script>alert('OTP Verified. You can now change your password.')</script>");
+                            lblOTPMessage.Text = "OTP Verified. You can now change your password.";
+                            lblOTPMessage.ForeColor = System.Drawing.Color.Green;
+                            EnableSubmitOTP(false);
+                            // Optionally, clear OTP fields after successful verification
+                            OTPtxt1.Text = OTPtxt2.Text = OTPtxt3.Text = OTPtxt4.Text = OTPtxt5.Text = OTPtxt6.Text = string.Empty;
                         }
                         else
                         {
-                            Response.Write("<script>alert('Invalid OTP.')</script>");
+                            // OTP is incorrect, disable password fields and show error message
+                            EnablePasswordFields(false);
+                            lblOTPMessage.Text = "Incorrect OTP. Please try again.";
+                            lblOTPMessage.ForeColor = System.Drawing.Color.Red;
+                            // Optionally, clear OTP fields to prompt user to try again
+                            OTPtxt1.Text = OTPtxt2.Text = OTPtxt3.Text = OTPtxt4.Text = OTPtxt5.Text = OTPtxt6.Text = string.Empty;
                         }
+                    }
+                    else
+                    {
+                        // No matching email found
+                        lblOTPMessage.Text = "Email not found. Please check your email.";
+                        lblOTPMessage.ForeColor = System.Drawing.Color.Red;
+                        EnablePasswordFields(false);
                     }
                 }
             }
@@ -185,6 +264,7 @@ namespace Capstone
         {
             changetxt.Enabled = confirmtxt.Enabled = changepassword.Enabled = enable;
         }
+
 
         private string HashPassword(string password)
         {
@@ -211,7 +291,7 @@ namespace Capstone
                 using (var conn = new NpgsqlConnection(con))
                 {
                     conn.Open();
-                    using (var cmd = new NpgsqlCommand("UPDATE account_manager SET acc_password = @Password, acc_otp = NULL WHERE acc_email = @Email", conn))
+                    using (var cmd = new NpgsqlCommand("UPDATE employee SET emp_password = @Password, emp_otp = NULL WHERE emp_email = @Email", conn))
                     {
                         cmd.Parameters.AddWithValue("Password", hashedPassword);
                         cmd.Parameters.AddWithValue("Email", client_email);
@@ -220,6 +300,10 @@ namespace Capstone
                         if (rowsAffected > 0)
                         {
                             Response.Write("<script>alert('Password changed successfully!')</script>");
+                            EnablePasswordFields(false);
+                            EnableOtpInputs(false);
+                            EnableSendEmail(true);
+                            EnableEmailInput(true);
                         }
                         else
                         {
@@ -232,6 +316,11 @@ namespace Capstone
             {
                 lblResult.Text = "Passwords do not match!";
             }
+        }
+        protected void btnBackToLogin_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Login.aspx");
+
         }
 
 

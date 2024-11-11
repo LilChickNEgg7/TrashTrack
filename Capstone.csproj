@@ -300,6 +300,7 @@
     <Content Include="AM_AccountManCustomers.aspx" />
     <Content Include="AM_AccountSettings.aspx" />
     <Content Include="AM_Dashboard.aspx" />
+    <Content Include="AM_Reports.aspx" />
     <Content Include="BO_AccountSettings.aspx" />
     <Content Include="BO_Billing.aspx" />
     <Content Include="BO_Controls.aspx" />
@@ -2394,6 +2395,13 @@
     </Compile>
     <Compile Include="AM_Dashboard.aspx.designer.cs">
       <DependentUpon>AM_Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AM_Reports.aspx.cs">
+      <DependentUpon>AM_Reports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AM_Reports.aspx.designer.cs">
+      <DependentUpon>AM_Reports.aspx</DependentUpon>
     </Compile>
     <Compile Include="BO_AccountSettings.aspx.cs">
       <DependentUpon>BO_AccountSettings.aspx</DependentUpon>

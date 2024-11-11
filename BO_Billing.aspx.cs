@@ -1120,8 +1120,7 @@ namespace Capstone
                     using (var cmd = db.CreateCommand())
                     {
                         cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = @"SELECT gb_id, gb_date_issued, gb_date_due, gb_status, bk_id, gb_total_amnt_interest, gb_total_sales, 
-                                    gb_note, gb_add_fees, gb_net_vat, gb_vat_amnt, gb_interest, gb_lead_days, gb_accrual_period, gb_suspend_period
+                        cmd.CommandText = @"SELECT *
                                     FROM generate_bill WHERE gb_id = @gb_id";
                         cmd.Parameters.AddWithValue("@gb_id", gb_id);
 
@@ -1129,14 +1128,18 @@ namespace Capstone
                         {
                             if (reader.Read())
                             {
+                                Label4.Text = reader["gb_tax"].ToString();
+                                Label5.Text = reader["gb_interest"].ToString();
+                                Label6.Text = reader["gb_accrual_period"].ToString();
+                                Label7.Text = reader["gb_suspend_period"].ToString();
                                 TextBox2.Text = reader["gb_id"].ToString();
-                                dateEntered.Text = Convert.ToDateTime(reader["gb_date_issued"]).ToString("yyyy-MM-ddTHH:mm");
+                                Date.Text = Convert.ToDateTime(reader["gb_date_issued"]).ToString("yyyy-MM-ddTHH:mm");
                                 TextBox7.Text = Convert.ToDateTime(reader["gb_date_due"]).ToString("yyyy-MM-ddTHH:mm");
                                 TextBox4.Text = reader["gb_net_vat"].ToString();
                                 TextBox5.Text = reader["gb_vat_amnt"].ToString();
                                 TextBox6.Text = reader["gb_total_sales"].ToString();
-                                TextBox8.Text = reader["gb_accrual_period"].ToString();
-                                TextBox9.Text = reader["gb_suspend_period"].ToString();
+                                TextBox8.Text = Convert.ToDateTime(reader["gb_accrual_date"]).ToString("yyyy-MM-ddTHH:mm");
+                                TextBox9.Text = Convert.ToDateTime(reader["gb_suspend_date"]).ToString("yyyy-MM-ddTHH:mm");
                                 TextBox10.Text = reader["gb_add_fees"].ToString();
                                 TextBox11.Text = reader["gb_note"].ToString();
                             }
@@ -1444,7 +1447,7 @@ namespace Capstone
                 int accrualPeriod = 0;
                 int suspendPeriod = 0;
                 double totalSales = 0;
-
+                double? addFee = 0;
                 // Use a nullable DateTime for dateIssued in case it’s not set
                 DateTime? dateIssued = null;
                 DateTime? dueDate = null;
@@ -1487,6 +1490,7 @@ namespace Capstone
                         {
                             if (billReader.Read())
                             {
+                                addFee = billReader["gb_add_fees"] == DBNull.Value ? 0.0 : Convert.ToDouble(billReader["gb_add_fees"]);
                                 dateIssued = Convert.ToDateTime(billReader["gb_date_issued"]);
                                 totalSales = Convert.ToDouble(billReader["gb_total_sales"]);
                                 interestRate = Convert.ToDouble(billReader["gb_interest"]);
@@ -1735,136 +1739,310 @@ namespace Capstone
                 document.Add(btmLine);
 
 
+
                 float[] columnWidths = new float[] { 100, 40, 30, 80, 100 }; // Set fixed pixel widths
                 iText.Layout.Element.Table summarySection = new iText.Layout.Element.Table(columnWidths).UseAllAvailableWidth();
 
+                // Method to add empty cells
+                void AddEmptyCell(iText.Layout.Element.Table table)
+                {
+                    table.AddCell(new Cell().SetBorder(Border.NO_BORDER).Add(new Paragraph("").SetBorder(Border.NO_BORDER)));
+                }
 
-                // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) // No border for the cell
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
-                                                                          // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) // No border for the cell
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
-                                                                          // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) // No border for the cell
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
-                                                                          // Add Bill ID cell (empty for spacing)
+                // Add Bill ID cell (empty for spacing) - Add empty cells where needed
+                for (int i = 0; i < 3; i++)
+                {
+                    AddEmptyCell(summarySection); // Adding empty cells for spacing
+                }
+
+                // Add Net of VAT label
                 summarySection.AddCell(new Cell()
                     .SetBorder(Border.NO_BORDER) // No border for the cell
                     .Add(new Paragraph("Net of VAT: ").SetFont(boldFont)
                         .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER))); // No border for empty content
+                        .SetBorder(Border.NO_BORDER)));
 
-                // Add Sum Amount cell, aligned to the left
+                // Add Net of VAT amount
                 summarySection.AddCell(new Cell()
                     .SetBorder(Border.NO_BORDER) // No border for the cell
                     .Add(new Paragraph("₱" + totalSum.ToString("N2"))
                         .SetFont(boldFont)
                         .SetFont(font)
                         .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER))); // No border for the content
+                        .SetBorder(Border.NO_BORDER)));
 
-                // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) // No border for the cell
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
+                // Add empty cells for spacing
+                for (int i = 0; i < 3; i++)
+                {
+                    AddEmptyCell(summarySection);
+                }
 
-                // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) // No border for the cell
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
-
-                // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) // No border for the cell
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
-
-                // Add empty cell for spacing
+                // Add VAT label
                 summarySection.AddCell(new Cell()
                     .SetBorder(Border.NO_BORDER) // No border for the cell
                     .Add(new Paragraph("VAT (" + taxValue + "%): ")
                         .SetFont(boldFont)
                         .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER))); // No border for empty content
+                        .SetBorder(Border.NO_BORDER)));
 
-                // Add VAT Amount cell, aligned to the left
+                // Add VAT amount
                 summarySection.AddCell(new Cell()
                     .SetBorder(Border.NO_BORDER) // No border for the cell
                     .Add(new Paragraph("₱" + vat_Amnt.ToString("N2"))
                         .SetFont(boldFont)
                         .SetFont(font)
                         .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER))); // No border for the content
+                        .SetBorder(Border.NO_BORDER)));
 
-                // Add Bill ID cell (empty for spacing)
+                // Add empty cells for spacing
+                for (int i = 0; i < 3; i++)
+                {
+                    AddEmptyCell(summarySection);
+                }
+
+                // Add Total Sales label
                 summarySection.AddCell(new Cell()
                     .SetBorder(Border.NO_BORDER) // No border for the cell
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
-                                                                          // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) // No border for the cell
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
-                                                                          // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) // No border for the cell
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
-
-
-                // Add empty cell for spacing
-                summarySection.AddCell(new Cell()
-                        .SetBorder(Border.NO_BORDER) // No border for the cell
-                        .Add(new Paragraph("Total Sales: ")
-                            .SetFont(font)
-                            .SetFontColor(redColor)
-                            .SetTextAlignment(TextAlignment.LEFT)
-                            .SetBorder(Border.NO_BORDER))); // No border for empty content
-
-                // Add Total Amount cell, aligned to the left
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) // No border for the cell
-                    .Add(new Paragraph("₱" + totalSales.ToString("N2") + "")
+                    .Add(new Paragraph("Total Sales: ")
                         .SetFont(font)
                         .SetFontColor(redColor)
                         .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER))); // No border for the content
+                        .SetBorder(Border.NO_BORDER)));
 
-                // Add Bill ID cell (empty for spacing)
+                // Add Total Sales amount
                 summarySection.AddCell(new Cell()
                     .SetBorder(Border.NO_BORDER) // No border for the cell
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
-                                                                          // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) // No border for the cell
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
-                                                                          // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) // No border for the cell
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
-
-
-                // Add empty cell for spacing
-                summarySection.AddCell(new Cell()
-                        .SetBorder(Border.NO_BORDER) // No border for the cell
-                        .Add(new Paragraph("Total Amount: ")
-                            .SetFont(font)
-                            .SetFontColor(redColor)
-                            .SetTextAlignment(TextAlignment.LEFT)
-                            .SetBorder(Border.NO_BORDER))); // No border for empty content
-
-                // Add Total Amount cell, aligned to the left
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) // No border for the cell
-                    .Add(new Paragraph("₱" + totalPayment.ToString("N2") + "")
+                    .Add(new Paragraph("₱" + totalSales.ToString("N2"))
                         .SetFont(font)
                         .SetFontColor(redColor)
                         .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER))); // No border for the content
+                        .SetBorder(Border.NO_BORDER)));
+
+                // Add empty cells for spacing
+                for (int i = 0; i < 3; i++)
+                {
+                    AddEmptyCell(summarySection);
+                }
+
+                // Add Additional Fee label
+                summarySection.AddCell(new Cell()
+                    .SetBorder(Border.NO_BORDER) // No border for the cell
+                    .Add(new Paragraph("Additional Fee: ")
+                        .SetFont(font)
+                        .SetFontColor(redColor)
+                        .SetTextAlignment(TextAlignment.LEFT)
+                        .SetBorder(Border.NO_BORDER)));
+
+                // Add Total Amount due
+                summarySection.AddCell(new Cell()
+                    .SetBorder(Border.NO_BORDER) // No border for the cell
+                    .Add(new Paragraph("₱" + (addFee.HasValue ? addFee.Value.ToString("N2") : "0.00"))
+                        .SetFont(font)
+                        .SetFontColor(redColor)
+                        .SetTextAlignment(TextAlignment.LEFT)
+                        .SetBorder(Border.NO_BORDER)));
+
+
+                // Add empty cells for spacing
+                for (int i = 0; i < 3; i++)
+                {
+                    AddEmptyCell(summarySection);
+                }
+
+                // Add Total Amount label
+                summarySection.AddCell(new Cell()
+                    .SetBorder(Border.NO_BORDER) // No border for the cell
+                    .Add(new Paragraph("Total Amount: ")
+                        .SetFont(font)
+                        .SetFontColor(redColor)
+                        .SetTextAlignment(TextAlignment.LEFT)
+                        .SetBorder(Border.NO_BORDER)));
+
+                // Calculate Total Due
+                double totalDue = totalPayment + (addFee.HasValue && addFee.Value > 0 ? addFee.Value : 0);
+
+                // Add Total Amount due
+                summarySection.AddCell(new Cell()
+                    .SetBorder(Border.NO_BORDER) // No border for the cell
+                    .Add(new Paragraph("₱" + totalDue.ToString("N2"))
+                        .SetFont(font)
+                        .SetFontColor(redColor)
+                        .SetTextAlignment(TextAlignment.LEFT)
+                        .SetBorder(Border.NO_BORDER)));
 
                 // Add the summary section table to the document
                 document.Add(summarySection);
+
+
+
+
+
+
+                //float[] columnWidths = new float[] { 100, 40, 30, 80, 100 }; // Set fixed pixel widths
+                //iText.Layout.Element.Table summarySection = new iText.Layout.Element.Table(columnWidths).UseAllAvailableWidth();
+
+
+                //// Add Bill ID cell (empty for spacing)
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
+                //                                                          // Add Bill ID cell (empty for spacing)
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
+                //                                                          // Add Bill ID cell (empty for spacing)
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
+                //                                                          // Add Bill ID cell (empty for spacing)
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("Net of VAT: ").SetFont(boldFont)
+                //        .SetTextAlignment(TextAlignment.LEFT)
+                //        .SetBorder(Border.NO_BORDER))); // No border for empty content
+
+                //// Add Sum Amount cell, aligned to the left
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("₱" + totalSum.ToString("N2"))
+                //        .SetFont(boldFont)
+                //        .SetFont(font)
+                //        .SetTextAlignment(TextAlignment.LEFT)
+                //        .SetBorder(Border.NO_BORDER))); // No border for the content
+
+                //// Add Bill ID cell (empty for spacing)
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
+
+                //// Add Bill ID cell (empty for spacing)
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
+
+                //// Add Bill ID cell (empty for spacing)
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
+
+                //// Add empty cell for spacing
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("VAT (" + taxValue + "%): ")
+                //        .SetFont(boldFont)
+                //        .SetTextAlignment(TextAlignment.LEFT)
+                //        .SetBorder(Border.NO_BORDER))); // No border for empty content
+
+                //// Add VAT Amount cell, aligned to the left
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("₱" + vat_Amnt.ToString("N2"))
+                //        .SetFont(boldFont)
+                //        .SetFont(font)
+                //        .SetTextAlignment(TextAlignment.LEFT)
+                //        .SetBorder(Border.NO_BORDER))); // No border for the content
+
+                //// Add Bill ID cell (empty for spacing)
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
+                //                                                          // Add Bill ID cell (empty for spacing)
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
+                //                                                          // Add Bill ID cell (empty for spacing)
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
+
+
+                //// Add empty cell for spacing
+                //summarySection.AddCell(new Cell()
+                //        .SetBorder(Border.NO_BORDER) // No border for the cell
+                //        .Add(new Paragraph("Total Sales: ")
+                //            .SetFont(font)
+                //            .SetFontColor(redColor)
+                //            .SetTextAlignment(TextAlignment.LEFT)
+                //            .SetBorder(Border.NO_BORDER))); // No border for empty content
+
+                //// Add Total Amount cell, aligned to the left
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("₱" + totalSales.ToString("N2") + "")
+                //        .SetFont(font)
+                //        .SetFontColor(redColor)
+                //        .SetTextAlignment(TextAlignment.LEFT)
+                //        .SetBorder(Border.NO_BORDER))); // No border for the content
+
+                //// Add Bill ID cell (empty for spacing)
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
+                //                                                          // Add Bill ID cell (empty for spacing)
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
+                //                                                          // Add Bill ID cell (empty for spacing)
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
+
+
+                //// Add empty cell for spacing
+                //summarySection.AddCell(new Cell()
+                //        .SetBorder(Border.NO_BORDER) // No border for the cell
+                //        .Add(new Paragraph("Additional Fee: ")
+                //            .SetFont(font)
+                //            .SetFontColor(redColor)
+                //            .SetTextAlignment(TextAlignment.LEFT)
+                //            .SetBorder(Border.NO_BORDER))); // No border for empty content
+
+                //// Add Total Amount cell, aligned to the left
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("₱" + totalPayment.ToString("N2") + "")
+                //        .SetFont(font)
+                //        .SetFontColor(redColor)
+                //        .SetTextAlignment(TextAlignment.LEFT)
+                //        .SetBorder(Border.NO_BORDER))); // No border for the content
+
+                //// Add Bill ID cell (empty for spacing)
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
+                //                                                          // Add Bill ID cell (empty for spacing)
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
+                //                                                          // Add Bill ID cell (empty for spacing)
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); // No border for empty content
+
+
+
+                //// Add empty cell for spacing
+                //summarySection.AddCell(new Cell()
+                //        .SetBorder(Border.NO_BORDER) // No border for the cell
+                //        .Add(new Paragraph("Total Amount: ")
+                //            .SetFont(font)
+                //            .SetFontColor(redColor)
+                //            .SetTextAlignment(TextAlignment.LEFT)
+                //            .SetBorder(Border.NO_BORDER))); // No border for empty content
+
+                //double totalDue = totalPayment + (addFee.HasValue && addFee.Value > 0 ? addFee.Value : 0);
+
+                //// Add Total Amount cell, aligned to the left
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER) // No border for the cell
+                //    .Add(new Paragraph("₱" + totalDue.ToString("N2") + "")//totalPayment
+                //        .SetFont(font)
+                //        .SetFontColor(redColor)
+                //        .SetTextAlignment(TextAlignment.LEFT)
+                //        .SetBorder(Border.NO_BORDER))); // No border for the content
+
+                //// Add the summary section table to the document
+                //document.Add(summarySection);
 
 
                 //totalPayment
@@ -2589,10 +2767,12 @@ namespace Capstone
                             // Show success dialog with SweetAlert
                             ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
                                 "Swal.fire({ icon: 'success', title: 'Marked Unpaid!', text: 'Bill Marked Unpaid Successfully!', background: '#e9f7ef', confirmButtonColor: '#28a745' });", true);
+                            hfActiveTab.Value = "#tab2"; // Set the tab to display
 
                             GeneratedBillList(); // Refresh the list
                         }
                     }
+                    hfActiveTab.Value = "#tab2"; // Set the tab to display
                     GeneratedBillList();
                     LoadProfile();
                     db.Close();
@@ -2600,6 +2780,8 @@ namespace Capstone
             }
             catch (Exception ex)
             {
+                hfActiveTab.Value = "#tab2"; // Set the tab to display
+
                 // Show error dialog with SweetAlert
                 ScriptManager.RegisterStartupScript(this, GetType(), "showError",
                     $"Swal.fire({{ icon: 'error', title: 'Unsuccessful!', text: '{ex.Message}', background: '#f8d7da', confirmButtonColor: '#dc3545' }});", true);
@@ -2668,6 +2850,8 @@ namespace Capstone
                             ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
                                 "Swal.fire({ icon: 'success', title: 'Update Successful', text: 'Account Manager updated to paid successfully!', background: '#e9f7ef', confirmButtonColor: '#28a745' });", true);
                             ModalPopupExtender6.Hide();
+                            hfActiveTab.Value = "#tab2"; // Set the tab to display
+
                             GeneratedBillList(); // Refresh the list
                             LoadProfile();
                         }

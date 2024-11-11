@@ -1201,7 +1201,7 @@
                                                     runat="server"
                                                     Text="Reset Password"
                                                     OnClick="btnResetPass_Click"
-                                                    OnClientClick="return confirm('Are you sure you want to update category?');"
+                                                    OnClientClick="return confirm('Are you sure you want to reset password?');"
                                                     Style="background-color: green; color: white;border-bottom-right-radius: 5px; border-top-right-radius: 5px" />
                                         </div>
                                     </div>

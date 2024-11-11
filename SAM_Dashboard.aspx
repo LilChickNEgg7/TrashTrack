@@ -345,7 +345,6 @@
                     <h1 style="padding-top: 20px; color: chartreuse">Dashboard</h1>
                     <nav>
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="WAREHOUSE_DASHBOARD.aspx">Dashboard</a></li>
                             <%--<li class="breadcrumb-item">Add Item</li>--%>
                         </ol>
                     </nav>

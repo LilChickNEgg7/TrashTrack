@@ -488,7 +488,7 @@
 
                     <li class="nav-item">
                         <a class="nav-link" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-                            <i class="ri-bill-line"></i><span>Generate Billing</span><i class="bi bi-chevron-down ms-auto"></i>
+                            <i class="ri-bill-line"></i><span>Billing</span><i class="bi bi-chevron-down ms-auto"></i>
                         </a>
                         <ul id="tables-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
                             <li>
@@ -640,9 +640,6 @@
                                     </asp:BoundField>
                                     <asp:BoundField DataField="gb_total_sales" HeaderText="Total Sales" SortExpression="gb_total_sales" ItemStyle-Width="100px">
                                         <ItemStyle Width="100px"></ItemStyle>
-                                    </asp:BoundField>
-                                    <asp:BoundField DataField="gb_total_amnt_interest" HeaderText="Amount Interest" SortExpression="gb_total_amnt_interest" ItemStyle-Width="150px">
-                                        <ItemStyle Width="150px"></ItemStyle>
                                     </asp:BoundField>
                                     <asp:TemplateField HeaderText="Details">
                                         <ItemTemplate>
@@ -1219,9 +1216,9 @@
                             <div class="col-6">
                                 <div class="input-group input-group-sm mb-3">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000; color: blue">Date</span>
+                                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000; color: blue">Date Issued</span>
                                     </div>
-                                    <asp:TextBox ID="Date" TextMode="DateTimeLocal" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                                    <asp:TextBox ID="Date" TextMode="DateTimeLocal" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
                                 </div>
                             </div>
                             <!-- Net of VAT -->
@@ -1262,7 +1259,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000">Due Date</span>
                                     </div>
-                                    <asp:TextBox ID="TextBox7" TextMode="DateTimeLocal" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                                    <asp:TextBox ID="TextBox7" TextMode="DateTimeLocal" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
                                 </div>
                             </div>
                             <!-- Accrual Date -->
@@ -1271,7 +1268,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000">Accrual Date</span>
                                     </div>
-                                    <asp:TextBox ID="TextBox8" TextMode="DateTimeLocal" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                                    <asp:TextBox ID="TextBox8" TextMode="DateTimeLocal" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
                                 </div>
                             </div>
                             <!-- Suspension Date -->
@@ -1280,7 +1277,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000">Suspension Date</span>
                                     </div>
-                                    <asp:TextBox ID="TextBox9" TextMode="DateTimeLocal" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                                    <asp:TextBox ID="TextBox9" TextMode="DateTimeLocal" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
                                 </div>
                             </div>
                             <!-- Additional Fee -->
@@ -1289,16 +1286,16 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000">Additional Fee</span>
                                     </div>
-                                    <asp:TextBox ID="TextBox10" TextMode="Number" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                                    <asp:TextBox ID="TextBox10" TextMode="Number" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
                                 </div>
                             </div>
                             <!-- Additional Note -->
                             <div class="col-6">
                                 <div class="input-group input-group-sm mb-3">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px; border-bottom-left-radius: 0;">Notes</span>
+                                        <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px; border-bottom-left-radius: 0;" >Notes</span>
                                     </div>
-                                    <asp:TextBox ID="TextBox11" runat="server" TextMode="MultiLine" CssClass="form-control" ClientIDMode="Static"
+                                    <asp:TextBox ID="TextBox11" runat="server" TextMode="MultiLine" CssClass="form-control" ClientIDMode="Static" Enabled="false"
                                         aria-label="Small" aria-describedby="inputGroup-sizing-sm" Rows="4" Columns="30">
                                     </asp:TextBox>
                                 </div>

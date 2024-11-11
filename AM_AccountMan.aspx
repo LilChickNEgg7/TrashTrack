@@ -40,6 +40,10 @@
     <%--#052507--%>
 
     <style>
+        .modal-dialog {
+            margin: auto;
+        }
+
         .notification-link {
             color: black; /* Initial color */
             text-decoration: none; /* Optional: remove underline */
@@ -205,7 +209,7 @@
 
 
         /* Styling for GridView Tables */
-        #gridView1, #gridView2, #gridView3, #gridView4 {
+        #gridView1, #gridView2, #gridView3, #gridView4, #gridView5 {
             width: 100%;
             border-collapse: separate; /* Allows styling of borders separately */
             border-spacing: 0; /* Removes additional spacing */
@@ -217,7 +221,7 @@
         }
 
             /* GridView Header Styling */
-            #gridView1 th, #gridView2 th, #gridView3 th, #gridView4 th {
+            #gridView1 th, #gridView2 th, #gridView3 th, #gridView4 th, #gridView5 th {
                 background: #66CDAA; /* Luminous green for header */
                 color: white;
                 font-size: 16px; /* Slightly smaller font for a refined look */
@@ -228,7 +232,7 @@
             }
 
             /* GridView Row Styles */
-            #gridView1 td, #gridView2 td, #gridView3 td, #gridView4 td {
+            #gridView1 td, #gridView2 td, #gridView3 td, #gridView4 td, #gridView5 td {
                 padding: 12px;
                 font-size: 14px; /* Smaller font size */
                 font-weight: 500; /* Medium weight for row text */
@@ -239,12 +243,12 @@
             }
 
             /* Hover Effect for GridView Rows */
-            #gridView1 tr:hover, #gridView2 tr:hover, #gridView3 tr:hover, #gridView4 tr:hover {
+            #gridView1 tr:hover, #gridView2 tr:hover, #gridView3 tr:hover, #gridView4 tr:hover, #gridView5 tr:hover {
                 background: #eef8ee; /* Subtle hover effect */
             }
 
             /* Styling the GridView Footer */
-            #gridView1 .FooterStyle, #gridView2 .FooterStyle, #gridView3 .FooterStyle, #gridView4 .FooterStyle {
+            #gridView1 .FooterStyle, #gridView2 .FooterStyle, #gridView3 .FooterStyle, #gridView4 .FooterStyle, #gridView5 .FooterStyle {
                 border-radius: 0 0 12px 12px; /* Rounded bottom corners */
                 background: #66CDAA;
                 color: #fff;
@@ -253,15 +257,16 @@
             }
 
             /* Optional: Styling for the Status and Action Buttons */
-            #gridView1 .btnUnsuspend, #gridView2 .btnUnsuspend, #gridView3 .btnUnsuspend, #gridView4 .btnUnsuspend,
-            #gridView1 .btnSuspend, #gridView2 .btnSuspend, #gridView3 .btnSuspend, #gridView4 .btnSuspend {
+            #gridView1 .btnUnsuspend, #gridView2 .btnUnsuspend, #gridView3 .btnUnsuspend, #gridView4 .btnUnsuspend, #gridView5 .btnUnsuspend
+            #gridView1 .btnSuspend, #gridView2 .btnSuspend, #gridView3 .btnSuspend, #gridView4 .btnSuspend, #gridView5 .btnUnsuspend {
                 font-size: 10px; /* Adjusted button font size */
                 border-radius: 8px; /* Slightly rounded buttons */
-                padding: 5px 10px; /* Comfortable padding */
+                /*                background-color: bisque;
+*/ padding: 5px 10px; /* Comfortable padding */
             }
 
-            #gridView1 .imgEdit, #gridView2 .imgEdit, #gridView3 .imgEdit, #gridView4 .imgEdit,
-            #gridView1 .Image1, #gridView2 .Image1, #gridView3 .Image1, #gridView4 .Image1 {
+            #gridView1 .imgEdit, #gridView2 .imgEdit, #gridView3 .imgEdit, #gridView4 .imgEdit, #gridView5 .imgEdit,
+            #gridView1 .Image1, #gridView2 .Image1, #gridView3 .Image1, #gridView4 .Image1, #gridView5 .Image1 {
                 border-radius: 8px; /* Rounded corners for images */
                 margin-right: 10px; /* Margin between images */
             }
@@ -345,7 +350,7 @@
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <%--start of searchbar script--%>
+
     <script type="text/javascript">
         function search() {
             var searchText = document.getElementById('<%= txtSearch.ClientID %>').value.toUpperCase();
@@ -355,7 +360,8 @@
 
             '<%= gridView2.ClientID %>',
             '<%= gridView3.ClientID %>',
-            '<%= gridView4.ClientID %>'
+            '<%= gridView4.ClientID %>',
+            '<%= gridView5.ClientID %>'
             ];
 
             gridViewIds.forEach(function (gridId) {
@@ -374,6 +380,7 @@
             });
         }
     </script>
+
 </head>
 <form id="form2" runat="server" class="row g-3 needs-validation" novalidate>
     <div>
@@ -543,27 +550,15 @@
                             </li>
                         </ul>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-                            <i class="ri-bill-line"></i><span>Reports</span><i class="bi bi-chevron-down ms-auto"></i>
+                        <a class="nav-link collapsed" href="AM_Reports.aspx">
+                            <i class="bi bi-grid"></i>
+                            <span>Reports</span>
                         </a>
-                        <ul id="tables-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                            <li>
-                                <a href="Admin_Billing_GenerateBill.aspx">
-                                    <i class="bi bi-circle"></i><span>Generate Bill</span>
-                                </a>
-                            </li>
 
-                            <li>
-                                <a href="Admin_Billing_Controls.aspx">
-                                    <i class="bi bi-circle"></i><span>Controls</span>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
 
-<!-- End Transaction Nav -->
+                    <!-- End Transaction Nav -->
                 </ul>
             </aside>
             <!-- End Sidebar-->
@@ -572,14 +567,7 @@
 
                 <div class="pagetitle">
                     <h1 style="padding-top: -5px; color: chartreuse">Employees</h1>
-                    <%--<nav>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="SAM_Dashboard.aspx">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="admin_manage_account.aspx">Manage Accounts   </a></li>
-                            <li class="breadcrumb-item">Account Manager </li>
 
-                        </ol>
-                    </nav>--%>
                 </div>
                 <!-- End Page Title -->
 
@@ -601,7 +589,7 @@
                     </div>
                 </section>
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <!-- Modal Header -->
                             <div class="modal-header" style="position: center">
@@ -651,7 +639,7 @@
                                     <div class="invalid-feedback">Please provide a valid email address.</div>
                                 </div>
 
-                                <!-- Password -->
+                                <%--<!-- Password -->
                                 <div class="col-12 mb-3">
                                     <asp:Label ID="Label7" runat="server" Text="Password" for="inputText" Style="color: chartreuse"></asp:Label>
                                     <div class="input-group">
@@ -661,7 +649,7 @@
                                         </span>
                                     </div>
                                     <div class="invalid-feedback">Password must be at least 6 characters long and contain at least one uppercase letter, one number, and one special character.</div>
-                                </div>
+                                </div>--%>
 
 
                                 <!-- Contact No. -->
@@ -700,9 +688,6 @@
                 </div>
 
 
-
-
-
                 <section style="background-color: #052507; padding: 25px; border-radius: 8px; box-shadow: 0 0 5px rgba(0, 0, 0, .2)">
                     <div>
                         <asp:ImageMap ID="ImageMap1" runat="server" ImageUrl="Pictures//box_format.png" Style="float: right; margin-right: 0px; margin-top: 0px; width: 50px"></asp:ImageMap>
@@ -719,13 +704,9 @@
 
                     <%-- START TABS DESIGN GRIDVIEW--%>
 
-
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <%--<li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="sam-tab" data-bs-toggle="tab" data-bs-target="#sam" type="button" role="tab" aria-controls="sam" aria-selected="true" style="color: #061f0d; font-weight: 900">Super Account Manager</button>
-                        </li>--%>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="am-tab" data-bs-toggle="tab" data-bs-target="#am" type="button" role="tab" aria-controls="am" aria-selected="false" style="color: #061f0d; font-weight: 900">Account Manager</button>
+                            <button class="nav-link active" id="am-tab" data-bs-toggle="tab" data-bs-target="#am" type="button" role="tab" aria-controls="am" aria-selected="false" style="color: #061f0d; font-weight: 900">Account Manager</button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="bo-tab" data-bs-toggle="tab" data-bs-target="#bo" type="button" role="tab" aria-controls="bo" aria-selected="false" style="color: #061f0d; font-weight: 900">Billing Officer</button>
@@ -741,78 +722,7 @@
 
                     <div id="myTabContent" class="tab-content pt-2">
 
-                        <%--<div class="tab-pane fade show active" id="sam" role="tabpanel" aria-labelledby="sam-tab">
-                            <asp:GridView Style="width: 100%; word-break: break-all; table-layout: fixed" ID="gridView1" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True"
-                                DataKeyNames="emp_id" AllowPaging="False" CellPadding="20" GridLines="None">
-                                <AlternatingRowStyle BackColor="white" ForeColor="Black" />
-
-                                <Columns>
-                                    <asp:BoundField DataField="emp_id" HeaderText="ID" InsertVisible="False" ReadOnly="True" SortExpression="emp_id" ItemStyle-Width="100px">
-                                        <ItemStyle Width="100px" Wrap="true" />
-                                    </asp:BoundField>
-                                    <asp:BoundField DataField="emp_fname" HeaderText="First Name" SortExpression="emp_fname" ItemStyle-Width="150px">
-                                        <ItemStyle Width="150px" Wrap="true" />
-                                    </asp:BoundField>
-                                    <asp:BoundField DataField="emp_mname" HeaderText="M.I" SortExpression="emp_mname" ItemStyle-Width="100px">
-                                        <ItemStyle Width="100px" Wrap="true" />
-                                    </asp:BoundField>
-                                    <asp:BoundField DataField="emp_lname" HeaderText="Last Name" SortExpression="emp_lname" ItemStyle-Width="150px">
-                                        <ItemStyle Width="150px" Wrap="true" />
-                                    </asp:BoundField>
-                                    <asp:BoundField DataField="emp_contact" HeaderText="Contact" SortExpression="emp_contact" ItemStyle-Width="100px">
-                                        <ItemStyle Width="100px" Wrap="true" />
-                                    </asp:BoundField>
-                                    <asp:BoundField DataField="emp_email" HeaderText="Email" SortExpression="emp_email" ItemStyle-Width="200px">
-                                        <ItemStyle Width="200px" Wrap="true" />
-                                    </asp:BoundField>
-                                    <asp:BoundField DataField="emp_created_at" HeaderText="Created At" SortExpression="emp_created_at" ItemStyle-Width="150px">
-                                        <ItemStyle Width="150px" Wrap="true" />
-                                    </asp:BoundField>
-                                    <asp:BoundField DataField="emp_updated_at" HeaderText="Updated At" SortExpression="emp_updated_at" ItemStyle-Width="150px">
-                                        <ItemStyle Width="150px" Wrap="true" />
-                                    </asp:BoundField>
-
-                                    <asp:TemplateField HeaderText="Status">
-                                        <ItemTemplate>
-                                            <asp:Button Style="font-size: 10px; color: orangered; font-weight: bold;" ID="btnUnsuspend" runat="server" Text='<%# Eval("emp_status") + " ▼"%>'
-                                                OnClick="Unsuspend_Click"
-                                                OnClientClick="return confirm('Are you sure you want to Unsuspend this account manager?');"
-                                                Visible='<%# Eval("emp_status").ToString() == "Suspend" %>' CommandArgument='<%# Eval("emp_id") %>' />
-                                            <asp:Label class="badge bg-success" ID="Label9" runat="server" Text='<%# Eval("emp_status")%>' Visible='<%# Eval("emp_status").ToString() == "Inactive" %>' />
-                                            <asp:Button Style="font-size: 10px; color: lawngreen; font-weight: bold;" ID="btnSuspend" runat="server" Text='<%# Eval("emp_status") + " ▲"%>'
-                                                OnClick="Suspend_Click"
-                                                OnClientClick="return confirm('Are you sure you want to Suspend this account manager?');"
-                                                Visible='<%# Eval("emp_status").ToString() == "Active" %>' CommandArgument='<%# Eval("emp_id") %>' />
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-
-                                    <asp:TemplateField HeaderText="Action">
-                                        <ItemTemplate>
-                                            <asp:LinkButton ID="update" runat="server" OnClick="Update_Click" CommandArgument='<%# Eval("emp_id") %>'>
-                                                <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
-                                            </asp:LinkButton>
-                                            <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("emp_id") %>' OnClientClick="return confirm('Are you sure you want to remove this account manager?');">
-                                                <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
-                                            </asp:LinkButton>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                </Columns>
-
-                                <RowStyle BackColor="White" ForeColor="Black" />
-                                <EditRowStyle BackColor="#90EE90" />
-                                <FooterStyle BackColor="Black" Font-Bold="True" ForeColor="#f9cfb4" />
-                                <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="None" />
-                                <PagerStyle BorderColor="#CC9900" Font-Size="20px" BackColor="White" ForeColor="#f9cfb4" HorizontalAlign="Center" />
-                                <SelectedRowStyle BackColor="#C5BBAF" Font-Bold="True" ForeColor="White" />
-                                <SortedAscendingCellStyle BackColor="Black" />
-                                <SortedAscendingHeaderStyle BackColor="#246B61" />
-                                <SortedDescendingCellStyle BackColor="Black" />
-                                <SortedDescendingHeaderStyle BackColor="#15524A" />
-                            </asp:GridView>
-                        </div>--%>
-
-
-                        <div class="tab-pane fade" id="am" role="tabpanel" aria-labelledby="am-tab">
+                        <div class="tab-pane fade show active" id="am" role="tabpanel" aria-labelledby="am-tab">
                             <%--<h1 style="color: #f40f0f; padding-top: 50px; padding-bottom: 0; font-family: 'Raleway',sans-serif; font-size: 62px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center; text-transform: uppercase;">Account Manager
                             </h1>--%>
                             <%--<div class="gridview-container">--%>
@@ -863,10 +773,10 @@
                                     <asp:TemplateField HeaderText="Action">
                                         <ItemTemplate>
                                             <asp:LinkButton ID="update" runat="server" OnClick="Update_Click" CommandArgument='<%# Eval("emp_id") %>'>
-                                                <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Style="margin-right: 10px; width: 2em; height: auto; max-height: 100%;"  AlternateText="Edit" />
+                                                <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
                                             </asp:LinkButton>
                                             <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("emp_id") %>' OnClientClick="return confirm('Are you sure you want to remove this account manager?');">
-                                                <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Style="margin-right: 10px; width: 2em; height: auto; max-height: 100%;"  AlternateText="Remove" />
+                                                <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
                                             </asp:LinkButton>
                                         </ItemTemplate>
                                     </asp:TemplateField>
@@ -1109,125 +1019,10 @@
                                 <SortedDescendingHeaderStyle BackColor="#15524A" />
                             </asp:GridView>
                         </div>
-
-
                     </div>
 
                 </section>
-
                 <%--END TABS DESIGN GRIDVIEW--%>
-
-
-
-
-
-
-
-
-
-                <%--EDIT BUTTON--%>
-                <%--<div class="gridview-container">
-                    <asp:GridView Style="width: 100%; word-break: break-all; table-layout: fixed" ID="gridViewAccountMan" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True"
-                        DataKeyNames="emp_id" AllowPaging="False" CellPadding="20" GridLines="None">
-                        <AlternatingRowStyle BackColor="white" ForeColor="Black" />
-
-                        <Columns>
-                            <asp:BoundField DataField="emp_id" HeaderText="ID" InsertVisible="False" ReadOnly="True" SortExpression="emp_id" ItemStyle-Width="100px">
-                                <ItemStyle Width="100px" Wrap="true" />
-                            </asp:BoundField>
-                            <asp:BoundField DataField="emp_fname" HeaderText="First Name" SortExpression="emp_fname" ItemStyle-Width="150px">
-                                <ItemStyle Width="150px" Wrap="true" />
-                            </asp:BoundField>
-                            <asp:BoundField DataField="emp_mname" HeaderText="M.I" SortExpression="emp_mname" ItemStyle-Width="100px">
-                                <ItemStyle Width="100px" Wrap="true" />
-                            </asp:BoundField>
-                            <asp:BoundField DataField="emp_lname" HeaderText="Last Name" SortExpression="emp_lname" ItemStyle-Width="150px">
-                                <ItemStyle Width="150px" Wrap="true" />
-                            </asp:BoundField>
-                            <asp:BoundField DataField="emp_contact" HeaderText="Contact" SortExpression="emp_contact" ItemStyle-Width="100px">
-                                <ItemStyle Width="100px" Wrap="true" />
-                            </asp:BoundField>
-                            <asp:BoundField DataField="emp_email" HeaderText="Email" SortExpression="emp_email" ItemStyle-Width="200px">
-                                <ItemStyle Width="200px" Wrap="true" />
-                            </asp:BoundField>
-                            <asp:BoundField DataField="emp_created_at" HeaderText="Created At" SortExpression="emp_created_at" ItemStyle-Width="150px">
-                                <ItemStyle Width="150px" Wrap="true" />
-                            </asp:BoundField>
-                            <asp:BoundField DataField="emp_updated_at" HeaderText="Updated At" SortExpression="emp_updated_at" ItemStyle-Width="150px">
-                                <ItemStyle Width="150px" Wrap="true" />
-                            </asp:BoundField>
-
-                            <asp:TemplateField HeaderText="Status">
-                                <ItemTemplate>
-                                    <asp:Button Style="font-size: 10px; color: orangered; font-weight: bold;" ID="btnUnsuspend" runat="server" Text='<%# Eval("emp_status") + " ▼"%>'
-                                        OnClick="Unsuspend_Click"
-                                        OnClientClick="return confirm('Are you sure you want to Unsuspend this account manager?');"
-                                        Visible='<%# Eval("emp_status").ToString() == "Suspend" %>' CommandArgument='<%# Eval("emp_id") %>' />
-                                    <asp:Label ID="Label9" runat="server" Text='<%# Eval("emp_status")%>' Visible='<%# Eval("emp_status").ToString() == "Inactive" %>' />
-                                    <asp:Button Style="font-size: 10px; color: lawngreen; font-weight: bold;" ID="btnSuspend" runat="server" Text='<%# Eval("emp_status") + " ▲"%>'
-                                        OnClick="Suspend_Click"
-                                        OnClientClick="return confirm('Are you sure you want to Suspend this account manager?');"
-                                        Visible='<%# Eval("emp_status").ToString() == "Active" %>' CommandArgument='<%# Eval("emp_id") %>' />
-                                </ItemTemplate>
-                            </asp:TemplateField>
-
-                            <asp:TemplateField HeaderText="Action">
-                                <ItemTemplate>
-                                    <asp:LinkButton ID="update" runat="server" OnClick="Update_Click" CommandArgument='<%# Eval("emp_id") %>'>
-                                        <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
-                                    </asp:LinkButton>
-                                    <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("emp_id") %>' OnClientClick="return confirm('Are you sure you want to remove this account manager?');">
-                                        <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
-                                    </asp:LinkButton>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                        </Columns>
-
-                        <RowStyle BackColor="White" ForeColor="Black" />
-                        <EditRowStyle BackColor="#90EE90" />
-                        <FooterStyle BackColor="Black" Font-Bold="True" ForeColor="#f9cfb4" />
-                        <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="None" />
-                        <PagerStyle BorderColor="#CC9900" Font-Size="20px" BackColor="White" ForeColor="#f9cfb4" HorizontalAlign="Center" />
-                        <SelectedRowStyle BackColor="#C5BBAF" Font-Bold="True" ForeColor="White" />
-                        <SortedAscendingCellStyle BackColor="Black" />
-                        <SortedAscendingHeaderStyle BackColor="#246B61" />
-                        <SortedDescendingCellStyle BackColor="Black" />
-                        <SortedDescendingHeaderStyle BackColor="#15524A" />
-                    </asp:GridView>
-                </div>--%>
-
-
-
-
-
-                <%--<div class="gridview-container">
-    <asp:GridView ID="gridViewAccountMan" runat="server" AutoGenerateColumns="False" AllowPaging="False" GridLines="None" CssClass="table datatable">
-        <HeaderStyle CssClass="thead-dark" />
-        <RowStyle CssClass="table-row" />
-        <AlternatingRowStyle CssClass="table-row-striped" />
-
-        <Columns>
-            <asp:BoundField DataField="acc_fname" SortExpression="acc_fname" ItemStyle-CssClass="column" />
-            <asp:BoundField DataField="acc_contact" HeaderText="Contact" SortExpression="acc_contact" ItemStyle-CssClass="column" />
-            <asp:BoundField DataField="acc_email" HeaderText="Email" SortExpression="acc_email" ItemStyle-CssClass="column" />
-            <asp:BoundField DataField="acc_created_at" HeaderText="Created At" SortExpression="acc_created_at" ItemStyle-CssClass="column" />
-            <asp:BoundField DataField="acc_status" HeaderText="Status" ItemStyle-CssClass="column" />
-        </Columns>
-    </asp:GridView>
-</div>--%>
-
-
-
-
-
-
-
-
-                <%--                </section>--%>
-
-
-
-
 
 
                 <asp:LinkButton ID="LinkButton1" runat="server"></asp:LinkButton>
@@ -1245,94 +1040,94 @@
                                 </div>
 
                                 <!-- Body Section -->
-                                <div class="card-body" style="background-color: #052507;">
+                                <div class="card-body" style="background-color: #052507; padding-top: 10px">
                                     <div class="row">
                                         <!-- ID (Disabled) -->
                                         <div class="col-12 mb-3">
                                             <div class="input-group input-group-sm">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">ID</span>
-                                                </div>
+                                                <span class="input-group-text" style="padding: 10px;">ID</span>
                                                 <asp:TextBox ID="txtbxID" runat="server" CssClass="form-control" ClientIDMode="Static" Enabled="false"></asp:TextBox>
                                             </div>
                                         </div>
 
                                         <!-- Firstname -->
-                                        <div class="col-6 mb-3">
-                                            <asp:Label ID="Label17" runat="server" Text="Firstname" Style="color: chartreuse"></asp:Label>
-
-                                            <asp:TextBox ID="txtbfirstname" runat="server" CssClass="form-control" ClientIDMode="Static" onkeyup="validateUpdateFirstname()"></asp:TextBox>
-                                            <div class="valid-feedback">Looks good!</div>
-                                            <div class="invalid-feedback">Please provide a valid firstname.</div>
+                                        <div class="col-12 mb-3">
+                                            <div class="input-group input-group-sm mb-3" style="margin-top: 20px; color: #1C5E55">
+                                                <span class="input-group-text" style="padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Firstname</span>
+                                                <asp:TextBox ID="txtbfirstname" runat="server" Style="border-bottom-right-radius: 5px; border-top-right-radius: 5px" CssClass="form-control" ClientIDMode="Static" onkeyup="validateUpdateFirstname()"></asp:TextBox>
+                                                <div class="valid-feedback">Looks good!</div>
+                                                <div class="invalid-feedback">Please provide a valid firstname.</div>
+                                            </div>
+                                        </div>
+                                        <!-- Middle Initial (Optional) -->
+                                        <div class="col-3 mb-3">
+                                            <div class="input-group input-group-sm mb-3" style="color: #1C5E55">
+                                                <span class="input-group-text" style="padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">M.I</span>
+                                                <asp:TextBox ID="txtmi" runat="server" CssClass="form-control" ClientIDMode="Static" Style="border-bottom-right-radius: 5px; border-top-right-radius: 5px" MaxLength="1" onkeypress="return isLetter(event)"></asp:TextBox>
+                                                <div class="valid-feedback">Looks good!</div>
+                                                <div class="invalid-feedback">Please provide a valid middle initial (optional).</div>
+                                            </div>
                                         </div>
 
                                         <!-- Lastname -->
-                                        <div class="col-6 mb-3">
-                                            <asp:Label ID="Label16" runat="server" Text="Lastname" Style="color: chartreuse"></asp:Label>
-
-                                            <asp:TextBox ID="txtLastname" runat="server" CssClass="form-control" ClientIDMode="Static" onkeyup="validateUpdateLastname()"></asp:TextBox>
-                                            <div class="valid-feedback">Looks good!</div>
-                                            <div class="invalid-feedback">Please provide a valid lastname.</div>
-                                        </div>
-
-                                        <!-- Middle Initial (Optional) -->
-                                        <div class="col-6 mb-3">
-                                            <asp:Label ID="Label14" runat="server" Text="Middle Initial" Style="color: chartreuse"></asp:Label>
-
-                                            <asp:TextBox ID="txtmi" runat="server" CssClass="form-control" ClientIDMode="Static" MaxLength="1" onkeypress="return isLetter(event)"></asp:TextBox>
-                                            <div class="valid-feedback">Looks good!</div>
-                                            <div class="invalid-feedback">Please provide a valid middle initial (optional).</div>
-
+                                        <div class="col-9 mb-3">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text" style="padding: 10px; color: darkblue; font-weight: 700">Lastname</span>
+                                                <asp:TextBox ID="txtLastname" runat="server" CssClass="form-control" Style="border-bottom-right-radius: 5px; border-top-right-radius: 5px" ClientIDMode="Static" onkeyup="validateUpdateLastname()"></asp:TextBox>
+                                                <div class="valid-feedback">Looks good!</div>
+                                                <div class="invalid-feedback">Please provide a valid lastname.</div>
+                                            </div>
                                         </div>
 
                                         <!-- Contact -->
-                                        <div class="col-6 mb-3">
-                                            <asp:Label ID="Label15" runat="server" Text="Contact No." Style="color: chartreuse"></asp:Label>
-
-                                            <asp:TextBox ID="txtContact" runat="server" CssClass="form-control" ClientIDMode="Static" onkeyup="validateUpdateContact()"></asp:TextBox>
-                                            <div class="valid-feedback">Looks good!</div>
-                                            <div class="invalid-feedback">Please provide a valid Philippines contact number (e.g., 09XXXXXXXXX).</div>
+                                        <div class="col-12 mb-3">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text" style="padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Contact #.</span>
+                                                <asp:TextBox ID="txtContact" runat="server" CssClass="form-control" Style="border-bottom-right-radius: 5px; border-top-right-radius: 5px" ClientIDMode="Static" onkeyup="validateUpdateContact()"></asp:TextBox>
+                                                <div class="valid-feedback">Looks good!</div>
+                                                <div class="invalid-feedback">Please provide a valid Philippines contact number (e.g., 09XXXXXXXXX).</div>
+                                            </div>
                                         </div>
-                                    </div>
 
                                     <!-- Dropdown (Role) -->
-                                    <div class="col-6 mb-3">
-                                        <asp:Label ID="Label21" runat="server" Text="Change Role" for="inputText" Style="color: chartreuse"></asp:Label>
-                                        <asp:DropDownList ID="promoteddl" class="form-select" aria-label="Default select example" runat="server" onChange="validateRole()">
-                                        </asp:DropDownList>
-                                        <div class="invalid-feedback">Please select a role.</div>
+                                    <div class="col-12 mb-3">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text" style="padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Role</span>
+                                            <asp:DropDownList ID="promoteddl" class="form-select" Style="border-bottom-right-radius: 5px; border-top-right-radius: 5px" aria-label="Default select example" runat="server" onChange="validateRole()">
+                                            </asp:DropDownList>
+                                            <div class="invalid-feedback">Please select a role.</div>
+                                        </div>
                                     </div>
 
 
                                     <!-- Email -->
                                     <div class="col-12 mb-3">
-                                        <div class="mb-3">
-                                            <%--<div class="input-group-prepend">
-                                <span class="input-group-text">Email</span>
-                            </div>--%>
-                                            <asp:Label ID="Label18" runat="server" Text="Email" Style="color: chartreuse"></asp:Label>
-
-                                            <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" ClientIDMode="Static" onkeyup="validateUpdateEmail()"></asp:TextBox>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text" style="padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Email</span>
+                                            <asp:TextBox ID="txtEmail" runat="server" Style="border-bottom-right-radius: 5px; border-top-right-radius: 5px" CssClass="form-control" ClientIDMode="Static" onkeyup="validateUpdateEmail()"></asp:TextBox>
                                             <div class="valid-feedback">Looks good!</div>
                                             <div class="invalid-feedback">Please provide a valid email address.</div>
                                         </div>
                                     </div>
-
                                     <!-- Password -->
                                     <div class="col-12 mb-3">
-
-                                        <asp:Label ID="Label19" runat="server" Text="Password" Style="color: chartreuse"></asp:Label>
-                                        <div class="input-group">
-                                            <asp:TextBox ID="TextBox1" runat="server" CssClass="form-control mt-2" type="password" onkeyup="validateUpdatePassword()"></asp:TextBox>
-                                            <span class="input-group-text mt-2" style="cursor: pointer;" onclick="toggleUpdatePassword()">
-                                                <i id="updatePasswordIcon" class="fas fa-eye-slash"></i>
-                                            </span>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text" style="padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Password</span>                                            
+                                                <asp:Button
+                                                    ID="btnResetPass"
+                                                    CssClass="form-control"
+                                                    runat="server"
+                                                    Text="Reset Password"
+                                                    OnClick="btnResetPass_Click"
+                                                    OnClientClick="return confirm('Are you sure you want to update category?');"
+                                                    Style="background-color: green; color: white;border-bottom-right-radius: 5px; border-top-right-radius: 5px" />
                                         </div>
-                                        <div class="invalid-feedback">Password must be at least 6 characters long and contain at least one uppercase letter, one number, and one special character.</div>
                                     </div>
+
 
                                     <!-- Picture Upload -->
                                     <div class="col-12 mb-3">
+
                                         <asp:Label ID="Label20" runat="server" Text="Picture" Style="color: chartreuse"></asp:Label>
                                         <asp:FileUpload ID="FileUpload1" accept="image/*" class="form-control" runat="server" OnChange="previewImageUpdate();" />
                                         <asp:Image ID="imagePreviewUpdate" runat="server" AlternateText="Image Preview" CssClass="img-thumbnail mt-2" Style="max-width: 150px;" />
@@ -1340,7 +1135,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                            </div>
                             <!-- Footer Section -->
                             <div class="card-footer text-center" style="background-color: #052507; color: aquamarine;">
                                 <asp:Button ID="btncancel" CssClass="btn btn-secondary" runat="server" Text="Cancel" />
@@ -1350,8 +1145,7 @@
                         </contenttemplate>
                     </asp:Panel>
                 </div>
-
-
+      
 
 
                 <ajaxToolkit:ModalPopupExtender ID="ModalPopupExtender2" runat="server" CancelControlID="btncancel" PopupControlID="updatePanel" TargetControlID="LinkButton1" BackgroundCssClass="Background" DropShadow="True"></ajaxToolkit:ModalPopupExtender>
@@ -1454,7 +1248,7 @@
                         }
                     }
 
-                    function validatePassword() {
+                    <%--function validatePassword() {
                         const password = document.getElementById('<%= emp_pass.ClientID %>');
                         const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
                         if (!passwordPattern.test(password.value)) {
@@ -1464,8 +1258,8 @@
                             password.classList.remove('is-invalid');
                             password.classList.add('is-valid');
                         }
-                    }
-                    function togglePasswords() {
+                    }--%>
+                    <%--function togglePasswords() {
                         const password = document.getElementById('<%= emp_pass.ClientID %>');
                         const passIcon = document.getElementById('passIcon');
                         if (password.type === "password") {
@@ -1477,7 +1271,7 @@
                             passIcon.classList.remove("fa-eye");
                             passIcon.classList.add("fa-eye-slash");
                         }
-                    }
+                    }--%>
 
                     function validateRole() {
                         const role = document.getElementById('<%= emp_role.ClientID %>');
@@ -1601,7 +1395,7 @@
                     }
 
 
-                    function validateUpdatePassword() {
+                    <%--function validateUpdatePassword() {
                         const password = document.getElementById('<%= TextBox1.ClientID %>');
                         const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
                         if (!passwordPattern.test(password.value)) {
@@ -1626,7 +1420,7 @@
                             icon.classList.remove("fa-eye");
                             icon.classList.add("fa-eye-slash");
                         }
-                    }
+                    }--%>
 
 
 
@@ -1729,7 +1523,10 @@
                         }
                     });
 
-
+                    ////// Call this function to show the modal after the transaction
+                    //function showModal() {
+                    //    $('#exampleModal').modal('show');
+                    //}
                 </script>
 
 
@@ -1818,6 +1615,21 @@
                 </style>
 
                 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                <%--search bar--%>
+                <%--<script>
+                    $(document).ready(function () {
+                        $('#<%= gridViewAccountMan.ClientID %> .edit-button').on('click', function () {
+
+                            var rowIndex = $(this).closest('tr').index();
+                            $('#<%= gridViewAccountMan.ClientID %> tr').height('auto'); // Reset all rows to auto height
+                            $('#<%= gridViewAccountMan.ClientID %> tr:eq(' + rowIndex + ')').height($('#<%= gridViewAccountMan.ClientID %> tr:eq(' + rowIndex + ')').height());
+                        });
+                    });
+
+                </script>--%>
+                <%--end of searchbar--%>
+
+
 
 
                 <!-- End General Form Elements -->
@@ -1827,17 +1639,19 @@
             <!-- ======= Footer ======= -->
             <footer id="footer" class="footer" style="border-top-color: chartreuse">
                 <div class="copyright" style="color: #d4f3cf">
-                    &copy; Copyright <strong><span style="color: #d4f3cf">TrashTrack</span></strong>. All Rights Reserved
+                    &copy; Copyright <strong><span style="color: #d4f3cf">Pinoy Basurero Corporation</span></strong>. All Rights Reserved
                 </div>
             </footer>
             <!-- End Footer -->
+
+
 
             <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
             <!-- Vendor JS Files -->
             <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
             <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-            fgen
+
             <script src="assets/vendor/chart.js/chart.umd.js"></script>
             <script src="assets/vendor/echarts/echarts.min.js"></script>
             <script src="assets/vendor/quill/quill.min.js"></script>
@@ -1857,3 +1671,4 @@
 
 </form>
 </html>
+
