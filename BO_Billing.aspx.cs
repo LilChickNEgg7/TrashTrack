@@ -1145,6 +1145,7 @@ namespace Capstone
                             }
                         }
                     }
+                    hfActiveTab.Value = "#tab2"; // Set Tab 1 as the default
                     //LoadBillDetails(gb_id);  // Load data into the GridView
                     updatePanel4.Update();   // Update the UpdatePanel
                     //this.ModalPopupExtender5.Show(); // Show the modal
@@ -2801,6 +2802,8 @@ namespace Capstone
             ModalPopupExtender1.Hide();
             // Show the modal popup
             ModalPopupExtender6.Show();
+            hfActiveTab.Value = "#tab2"; // Set Tab 1 as the default
+
             // Optional: Load other details related to managerId if needed
             this.ModalPopupExtender6.Show(); // Show the modal
         }
@@ -2845,6 +2848,7 @@ namespace Capstone
 
                                 paymentCmd.ExecuteNonQuery();
                             }
+                            hfActiveTab.Value = "#tab2"; // Set Tab 1 as the default
 
                             // Display success message with SweetAlert
                             ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",

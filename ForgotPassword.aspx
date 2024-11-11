@@ -8,7 +8,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <%--hide unhide pass--%>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <title>Users / Profile - NiceAdmin Bootstrap Template</title>
+    <title>Forgot Password</title>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <%--<script type="text/javascript">
         $(document).ready(function () {
@@ -73,7 +73,7 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
+    <link href="Pictures/logo_bgRM.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
@@ -217,12 +217,12 @@
                                     <label for="OTPtxt1" style="color: white; font-size: 18px;">Enter OTP From Email</label>
                                 </div>
                                 <div id="otpContainer" style="display: flex; gap: 15px; justify-content: center; align-items: center; padding: 20px;">
-                                    <asp:TextBox ID="OTPtxt1" runat="server" class="form-control otp-input" MaxLength="1" TextMode="SingleLine" Enabled="false" Style="background-color: #031c02; border-color: #005c3b; border-radius: 8px; border-width: 2px; color: white; width: 60px; height: 60px; text-align: center; font-size: 28px;" />
-                                    <asp:TextBox ID="OTPtxt2" runat="server" class="form-control otp-input" MaxLength="1" TextMode="SingleLine" Enabled="false" Style="background-color: #031c02; border-color: #005c3b; border-radius: 8px; border-width: 2px; color: white; width: 60px; height: 60px; text-align: center; font-size: 28px;" />
-                                    <asp:TextBox ID="OTPtxt3" runat="server" class="form-control otp-input" MaxLength="1" TextMode="SingleLine" Enabled="false" Style="background-color: #031c02; border-color: #005c3b; border-radius: 8px; border-width: 2px; color: white; width: 60px; height: 60px; text-align: center; font-size: 28px;" />
-                                    <asp:TextBox ID="OTPtxt4" runat="server" class="form-control otp-input" MaxLength="1" TextMode="SingleLine" Enabled="false" Style="background-color: #031c02; border-color: #005c3b; border-radius: 8px; border-width: 2px; color: white; width: 60px; height: 60px; text-align: center; font-size: 28px;" />
-                                    <asp:TextBox ID="OTPtxt5" runat="server" class="form-control otp-input" MaxLength="1" TextMode="SingleLine" Enabled="false" Style="background-color: #031c02; border-color: #005c3b; border-radius: 8px; border-width: 2px; color: white; width: 60px; height: 60px; text-align: center; font-size: 28px;" />
-                                    <asp:TextBox ID="OTPtxt6" runat="server" class="form-control otp-input" MaxLength="1" TextMode="SingleLine" Enabled="false" Style="background-color: #031c02; border-color: #005c3b; border-radius: 8px; border-width: 2px; color: white; width: 60px; height: 60px; text-align: center; font-size: 28px;" />
+                                    <asp:TextBox ID="OTPtxt1" runat="server" class="form-control otp-input" MaxLength="1" TextMode="SingleLine" Enabled="False" Style="background-color: #031c02; border-color: #005c3b; border-radius: 8px; border-width: 2px; color: white; width: 60px; height: 60px; text-align: center; font-size: 28px;" />
+                                    <asp:TextBox ID="OTPtxt2" runat="server" class="form-control otp-input" MaxLength="1" TextMode="SingleLine" Enabled="False" Style="background-color: #031c02; border-color: #005c3b; border-radius: 8px; border-width: 2px; color: white; width: 60px; height: 60px; text-align: center; font-size: 28px;" />
+                                    <asp:TextBox ID="OTPtxt3" runat="server" class="form-control otp-input" MaxLength="1" TextMode="SingleLine" Enabled="False" Style="background-color: #031c02; border-color: #005c3b; border-radius: 8px; border-width: 2px; color: white; width: 60px; height: 60px; text-align: center; font-size: 28px;" />
+                                    <asp:TextBox ID="OTPtxt4" runat="server" class="form-control otp-input" MaxLength="1" TextMode="SingleLine" Enabled="False" Style="background-color: #031c02; border-color: #005c3b; border-radius: 8px; border-width: 2px; color: white; width: 60px; height: 60px; text-align: center; font-size: 28px;" />
+                                    <asp:TextBox ID="OTPtxt5" runat="server" class="form-control otp-input" MaxLength="1" TextMode="SingleLine" Enabled="False" Style="background-color: #031c02; border-color: #005c3b; border-radius: 8px; border-width: 2px; color: white; width: 60px; height: 60px; text-align: center; font-size: 28px;" />
+                                    <asp:TextBox ID="OTPtxt6" runat="server" class="form-control otp-input" MaxLength="1" TextMode="SingleLine" Enabled="False" Style="background-color: #031c02; border-color: #005c3b; border-radius: 8px; border-width: 2px; color: white; width: 60px; height: 60px; text-align: center; font-size: 28px;" />
                                 </div>
                                 <div id="otpMessage" style="text-align: center; margin-top: 10px;">
                                     <asp:Label ID="lblOTPMessage" runat="server" Text="" ForeColor="Red" Font-Bold="True"></asp:Label>
@@ -392,7 +392,41 @@
                 }
             }
 
-            // Compare Textboxes (for password confirmation)
+
+            $(document).ready(function () {
+                // Attach event handler to both textboxes on input change
+                $('#<%= changetxt.ClientID %>').on('input', function () {
+                    compareTextboxes();
+                });
+
+                $('#<%= confirmtxt.ClientID %>').on('input', function () {
+                    compareTextboxes();
+                });
+            });
+            function compareTextboxes() {
+                var value1 = $('#<%= changetxt.ClientID %>').val();
+              var value2 = $('#<%= confirmtxt.ClientID %>').val();
+
+            var resultLabel = $('#<%= lblResult.ClientID %>');
+
+            if (value1 !== "" && value2 !== "") {
+                if (value1 === value2) {
+                    // Values match
+                    resultLabel.text('Values match!');
+                    resultLabel.css('color', 'green');
+                } else {
+                    // Values do not match
+                    resultLabel.text('Values do not match!');
+                    resultLabel.css('color', 'red');
+                }
+                resultLabel.show(); // Show the label
+            } else {
+                // Either one or both values are empty
+                resultLabel.hide(); // Hide the label
+            }
+        }
+
+            <%--// Compare Textboxes (for password confirmation)
             function compareTextboxes() {
                 var value1 = $('#<%= changetxt.ClientID %>').val();
                 var value2 = $('#<%= confirmtxt.ClientID %>').val();
@@ -411,7 +445,7 @@
                 } else {
                     resultLabel.hide();
                 }
-            }
+            }--%>
 
             // Toggle Password Visibility
             function togglePassword(passwordId, iconId) {
