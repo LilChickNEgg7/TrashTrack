@@ -1112,6 +1112,8 @@ namespace Capstone
             LinkButton btn = (LinkButton)sender;
             int gb_id = Convert.ToInt32(btn.CommandArgument);
             this.ModalPopupExtender5.Show(); // Show the modal
+            dateEntered.Text = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
+
             try
             {
                 using (var db = new NpgsqlConnection(con))

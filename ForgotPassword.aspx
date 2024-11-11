@@ -265,12 +265,6 @@
                                         <i id="toggleIcon2" class="fas fa-eye-slash" style="color: gray;"></i>
                                     </span>
                                 </div>
-
-                                <br />
-                                <br />
-                                  <br />
-                                <br />
-
                                 <div class="text-center">
                                     <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label"></label>
 
@@ -280,6 +274,12 @@
                                     <br />
                                     <asp:Button ID="changepassword" runat="server" CssClass="btn btn-warning" Text="Change Password" Enabled="False" OnClick="changepassword_Click" />
                                 </div>
+                                                                <br />
+                                                                <br />
+                                                                <br />
+
+
+
                             </form>
                         </div>
                     </div>
