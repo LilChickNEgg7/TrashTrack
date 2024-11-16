@@ -703,6 +703,7 @@
 
 
                     <%-- START TABS DESIGN GRIDVIEW--%>
+                                        <asp:HiddenField ID="hfActiveTab" runat="server" />
 
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -758,14 +759,14 @@
 
                                     <asp:TemplateField HeaderText="Status">
                                         <ItemTemplate>
-                                            <asp:Button Style="font-size: 10px; color: orangered; font-weight: bold;" ID="btnUnsuspend" runat="server" Text='<%# Eval("emp_status") + " ▼"%>'
+                                            <asp:Button Style="font-size: 10px; font-weight: bold;" CssClass="btn btn-outline-danger" ID="btnUnsuspend" runat="server" Text='<%# Eval("emp_status") + " ▼"%>'
                                                 OnClick="Unsuspend_Click"
-                                                OnClientClick="return confirm('Are you sure you want to Unsuspend this account manager?');"
+                                                OnClientClick="return confirm('Are you sure you want to Unsuspend this user?');"
                                                 Visible='<%# Eval("emp_status").ToString() == "Suspend" %>' CommandArgument='<%# Eval("emp_id") %>' />
                                             <asp:Label ID="Label9" runat="server" Text='<%# Eval("emp_status")%>' Visible='<%# Eval("emp_status").ToString() == "Inactive" %>' />
-                                            <asp:Button Style="font-size: 10px; color: lawngreen; font-weight: bold;" ID="btnSuspend" runat="server" Text='<%# Eval("emp_status") + " ▲"%>'
+                                            <asp:Button Style="font-size: 10px; font-weight: bold;" CssClass="btn btn-outline-success" ID="btnSuspend" runat="server" Text='<%# Eval("emp_status") + " ▲"%>'
                                                 OnClick="Suspend_Click"
-                                                OnClientClick="return confirm('Are you sure you want to Suspend this account manager?');"
+                                                OnClientClick="return confirm('Are you sure you want to Suspend this user?');"
                                                 Visible='<%# Eval("emp_status").ToString() == "Active" %>' CommandArgument='<%# Eval("emp_id") %>' />
                                         </ItemTemplate>
                                     </asp:TemplateField>
@@ -775,7 +776,7 @@
                                             <asp:LinkButton ID="update" runat="server" OnClick="Update_Click" CommandArgument='<%# Eval("emp_id") %>'>
                                                 <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
                                             </asp:LinkButton>
-                                            <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("emp_id") %>' OnClientClick="return confirm('Are you sure you want to remove this account manager?');">
+                                            <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("emp_id") %>' OnClientClick="return confirm('Are you sure you want to remove this user?');">
                                                 <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
                                             </asp:LinkButton>
                                         </ItemTemplate>
@@ -832,14 +833,14 @@
 
                                     <asp:TemplateField HeaderText="Status">
                                         <ItemTemplate>
-                                            <asp:Button Style="font-size: 10px; color: orangered; font-weight: bold;" ID="btnUnsuspend" runat="server" Text='<%# Eval("emp_status") + " ▼"%>'
+                                            <asp:Button Style="font-size: 10px; font-weight: bold;" CssClass="btn btn-outline-danger" ID="btnUnsuspend" runat="server" Text='<%# Eval("emp_status") + " ▼"%>'
                                                 OnClick="Unsuspend_Click"
-                                                OnClientClick="return confirm('Are you sure you want to Unsuspend this account manager?');"
+                                                OnClientClick="return confirm('Are you sure you want to Unsuspend this user?');"
                                                 Visible='<%# Eval("emp_status").ToString() == "Suspend" %>' CommandArgument='<%# Eval("emp_id") %>' />
                                             <asp:Label ID="Label9" runat="server" Text='<%# Eval("emp_status")%>' Visible='<%# Eval("emp_status").ToString() == "Inactive" %>' />
-                                            <asp:Button Style="font-size: 10px; color: lawngreen; font-weight: bold;" ID="btnSuspend" runat="server" Text='<%# Eval("emp_status") + " ▲"%>'
+                                            <asp:Button Style="font-size: 10px; font-weight: bold;" CssClass="btn btn-outline-success" ID="btnSuspend" runat="server" Text='<%# Eval("emp_status") + " ▲"%>'
                                                 OnClick="Suspend_Click"
-                                                OnClientClick="return confirm('Are you sure you want to Suspend this account manager?');"
+                                                OnClientClick="return confirm('Are you sure you want to Suspend this user?');"
                                                 Visible='<%# Eval("emp_status").ToString() == "Active" %>' CommandArgument='<%# Eval("emp_id") %>' />
                                         </ItemTemplate>
                                     </asp:TemplateField>
@@ -849,7 +850,7 @@
                                             <asp:LinkButton ID="update" runat="server" OnClick="Update_Click" CommandArgument='<%# Eval("emp_id") %>'>
                                                 <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
                                             </asp:LinkButton>
-                                            <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("emp_id") %>' OnClientClick="return confirm('Are you sure you want to remove this account manager?');">
+                                            <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("emp_id") %>' OnClientClick="return confirm('Are you sure you want to remove this user?');">
                                                 <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
                                             </asp:LinkButton>
                                         </ItemTemplate>
@@ -907,14 +908,14 @@
 
                                     <asp:TemplateField HeaderText="Status">
                                         <ItemTemplate>
-                                            <asp:Button Style="font-size: 10px; color: orangered; font-weight: bold;" ID="btnUnsuspend" runat="server" Text='<%# Eval("emp_status") + " ▼"%>'
+                                            <asp:Button Style="font-size: 10px; font-weight: bold;" CssClass="btn btn-outline-danger" ID="btnUnsuspend" runat="server" Text='<%# Eval("emp_status") + " ▼"%>'
                                                 OnClick="Unsuspend_Click"
-                                                OnClientClick="return confirm('Are you sure you want to Unsuspend this account manager?');"
+                                                OnClientClick="return confirm('Are you sure you want to Unsuspend this user?');"
                                                 Visible='<%# Eval("emp_status").ToString() == "Suspend" %>' CommandArgument='<%# Eval("emp_id") %>' />
                                             <asp:Label ID="Label9" runat="server" Text='<%# Eval("emp_status")%>' Visible='<%# Eval("emp_status").ToString() == "Inactive" %>' />
-                                            <asp:Button Style="font-size: 10px; color: lawngreen; font-weight: bold;" ID="btnSuspend" runat="server" Text='<%# Eval("emp_status") + " ▲"%>'
+                                            <asp:Button Style="font-size: 10px; font-weight: bold;" CssClass="btn btn-outline-success" ID="btnSuspend" runat="server" Text='<%# Eval("emp_status") + " ▲"%>'
                                                 OnClick="Suspend_Click"
-                                                OnClientClick="return confirm('Are you sure you want to Suspend this account manager?');"
+                                                OnClientClick="return confirm('Are you sure you want to Suspend this user?');"
                                                 Visible='<%# Eval("emp_status").ToString() == "Active" %>' CommandArgument='<%# Eval("emp_id") %>' />
                                         </ItemTemplate>
                                     </asp:TemplateField>
@@ -924,7 +925,7 @@
                                             <asp:LinkButton ID="update" runat="server" OnClick="Update_Click" CommandArgument='<%# Eval("emp_id") %>'>
                                                 <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
                                             </asp:LinkButton>
-                                            <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("emp_id") %>' OnClientClick="return confirm('Are you sure you want to remove this account manager?');">
+                                            <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("emp_id") %>' OnClientClick="return confirm('Are you sure you want to remove this user?');">
                                                 <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
                                             </asp:LinkButton>
                                         </ItemTemplate>
@@ -983,14 +984,14 @@
 
                                     <asp:TemplateField HeaderText="Status">
                                         <ItemTemplate>
-                                            <asp:Button Style="font-size: 10px; color: orangered; font-weight: bold;" ID="btnUnsuspend" runat="server" Text='<%# Eval("emp_status") + " ▼"%>'
+                                            <asp:Button Style="font-size: 10px; font-weight: bold;" CssClass="btn btn-outline-danger" ID="btnUnsuspend" runat="server" Text='<%# Eval("emp_status") + " ▼"%>'
                                                 OnClick="Unsuspend_Click"
-                                                OnClientClick="return confirm('Are you sure you want to Unsuspend this account manager?');"
+                                                OnClientClick="return confirm('Are you sure you want to Unsuspend this user?');"
                                                 Visible='<%# Eval("emp_status").ToString() == "Suspend" %>' CommandArgument='<%# Eval("emp_id") %>' />
                                             <asp:Label ID="Label9" runat="server" Text='<%# Eval("emp_status")%>' Visible='<%# Eval("emp_status").ToString() == "Inactive" %>' />
-                                            <asp:Button Style="font-size: 10px; color: lawngreen; font-weight: bold;" ID="btnSuspend" runat="server" Text='<%# Eval("emp_status") + " ▲"%>'
+                                            <asp:Button Style="font-size: 10px; font-weight: bold;" CssClass="btn btn-outline-success" ID="btnSuspend" runat="server" Text='<%# Eval("emp_status") + " ▲"%>'
                                                 OnClick="Suspend_Click"
-                                                OnClientClick="return confirm('Are you sure you want to Suspend this account manager?');"
+                                                OnClientClick="return confirm('Are you sure you want to Suspend this user?');"
                                                 Visible='<%# Eval("emp_status").ToString() == "Active" %>' CommandArgument='<%# Eval("emp_id") %>' />
                                         </ItemTemplate>
                                     </asp:TemplateField>
@@ -1000,7 +1001,7 @@
                                             <asp:LinkButton ID="update" runat="server" OnClick="Update_Click" CommandArgument='<%# Eval("emp_id") %>'>
                                                 <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
                                             </asp:LinkButton>
-                                            <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("emp_id") %>' OnClientClick="return confirm('Are you sure you want to remove this account manager?');">
+                                            <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("emp_id") %>' OnClientClick="return confirm('Are you sure you want to remove this user?');">
                                                 <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
                                             </asp:LinkButton>
                                         </ItemTemplate>
@@ -1519,6 +1520,17 @@
                             const tab = document.querySelector(activeTab);
                             if (tab) {
                                 tab.click(); // Click the active tab to switch back
+                            }
+                        }
+                    });
+
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const activeTab = document.getElementById('<%= hfActiveTab.ClientID %>').value;
+                        if (activeTab) {
+                            const targetTab = document.querySelector(`button[data-bs-target="${activeTab}"]`);
+                            if (targetTab) {
+                                const bootstrapTab = new bootstrap.Tab(targetTab);
+                                bootstrapTab.show();
                             }
                         }
                     });

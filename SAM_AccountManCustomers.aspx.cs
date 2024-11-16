@@ -30,55 +30,56 @@ namespace Capstone
             {
                 //emp_role.Items.FindByValue(string.Empty).Attributes.Add("disabled", "disabled");
                 //LoadRoles();
-                ContractList();
-                //NonContractList();
+                CustomerList();
+                VerifyCustomerRequests();
                 LoadProfile();
                 //RequestsContractual();
+                hfActiveTab.Value = "#sam"; // Set Tab 1 as the default
             }
-            if (IsPostBack && Request["__EVENTTARGET"] == "btnDecline")
-            {
-                string[] args = Request["__EVENTARGUMENT"].Split('|');
-                if (args.Length == 2)
-                {
-                    int contId = Convert.ToInt32(args[0]);
-                    string declineReason = args[1];
+            //if (IsPostBack && Request["__EVENTTARGET"] == "btnDecline")
+            //{
+            //    string[] args = Request["__EVENTARGUMENT"].Split('|');
+            //    if (args.Length == 2)
+            //    {
+            //        int contId = Convert.ToInt32(args[0]);
+            //        string declineReason = args[1];
 
-                    DeclineContract(contId, declineReason);
-                }
-            }
+            //        //DeclineContract(contId, declineReason);
+            //    }
+            //}
         }
 
-        private void DeclineContract(int contId, string declineReason)
-        {
-            try
-            {
-                using (var db = new NpgsqlConnection(con))
-                {
-                    db.Open();
+        //private void DeclineContract(int contId, string declineReason)
+        //{
+        //    try
+        //    {
+        //        using (var db = new NpgsqlConnection(con))
+        //        {
+        //            db.Open();
 
-                    using (var cmd = db.CreateCommand())
-                    {
-                        // Update the contractual status to 'Declined' and insert the decline reason
-                        cmd.CommandText = "UPDATE contractual SET cont_status = 'Declined', cont_faileddesc = @declineReason WHERE cont_id = @id";
-                        cmd.Parameters.AddWithValue("@declineReason", declineReason);
-                        cmd.Parameters.AddWithValue("@id", contId);
-                        cmd.ExecuteNonQuery();
-                    }
-                    db.Close();
-                }
+        //            using (var cmd = db.CreateCommand())
+        //            {
+        //                // Update the contractual status to 'Declined' and insert the decline reason
+        //                cmd.CommandText = "UPDATE contractual SET cont_status = 'Declined', cont_faileddesc = @declineReason WHERE cont_id = @id";
+        //                cmd.Parameters.AddWithValue("@declineReason", declineReason);
+        //                cmd.Parameters.AddWithValue("@id", contId);
+        //                cmd.ExecuteNonQuery();
+        //            }
+        //            db.Close();
+        //        }
 
-                // Re-bind lists if necessary
-                //RequestsContractual();
+        //        // Re-bind lists if necessary
+        //        //RequestsContractual();
 
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-                    "swal('Success!', 'Contract declined!', 'success')", true);
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-                    "swal('Unsuccessful!', '" + ex.Message + "', 'error')", true);
-            }
-        }
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
+        //            "swal('Success!', 'Contract declined!', 'success')", true);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
+        //            "swal('Unsuccessful!', '" + ex.Message + "', 'error')", true);
+        //    }
+        //}
 
 
 
@@ -274,7 +275,10 @@ namespace Capstone
                                     cmd.Parameters.Clear(); // Clear previous parameters again
                                     cmd.Parameters.AddWithValue("@cusId", (int)cusId);
                                     cmd.ExecuteNonQuery();
+                                    hfActiveTab.Value = "#am"; // Set tab am as active
+
                                 }
+                                hfActiveTab.Value = "#am"; // Set tab am as active
 
                                 // Commit the transaction
                                 transaction.Commit();
@@ -283,7 +287,7 @@ namespace Capstone
                                     "swal('Success!', 'Contract accepted and customer type updated!', 'success')", true);
 
                                 // Re-bind lists if necessary
-                                ContractList();
+                                CustomerList();
                                 //NonContractList();
                                 //RequestsContractual();
                             }
@@ -309,45 +313,201 @@ namespace Capstone
         }
 
 
+        //protected void Reject_Click(object sender, EventArgs e)
+        //{
+        //    // Retrieve the vc_id and cus_id from the hidden fields
+        //    int vcId = Convert.ToInt32(hide_vcID.Value);
+        //    int cusId = Convert.ToInt32(hide_cusID.Value);
+        //    string declineReason = Request.Form["declineReason"]; // Get the value from the textarea
 
-        protected void Decline_Click(object sender, EventArgs e)
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+
+        //        // Start a transaction to ensure data consistency
+        //        using (var transaction = db.BeginTransaction())
+        //        {
+        //            try
+        //            {
+        //                // Update vc_status to 'Rejected' in the verified_customer table
+        //                using (var cmd = db.CreateCommand())
+        //                {
+        //                    cmd.CommandType = CommandType.Text;
+        //                    cmd.CommandText = @"
+        //                UPDATE verified_customer 
+        //                SET vc_status = 'Rejected' 
+        //                WHERE vc_id = @vcId;";
+        //                    cmd.Parameters.AddWithValue("@vcId", vcId);
+        //                    cmd.Transaction = transaction;
+        //                    cmd.ExecuteNonQuery();
+        //                }
+
+        //                //// Optionally, set cus_isverified to false in the customer table (if needed)
+        //                //using (var cmd = db.CreateCommand())
+        //                //{
+        //                //    cmd.CommandType = CommandType.Text;
+        //                //    cmd.CommandText = @"
+        //                //UPDATE customer 
+        //                //SET cus_isverified = false 
+        //                //WHERE cus_id = @cusId;";
+        //                //    cmd.Parameters.AddWithValue("@cusId", cusId);
+        //                //    cmd.Transaction = transaction;
+        //                //    cmd.ExecuteNonQuery();
+        //                //}
+
+        //                // Commit the transaction
+        //                transaction.Commit();
+        //            }
+        //            catch
+        //            {
+        //                // Rollback the transaction in case of an error
+        //                transaction.Rollback();
+        //                throw; // Optionally, log the error or handle it as needed
+        //            }
+        //        }
+
+        //        db.Close();
+        //    }
+
+        //    // Refresh the grid view to reflect the changes
+        //    VerifyCustomerRequests();
+        //}
+        protected void Reject_Click(object sender, EventArgs e)
         {
-            LinkButton btn = (LinkButton)sender;
-            int contId = Convert.ToInt32(btn.CommandArgument);
+            // Retrieve vc_id and cus_id from hidden fields
+            int vcId = Convert.ToInt32(hide_vcID.Value);
+            int cusId = Convert.ToInt32(hide_cusID.Value);
+            hfActiveTab.Value = "#am"; // Set tab am as active
 
-            try
+            // Retrieve the decline reason directly from the textarea control
+            //string declineReason = Request.Form["declineReason"]; // Get the value from the textarea
+            string declineReason = declineReasons.Text;
+            using (var db = new NpgsqlConnection(con))
             {
-                using (var db = new NpgsqlConnection(con))
+                db.Open();
+
+                // Start a transaction to ensure data consistency
+                using (var transaction = db.BeginTransaction())
                 {
-                    db.Open();
-                    using (var cmd = db.CreateCommand())
+                    try
                     {
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = "UPDATE contractual SET cont_status = 'Declined' WHERE cont_id = @id";
-                        cmd.Parameters.AddWithValue("@id", contId);
-
-                        var ctr = cmd.ExecuteNonQuery();
-                        if (ctr >= 1)
+                        // Update vc_status to 'Rejected' and set vc_reason in the verified_customer table
+                        using (var cmd = db.CreateCommand())
                         {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-                                "swal('Suspended!', 'Account Manager Suspended Successfully!', 'success')", true);
-                            ContractList();
-                            //NonContractList();
-                            //RequestsContractual();
+                            cmd.CommandType = CommandType.Text;
+                            cmd.CommandText = @"
+                        UPDATE verified_customer 
+                        SET vc_status = 'Rejected', vc_reason = @declineReason 
+                        WHERE vc_id = @vcId;";
+                            cmd.Parameters.AddWithValue("@vcId", vcId);
+                            cmd.Parameters.AddWithValue("@declineReason", declineReason);
+                            cmd.Transaction = transaction;
+                            cmd.ExecuteNonQuery();
+                            declineReason = "";
+                            VerifyCustomerRequests();
+                            hfActiveTab.Value = "#am"; // Set tab am as active
                         }
+
+                        // Commit the transaction
+                        transaction.Commit();
                     }
-                    db.Close();
+                    catch
+                    {
+                        declineReason = "";
+
+                        // Rollback the transaction in case of an error
+                        transaction.Rollback();
+                        throw; // Optionally, log the error or handle it as needed
+                    }
                 }
+
+                db.Close();
             }
-            catch (Exception ex)
+            hfActiveTab.Value = "#am"; // Set tab am as active
+
+            // Refresh the grid view to reflect the changes
+            VerifyCustomerRequests();
+        }
+
+        //protected void VerificationDetails_Click(object sender, EventArgs e)
+        //{
+        //    // Retrieve vc_id from the hidden field
+        //    int vcId = Convert.ToInt32(HiddenField1.Value);
+
+        //    hfActiveTab.Value = "#am"; // Set tab am as active
+
+        //    // Create a connection to the database and fetch the cus_id for the given vcId
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+
+        //        // Select the cus_id from verified_customer based on the vc_id
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            cmd.CommandText = @"
+        //        SELECT c.cus_id
+        //        FROM verified_customer vc
+        //        INNER JOIN customer c ON c.cus_id = vc.cus_id
+        //        WHERE vc.vc_id = @vcId;
+        //    ";
+        //            cmd.Parameters.AddWithValue("@vcId", vcId);
+
+        //            // Execute the query and get the cus_id
+        //            int cusId = Convert.ToInt32(cmd.ExecuteScalar());
+
+        //            // Set the cus_id in TextBox1
+        //            //TextBox1.Text = cusId.ToString();
+        //            //TextBox1.Text = HiddenField1.Value;
+        //            TextBox1.Text = "hdshf";
+
+        //        }
+
+        //        db.Close();
+        //    }
+
+        //    // Refresh the grid view to reflect the changes
+        //    VerifyCustomerRequests();
+        //}
+        protected void VerificationDetails_Click(object sender, EventArgs e)
+        {
+            // Retrieve vc_id from the hidden field
+            int vcId = Convert.ToInt32(HiddenField1.Value);
+
+            using (var db = new NpgsqlConnection(con))
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-                    "swal('Unsuccessful!', '" + ex.Message + "', 'error')", true);
+                db.Open();
+
+                using (var cmd = db.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = @"
+                SELECT c.cus_id
+                FROM verified_customer vc
+                INNER JOIN customer c ON c.cus_id = vc.cus_id
+                WHERE vc.vc_id = @vcId;
+            ";
+                    cmd.Parameters.AddWithValue("@vcId", vcId);
+
+                    object result = cmd.ExecuteScalar();
+                    if (result != null)
+                    {
+                        TextBox1.Text = result.ToString();
+                    }
+                    else
+                    {
+                        TextBox1.Text = "No data found";
+                    }
+                }
+
+                db.Close();
             }
         }
 
 
-        protected void ContractList()
+
+
+        protected void CustomerList()
         {
             using (var db = new NpgsqlConnection(con))
             {
@@ -372,10 +532,155 @@ namespace Capstone
             }
         }
 
+        //protected void VerifyCustomerRequests()
+        //{
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            cmd.CommandText = @"
+        //        SELECT 
+        //            vc.vc_status, 
+        //            vc.vc_id, 
+        //            c.cus_contact, 
+        //            vc.vc_created_at, 
+        //            CONCAT(c.cus_fname, ' ', COALESCE(c.cus_mname || ' ', ''), c.cus_lname) AS full_name, 
+        //            c.cus_id
+        //        FROM 
+        //            customer c
+        //        LEFT JOIN 
+        //            verified_customer vc
+        //        ON 
+        //            c.cus_id = vc.cus_id
+        //        WHERE 
+        //            c.cus_status != 'Deleted' 
+        //            AND c.cus_isverified = false
+        //        ORDER BY 
+        //            c.cus_id, c.cus_status;
+        //    ";
+
+        //            DataTable admin_datatable = new DataTable();
+        //            NpgsqlDataAdapter admin_sda = new NpgsqlDataAdapter(cmd);
+        //            admin_sda.Fill(admin_datatable);
+
+        //            gridView2.DataSource = admin_datatable;
+        //            gridView2.DataBind();
+        //        }
+        //        db.Close();
+        //    }
+        //}
+        protected void VerifyCustomerRequests()
+        {
+            using (var db = new NpgsqlConnection(con))
+            {
+                db.Open();
+                using (var cmd = db.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = @"
+                SELECT 
+                    vc.vc_status, 
+                    vc.vc_id, 
+                    c.cus_contact, 
+                    vc.vc_created_at, 
+                    CONCAT(c.cus_fname, ' ', COALESCE(c.cus_mname || ' ', ''), c.cus_lname) AS full_name, 
+                    c.cus_id
+                FROM 
+                    customer c
+                INNER JOIN 
+                    verified_customer vc
+                ON 
+                    c.cus_id = vc.cus_id
+                WHERE 
+                    c.cus_status != 'Deleted' 
+                    AND c.cus_isverified = false
+                    AND vc.vc_status = 'Pending'
+                ORDER BY 
+                    c.cus_id, c.cus_status;
+            ";
+
+                    DataTable admin_datatable = new DataTable();
+                    NpgsqlDataAdapter admin_sda = new NpgsqlDataAdapter(cmd);
+                    admin_sda.Fill(admin_datatable);
+
+                    gridView2.DataSource = admin_datatable;
+                    gridView2.DataBind();
+                }
+                db.Close();
+            }
+        }
 
 
+        protected void Approve_Click(object sender, EventArgs e)
+        {
+            LinkButton btnApprove = (LinkButton)sender;
+            int vcId = Convert.ToInt32(btnApprove.CommandArgument);
 
-        //protected void NonContractList()
+            using (var db = new NpgsqlConnection(con))
+            {
+                db.Open();
+
+                // Start a transaction to ensure data consistency
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+                        // Update vc_status to 'Approved' in the verified_customer table
+                        using (var cmd = db.CreateCommand())
+                        {
+                            cmd.CommandType = CommandType.Text;
+                            cmd.CommandText = @"
+                        UPDATE verified_customer 
+                        SET vc_status = 'Approved' 
+                        WHERE vc_id = @vcId;";
+                            cmd.Parameters.AddWithValue("@vcId", vcId);
+                            cmd.Transaction = transaction;
+                            cmd.ExecuteNonQuery();
+                            VerifyCustomerRequests();
+
+                        }
+
+                        // Set cus_isverified to true in the customer table
+                        using (var cmd = db.CreateCommand())
+                        {
+                            cmd.CommandType = CommandType.Text;
+                            cmd.CommandText = @"
+                        UPDATE customer 
+                        SET cus_isverified = TRUE 
+                        WHERE cus_id = (
+                            SELECT cus_id 
+                            FROM verified_customer 
+                            WHERE vc_id = @vcId
+                        );";
+                            cmd.Parameters.AddWithValue("@vcId", vcId);
+                            cmd.Transaction = transaction;
+                            cmd.ExecuteNonQuery();
+                            VerifyCustomerRequests();
+
+                        }
+
+                        // Commit the transaction
+                        transaction.Commit();
+                    }
+                    catch
+                    {
+                        // Rollback the transaction in case of an error
+                        transaction.Rollback();
+                        throw; // Optionally, log the error or handle it as needed
+                    }
+                }
+
+                db.Close();
+            }
+
+            // Refresh the grid view to reflect the changes
+            VerifyCustomerRequests();
+        }
+
+
+        //protected void VerifyCustomerRequests()
         //{
         //    using (var db = new NpgsqlConnection(con))
         //    {
@@ -1193,7 +1498,7 @@ namespace Capstone
                                 {
                                     Send_Email(originalEmail, subject, body);
                                 }
-                                ContractList();
+                                CustomerList();
                                 ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
                                 "Swal.fire({ icon: 'success', title: 'Customer Update Success', text: 'Customer information updated successfully!', background: '#e9f7ef', confirmButtonColor: '#28a745' });", true);
                             }
@@ -1206,7 +1511,7 @@ namespace Capstone
                     }
                     else
                     {
-                        ContractList();
+                        CustomerList();
                         ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
                         "Swal.fire({ icon: 'info', title: 'No Changes Detected', text: 'No changes detected in the customer information.', background: '#e9ecef', confirmButtonColor: '#6c757d' });", true);
                     }
@@ -1468,7 +1773,8 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                         {
                             // Success: Customer added
                             Response.Write("<script>alert('Customer Added!')</script>");
-                            ContractList();  // Reload or update the list of Customers
+                            CustomerList();  // Reload or update the list of Customers
+
                             Send_Email(toAddress, subject, body);  // Optionally send a welcome email
                         }
                         else
@@ -1710,7 +2016,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
             this.ModalPopupExtender2.Show();  // Show the modal popup
 
             // Optionally refresh the account manager list after the modal popup
-            ContractList();
+            CustomerList();
             //NonContractList();
         }
 
@@ -1745,7 +2051,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                                 txtContact.Text = reader["emp_contact"].ToString();
                                 txtEmail.Text = reader["emp_email"].ToString();
 
-                                ContractList();
+                                CustomerList();
                                 //NonContractList();
                             }
                             else
@@ -1759,7 +2065,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
 
                     db.Close();
                 }
-                ContractList();
+                CustomerList();
                 //NonContractList();
             }
             catch (Exception ex)
@@ -1792,7 +2098,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                         {
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
                                 "swal('Suspended!', 'Account Manager Suspended Successfully!', 'success')", true);
-                            ContractList();
+                            CustomerList();
                             //NonContractList();
                         }
                     }
@@ -1830,7 +2136,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                         {
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
                                 "swal('Unsuspended!', 'Account Manager Unsuspended Successfully!', 'success')", true);
-                            ContractList();
+                            CustomerList();
                         }
                     }
                     db.Close();
@@ -1879,7 +2185,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                         {
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
                                 "swal('Account Removed!', 'Account Manager Account Removed Successfully!', 'success')", true);
-                            ContractList();
+                            CustomerList();
                             //NonContractList();
                         }
                     }

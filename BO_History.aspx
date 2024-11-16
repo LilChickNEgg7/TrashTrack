@@ -571,13 +571,13 @@
                     <asp:HiddenField ID="hfActiveTab" runat="server" />
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link" id="tab1-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="false">Booking History</a>
+                            <a class="nav-link" id="tab1-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="false" style="color: #061f0d;" >Booking History</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="tab2-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">Billing History</a>
+                            <a class="nav-link" id="tab2-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false" style="color: #061f0d;" >Billing History</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="tab3-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false">Payment History</a>
+                            <a class="nav-link" id="tab3-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false" style="color: #061f0d;">Payment History</a>
                         </li>
                     </ul>
 

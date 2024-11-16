@@ -9,7 +9,7 @@ namespace Capstone
     public partial class Login : System.Web.UI.Page
     {
         ////string connString = "Host=localhost;Port=5432;Password=123456;Database="PBC_CAPS";
-        private readonly string con = "Server=localhost;Port=5432;User Id=postgres;Password=123456;Database=trashtrack";
+        private readonly string con = "Server=localhost;Port=5432;User Id=postgres;Password=123456;Database=trashtrack"; 
 
         protected void Page_Load(object sender, EventArgs e)
         {

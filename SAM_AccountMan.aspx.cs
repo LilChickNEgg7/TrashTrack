@@ -39,6 +39,7 @@ namespace Capstone
                 LoadProfile();
                 LoadChangeRoles();
                 ClearFormFields();
+                hfActiveTab.Value = "#sam"; // Set Tab 1 as the default
             }
 
         }
@@ -2393,6 +2394,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
         {
             LinkButton btn = sender as LinkButton;
             int id = Convert.ToInt32(btn.CommandArgument); // Get the employee ID from the button's CommandArgument
+            hfActiveTab.Value = "#bo"; // Set tab am as active
 
             try
             {
@@ -2442,6 +2444,28 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
 
                                 // Set the selected role in the dropdown based on the role_id
                                 int roleId = Convert.ToInt32(reader["role_id"]);
+                                if (roleId == 1)
+                                {
+                                    hfActiveTab.Value = "#am"; // Set tab am as active
+                                }
+                                else if (roleId == 2)
+                                {
+                                    hfActiveTab.Value = "#sam"; // Set tab am as active
+                                }
+                                else if (roleId == 3)
+                                {
+                                    hfActiveTab.Value = "#bo"; // Set tab am as active
+                                }
+                                else if (roleId == 4)
+                                {
+                                    hfActiveTab.Value = "#hauler"; // Set tab am as active
+                                }
+                                else if (roleId == 5)
+                                {
+                                    hfActiveTab.Value = "#od"; // Set tab am as active
+                                }
+
+
                                 if (roleId > 0)
                                 {
                                     promoteddl.SelectedValue = roleId.ToString(); // Set the selected value to the user's role
@@ -2553,7 +2577,26 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                         {
                             cmd.CommandText = "SELECT role_id FROM employee WHERE emp_id = @id";
                             int roleId = (int)cmd.ExecuteScalar();
-
+                            if (roleId == 1)
+                            {
+                                hfActiveTab.Value = "#am"; // Set tab am as active
+                            }
+                            else if (roleId == 2)
+                            {
+                                hfActiveTab.Value = "#sam"; // Set tab am as active
+                            }
+                            else if (roleId == 3)
+                            {
+                                hfActiveTab.Value = "#bo"; // Set tab am as active
+                            }
+                            else if (roleId == 4)
+                            {
+                                hfActiveTab.Value = "#hauler"; // Set tab am as active
+                            }
+                            else if (roleId == 5)
+                            {
+                                hfActiveTab.Value = "#od"; // Set tab am as active
+                            }
                             cmd.CommandText = "SELECT role_name FROM roles WHERE role_id = @roleId";
                             cmd.Parameters.Clear();
                             cmd.Parameters.AddWithValue("@roleId", roleId);
@@ -2611,7 +2654,26 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                         {
                             cmd.CommandText = "SELECT role_id FROM employee WHERE emp_id = @id";
                             int roleId = (int)cmd.ExecuteScalar();
-
+                            if (roleId == 1)
+                            {
+                                hfActiveTab.Value = "#am"; // Set tab am as active
+                            }
+                            else if (roleId == 2)
+                            {
+                                hfActiveTab.Value = "#sam"; // Set tab am as active
+                            }
+                            else if (roleId == 3)
+                            {
+                                hfActiveTab.Value = "#bo"; // Set tab am as active
+                            }
+                            else if (roleId == 4)
+                            {
+                                hfActiveTab.Value = "#hauler"; // Set tab am as active
+                            }
+                            else if (roleId == 5)
+                            {
+                                hfActiveTab.Value = "#od"; // Set tab am as active
+                            }
                             cmd.CommandText = "SELECT role_name FROM roles WHERE role_id = @roleId";
                             cmd.Parameters.Clear();
                             cmd.Parameters.AddWithValue("@roleId", roleId);
@@ -2679,7 +2741,26 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                         {
                             cmd.CommandText = "SELECT role_id FROM employee WHERE emp_id = @id";
                             int roleId = (int)cmd.ExecuteScalar();
-
+                            if (roleId == 1)
+                            {
+                                hfActiveTab.Value = "#am"; // Set tab am as active
+                            }
+                            else if (roleId == 2)
+                            {
+                                hfActiveTab.Value = "#sam"; // Set tab am as active
+                            }
+                            else if (roleId == 3)
+                            {
+                                hfActiveTab.Value = "#bo"; // Set tab am as active
+                            }
+                            else if (roleId == 4)
+                            {
+                                hfActiveTab.Value = "#hauler"; // Set tab am as active
+                            }
+                            else if (roleId == 5)
+                            {
+                                hfActiveTab.Value = "#od"; // Set tab am as active
+                            }
                             cmd.CommandText = "SELECT role_name FROM roles WHERE role_id = @roleId";
                             cmd.Parameters.Clear();
                             cmd.Parameters.AddWithValue("@roleId", roleId);

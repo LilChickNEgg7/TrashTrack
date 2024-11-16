@@ -133,8 +133,7 @@ namespace Capstone
                     // Query to fetch booking data from the database
                     cmd.CommandText = @"
                 SELECT bk_id, bk_date, bk_status, bk_province, bk_city, bk_brgy, bk_street, bk_postal
-                FROM booking WHERE bk_status != 'Completed'
-                ORDER BY bk_id, bk_date";  // Sorting by date for recent bookings
+                FROM booking ORDER BY bk_id, bk_date";  // Sorting by date for recent bookings
 
                     // Execute the query and bind the results to the GridView
                     DataTable bookingsDataTable = new DataTable();
@@ -182,7 +181,7 @@ namespace Capstone
                 {
                     cmd.CommandType = CommandType.Text;
                     // Query to fetch booking data from the database
-                    cmd.CommandText = @"SELECT * FROM payment WHERE p_status = 'paid'";  // Sorting by date for recent bookings
+                    cmd.CommandText = @"SELECT * FROM payment";  // Sorting by date for recent bookings
                     // Execute the query and bind the results to the GridView
                     DataTable bookingsDataTable = new DataTable();
                     NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);

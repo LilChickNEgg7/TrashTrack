@@ -115,10 +115,7 @@
             border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
-        /*.card {
-        max-height: 90vh;*/ /* Keep it from extending past the viewport */
-        /*overflow-y: auto;*/ /* Enable vertical scrolling if needed */
-        /*}*/
+ 
 
         /*SCROLLABLE PANEL*/
         .scrollable-content {
@@ -127,20 +124,6 @@
             padding-right: 10px; /* Optional: to prevent overflow text from hiding under the scrollbar */
         }
         /*END SCROLLABLE PANEL*/
-
-
-
-        /* Animation for modal */
-        /*.animate-modal {
-            opacity: 0;
-            transform: scale(0.95);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-
-        .modal.show .animate-modal {
-            opacity: 1;
-            transform: scale(1);
-        }*/
 
         /* Styling for Close Buttons */
         .btn-close {
@@ -512,18 +495,6 @@
                         </a>
                     </li>
 
-                    <%--<li class="nav-item">
-                        <a class="nav-link collapsed" data-bs-target="#receipt-nav" data-bs-toggle="collapse" href="#">
-                            <i class="ri-secure-payment-line"></i><span>Payment</span><i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <ul id="receipt-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                            <li>
-                                <a href="BO_ViewHistory.aspx">
-                                    <i class="bi bi-circle"></i><span>View Payments</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>--%>
                     <!-- End Transaction Nav -->
                 </ul>
             </aside>
@@ -1461,28 +1432,27 @@
             link.click();
             document.body.removeChild(link);
         }
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            // Set the active tab based on the value in the hidden field.
-            var activeTab = $("#<%= hfActiveTab.ClientID %>").val();
-                        if (activeTab) {
-                            $('#myTab a[href="' + activeTab + '"]').tab('show');
-                        }
+    
+                    $(document).ready(function () {
+                        // Set the active tab based on the value in the hidden field.
+                        var activeTab = $("#<%= hfActiveTab.ClientID %>").val();
+            if (activeTab) {
+                $('#myTab a[href="' + activeTab + '"]').tab('show');
+            }
 
-                        // Store the active tab in the hidden field whenever a tab is shown.
-                        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                            var activeTab = $(e.target).attr("href");
-                            $("#<%= hfActiveTab.ClientID %>").val(activeTab);
+            // Store the active tab in the hidden field whenever a tab is shown.
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var activeTab = $(e.target).attr("href");
+                $("#<%= hfActiveTab.ClientID %>").val(activeTab);
                         });
-                    });
+        });
 
 
                 </script>
-    <script src="https://code.jquery.com/jquery-3.5.2.min.js"></script>
+                <script src="https://code.jquery.com/jquery-3.5.2.min.js"></script>
 
 
-    <!-- TAB SCRIPTS-->
+                <!-- TAB SCRIPTS-->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
