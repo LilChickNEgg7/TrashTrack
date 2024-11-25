@@ -1143,7 +1143,7 @@
                                             </div>
                                         </div>
                                         <!-- Middle Initial (Optional) -->
-                                        <div class="col-3 mb-3">
+                                        <div class="col-6 mb-3">
                                             <div class="input-group input-group-sm mb-3" style="color: #1C5E55">
                                                 <span class="input-group-text" style="padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">M.I</span>
                                                 <asp:TextBox ID="txtmi" runat="server" CssClass="form-control" ClientIDMode="Static" Style="border-bottom-right-radius: 5px; border-top-right-radius: 5px" MaxLength="1" onkeypress="return isLetter(event)"></asp:TextBox>
@@ -1153,8 +1153,8 @@
                                         </div>
 
                                         <!-- Lastname -->
-                                        <div class="col-9 mb-3">
-                                            <div class="input-group input-group-sm">
+                                        <div class="col-12 mb-3">
+                                            <div class="input-group input-group-sm mb-3">
                                                 <span class="input-group-text" style="padding: 10px; color: darkblue; font-weight: 700">Lastname</span>
                                                 <asp:TextBox ID="txtLastname" runat="server" CssClass="form-control" Style="border-bottom-right-radius: 5px; border-top-right-radius: 5px" ClientIDMode="Static" onkeyup="validateUpdateLastname()"></asp:TextBox>
                                                 <div class="valid-feedback">Looks good!</div>
@@ -1164,8 +1164,8 @@
 
                                         <!-- Contact -->
                                         <div class="col-12 mb-3">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text" style="padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Contact #.</span>
+                                            <div class="input-group input-group-sm mb-3">
+                                                <span class="input-group-text" style="width: 100px; padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Contact #.</span>
                                                 <asp:TextBox ID="txtContact" runat="server" CssClass="form-control" Style="border-bottom-right-radius: 5px; border-top-right-radius: 5px" ClientIDMode="Static" onkeyup="validateUpdateContact()"></asp:TextBox>
                                                 <div class="valid-feedback">Looks good!</div>
                                                 <div class="invalid-feedback">Please provide a valid Philippines contact number (e.g., 09XXXXXXXXX).</div>
@@ -1174,8 +1174,8 @@
 
                                     <!-- Dropdown (Role) -->
                                     <div class="col-12 mb-3">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-text" style="padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Role</span>
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" style="width: 100px; padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Role</span>
                                             <asp:DropDownList ID="promoteddl" class="form-select" Style="border-bottom-right-radius: 5px; border-top-right-radius: 5px" aria-label="Default select example" runat="server" onChange="validateRole()">
                                             </asp:DropDownList>
                                             <div class="invalid-feedback">Please select a role.</div>
@@ -1185,8 +1185,8 @@
 
                                     <!-- Email -->
                                     <div class="col-12 mb-3">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-text" style="padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Email</span>
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" style="width: 100px; padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Email</span>
                                             <asp:TextBox ID="txtEmail" runat="server" Style="border-bottom-right-radius: 5px; border-top-right-radius: 5px" CssClass="form-control" ClientIDMode="Static" onkeyup="validateUpdateEmail()"></asp:TextBox>
                                             <div class="valid-feedback">Looks good!</div>
                                             <div class="invalid-feedback">Please provide a valid email address.</div>
@@ -1194,7 +1194,7 @@
                                     </div>
                                     <!-- Password -->
                                     <div class="col-12 mb-3">
-                                        <div class="input-group input-group-sm">
+                                        <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" style="padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Password</span>                                            
                                                 <asp:Button
                                                     ID="btnResetPass"

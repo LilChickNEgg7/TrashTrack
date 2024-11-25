@@ -228,14 +228,13 @@
                                     <asp:Label ID="lblOTPMessage" runat="server" Text="" ForeColor="Red" Font-Bold="True"></asp:Label>
                                 </div>
                                 <div class="text-center">
-                                    <asp:Button ID="Button2" CssClass="btn btn-primary" runat="server" Text="Submit" OnClick="VerifyOTP" />
+                                    <asp:Button ID="Button2" CssClass="btn btn-primary" runat="server" Text="Submit" OnClick="VerifyOTP" Enabled="false"/>
                                 </div>
                                 <br />
                                 <br />
                                 <br />
                                 <div class="custom-floating">
                                     <div class="col-12 mb-3">
-
                                         <asp:TextBox ID="changetxt" runat="server" class="form-control" TextMode="Password"
                                             Style="background-color: #031c02; border-color: #005c3b; border-radius: 30px; border-width: 3px; color: white;"
                                             placeholder=" " aria-describedby="" Enabled="False" oninput="compareTextboxes()"></asp:TextBox>

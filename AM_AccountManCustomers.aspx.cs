@@ -1410,28 +1410,15 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
 
         public static void Send_Email(string toAddress, string subject, string body)
         {
-            //SmtpClient smtpClient = new SmtpClient("smtp.gmail.com");
-            //smtpClient.UseDefaultCredentials = false;
-            //smtpClient.Credentials = new NetworkCredential("fjunevincent369@gmail.com", "lgkw alyq ntyv mefw");
-            //smtpClient.EnableSsl = true;
-            //smtpClient.Port = 587;
 
-            //MailMessage mailMessage = new MailMessage();
-            //mailMessage.From = new MailAddress("fjunevincent369@gmail.com");
-            //mailMessage.To.Add(toAddress);
-            //mailMessage.Subject = subject;
-            //mailMessage.Body = body;
-            //mailMessage.IsBodyHtml = false;
-
-            //smtpClient.Send(mailMessage);
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com");
             smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new NetworkCredential("fjunevincent369@gmail.com", "lgkw alyq ntyv mefw");
+            smtpClient.Credentials = new NetworkCredential("official.trashtrack@gmail.com", "oojn qqna nkxb gmby");
             smtpClient.EnableSsl = true;
             smtpClient.Port = 587;
 
             MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress("fjunevincent369@gmail.com");
+            mailMessage.From = new MailAddress("official.trashtrack@gmail.com");
             mailMessage.To.Add(toAddress);
             mailMessage.Subject = subject;
             mailMessage.Body = body;

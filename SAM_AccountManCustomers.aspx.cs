@@ -24,8 +24,10 @@ namespace Capstone
     {
         // Database Connection String
         private readonly string con = "Server=localhost;Port=5432;User Id=postgres;Password=123456;Database=trashtrack";
+        
         protected void Page_Load(object sender, EventArgs e)
         {
+
             if (!IsPostBack)
             {
                 //emp_role.Items.FindByValue(string.Empty).Attributes.Add("disabled", "disabled");
@@ -80,74 +82,6 @@ namespace Capstone
         //            "swal('Unsuccessful!', '" + ex.Message + "', 'error')", true);
         //    }
         //}
-
-
-
-        protected void gridView3_RowDataBound(object sender, GridViewRowEventArgs e)
-        {
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                // Use the cont_id from the first cell (adjust as necessary)
-                string contId = e.Row.Cells[0].Text;
-                e.Row.Attributes["onclick"] = $"openModal('{contId}');"; // Set onclick to open the modal
-                e.Row.Attributes["style"] = "cursor: pointer;"; // Change cursor to pointer for better UX
-            }
-        }
-
-        //private void LoadRoles()
-        //{
-        //    using (NpgsqlConnection conn = new NpgsqlConnection(con))
-        //    {
-        //        string query = "SELECT role_id, role_name FROM roles ORDER BY role_id";
-        //        NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
-
-        //        try
-        //        {
-        //            conn.Open();
-        //            NpgsqlDataAdapter da = new NpgsqlDataAdapter(cmd);
-        //            DataTable dt = new DataTable();
-        //            da.Fill(dt);
-
-        //            emp_role.DataSource = dt;
-        //            emp_role.DataTextField = "role_name";
-        //            emp_role.DataValueField = "role_id";
-        //            emp_role.DataBind();
-
-        //            // Clear existing items and add the default "Select Role" option at the top
-        //            emp_role.Items.Clear();
-        //            ListItem selectRoleItem = new ListItem("--Select Role--", "0");
-        //            selectRoleItem.Attributes.Add("disabled", "true"); // Disable the item
-        //            selectRoleItem.Attributes.Add("selected", "true"); // Set as selected
-        //            emp_role.Items.Add(selectRoleItem);
-        //            emp_role.Items.AddRange(dt.AsEnumerable().Select(row => new ListItem(row["role_name"].ToString(), row["role_id"].ToString())).ToArray());
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            // Handle exception (logging, showing a message, etc.)
-        //        }
-        //    }
-        //}
-
-
-
-        // Function to retrieve data from PostgreSQL
-        private DataTable GetAccountManagers()
-        {
-            DataTable dt = new DataTable();
-            using (NpgsqlConnection conn = new NpgsqlConnection(con))
-            {
-                conn.Open();
-                string query = "SELECT emp_id, emp_fname, emp_mname, emp_lname, emp_contact, emp_email, emp_created_at, emp_updated_at, emp_status FROM employee";
-                using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
-                {
-                    using (NpgsqlDataAdapter da = new NpgsqlDataAdapter(cmd))
-                    {
-                        da.Fill(dt);
-                    }
-                }
-            }
-            return dt;
-        }
 
         private void LoadProfile()
         {
@@ -238,6 +172,74 @@ namespace Capstone
             }
         }
 
+        protected void gridView3_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                // Use the cont_id from the first cell (adjust as necessary)
+                string contId = e.Row.Cells[0].Text;
+                e.Row.Attributes["onclick"] = $"openModal('{contId}');"; // Set onclick to open the modal
+                e.Row.Attributes["style"] = "cursor: pointer;"; // Change cursor to pointer for better UX
+            }
+        }
+
+        //private void LoadRoles()
+        //{
+        //    using (NpgsqlConnection conn = new NpgsqlConnection(con))
+        //    {
+        //        string query = "SELECT role_id, role_name FROM roles ORDER BY role_id";
+        //        NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
+
+        //        try
+        //        {
+        //            conn.Open();
+        //            NpgsqlDataAdapter da = new NpgsqlDataAdapter(cmd);
+        //            DataTable dt = new DataTable();
+        //            da.Fill(dt);
+
+        //            emp_role.DataSource = dt;
+        //            emp_role.DataTextField = "role_name";
+        //            emp_role.DataValueField = "role_id";
+        //            emp_role.DataBind();
+
+        //            // Clear existing items and add the default "Select Role" option at the top
+        //            emp_role.Items.Clear();
+        //            ListItem selectRoleItem = new ListItem("--Select Role--", "0");
+        //            selectRoleItem.Attributes.Add("disabled", "true"); // Disable the item
+        //            selectRoleItem.Attributes.Add("selected", "true"); // Set as selected
+        //            emp_role.Items.Add(selectRoleItem);
+        //            emp_role.Items.AddRange(dt.AsEnumerable().Select(row => new ListItem(row["role_name"].ToString(), row["role_id"].ToString())).ToArray());
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            // Handle exception (logging, showing a message, etc.)
+        //        }
+        //    }
+        //}
+
+
+
+        // Function to retrieve data from PostgreSQL
+        private DataTable GetAccountManagers()
+        {
+            DataTable dt = new DataTable();
+            using (NpgsqlConnection conn = new NpgsqlConnection(con))
+            {
+                conn.Open();
+                string query = "SELECT emp_id, emp_fname, emp_mname, emp_lname, emp_contact, emp_email, emp_created_at, emp_updated_at, emp_status FROM employee";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+                {
+                    using (NpgsqlDataAdapter da = new NpgsqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+            }
+            return dt;
+        }
+
+        
+
 
         protected void Accept_Click(object sender, EventArgs e)
         {
@@ -275,10 +277,10 @@ namespace Capstone
                                     cmd.Parameters.Clear(); // Clear previous parameters again
                                     cmd.Parameters.AddWithValue("@cusId", (int)cusId);
                                     cmd.ExecuteNonQuery();
-                                    hfActiveTab.Value = "#am"; // Set tab am as active
+                                    //hfActiveTab.Value = "#am"; // Set tab am as active
 
                                 }
-                                hfActiveTab.Value = "#am"; // Set tab am as active
+                                //hfActiveTab.Value = "#am"; // Set tab am as active
 
                                 // Commit the transaction
                                 transaction.Commit();
@@ -372,16 +374,93 @@ namespace Capstone
         //    // Refresh the grid view to reflect the changes
         //    VerifyCustomerRequests();
         //}
+
+        //Original Reject_Click
+        //protected void Reject_Click(object sender, EventArgs e)
+        //{
+        //    //string vcId = hide_vcID.Value;
+        //    //string cusId = hide_cusID.Value;
+
+        //    // Output values for testing (in the response)
+        //    //Response.Write("<script>alert('Customer ID: " + cusId + " Verification ID: " + vcId + "');</script>");
+        //    // Retrieve vc_id and cus_id from hidden fields
+        //    int vcId = Convert.ToInt32(hide_vcID.Value);
+        //    int cusId = Convert.ToInt32(hide_cusID.Value);
+        //    hfActiveTab.Value = "#am"; // Set tab am as active
+
+        //    // Retrieve the decline reason directly from the textarea control
+        //    //string declineReason = Request.Form["declineReason"]; // Get the value from the textarea
+        //    string declineReason = declineReasons.Text;
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+
+        //        // Start a transaction to ensure data consistency
+        //        using (var transaction = db.BeginTransaction())
+        //        {
+        //            try
+        //            {
+        //                // Update vc_status to 'Rejected' and set vc_reason in the verified_customer table
+        //                using (var cmd = db.CreateCommand())
+        //                {
+        //                    cmd.CommandType = CommandType.Text;
+        //                    cmd.CommandText = @"
+        //                UPDATE verified_customer 
+        //                SET vc_status = 'Rejected', vc_reason = @declineReason 
+        //                WHERE vc_id = @vcId;";
+        //                    cmd.Parameters.AddWithValue("@vcId", vcId);
+        //                    cmd.Parameters.AddWithValue("@declineReason", declineReason);
+        //                    cmd.Transaction = transaction;
+        //                    cmd.ExecuteNonQuery();
+        //                    declineReason = "";
+        //                    //VerifyCustomerRequests();
+        //                    CustomerList();
+        //                    hfActiveTab.Value = "#am"; // Set tab am as active
+        //                }
+
+        //                // Commit the transaction
+        //                transaction.Commit();
+        //            }
+        //            catch
+        //            {
+        //                declineReason = "";
+
+        //                // Rollback the transaction in case of an error
+        //                transaction.Rollback();
+        //                throw; // Optionally, log the error or handle it as needed
+        //            }
+        //        }
+
+        //        db.Close();
+        //    }
+        //    hfActiveTab.Value = "#am"; // Set tab am as active
+
+        //    // Refresh the grid view to reflect the changes
+        //    //VerifyCustomerRequests();
+        //    CustomerList();
+        //}
+
         protected void Reject_Click(object sender, EventArgs e)
         {
-            // Retrieve vc_id and cus_id from hidden fields
             int vcId = Convert.ToInt32(hide_vcID.Value);
             int cusId = Convert.ToInt32(hide_cusID.Value);
-            hfActiveTab.Value = "#am"; // Set tab am as active
+            //hfActiveTab.Value = "#am"; // Set tab am as active
 
-            // Retrieve the decline reason directly from the textarea control
-            //string declineReason = Request.Form["declineReason"]; // Get the value from the textarea
-            string declineReason = declineReasons.Text;
+            int adminId = 1011;
+            //int adminId = (int)Session["am_id"];  // Retrieve admin ID from session
+            string roleName = (string)Session["am_rolename"];
+
+
+            string declineReason = declineReasons.Text; // Retrieve decline reason
+
+            if (string.IsNullOrWhiteSpace(declineReason))
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "swal",
+                           "Swal.fire({title: 'Error!', text: 'Please provide a reason for the rejection.', icon: 'error', confirmButtonColor: '#3085d6'});", true);
+                return; // Stop further execution
+            }
+
+
             using (var db = new NpgsqlConnection(con))
             {
                 db.Open();
@@ -397,37 +476,47 @@ namespace Capstone
                             cmd.CommandType = CommandType.Text;
                             cmd.CommandText = @"
                         UPDATE verified_customer 
-                        SET vc_status = 'Rejected', vc_reason = @declineReason 
+                        SET vc_status = 'Rejected', vc_reason = @declineReason, emp_id = @empid
                         WHERE vc_id = @vcId;";
                             cmd.Parameters.AddWithValue("@vcId", vcId);
                             cmd.Parameters.AddWithValue("@declineReason", declineReason);
+                            cmd.Parameters.AddWithValue("@empid", adminId);
                             cmd.Transaction = transaction;
                             cmd.ExecuteNonQuery();
-                            declineReason = "";
-                            VerifyCustomerRequests();
-                            hfActiveTab.Value = "#am"; // Set tab am as active
                         }
 
                         // Commit the transaction
                         transaction.Commit();
-                    }
-                    catch
-                    {
-                        declineReason = "";
 
+                        // Show success message using SweetAlert
+                        ClientScript.RegisterStartupScript(this.GetType(), "swal",
+                            "Swal.fire({title: 'Success!', text: 'Customer rejected successfully.', icon: 'success', confirmButtonColor: '#3085d6'});", true);
+                    }
+                    catch (Exception ex)
+                    {
                         // Rollback the transaction in case of an error
                         transaction.Rollback();
-                        throw; // Optionally, log the error or handle it as needed
+
+                        // Show error message using SweetAlert
+                        ClientScript.RegisterStartupScript(this.GetType(), "swal",
+                            $"Swal.fire({{title: 'Error!', text: 'Failed to reject customer. {ex.Message}', icon: 'error', confirmButtonColor: '#d33'}});", true);
+
+                        throw; // Optionally rethrow the error after showing the alert
                     }
                 }
 
                 db.Close();
             }
-            hfActiveTab.Value = "#am"; // Set tab am as active
+
+            /* hfActiveTab.Value = "#am";*/ // Set tab am as active
 
             // Refresh the grid view to reflect the changes
-            VerifyCustomerRequests();
+            CustomerList();
         }
+
+
+
+
 
         //protected void VerificationDetails_Click(object sender, EventArgs e)
         //{
@@ -469,43 +558,58 @@ namespace Capstone
         //    // Refresh the grid view to reflect the changes
         //    VerifyCustomerRequests();
         //}
-        protected void VerificationDetails_Click(object sender, EventArgs e)
-        {
-            // Retrieve vc_id from the hidden field
-            int vcId = Convert.ToInt32(HiddenField1.Value);
-
-            using (var db = new NpgsqlConnection(con))
-            {
-                db.Open();
-
-                using (var cmd = db.CreateCommand())
-                {
-                    cmd.CommandType = CommandType.Text;
-                    cmd.CommandText = @"
-                SELECT c.cus_id
-                FROM verified_customer vc
-                INNER JOIN customer c ON c.cus_id = vc.cus_id
-                WHERE vc.vc_id = @vcId;
-            ";
-                    cmd.Parameters.AddWithValue("@vcId", vcId);
-
-                    object result = cmd.ExecuteScalar();
-                    if (result != null)
-                    {
-                        TextBox1.Text = result.ToString();
-                    }
-                    else
-                    {
-                        TextBox1.Text = "No data found";
-                    }
-                }
-
-                db.Close();
-            }
-        }
 
 
+        //ORIGINAL CustomerList()
+        //protected void CustomerList()
+        //{
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            // Modified the query to match the column names in the account_manager table
+        //            cmd.CommandText = "SELECT * FROM customer WHERE cus_status != 'Deleted' ORDER BY cus_id, cus_status";
 
+        //            // Ensure the parameter type is correct (assuming emp_id is an integer)
+        //            //cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, Convert.ToInt32(Session["id"]));
+
+        //            // Execute the query and bind to the GridView
+        //            DataTable admin_datatable = new DataTable();
+        //            NpgsqlDataAdapter admin_sda = new NpgsqlDataAdapter(cmd);
+        //            admin_sda.Fill(admin_datatable);
+
+        //            gridView1.DataSource = admin_datatable;
+        //            gridView1.DataBind();
+        //        }
+        //    }
+        //}
+
+        //protected void CustomerList()
+        //{
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            // Modified the query to match the column names in the account_manager table
+        //            cmd.CommandText = "SELECT * FROM customer WHERE cus_status != 'Deleted' ORDER BY cus_id, cus_status";
+
+        //            // Ensure the parameter type is correct (assuming emp_id is an integer)
+        //            //cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, Convert.ToInt32(Session["id"]));
+
+        //            // Execute the query and bind to the GridView
+        //            DataTable admin_datatable = new DataTable();
+        //            NpgsqlDataAdapter admin_sda = new NpgsqlDataAdapter(cmd);
+        //            admin_sda.Fill(admin_datatable);
+
+        //            gridView1.DataSource = admin_datatable;
+        //            gridView1.DataBind();
+        //        }
+        //    }
+        //}
 
         protected void CustomerList()
         {
@@ -515,13 +619,66 @@ namespace Capstone
                 using (var cmd = db.CreateCommand())
                 {
                     cmd.CommandType = CommandType.Text;
-                    // Modified the query to match the column names in the account_manager table
-                    cmd.CommandText = "SELECT * FROM customer WHERE cus_status != 'Deleted' ORDER BY cus_id, cus_status";
+                    cmd.CommandText = @"
+                        SELECT 
+                        c.cus_id,
+                        c.cus_isverified,
+                        CONCAT(c.cus_fname, 
+                               CASE 
+                                   WHEN c.cus_mname IS NOT NULL AND c.cus_mname <> '' THEN CONCAT(' ', c.cus_mname) 
+                                   ELSE '' 
+                               END, 
+                               ' ', c.cus_lname) AS FullName,
+                        vc.vc_id,
+                        vc.vc_status,
+                        c.cus_status,
+                        CASE 
+                            WHEN vc.vc_valid_id IS NOT NULL THEN 'Yes' 
+                            ELSE 'No' 
+                        END AS valid_id_uploaded,
+                        CASE 
+                            WHEN vc.vc_selfie IS NOT NULL THEN 'Yes' 
+                            ELSE 'No' 
+                        END AS selfie_uploaded
+                    FROM 
+                        customer c
+                    LEFT JOIN 
+                        verified_customer vc ON c.cus_id = vc.cus_id
+                    WHERE 
+                        c.cus_status != 'Deleted'
+                    ORDER BY 
+                        c.cus_id, c.cus_status;
 
-                    // Ensure the parameter type is correct (assuming emp_id is an integer)
-                    //cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, Convert.ToInt32(Session["id"]));
+                    ";
 
-                    // Execute the query and bind to the GridView
+
+
+                    //Original
+                    //        cmd.CommandText = @"
+                    //    SELECT 
+                    //        c.cus_id,
+                    //        c.cus_isverified,
+                    //        c.cus_status,
+                    //        CONCAT(c.cus_fname, 
+                    //               CASE 
+                    //                   WHEN c.cus_mname IS NOT NULL AND c.cus_mname <> '' THEN CONCAT(' ', c.cus_mname) 
+                    //                   ELSE '' 
+                    //               END, 
+                    //               ' ', c.cus_lname) AS FullName,
+                    //        vc.vc_id,
+                    //        vc.vc_status,
+                    //        vc.vc_valid_id,
+                    //        vc.vc_selfie
+                    //    FROM 
+                    //        customer c
+                    //    LEFT JOIN 
+                    //        verified_customer vc ON c.cus_id = vc.cus_id
+                    //    WHERE 
+                    //        c.cus_status != 'Deleted'
+                    //    ORDER BY 
+                    //        c.cus_id, c.cus_status;
+                    //";
+
                     DataTable admin_datatable = new DataTable();
                     NpgsqlDataAdapter admin_sda = new NpgsqlDataAdapter(cmd);
                     admin_sda.Fill(admin_datatable);
@@ -531,6 +688,9 @@ namespace Capstone
                 }
             }
         }
+
+
+
 
         //protected void VerifyCustomerRequests()
         //{
@@ -612,11 +772,86 @@ namespace Capstone
             }
         }
 
+        //Original Approve_Click
+        //protected void Approve_Click(object sender, EventArgs e)
+        //{
+        //    LinkButton btnApprove = (LinkButton)sender;
+        //    int vcId = Convert.ToInt32(btnApprove.CommandArgument);
+
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+
+        //        // Start a transaction to ensure data consistency
+        //        using (var transaction = db.BeginTransaction())
+        //        {
+        //            try
+        //            {
+
+        //                // Update vc_status to 'Approved' in the verified_customer table
+        //                using (var cmd = db.CreateCommand())
+        //                {
+        //                    cmd.CommandType = CommandType.Text;
+        //                    cmd.CommandText = @"
+        //                UPDATE verified_customer 
+        //                SET vc_status = 'Approved' 
+        //                WHERE vc_id = @vcId;";
+        //                    cmd.Parameters.AddWithValue("@vcId", vcId);
+        //                    cmd.Transaction = transaction;
+        //                    cmd.ExecuteNonQuery();
+        //                    //VerifyCustomerRequests();
+        //                    CustomerList();
+
+        //                }
+
+        //                // Set cus_isverified to true in the customer table
+        //                using (var cmd = db.CreateCommand())
+        //                {
+        //                    cmd.CommandType = CommandType.Text;
+        //                    cmd.CommandText = @"
+        //                UPDATE customer 
+        //                SET cus_isverified = TRUE 
+        //                WHERE cus_id = (
+        //                    SELECT cus_id 
+        //                    FROM verified_customer 
+        //                    WHERE vc_id = @vcId
+        //                );";
+        //                    cmd.Parameters.AddWithValue("@vcId", vcId);
+        //                    cmd.Transaction = transaction;
+        //                    cmd.ExecuteNonQuery();
+        //                    //VerifyCustomerRequests();
+        //                    CustomerList();
+
+        //                }
+
+        //                // Commit the transaction
+        //                transaction.Commit();
+        //            }
+        //            catch
+        //            {
+        //                // Rollback the transaction in case of an error
+        //                transaction.Rollback();
+        //                throw; // Optionally, log the error or handle it as needed
+        //            }
+        //        }
+
+        //        db.Close();
+        //    }
+
+        //    // Refresh the grid view to reflect the changes
+        //    //VerifyCustomerRequests();
+        //    CustomerList();
+        //}
+
 
         protected void Approve_Click(object sender, EventArgs e)
         {
             LinkButton btnApprove = (LinkButton)sender;
             int vcId = Convert.ToInt32(btnApprove.CommandArgument);
+
+            int adminId = 1011;
+            /*int adminId = (int)Session["sam_id"];*/  // Retrieve admin ID from session
+            string roleName = (string)Session["sam_rolename"];
 
             using (var db = new NpgsqlConnection(con))
             {
@@ -627,19 +862,56 @@ namespace Capstone
                 {
                     try
                     {
+                        // Check if the valid_id_pic and valid_selfie are null
+                        bool isValidPicNull = false;
+                        bool isSelfiePicNull = false;
+
+                        // Execute the SELECT query to check for nulls in vc_valid_id and vc_selfie
+                        using (var checkCmd = db.CreateCommand())
+                        {
+                            checkCmd.CommandType = CommandType.Text;
+                            checkCmd.CommandText = @"
+                        SELECT vc_valid_id, vc_selfie 
+                        FROM verified_customer 
+                        WHERE vc_id = @vcId";
+                            checkCmd.Parameters.AddWithValue("@vcId", vcId);
+                            checkCmd.Transaction = transaction;
+
+                            using (var reader = checkCmd.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    // Check if valid_id_pic or selfie_pic are null
+                                    isValidPicNull = reader["vc_valid_id"] == DBNull.Value;
+                                    isSelfiePicNull = reader["vc_selfie"] == DBNull.Value;
+                                }
+                            }
+                        }
+
+                        // If either picture is null, show an alert and stop execution
+                        if (isValidPicNull || isSelfiePicNull)
+                        {
+                            ClientScript.RegisterStartupScript(this.GetType(), "swal",
+                                "Swal.fire({title: 'Error!', text: 'Both valid ID and selfie picture must be provided before approval.', icon: 'error', confirmButtonColor: '#d33'});", true);
+
+                            transaction.Rollback(); // Rollback the transaction
+                            return; // Stop further execution
+                        }
+
+                        // Proceed with approval if both pictures are not null
                         // Update vc_status to 'Approved' in the verified_customer table
                         using (var cmd = db.CreateCommand())
                         {
                             cmd.CommandType = CommandType.Text;
                             cmd.CommandText = @"
                         UPDATE verified_customer 
-                        SET vc_status = 'Approved' 
+                        SET vc_status = 'Approved',
+                            emp_id = @empid
                         WHERE vc_id = @vcId;";
+                            cmd.Parameters.AddWithValue("@empid", adminId);
                             cmd.Parameters.AddWithValue("@vcId", vcId);
                             cmd.Transaction = transaction;
                             cmd.ExecuteNonQuery();
-                            VerifyCustomerRequests();
-
                         }
 
                         // Set cus_isverified to true in the customer table
@@ -657,18 +929,25 @@ namespace Capstone
                             cmd.Parameters.AddWithValue("@vcId", vcId);
                             cmd.Transaction = transaction;
                             cmd.ExecuteNonQuery();
-                            VerifyCustomerRequests();
-
                         }
 
                         // Commit the transaction
                         transaction.Commit();
+
+                        // Show success message using SweetAlert
+                        ClientScript.RegisterStartupScript(this.GetType(), "swal",
+                            "Swal.fire({title: 'Success!', text: 'Customer successfully approved and verified!', icon: 'success', confirmButtonColor: '#3085d6'});", true);
                     }
-                    catch
+                    catch (Exception ex)
                     {
                         // Rollback the transaction in case of an error
                         transaction.Rollback();
-                        throw; // Optionally, log the error or handle it as needed
+
+                        // Show error message using SweetAlert
+                        ClientScript.RegisterStartupScript(this.GetType(), "swal",
+                            $"Swal.fire({{title: 'Error!', text: 'An error occurred: {ex.Message}', icon: 'error', confirmButtonColor: '#d33'}});", true);
+
+                        throw; // Optionally rethrow the error after showing the alert
                     }
                 }
 
@@ -676,8 +955,9 @@ namespace Capstone
             }
 
             // Refresh the grid view to reflect the changes
-            VerifyCustomerRequests();
+            CustomerList();
         }
+
 
 
         //protected void VerifyCustomerRequests()
@@ -1851,28 +2131,15 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
 
         public static void Send_Email(string toAddress, string subject, string body)
         {
-            //SmtpClient smtpClient = new SmtpClient("smtp.gmail.com");
-            //smtpClient.UseDefaultCredentials = false;
-            //smtpClient.Credentials = new NetworkCredential("fjunevincent369@gmail.com", "lgkw alyq ntyv mefw");
-            //smtpClient.EnableSsl = true;
-            //smtpClient.Port = 587;
-
-            //MailMessage mailMessage = new MailMessage();
-            //mailMessage.From = new MailAddress("fjunevincent369@gmail.com");
-            //mailMessage.To.Add(toAddress);
-            //mailMessage.Subject = subject;
-            //mailMessage.Body = body;
-            //mailMessage.IsBodyHtml = false;
-
-            //smtpClient.Send(mailMessage);
+            
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com");
             smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new NetworkCredential("fjunevincent369@gmail.com", "lgkw alyq ntyv mefw");
+            smtpClient.Credentials = new NetworkCredential("official.trashtrack@gmail.com", "oojn qqna nkxb gmby");
             smtpClient.EnableSsl = true;
             smtpClient.Port = 587;
 
             MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress("fjunevincent369@gmail.com");
+            mailMessage.From = new MailAddress("official.trashtrack@gmail.com");
             mailMessage.To.Add(toAddress);
             mailMessage.Subject = subject;
             mailMessage.Body = body;
@@ -1929,11 +2196,104 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
 
 
         //IMODIFY PALANG
+        //protected void Update_Click(object sender, EventArgs e)
+        //{
+        //    LinkButton btn = sender as LinkButton;
+        //    int id = Convert.ToInt32(btn.CommandArgument);  // Get the admin ID from the button's CommandArgument
+        //    //byte[] imageData = null;  // To hold the profile image data
+
+        //    try
+        //    {
+        //        // Connect to PostgreSQL
+        //        using (var db = new NpgsqlConnection(con))
+        //        {
+        //            db.Open();
+
+        //            // Define the SQL query to get the admin details based on the admin ID (acc_id)
+        //            string query = @"
+        //        SELECT cus_fname, cus_mname, cus_lname, cus_contact, cus_email, cus_profile 
+        //        FROM customer 
+        //        WHERE cus_id = @acc_id";
+
+        //            using (var cmd = new NpgsqlCommand(query, db))
+        //            {
+        //                cmd.Parameters.AddWithValue("@acc_id", id);
+
+        //                // Execute the query
+        //                using (var reader = cmd.ExecuteReader())
+        //                {
+        //                    if (reader.Read()) // Check if data is available for the given admin ID
+        //                    {
+        //                        // Assign the data to the respective textboxes
+        //                        txtbfirstname.Text = reader["cus_fname"].ToString();
+        //                        txtmi.Text = reader["cus_mname"].ToString();
+        //                        txtLastname.Text = reader["cus_lname"].ToString();
+        //                        txtContact.Text = reader["cus_contact"].ToString();
+        //                        txtEmail.Text = reader["cus_email"].ToString();
+        //                        byte[] imageData = reader["cus_profile"] as byte[];  // Retrieve profile image data (byte array)
+
+        //                        // Display profile image in the preview control
+        //                        if (imagePreviewUpdate != null)
+        //                        {
+        //                            if (imageData != null && imageData.Length > 0)
+        //                            {
+        //                                try
+        //                                {
+        //                                    string base64String = Convert.ToBase64String(imageData);
+        //                                    imagePreviewUpdate.ImageUrl = "data:image/jpeg;base64," + base64String;  // Set image as base64 string
+        //                                }
+        //                                catch (Exception ex)
+        //                                {
+        //                                    Response.Write("<script>alert('Error converting image to Base64: " + ex.Message + "')</script>");
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+        //                                imagePreviewUpdate.ImageUrl = "~/Pictures/blank_prof.png";  // Default image if no profile picture found
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            Response.Write("<script>alert('Image preview control is not found');</script>");
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        // Handle case when no data is found for the given admin ID
+        //                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
+        //                            "swal('Unsuccessful!', 'Admin not found.', 'error')", true);
+        //                        return; // Exit if no data is found
+        //                    }
+        //                }
+        //            }
+
+        //            db.Close();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle any errors
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
+        //            "swal('Unsuccessful!', '" + ex.Message + "', 'error')", true);
+        //        return; // Exit if there was an error
+        //    }
+
+        //    // Set the ID textbox and show the modal popup
+        //    txtbxID.Text = id.ToString();
+        //    this.ModalPopupExtender2.Show();  // Show the modal popup
+
+        //    // Optionally refresh the account manager list after the modal popup
+        //    CustomerList();
+        //    //NonContractList();
+        //}
+
+
+
+
         protected void Update_Click(object sender, EventArgs e)
         {
             LinkButton btn = sender as LinkButton;
-            int id = Convert.ToInt32(btn.CommandArgument);  // Get the admin ID from the button's CommandArgument
-            //byte[] imageData = null;  // To hold the profile image data
+            int id = Convert.ToInt32(btn.CommandArgument); // Get the customer ID from the button's CommandArgument
 
             try
             {
@@ -1942,83 +2302,117 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                 {
                     db.Open();
 
-                    // Define the SQL query to get the admin details based on the admin ID (acc_id)
+                    // SQL query to join customer and verified_customer tables
                     string query = @"
-                SELECT cus_fname, cus_mname, cus_lname, cus_contact, cus_email, cus_profile 
-                FROM customer 
-                WHERE cus_id = @acc_id";
+    SELECT 
+        c.cus_fname, c.cus_mname, c.cus_lname, c.cus_contact, c.cus_email, c.cus_profile, 
+        vc.vc_valid_id, vc.vc_selfie, vc.vc_status, c.cus_status
+    FROM 
+        customer c
+    LEFT JOIN 
+        verified_customer vc ON c.cus_id = vc.cus_id
+    WHERE 
+        c.cus_id = @cus_id";
 
                     using (var cmd = new NpgsqlCommand(query, db))
                     {
-                        cmd.Parameters.AddWithValue("@acc_id", id);
+                        cmd.Parameters.AddWithValue("@cus_id", id);
 
                         // Execute the query
                         using (var reader = cmd.ExecuteReader())
                         {
-                            if (reader.Read()) // Check if data is available for the given admin ID
+                            if (reader.Read())
                             {
-                                // Assign the data to the respective textboxes
+                                // Populate customer details
                                 txtbfirstname.Text = reader["cus_fname"].ToString();
                                 txtmi.Text = reader["cus_mname"].ToString();
                                 txtLastname.Text = reader["cus_lname"].ToString();
                                 txtContact.Text = reader["cus_contact"].ToString();
                                 txtEmail.Text = reader["cus_email"].ToString();
-                                byte[] imageData = reader["cus_profile"] as byte[];  // Retrieve profile image data (byte array)
 
-                                // Display profile image in the preview control
-                                if (imagePreviewUpdate != null)
+                                // Display profile image
+                                byte[] profileImage = reader["cus_profile"] as byte[];
+                                if (profileImage != null && profileImage.Length > 0)
                                 {
-                                    if (imageData != null && imageData.Length > 0)
-                                    {
-                                        try
-                                        {
-                                            string base64String = Convert.ToBase64String(imageData);
-                                            imagePreviewUpdate.ImageUrl = "data:image/jpeg;base64," + base64String;  // Set image as base64 string
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            Response.Write("<script>alert('Error converting image to Base64: " + ex.Message + "')</script>");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        imagePreviewUpdate.ImageUrl = "~/Pictures/blank_prof.png";  // Default image if no profile picture found
-                                    }
+                                    string profileBase64 = Convert.ToBase64String(profileImage);
+                                    imagePreviewUpdate.ImageUrl = "data:image/jpeg;base64," + profileBase64;
                                 }
                                 else
                                 {
-                                    Response.Write("<script>alert('Image preview control is not found');</script>");
+                                    imagePreviewUpdate.ImageUrl = "~/Pictures/blank_prof.png";
                                 }
+
+                                // Display Valid ID Image
+                                byte[] validIdImage = reader["vc_valid_id"] as byte[];
+                                if (validIdImage != null && validIdImage.Length > 0)
+                                {
+                                    string validIdBase64 = Convert.ToBase64String(validIdImage);
+                                    valid_id.ImageUrl = "data:image/jpeg;base64," + validIdBase64;
+                                }
+                                else
+                                {
+                                    valid_id.ImageUrl = "~/Pictures/blank_prof.png"; // Default image
+                                }
+
+                                // Display Selfie Image
+                                byte[] selfieImage = reader["vc_selfie"] as byte[];
+                                if (selfieImage != null && selfieImage.Length > 0)
+                                {
+                                    string selfieBase64 = Convert.ToBase64String(selfieImage);
+                                    valid_selfie.ImageUrl = "data:image/jpeg;base64," + selfieBase64;
+                                }
+                                else
+                                {
+                                    valid_selfie.ImageUrl = "~/Pictures/blank_prof.png"; // Default image
+                                }
+
+                                // Check cus_status and enable/disable the Update button
+                                string customerStatus = reader["cus_status"].ToString();
+                                btnUpdate.Enabled = customerStatus == "Active";
+
+                                // Get the vc_status
+                                //string vcStatus = reader["vc_status"].ToString();
+
+                                //// Disable btnVerify and btnReject if vc_status is "Active" or "Rejected"
+                                //if (vcStatus == "Approved" || vcStatus == "Rejected")
+                                //{
+                                //    btnVerify.Enabled = false;
+                                //    btnReject.Enabled = false;
+                                //}
+                                //else
+                                //{
+                                //    btnVerify.Enabled = true;
+                                //    btnReject.Enabled = true;
+                                //}
+
                             }
                             else
                             {
-                                // Handle case when no data is found for the given admin ID
+                                // Handle case when no data is found
                                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-                                    "swal('Unsuccessful!', 'Admin not found.', 'error')", true);
-                                return; // Exit if no data is found
+                                    "swal('Unsuccessful!', 'Customer not found.', 'error')", true);
+                                return;
                             }
                         }
                     }
-
                     db.Close();
                 }
             }
             catch (Exception ex)
             {
-                // Handle any errors
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
                     "swal('Unsuccessful!', '" + ex.Message + "', 'error')", true);
-                return; // Exit if there was an error
+                return;
             }
 
-            // Set the ID textbox and show the modal popup
+            // Show the modal popup
             txtbxID.Text = id.ToString();
-            this.ModalPopupExtender2.Show();  // Show the modal popup
+            this.ModalPopupExtender2.Show();
 
-            // Optionally refresh the account manager list after the modal popup
-            CustomerList();
-            //NonContractList();
+            // Refresh the account manager list (if needed)
+            //ContractList();
         }
+
 
 
 
@@ -2200,6 +2594,645 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
             }
         }
 
+
+
+
+        //protected void VerificationDetails_Click(object sender, EventArgs e)
+
+        //{
+        //    // Retrieve vc_id from the hidden field
+        //    int vcId = Convert.ToInt32(HiddenField1.Value);
+
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            cmd.CommandText = @"
+        //        SELECT c.cus_id
+        //        FROM verified_customer vc
+        //        INNER JOIN customer c ON c.cus_id = vc.cus_id
+        //        WHERE vc.vc_id = @vcId;
+        //    ";
+        //            cmd.Parameters.AddWithValue("@vcId", vcId);
+
+        //            object result = cmd.ExecuteScalar();
+        //            if (result != null)
+        //            {
+        //                TextBox1.Text = result.ToString();
+        //            }
+        //            else
+        //            {
+        //                TextBox1.Text = "No data found";
+        //            }
+        //        }
+
+        //        db.Close();
+        //    }
+        //}
+
+
+        //protected void VerificationDetails_Click(object sender, EventArgs e)
+
+        //{
+        //    //LinkButton linkButton = sender as LinkButton;
+
+        //    //int vcId = Convert.ToInt32(linkButton.CommandArgument);
+        //    //int cusId = vcId;
+
+        //    ////Response.Write("<script>alert('Verified ID: "+vcId+" and Customer ID: "+cusId+"');</script>");
+        //    ////Response.Write("<script>alert('vcId: " + vcId + "');</script>");
+
+        //    ////using (var db = new NpgsqlConnection(con))
+        //    ////{
+        //    ////    db.Open();
+        //    ////    using(var cmd = db.CreateCommand())
+        //    ////    {
+        //    ////        cmd.CommandType = CommandType.Text;
+        //    ////        cmd.CommandText = "SELECT VC_ID, CUS_ID FROM verified_customer WHERE VC_ID = @vcid";
+        //    ////        cmd.Parameters.AddWithValue("@vcid", vcId);
+
+        //    ////        using(var reader = cmd.ExecuteReader())
+        //    ////        {
+        //    ////            if (reader.Read())
+        //    ////            {
+        //    ////                txtVerificationID.Text = reader["vc_id"].ToString();
+        //    ////                //txtContactDetail.Text = reader["cus_contact"].ToString();
+        //    ////                txtCustomerID.Text = reader["cus_id"].ToString();
+        //    ////            }
+        //    ////        }
+        //    ////    }
+        //    ////}
+
+
+        //    //////Show modal popup
+        //    ////ModalPopupExtenderDetails.Show();
+        //    ///
+        //    try
+        //    {
+        //        // Retrieve the LinkButton
+        //        LinkButton linkButton = sender as LinkButton;
+
+        //        if (linkButton == null || string.IsNullOrEmpty(linkButton.CommandArgument))
+        //            throw new Exception("CommandArgument is missing.");
+
+        //        // Parse the CommandArgument
+        //        int vcId = Convert.ToInt32(linkButton.CommandArgument);
+
+        //        // Debug CommandArgument value
+        //        //Response.Write("<script>alert('vcId: " + vcId + "');</script>");
+
+        //        using (var db = new NpgsqlConnection(con))
+        //        {
+        //            db.Open();
+        //            using (var cmd = db.CreateCommand())
+        //            {
+        //                cmd.CommandType = CommandType.Text;
+        //                cmd.CommandText = "SELECT VC_ID, CUS_ID FROM verified_customer WHERE VC_ID = @vcid";
+        //                cmd.Parameters.AddWithValue("@vcid", vcId);
+
+        //                using (var reader = cmd.ExecuteReader())
+        //                {
+        //                    if (reader.Read())
+        //                    {
+        //                        txtVerificationID.Text = reader["vc_id"].ToString();
+        //                        txtCustomerID.Text = reader["cus_id"].ToString();
+        //                    }
+        //                    else
+        //                    {
+        //                        // Debug no records found
+        //                        Response.Write("<script>alert('No records found for vcId: " + vcId + "');</script>");
+        //                    }
+        //                }
+        //            }
+        //        }
+
+        //        // Show modal popup
+        //        ModalPopupExtenderDetails.Show();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle errors
+        //        Response.Write("<script>alert('Error: " + ex.Message + "');</script>");
+        //    }
+
+
+        //}
+
+        //protected void VerificationDetails_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        // Get the clicked button and extract the CommandArgument
+        //        LinkButton linkButton = sender as LinkButton;
+
+        //        if (linkButton == null || string.IsNullOrEmpty(linkButton.CommandArgument))
+        //            throw new Exception("CommandArgument is missing.");
+
+        //        int vcId = Convert.ToInt32(linkButton.CommandArgument);
+
+        //        // Initialize variables to store the database values
+        //        string verificationID = string.Empty;
+        //        string customerID = string.Empty;
+        //        string contactDetail = string.Empty;
+
+        //        // Database connection and data retrieval
+        //        using (var db = new NpgsqlConnection(con))
+        //        {
+        //            db.Open();
+        //            using (var cmd = db.CreateCommand())
+        //            {
+        //                cmd.CommandType = CommandType.Text;
+        //                cmd.CommandText = "SELECT VC_ID, CUS_ID, CUS_CONTACT FROM verified_customer WHERE VC_ID = @vcid";
+        //                cmd.Parameters.AddWithValue("@vcid", vcId);
+
+        //                using (var reader = cmd.ExecuteReader())
+        //                {
+        //                    if (reader.Read())
+        //                    {
+        //                        verificationID = reader["vc_id"].ToString();
+        //                        customerID = reader["cus_id"].ToString();
+        //                        contactDetail = reader["cus_contact"].ToString();
+        //                    }
+        //                }
+        //            }
+        //        }
+
+        //        // Populate the modal's TextBox controls
+        //        txtVerificationID.Text = verificationID;
+        //        txtCustomerID.Text = customerID;
+        //        txtContactDetail.Text = contactDetail;
+
+        //        // Show the modal using JavaScript (this prevents a page reload)
+        //        string script = "var modal = new bootstrap.Modal(document.getElementById('fullscreenModal')); modal.show();";
+        //        ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Display error message (optional)
+        //        Response.Write("<script>alert('Error: " + ex.Message + "');</script>");
+        //    }
+        //}
+
+        protected void valid_idbtndownload_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtbxID.Text))
+            {
+                Response.Write("<script>alert('Please enter a valid ID.');</script>");
+                return;
+            }
+
+            int customerId = Convert.ToInt32(txtbxID.Text);
+            byte[] imageData = null;
+            string customerName = null;
+
+            using (var db = new NpgsqlConnection(con))
+            {
+                db.Open();
+
+                // Query to get the valid ID and customer name
+                string query = @"
+            SELECT vc_valid_id, CONCAT(cus_fname, '_', COALESCE(cus_mname, ''), '_', cus_lname) AS full_name
+            FROM verified_customer vc
+            JOIN customer c ON vc.cus_id = c.cus_id
+            WHERE vc.cus_id = @id";
+
+                using (var cmd = new NpgsqlCommand(query, db))
+                {
+                    cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, customerId);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            imageData = reader["vc_valid_id"] as byte[];
+                            customerName = reader["full_name"]?.ToString().Replace(" ", "_");
+                        }
+                        else
+                        {
+                            Response.Write("<script>alert('No data found for the specified ID.');</script>");
+                            return;
+                        }
+                    }
+                }
+            }
+
+            if (imageData != null && imageData.Length > 0)
+            {
+                string base64String = Convert.ToBase64String(imageData);
+                string imageUrl = $"data:image/jpeg;base64,{base64String}";
+                string filename = $"{customerName}_VALID_ID_{customerId}.jpg"; // Dynamic filename based on customer details
+
+                string downloadScript = $"downloadImage('{imageUrl}', '{filename}');";
+                ScriptManager.RegisterStartupScript(this, GetType(), "DownloadImageScript", downloadScript, true);
+            }
+            else
+            {
+                Response.Write("<script>alert('No image found.');</script>");
+            }
+        }
+
+
+
+        protected void valid_selfiebtndownload_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtbxID.Text))
+            {
+                Response.Write("<script>alert('Please enter a valid ID.');</script>");
+                return;
+            }
+
+            int customerId = Convert.ToInt32(txtbxID.Text);
+            byte[] imageData = null;
+            string customerName = null;
+
+            using (var db = new NpgsqlConnection(con))
+            {
+                db.Open();
+
+                // Query to get the selfie and customer name
+                string query = @"
+            SELECT vc_selfie, CONCAT(cus_fname, '_', COALESCE(cus_mname, ''), '_', cus_lname) AS full_name
+            FROM verified_customer vc
+            JOIN customer c ON vc.cus_id = c.cus_id
+            WHERE vc.cus_id = @id";
+
+                using (var cmd = new NpgsqlCommand(query, db))
+                {
+                    cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, customerId);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            imageData = reader["vc_selfie"] as byte[];
+                            customerName = reader["full_name"]?.ToString().Replace(" ", "_");
+                        }
+                        else
+                        {
+                            Response.Write("<script>alert('No data found for the specified ID.');</script>");
+                            return;
+                        }
+                    }
+                }
+            }
+
+            if (imageData != null && imageData.Length > 0)
+            {
+                string base64String = Convert.ToBase64String(imageData);
+                string imageUrl = $"data:image/jpeg;base64,{base64String}";
+                string filename = $"{customerName}_Valid_Selfie_{customerId}.jpg"; // Dynamic filename based on customer details
+
+                string downloadScript = $"downloadImage('{imageUrl}', '{filename}');";
+                ScriptManager.RegisterStartupScript(this, GetType(), "DownloadImageScript", downloadScript, true);
+            }
+            else
+            {
+                Response.Write("<script>alert('No image found.');</script>");
+            }
+        }
+
+
+        protected void VCSeeDetails_Click(object sender, EventArgs e)
+        {
+            LinkButton btn = (LinkButton)sender;
+            int VCID = Convert.ToInt32(btn.CommandArgument);
+
+            Response.Write("<script>alert('VC ID is: " + VCID + "');</script>");
+
+
+        }
+
+        protected void btnViewSlip_Click(object sender, EventArgs e)
+        {
+
+            Button btn = (Button)sender;
+            int bookingId = Convert.ToInt32(btn.CommandArgument);
+            //int bookingId = Convert.ToInt32(TextBox1.Text);  // Assuming you hardcode the bookingId for now. Adjust this as necessary.
+            //TextBox2.Text = bookingId.ToString();
+            byte[] imageData = null;
+
+            // Define the PostgreSQL connection
+            using (var db = new NpgsqlConnection(con))
+            {
+                db.Open();
+
+                // PostgreSQL query to get the waste scale slip image
+                string query = "SELECT vc_valid_id, vc_selfie FROM verified_customer WHERE VC_ID = @id";
+                using (var cmd = new NpgsqlCommand(query, db))
+                {
+                    cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, bookingId);
+
+                    // Execute the query and retrieve the image data
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            //Response.Write("<script>alert('DATA FOUND MOTHERCJERRR HELL YEAH!.');</script>");
+                            imageData = reader["vc_valid_id"] as byte[];
+                        }
+                        else
+                        {
+                            // No image found for the specified booking ID
+                            Response.Write("<script>alert('No data found for the specified ID.');</script>");
+                            return;
+                        }
+                    }
+                }
+                db.Close();
+            }
+
+            // Load the image
+            if (imageData != null && imageData.Length > 0)
+            {
+                string base64String = Convert.ToBase64String(imageData);
+
+                // Use a script to set the image URL after the modal opens
+                string script = $@"
+                document.getElementById('Image2').style.display = 'block';
+                document.getElementById('Image2').src = 'data:image/jpeg;base64,{base64String}';
+            ";
+                //        string script = $@"
+                //    document.getElementById('loading-spinner').style.display = 'none';
+                //    document.getElementById('Image2').style.display = 'block';
+                //    document.getElementById('Image2').src = 'data:image/jpeg;base64,{base64String}';
+                //";
+                ScriptManager.RegisterStartupScript(this, GetType(), "LoadImageScript", script, true);
+            }
+            else
+            {
+                // If no image data, hide spinner and set default image
+                string script = @"
+                document.getElementById('Image2').style.display = 'block';
+                document.getElementById('Image2').src = '~/Pictures/blank_prof.png';
+            ";
+                ScriptManager.RegisterStartupScript(this, GetType(), "DefaultImageScript", script, true);
+                //        string script = @"
+                //    document.getElementById('loading-spinner').style.display = 'none';
+                //    document.getElementById('Image2').style.display = 'block';
+                //    document.getElementById('Image2').src = '~/Pictures/blank_prof.png';
+                //";
+                //        ScriptManager.RegisterStartupScript(this, GetType(), "DefaultImageScript", script, true);
+            }
+
+            // Show the modal popup
+            ModalPopupExtender4.Show();
+        }
+
+        //TESTING IF THERE'S VALUE 
+        //protected void btnViewSlip_Click(object sender, EventArgs e)
+        //{
+        //    Button btn = sender as Button;
+
+        //    if (btn == null || string.IsNullOrEmpty(btn.CommandArgument))
+        //    {
+        //        Response.Write("<script>alert('CommandArgument is null or empty.');</script>");
+        //        return;
+        //    }
+
+        //    if (int.TryParse(btn.CommandArgument, out int bookingId))
+        //    {
+        //        Response.Write("<script>alert('VC_ID is = " + bookingId.ToString() + "');</script>");
+        //    }
+        //    else
+        //    {
+        //        Response.Write("<script>alert('CommandArgument is not a valid integer.');</script>");
+        //    }
+        //}
+
+
+        protected void btnCloseSlip_Click(object sender, EventArgs e)
+        {
+            // Hide the modal
+            ModalPopupExtender4.Hide();
+
+            // Reset the image and show the spinner for the next time it's opened
+            string resetScript = @"
+        document.getElementById('Image2').style.display = 'none';
+        document.getElementById('Image2').src = '';";
+
+            //        string resetScript = @"
+            //    document.getElementById('loading-spinner').style.display = 'block';
+            //    document.getElementById('Image2').style.display = 'none';
+            //    document.getElementById('Image2').src = '';
+            //";
+            ScriptManager.RegisterStartupScript(this, GetType(), "ResetModal", resetScript, true);
+
+        }
+
+        protected void btnReject_Click(object sender, EventArgs e)
+        {
+
+            //Button to Test if ID is not null
+            //string cusID = txtbxID.Text;
+            //Response.Write("<script>alert('Button is Clicked! Customer ID is:" + cusID + "');</script>");
+
+
+
+
+            int custID = Int32.Parse(txtbxID.Text);
+            //Test adminID
+            int adminId = 1004;
+            //int adminId = (int)Session["am_id"];  // Retrieve admin ID from session
+            string roleName = (string)Session["am_rolename"];
+
+            //string cus_email = txtEmail.Text;
+            string cus_email = "imperialemperor123@gmail.com";
+
+
+            try
+            {
+                using (var db = new NpgsqlConnection(con))
+                {
+                    db.Open();
+
+                    // Update CUSTOMER table
+                    //using (var cmd = db.CreateCommand())
+                    //{
+                    //    cmd.CommandType = CommandType.Text;
+                    //    cmd.CommandText = "UPDATE CUSTOMER SET CUS_STATUS = 'Rejected' WHERE CUS_ID = @custID";
+                    //    cmd.Parameters.AddWithValue("@custID", custID);
+                    //    cmd.ExecuteNonQuery();
+                    //}
+
+                    // Update VERIFIED_CUSTOMER table
+                    using (var cmd2 = db.CreateCommand())
+                    {
+                        cmd2.CommandType = CommandType.Text;
+                        cmd2.CommandText = "UPDATE VERIFIED_CUSTOMER SET VC_STATUS = 'Rejected', EMP_ID = @empid WHERE CUS_ID = @custID";
+                        cmd2.Parameters.AddWithValue("@custID", custID);
+                        cmd2.Parameters.AddWithValue("@empid", adminId);
+                        cmd2.ExecuteNonQuery();
+                    }
+
+                    string cus_lname = "";
+                    string cus_fname = "";
+                    string cus_mname = "";
+
+                    // Get Customer Info
+                    using (var cmd3 = db.CreateCommand())
+                    {
+                        cmd3.CommandType = CommandType.Text;
+                        cmd3.CommandText = "SELECT CUS_LNAME, CUS_FNAME, CUS_MNAME FROM CUSTOMER WHERE CUS_ID = @cus_id";
+                        cmd3.Parameters.AddWithValue("@cus_id", custID);
+
+                        using (var reader = cmd3.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                cus_lname = reader["cus_lname"]?.ToString() ?? ""; // Safeguard against NULL
+                                cus_fname = reader["cus_fname"]?.ToString() ?? "";
+                                cus_mname = reader["cus_mname"]?.ToString() ?? "";
+                            }
+                            else
+                            {
+                                ClientScript.RegisterStartupScript(this.GetType(), "swal",
+                                    "Swal.fire({title: 'Error!', text: 'Customer record not found.', icon: 'error', confirmButtonColor: '#d33'});", true);
+                            }
+                        }
+                    }
+
+
+
+                    string subject = "Your Registration Has Been Rejected";
+                    string body = $"Dear Mr./Mrs. {cus_fname} {cus_mname} {cus_lname},\n\n" +
+                                  "We regret to inform you that your registration has been rejected.\n\n" +
+                                  "This decision was made because the submitted ID and selfie did not match our records.\n\n" +
+                                  "If you believe this is an error or would like to provide additional information, please do not hesitate to contact our support team at trashtrackspteam@gmail.com / 455-6399.\n\n" +
+                                  "Thank you for your understanding.\n\n" +
+                                  "Best regards,\n" +
+                                  "TrashTrack Support Team";
+
+
+                    Send_Email(cus_email, subject, body); // Function to send email with rejection information
+
+                    CustomerList();
+
+                    ClientScript.RegisterStartupScript(this.GetType(), "swal", "Swal.fire({title: 'Rejected!', text: 'Customer rejected successfully!', icon: 'success', confirmButtonColor: '#3085d6'});", true);
+
+
+
+
+
+                    //ContractList();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log error (use appropriate logging mechanism)
+                Console.WriteLine(ex); // Example: Replace with logging framework
+
+                // Show user-friendly error
+                ClientScript.RegisterStartupScript(this.GetType(), "swal", "Swal.fire({title: 'Error!', text: 'An unexpected error occurred. Please try again later.', icon: 'error', confirmButtonColor: '#d33'});", true);
+                CustomerList();
+            }
+
+
+        }
+
+        protected void btnVerify_Click(object sender, EventArgs e)
+        {
+            //Button to Test if ID is not null
+            //string cusID = txtbxID.Text;
+            //Response.Write("<script>alert('Button is Clicked! Customer ID is:" + cusID + "');</script>");
+
+            int custID = Int32.Parse(txtbxID.Text);
+
+            //Test adminID
+            int adminId = 1004;
+
+            //int adminId = (int)Session["am_id"];  // Retrieve admin ID from session
+            string roleName = (string)Session["am_rolename"];
+
+            //Get the email of the current customer
+            //string cus_email = txtEmail.Text;
+
+            string cus_email = "imperialemperor123@gmail.com";
+
+
+            try
+            {
+                using (var db = new NpgsqlConnection(con))
+                {
+                    db.Open();
+
+                    //// Update CUSTOMER table
+                    //using (var cmd = db.CreateCommand())
+                    //{
+                    //    cmd.CommandType = CommandType.Text;
+                    //    cmd.CommandText = "UPDATE CUSTOMER SET CUS_STATUS = 'Active', CUS_ISVERIFIED = true WHERE CUS_ID = @custID";
+                    //    cmd.Parameters.AddWithValue("@custID", custID);
+                    //    cmd.ExecuteNonQuery();
+                    //}
+
+                    // Update VERIFIED_CUSTOMER table
+                    using (var cmd2 = db.CreateCommand())
+                    {
+                        cmd2.CommandType = CommandType.Text;
+                        cmd2.CommandText = "UPDATE VERIFIED_CUSTOMER SET VC_STATUS = 'Approved', EMP_ID = @empid WHERE CUS_ID = @custID";
+                        cmd2.Parameters.AddWithValue("@custID", custID);
+                        cmd2.Parameters.AddWithValue("@empid", adminId);
+                        cmd2.ExecuteNonQuery();
+                    }
+
+
+                    string cus_lname = "";
+                    string cus_fname = "";
+                    string cus_mname = "";
+
+                    // Get Customer Info
+                    using (var cmd3 = db.CreateCommand())
+                    {
+                        cmd3.CommandType = CommandType.Text;
+                        cmd3.CommandText = "SELECT CUS_LNAME, CUS_FNAME, CUS_MNAME FROM CUSTOMER WHERE CUS_ID = @cus_id";
+                        cmd3.Parameters.AddWithValue("@cus_id", custID);
+
+                        using (var reader = cmd3.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                cus_lname = reader["cus_lname"]?.ToString() ?? ""; // Safeguard against NULL
+                                cus_fname = reader["cus_fname"]?.ToString() ?? "";
+                                cus_mname = reader["cus_mname"]?.ToString() ?? "";
+                            }
+                            else
+                            {
+                                ClientScript.RegisterStartupScript(this.GetType(), "swal",
+                                    "Swal.fire({title: 'Error!', text: 'Customer record not found.', icon: 'error', confirmButtonColor: '#d33'});", true);
+                            }
+                        }
+                    }
+
+
+                    string subject = "Your Registration Has Been Verified";
+                    string body = $"Dear Mr./Mrs. {cus_fname} {cus_mname} {cus_lname},\n\n" +
+                                   $"We are pleased to inform you that your registration has been successfully verified.\n" +
+                                  $"After reviewing the submitted identification and selfie, we have confirmed their authenticity and consistency with our records. You can now access your account and take full advantage of our services.\n\n" +
+                                  "If you have any questions or need assistance, please feel free to reach out to our support team.\n" +
+                                  "Best regards,\n" +
+                                  "TrashTrack Support Team";
+
+                    Send_Email(cus_email, subject, body); // Function to send email with verification confirmation
+
+                    ClientScript.RegisterStartupScript(this.GetType(), "swal", "Swal.fire({title: 'Verified!!', text: 'Customer verified successfully!', icon: 'success', confirmButtonColor: '#3085d6'});", true);
+                    //ContractList();
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log error (use appropriate logging mechanism)
+                Console.WriteLine(ex); // Example: Replace with logging framework
+
+                // Show user-friendly error
+                ClientScript.RegisterStartupScript(this.GetType(), "swal", "Swal.fire({title: 'Error!', text: 'An unexpected error occurred. Please try again later.', icon: 'error', confirmButtonColor: '#d33'});", true);
+            }
+
+
+        }
 
 
     }

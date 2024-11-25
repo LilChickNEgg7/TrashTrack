@@ -105,6 +105,20 @@
                 border-radius: 6px; /* Rounded scrollbar track */
             }
 
+            .fixed-header {
+    position: sticky;
+    top: 0; /* Sticks to the top */
+    z-index: 1; /* Ensures the header stays on top of content */
+    background-color: #66CDAA; /* Matches your header style */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for emphasis */
+}
+
+.scrollable-content {
+    max-height: 500px; /* Set the desired height */
+    overflow-y: auto; /* Enables vertical scrolling */
+    border: 1px solid #ddd; /* Optional border for separation */
+    background-color: #fff; /* Matches your grid's background */
+}
 
 
 
@@ -703,8 +717,7 @@
 
 
                     <%-- START TABS DESIGN GRIDVIEW--%>
-                                        <asp:HiddenField ID="hfActiveTab" runat="server" />
-
+                    <asp:HiddenField ID="hfActiveTab" runat="server" />
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="am-tab" data-bs-toggle="tab" data-bs-target="#am" type="button" role="tab" aria-controls="am" aria-selected="false" style="color: #061f0d; font-weight: 900">Account Manager</button>
@@ -730,7 +743,7 @@
                             <asp:GridView Style="width: 100%; word-break: break-all; table-layout: fixed" ID="gridView2" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True"
                                 DataKeyNames="emp_id" AllowPaging="False" CellPadding="20" GridLines="None">
                                 <AlternatingRowStyle BackColor="white" ForeColor="Black" />
-
+                                <HeaderStyle CssClass="fixed-header" />
                                 <Columns>
                                     <asp:BoundField DataField="emp_id" HeaderText="ID" InsertVisible="False" ReadOnly="True" SortExpression="emp_id" ItemStyle-Width="100px">
                                         <ItemStyle Width="100px" Wrap="true" />

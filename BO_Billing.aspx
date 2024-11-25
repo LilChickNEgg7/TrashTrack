@@ -546,31 +546,21 @@
                                 <%--BOOKING GRIDVIEW--%>
                                 <asp:GridView ID="gridViewBookings" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="bk_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
                                     <Columns>
-                                        <asp:BoundField DataField="bk_id" HeaderText="Booking ID" SortExpression="bk_id" ItemStyle-Width="100px">
+                                        <asp:BoundField DataField="bk_id" HeaderText="ID" SortExpression="bk_id" ItemStyle-Width="100px">
                                             <ItemStyle Width="100px"></ItemStyle>
                                         </asp:BoundField>
                                         <asp:BoundField DataField="bk_date" HeaderText="Date" SortExpression="bk_date" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px">
                                             <ItemStyle Width="150px"></ItemStyle>
                                         </asp:BoundField>
+                                        <asp:BoundField DataField="bk_fullname" HeaderText="Full Name" SortExpression="bk_fullname" ItemStyle-Width="300px">
+                                            <ItemStyle Width="300px"></ItemStyle>
+                                        </asp:BoundField>
+                                        <asp:BoundField DataField="location" HeaderText="Location" SortExpression="location" ItemStyle-Width="300px">
+                                            <ItemStyle Width="300px"></ItemStyle>
+                                        </asp:BoundField>
                                         <asp:BoundField DataField="bk_status" HeaderText="Status" SortExpression="bk_status" ItemStyle-Width="150px">
                                             <ItemStyle Width="150px"></ItemStyle>
                                         </asp:BoundField>
-                                        <asp:BoundField DataField="bk_province" HeaderText="Province" SortExpression="bk_province" ItemStyle-Width="150px">
-                                            <ItemStyle Width="150px"></ItemStyle>
-                                        </asp:BoundField>
-                                        <asp:BoundField DataField="bk_city" HeaderText="City" SortExpression="bk_city" ItemStyle-Width="150px">
-                                            <ItemStyle Width="150px"></ItemStyle>
-                                        </asp:BoundField>
-                                        <asp:BoundField DataField="bk_brgy" HeaderText="Barangay" SortExpression="bk_brgy" ItemStyle-Width="150px">
-                                            <ItemStyle Width="150px"></ItemStyle>
-                                        </asp:BoundField>
-                                        <asp:BoundField DataField="bk_street" HeaderText="Street" SortExpression="bk_street" ItemStyle-Width="150px">
-                                            <ItemStyle Width="150px"></ItemStyle>
-                                        </asp:BoundField>
-                                        <asp:BoundField DataField="bk_postal" HeaderText="Postal Code" SortExpression="bk_postal" ItemStyle-Width="100px">
-                                            <ItemStyle Width="100px"></ItemStyle>
-                                        </asp:BoundField>
-
                                         <asp:TemplateField HeaderText="Generate Bill">
                                             <ItemTemplate>
                                                 <asp:LinkButton ID="update" runat="server" OnClick="openBookWaste_Click" CommandArgument='<%# Eval("bk_id") %>'>
@@ -587,56 +577,42 @@
                             </div>
                     </div>
 
-                    <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
-                        <div class="gridview-container">
-                            <asp:GridView ID="gridView1" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="gb_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
-                                <Columns>
-                                    <asp:BoundField DataField="gb_id" HeaderText="Transaction No." SortExpression="gb_id" ItemStyle-Width="100px">
-                                        <ItemStyle Width="100px"></ItemStyle>
-                                    </asp:BoundField>
-                                    <asp:BoundField DataField="gb_date_issued" HeaderText="Issued Date" SortExpression="gb_date_issued" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px">
-                                        <ItemStyle Width="150px"></ItemStyle>
-                                    </asp:BoundField>
-                                    <asp:BoundField DataField="gb_date_due" HeaderText="Due Date" SortExpression="gb_date_due" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px">
-                                        <ItemStyle Width="150px"></ItemStyle>
-                                    </asp:BoundField>
-                                    <%--<asp:BoundField DataField="gb_status" HeaderText="Status" SortExpression="gb_status" ItemStyle-Width="150px">
-                                            <ItemStyle Width="150px"></ItemStyle>
-                                        </asp:BoundField>--%>
-                                    <asp:BoundField DataField="bk_id" HeaderText="Book ID" SortExpression="bk_id" ItemStyle-Width="150px">
-                                        <ItemStyle Width="150px"></ItemStyle>
-                                    </asp:BoundField>
-                                    <asp:BoundField DataField="gb_total_amnt_interest" HeaderText="Amount Interest" SortExpression="gb_total_amnt_interest" ItemStyle-Width="150px">
-                                        <ItemStyle Width="150px"></ItemStyle>
-                                    </asp:BoundField>
-                                    <asp:BoundField DataField="gb_total_sales" HeaderText="Total Sales" SortExpression="gb_total_sales" ItemStyle-Width="100px">
-                                        <ItemStyle Width="100px"></ItemStyle>
-                                    </asp:BoundField>
-                                    <asp:TemplateField HeaderText="Details">
-                                        <ItemTemplate>
-                                            <asp:LinkButton ID="update" runat="server" OnClick="openViewBill_Click" CommandArgument='<%# Eval("gb_id") %>'>
-                                                <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/moreIcon.png" Style="margin-right: 10px; width: 2em; height: auto; max-height: 100%;" AlternateText="Edit" />
-                                            </asp:LinkButton>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="Status">
-                                        <ItemTemplate>
-                                            <asp:Button CssClass="btn btn-outline-danger" Style="font-size: 10px; font-weight: bolder;" ID="btnPaid" runat="server" Text='<%# Eval("gb_status") + " ▼"%>'
-                                                OnClick="Paid_Click"
-                                                Visible='<%# Eval("gb_status").ToString() == "unpaid" %>' CommandArgument='<%# Eval("gb_id") %>' />
-                                            <asp:Label ID="Label9" runat="server" Text='<%# Eval("gb_status")%>' Visible='<%# Eval("gb_status").ToString() == "Inactive" %>' />
-                                            <asp:Button CssClass="btn btn-outline-success" Style="font-size: 10px; font-weight: bolder;" ID="btnUnpaid" runat="server" Text='<%# Eval("gb_status") + " ▲"%>'
-                                                OnClick="Unpaid_Click"
-                                                Visible='<%# Eval("gb_status").ToString() == "paid" %>' CommandArgument='<%# Eval("gb_id") %>' />
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
+                        <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+                            <div class="gridview-container">
+                                <asp:GridView ID="gridView1" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="gb_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
+                                    <Columns>
+                                        <asp:BoundField DataField="gb_id" HeaderText="Transaction No." SortExpression="gb_id" ItemStyle-Width="100px" />
+                                        <asp:BoundField DataField="gb_date_issued" HeaderText="Issued Date" SortExpression="gb_date_issued" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px" />
+                                        <asp:BoundField DataField="gb_date_due" HeaderText="Due Date" SortExpression="gb_date_due" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px" />
+                                        <asp:BoundField DataField="bk_id" HeaderText="Book ID" SortExpression="bk_id" ItemStyle-Width="150px" />
+<%--                                        <asp:BoundField DataField="gb_total_amnt_interest" HeaderText="Amount Interest" SortExpression="gb_total_amnt_interest" ItemStyle-Width="150px" />--%>
+                                        <asp:BoundField DataField="gb_total_sales" HeaderText="Total Sales" SortExpression="gb_total_sales" DataFormatString="₱{0:N2}" ItemStyle-Width="100px" />
+                                        <asp:BoundField DataField="p_amount" HeaderText="Paid Amount" SortExpression="p_amount" DataFormatString="₱{0:N2}" ItemStyle-Width="100px" />
+                                        <asp:BoundField DataField="p_method" HeaderText="Payment Method" SortExpression="p_method" ItemStyle-Width="150px" />
+                                        <asp:BoundField DataField="p_date_paid" HeaderText="Payment Date" SortExpression="p_date_paid" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px" />
+                                        <asp:BoundField DataField="p_checkout_id" HeaderText="Checkout ID" SortExpression="p_checkout_id" ItemStyle-Width="150px" />
+                                        <asp:TemplateField HeaderText="Details">
+                                            <ItemTemplate>
+                                                <asp:LinkButton ID="update" runat="server" OnClick="openViewBill_Click" CommandArgument='<%# Eval("gb_id") %>'>
+                                                    <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/moreIcon.png" Style="margin-right: 10px; width: 2em; height: auto; max-height: 100%;" AlternateText="Edit" />
+                                                </asp:LinkButton>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Status">
+                                            <ItemTemplate>
+                                                <asp:Button CssClass="btn btn-outline-danger" Style="font-size: 10px; font-weight: bolder;" ID="btnPaid" runat="server" Text='<%# Eval("gb_status") + " ▼"%>'
+                                                    OnClick="Paid_Click" Visible='<%# Eval("gb_status").ToString() == "unpaid" %>' CommandArgument='<%# Eval("gb_id") %>' />
+                                                <asp:Label ID="Label9" runat="server" Text='<%# Eval("gb_status")%>' Visible='<%# Eval("gb_status").ToString() == "Inactive" %>' />
+                                                <asp:Button CssClass="btn btn-outline-success" Style="font-size: 10px; font-weight: bolder;" ID="btnUnpaid" runat="server" Text='<%# Eval("gb_status") + " ▲"%>'
+                                                    OnClick="Unpaid_Click" Visible='<%# Eval("gb_status").ToString() == "paid" %>' CommandArgument='<%# Eval("gb_id") %>' />
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                    </Columns>
+                                </asp:GridView>
 
-                                </Columns>
-                                <RowStyle BackColor="White" ForeColor="Black" BorderStyle="Solid" BorderColor="#ccc" BorderWidth="1px" />
-                                <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="Solid" BorderColor="#66CDAA" BorderWidth="1px" />
-                            </asp:GridView>
+
+                            </div>
                         </div>
-                    </div>
     </div>
     </section>
 
@@ -816,7 +792,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000">Additional Fee</span>
                                     </div>
-                                    <asp:TextBox ID="addFeeTxt" TextMode="Number" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                                    <asp:TextBox ID="addFeeTxt" TextMode="Number" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" AutoPostBack="true" aria-describedby="inputGroup-sizing-sm" OnTextChanged="addFeeTxt_TextChanged"></asp:TextBox>
                                 </div>
                             </div>
                             <!-- Additional Note -->
@@ -840,10 +816,10 @@
                             </div>
                         </div>
                     </div>
-
+                    <%--<asp:AsyncPostBackTrigger ControlID="addFeeTxt" EventName="TextChanged" />--%>
                     <!-- Footer Design -->
                     <div class="card-footer text-center" style="background-color: #0D342D; color: #26D8A8; padding: 10px;">
-                        <asp:Button ID="Button1" CssClass="btn btn-secondary" runat="server" Text="Cancel" />
+                        <asp:Button ID="Button1" CssClass="btn btn-secondary" runat="server" Text="Cancel" OnClick="CancelGenerateBill_Click" />
                         <asp:Button ID="Button2" CssClass="btn btn-primary" runat="server" Text="Generate Bill" OnClick="btnGenerateBill_Click" OnClientClick="return confirm('Are you sure you want to generate bill?');" />
                     </div>
                 </div>
@@ -1282,7 +1258,7 @@
                             </div>
                         </div>
                     </div>
-
+                    <%--<asp:AsyncPostBackTrigger ControlID="addFeeTxt" EventName="TextChanged" />--%>
                     <!-- Footer Design -->
                     <div class="card-footer text-center" style="background-color: #0D342D; color: #26D8A8; padding: 10px;">
                         <asp:Button ID="Button11" CssClass="btn btn-secondary" runat="server" Text="Cancel" />
@@ -1292,7 +1268,7 @@
             </contenttemplate>
             <triggers>
                 <asp:PostBackTrigger ControlID="Button11" />
-
+                
                 <asp:PostBackTrigger ControlID="Button8" />
                 <asp:PostBackTrigger ControlID="Button12" />
                 <asp:PostBackTrigger ControlID="Button2" />
@@ -1335,7 +1311,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px">Amount Paid</span>
                                     </div>
-                                    <asp:TextBox ID="txtAmntPaid" runat="server" type="number" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                                    <asp:TextBox ID="txtAmntPaid" runat="server" type="decimal" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
                                 </div>
                             </div>
                         </div>
