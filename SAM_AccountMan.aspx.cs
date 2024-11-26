@@ -1994,7 +1994,7 @@ namespace Capstone
                 !string.IsNullOrEmpty(emp_lastname.Text) &&
                 !string.IsNullOrEmpty(emp_email.Text) &&
                 //!string.IsNullOrEmpty(emp_pass.Text) &&
-                !string.IsNullOrEmpty(emp_address.Text) &&
+                //!string.IsNullOrEmpty(emp_address.Text) &&
                 !string.IsNullOrEmpty(emp_contact.Text) &&
                 !string.IsNullOrEmpty(roleIdString) && // Validate that a role is selected
                 roleIdString != "0") // Check if a valid role is selected
@@ -2052,15 +2052,15 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                     // Proceed to insert the new Account Manager
                     using (var cmd = new NpgsqlCommand(
                         @"INSERT INTO employee 
-                (emp_fname, emp_mname, emp_lname, emp_contact, emp_address, emp_email, emp_password, emp_profile, role_id, acc_id, emp_created_at, emp_updated_at, emp_otp) 
-                VALUES (@emp_fname, @emp_mname, @emp_lname, @emp_contact, @emp_address, @emp_email, @emp_password, @emp_profile, @role_id, @acc_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, @emp_otp)", db))
+                (emp_fname, emp_mname, emp_lname, emp_contact, emp_email, emp_password, emp_profile, role_id, acc_id, emp_created_at, emp_updated_at, emp_otp) 
+                VALUES (@emp_fname, @emp_mname, @emp_lname, @emp_contact, @emp_email, @emp_password, @emp_profile, @role_id, @acc_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, @emp_otp)", db))
                     {
                         // Adding parameters to prevent SQL injection
                         cmd.Parameters.AddWithValue("@emp_fname", emp_firstname.Text);
                         cmd.Parameters.AddWithValue("@emp_mname", emp_mi.Text);
                         cmd.Parameters.AddWithValue("@emp_lname", emp_lastname.Text);
                         cmd.Parameters.AddWithValue("@emp_contact", emp_contact.Text);
-                        cmd.Parameters.AddWithValue("@emp_address", emp_address.Text);  // Include employee address
+                        //cmd.Parameters.AddWithValue("@emp_address", emp_address.Text);  // Include employee address
                         cmd.Parameters.AddWithValue("@emp_email", email);
                         cmd.Parameters.AddWithValue("@emp_password", randomPasswordHashed);
                         cmd.Parameters.AddWithValue("@emp_profile", imageData);  // Profile image as byte array
@@ -2076,6 +2076,10 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                             ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
                             $"Swal.fire({{ icon: 'success', title: 'Adding Successful', text: 'Employee added successfully!', background: '#e9f7ef', confirmButtonColor: '#28a745' }});", true);
                             AccountManList();
+                            SupAccountManList();
+                            BillinOfficerList();
+                            OperationalDispList();
+                            HaulerList(); 
                             Send_Email(toAddress, subject, body);  // Send the welcome email after successful insertion
                             ClearFormFields();
                         }
@@ -2273,7 +2277,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
             emp_lastname.Text = "";
             emp_email.Text = "";
             //emp_pass.Text = "";
-            emp_address.Text = "";
+            //emp_address.Text = "";
             emp_contact.Text = "";
             emp_role.SelectedValue = "0"; // Reset the role dropdown to default or empty
             //formFile.Attributes.Clear(); // Clear file input
@@ -2308,7 +2312,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
             emp_lastname.Text = "";
             emp_email.Text = "";
             //emp_pass.Text = "";
-            emp_address.Text = "";
+            //emp_address.Text = "";
             emp_contact.Text = "";
             emp_role.SelectedIndex = 0;
             //lblErrorMessage.Text = ""; // Clear any error messages
@@ -2391,7 +2395,7 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
 
                     // Query to get employee details along with the role_id
                     string query = @"
-                SELECT emp_fname, emp_mname, emp_lname, emp_contact, emp_email, emp_profile, role_id 
+                SELECT emp_fname, emp_mname, emp_lname, emp_contact, emp_email, emp_profile, emp_address, role_id 
                 FROM employee 
                 WHERE emp_id = @acc_id";
 
@@ -2410,6 +2414,8 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                                 txtLastname.Text = reader["emp_lname"].ToString();
                                 txtContact.Text = reader["emp_contact"].ToString();
                                 txtEmail.Text = reader["emp_email"].ToString();
+
+                                txtAddress.Text = reader["emp_address"] == DBNull.Value ? "" : reader["emp_address"].ToString();
                                 byte[] imageData = reader["emp_profile"] as byte[]; // Retrieve profile image data (byte array)
 
                                 // Display profile image in the preview control

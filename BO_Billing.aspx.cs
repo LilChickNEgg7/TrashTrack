@@ -53,6 +53,7 @@ namespace Capstone
                 GeneratedBillList();
                 PopulateWasteCategory();
                 LoadBookingWasteData();
+                DetailsLoadBookingWasteData();
                 hfActiveTab.Value = "#tab1"; // Set Tab 1 as the default
 
             }
@@ -169,17 +170,23 @@ namespace Capstone
                     cmd.CommandType = CommandType.Text;
                     // Query to fetch booking data from the database
                     cmd.CommandText = @"SELECT 
-                                            bk_id, 
-                                            bk_date,
-                                            bk_fullname,
-                                            bk_status, 
-                                            CONCAT(bk_street, ', ', bk_brgy, ', ', bk_city, ', ', bk_province, ' ', bk_postal) AS location
-                                        FROM 
-                                            booking 
-                                        WHERE 
-                                            bk_status NOT IN ('Completed', 'Billed') 
-                                        ORDER BY 
-                                            bk_date DESC, bk_id DESC";
+                        b.bk_id, 
+                        b.bk_date,
+                        b.bk_fullname,
+                        b.bk_status, 
+                        b.bk_waste_scale_slip,
+                        CONCAT(b.bk_street, ', ', b.bk_brgy, ', ', b.bk_city, ', ', b.bk_province, ' ', b.bk_postal) AS location,
+                        c.cus_id,
+                        c.cus_email
+                    FROM 
+                        booking b
+                    JOIN 
+                        customer c ON b.cus_id = c.cus_id
+                    WHERE 
+                        b.bk_status NOT IN ('Completed', 'Billed', 'Cancelled', 'Failed') 
+                    ORDER BY 
+                        b.bk_date DESC, b.bk_id DESC";
+
 
                     // Execute the query and bind the results to the GridView
                     DataTable bookingsDataTable = new DataTable();
@@ -308,6 +315,7 @@ namespace Capstone
                         if (result != null)
                         {
                             bookingId = Convert.ToInt32(result);
+                            PopulateWasteCategory();
                         }
                         else
                         {
@@ -330,6 +338,7 @@ namespace Capstone
                         var ctr = cmd.ExecuteNonQuery();
                         if (ctr >= 1)
                         {
+                            PopulateWasteCategory();
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
                                 "swal('Record Deleted!', 'Booking Waste record deleted successfully!', 'success')", true);
 
@@ -468,18 +477,229 @@ namespace Capstone
 
         }
 
+        //protected void addBookWaste_Click(object sender, EventArgs e)
+        //{
+        //    // Fetch values from the textboxes
+        //    int bk_id = Convert.ToInt32(TextBox1.Text); // Booking ID
+        //    string bw_name = ddlbwName1.SelectedItem.Text; // Waste type name from the dropdown (Text, not value)
+        //    string bw_unit = txtbwUnit1.Text; // Waste unit from the textbox
+        //    double bw_total_unit = Convert.ToDouble(txtTotalUnit1.Text); // Total unit from the textbox
+        //    double bw_price = Convert.ToDouble(txtUnitPrice1.Text); // Price per unit from the textbox
+        //    double bw_total_price = Convert.ToDouble(txtTotalUnitPrice1.Text); // Total price from the textbox (already computed in UI)
+
+        //    try
+        //    {
+        //        using (var db = new NpgsqlConnection(con))
+        //        {
+        //            db.Open();
+
+        //            // Verify that the booking ID exists
+        //            using (var checkBookingCmd = db.CreateCommand())
+        //            {
+        //                checkBookingCmd.CommandText = "SELECT COUNT(*) FROM BOOKING WHERE bk_id = @bkId";
+        //                checkBookingCmd.Parameters.AddWithValue("@bkId", bk_id);
+
+        //                object result = checkBookingCmd.ExecuteScalar();
+        //                if (result == null || Convert.ToInt32(result) == 0)
+        //                {
+
+        //                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
+        //                    //    "swal('Not Found!', 'No associated booking ID found for this Booking Waste.', 'warning')", true);
+
+        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                               "Swal.fire({ icon: 'error', title: 'Not Found!', text: 'No associated booking ID found for this Booking Waste', background: '#e9f7ef', confirmButtonColor: '#28a745' });", true);
+        //                    return; // Exit if no booking ID found
+        //                }
+        //            }
+
+        //            // Insert the new booking waste record
+        //            string insertBookingWasteQuery = @"INSERT INTO booking_waste 
+        //                                       (bk_id, bw_name, bw_unit, bw_total_unit, bw_price, bw_total_price)
+        //                                       VALUES 
+        //                                       (@bk_id, @bw_name, @bw_unit, @bw_total_unit, @bw_price, @bw_total_price)";
+
+        //            using (var cmd = new NpgsqlCommand(insertBookingWasteQuery, db))
+        //            {
+        //                cmd.Parameters.AddWithValue("@bk_id", bk_id);
+        //                cmd.Parameters.AddWithValue("@bw_name", bw_name);
+        //                cmd.Parameters.AddWithValue("@bw_unit", bw_unit);
+        //                cmd.Parameters.AddWithValue("@bw_total_unit", bw_total_unit);
+        //                cmd.Parameters.AddWithValue("@bw_price", bw_price);
+        //                cmd.Parameters.AddWithValue("@bw_total_price", bw_total_price);
+        //                var ctr = cmd.ExecuteNonQuery();
+        //                if (ctr >= 1)
+        //                {
+        //                    LoadBookingWasteData();
+        //                    updatePanel1.Update(); // Update the UpdatePanel to reflect changes
+
+        //                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
+        //                        "swal('Record Deleted!', 'Booking Waste record deleted successfully!', 'success')", true);
+
+        //                    // Refresh the data for the associated booking ID
+        //                    /*LoadBookingWasteData(bk_id);*/ // Call the method to refresh the data
+        //                }
+        //                else
+        //                {
+        //                    LoadBookingWasteData();
+        //                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
+        //                        "swal('Not Found!', 'No record found to delete.', 'warning')", true);
+        //                }
+        //            }
+        //        }
+        //        txtTotalUnit1.Enabled = false;
+        //        // Reload data after insertion
+        //        LoadBookingWasteData();
+
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
+        //            "swal('Success!', 'Booking Waste record added successfully!', 'success')", true);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
+        //            $"swal('Unsuccessful!', '{ex.Message}', 'error')", true);
+        //    }
+        //    finally
+        //    {
+        //        LoadBookingWasteData();
+        //        // Close the modal
+        //        this.ModalPopupExtender3.Hide();
+        //        txtTotalUnit1.Enabled = false;
+        //        //this.ModalPopupExtender1.Show();
+
+        //    }
+        //}
+        //protected void addBookWaste_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        // Fetch values from the textboxes
+        //        int bk_id = Convert.ToInt32(TextBox1.Text); // Booking ID
+        //        string bw_name = ddlbwName1.SelectedItem.Text; // Waste type name from the dropdown (Text, not value)
+        //        string bw_unit = txtbwUnit1.Text; // Waste unit from the textbox
+        //        double bw_total_unit = Convert.ToDouble(txtTotalUnit1.Text); // Total unit from the textbox
+        //        double bw_price = Convert.ToDouble(txtUnitPrice1.Text); // Price per unit from the textbox
+        //        double bw_total_price = Convert.ToDouble(txtTotalUnitPrice1.Text); // Total price from the textbox (already computed in UI)
+
+        //        // Validate that Total Unit is greater than 0
+        //        if (!double.TryParse(txtTotalUnit1.Text, out bw_total_unit) || bw_total_unit <= 0)
+        //        {
+        //            // Display an error message and stop submission
+        //            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                "Swal.fire({ icon: 'error', title: 'Invalid Input', text: 'Total Unit must be greater than 0.', background: '#f8d7da', confirmButtonColor: '#f5c6cb' });",
+        //                true);
+        //            return; // Prevent form submission
+        //        }
+
+        //        // Calculate the total price
+        //        bw_total_price = bw_total_unit * bw_price;
+
+        //        using (var db = new NpgsqlConnection(con))
+        //        {
+        //            db.Open();
+
+        //            // Verify that the booking ID exists
+        //            using (var checkBookingCmd = db.CreateCommand())
+        //            {
+        //                checkBookingCmd.CommandText = "SELECT COUNT(*) FROM BOOKING WHERE bk_id = @bkId";
+        //                checkBookingCmd.Parameters.AddWithValue("@bkId", bk_id);
+
+        //                object result = checkBookingCmd.ExecuteScalar();
+        //                if (result == null || Convert.ToInt32(result) == 0)
+        //                {
+        //                    // Display error if no associated booking ID is found
+        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                        "Swal.fire({ icon: 'error', title: 'Not Found!', text: 'No associated booking ID found for this Booking Waste.', background: '#f8d7da', confirmButtonColor: '#f5c6cb' });",
+        //                        true);
+        //                    return; // Prevent form submission
+        //                }
+        //            }
+
+        //            // Insert the new booking waste record
+        //            string insertBookingWasteQuery = @"INSERT INTO booking_waste 
+        //                                   (bk_id, bw_name, bw_unit, bw_total_unit, bw_price, bw_total_price)
+        //                                   VALUES 
+        //                                   (@bk_id, @bw_name, @bw_unit, @bw_total_unit, @bw_price, @bw_total_price)";
+
+        //            using (var cmd = new NpgsqlCommand(insertBookingWasteQuery, db))
+        //            {
+        //                cmd.Parameters.AddWithValue("@bk_id", bk_id);
+        //                cmd.Parameters.AddWithValue("@bw_name", bw_name);
+        //                cmd.Parameters.AddWithValue("@bw_unit", bw_unit);
+        //                cmd.Parameters.AddWithValue("@bw_total_unit", bw_total_unit);
+        //                cmd.Parameters.AddWithValue("@bw_price", bw_price);
+        //                cmd.Parameters.AddWithValue("@bw_total_price", bw_total_price);
+
+        //                var ctr = cmd.ExecuteNonQuery();
+        //                if (ctr >= 1)
+        //                {
+        //                    LoadBookingWasteData();
+        //                    updatePanel1.Update(); // Update the UpdatePanel to reflect changes
+
+        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                        "Swal.fire({ icon: 'success', title: 'Success!', text: 'Booking Waste record added successfully.', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
+        //                        true);
+        //                    txtbwUnit1.Text = string.Empty;
+        //                    txtTotalUnit1.Text = string.Empty;
+        //                    txtUnitPrice1.Text = string.Empty;
+        //                    txtTotalUnitPrice1.Text = string.Empty;
+        //                    ddlbwName1.SelectedIndex = 0; // Reset the dropdown to its default selection
+        //                }
+        //                else
+        //                {
+        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                        "Swal.fire({ icon: 'warning', title: 'Failed!', text: 'Failed to add Booking Waste record.', background: '#fff3cd', confirmButtonColor: '#ffc107' });",
+        //                        true);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Display error for unexpected issues
+        //        ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //            $"Swal.fire({{ icon: 'error', title: 'Error!', text: '{ex.Message}', background: '#f8d7da', confirmButtonColor: '#f5c6cb' }});",
+        //            true);
+        //    }
+        //    finally
+        //    {
+        //        LoadBookingWasteData();
+        //        this.ModalPopupExtender3.Hide();
+        //        txtTotalUnit1.Enabled = false;
+        //        txtbwUnit1.Text = string.Empty;
+        //        txtTotalUnit1.Text = string.Empty;
+        //        txtUnitPrice1.Text = string.Empty;
+        //        txtTotalUnitPrice1.Text = string.Empty;
+        //        ddlbwName1.SelectedIndex = 0; // Reset the dropdown to its default selection
+        //    }
+        //}
         protected void addBookWaste_Click(object sender, EventArgs e)
         {
-            // Fetch values from the textboxes
-            int bk_id = Convert.ToInt32(TextBox1.Text); // Booking ID
-            string bw_name = ddlbwName1.SelectedItem.Text; // Waste type name from the dropdown (Text, not value)
-            string bw_unit = txtbwUnit1.Text; // Waste unit from the textbox
-            double bw_total_unit = Convert.ToDouble(txtTotalUnit1.Text); // Total unit from the textbox
-            double bw_price = Convert.ToDouble(txtUnitPrice1.Text); // Price per unit from the textbox
-            double bw_total_price = Convert.ToDouble(txtTotalUnitPrice1.Text); // Total price from the textbox (already computed in UI)
-
             try
             {
+                // Fetch values from the textboxes
+                int bk_id = Convert.ToInt32(TextBox1.Text); // Booking ID
+                string bw_name = ddlbwName1.SelectedItem.Text; // Waste type name from the dropdown (Text, not value)
+                string bw_unit = txtbwUnit1.Text; // Waste unit from the textbox
+                double bw_total_unit = Convert.ToDouble(txtTotalUnit1.Text); // Total unit from the textbox
+                double bw_price = Convert.ToDouble(txtUnitPrice1.Text); // Price per unit from the textbox
+                double bw_total_price = Convert.ToDouble(txtTotalUnitPrice1.Text); // Total price from the textbox (already computed in UI)
+
+                // Fetch the wc_id from the dropdown selection
+                int wc_id = Convert.ToInt32(ddlbwName1.SelectedValue); // wc_id from the dropdown's selected value
+
+                // Validate that Total Unit is greater than 0
+                if (!double.TryParse(txtTotalUnit1.Text, out bw_total_unit) || bw_total_unit <= 0)
+                {
+                    // Display an error message and stop submission
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+                        "Swal.fire({ icon: 'error', title: 'Invalid Input', text: 'Total Unit must be greater than 0.', background: '#f8d7da', confirmButtonColor: '#f5c6cb' });",
+                        true);
+                    return; // Prevent form submission
+                }
+
+                // Calculate the total price
+                bw_total_price = bw_total_unit * bw_price;
+
                 using (var db = new NpgsqlConnection(con))
                 {
                     db.Open();
@@ -493,69 +713,220 @@ namespace Capstone
                         object result = checkBookingCmd.ExecuteScalar();
                         if (result == null || Convert.ToInt32(result) == 0)
                         {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-                                "swal('Not Found!', 'No associated booking ID found for this Booking Waste.', 'warning')", true);
-                            return; // Exit if no booking ID found
+                            // Display error if no associated booking ID is found
+                            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+                                "Swal.fire({ icon: 'error', title: 'Not Found!', text: 'No associated booking ID found for this Booking Waste.', background: '#f8d7da', confirmButtonColor: '#f5c6cb' });",
+                                true);
+                            return; // Prevent form submission
                         }
                     }
 
-                    // Insert the new booking waste record
-                    string insertBookingWasteQuery = @"INSERT INTO booking_waste 
-                                               (bk_id, bw_name, bw_unit, bw_total_unit, bw_price, bw_total_price)
-                                               VALUES 
-                                               (@bk_id, @bw_name, @bw_unit, @bw_total_unit, @bw_price, @bw_total_price)";
+                    // Insert the new booking waste record, including wc_id
+                    string insertBookingWasteQuery = @"
+                INSERT INTO booking_waste 
+                (bk_id, bw_name, bw_unit, bw_total_unit, bw_price, bw_total_price, wc_id)
+                VALUES 
+                (@bk_id, @bw_name, @bw_unit, @bw_total_unit, @bw_price, @bw_total_price, @wc_id)";
 
                     using (var cmd = new NpgsqlCommand(insertBookingWasteQuery, db))
                     {
+                        // Add parameters to the command, including wc_id
                         cmd.Parameters.AddWithValue("@bk_id", bk_id);
                         cmd.Parameters.AddWithValue("@bw_name", bw_name);
                         cmd.Parameters.AddWithValue("@bw_unit", bw_unit);
                         cmd.Parameters.AddWithValue("@bw_total_unit", bw_total_unit);
                         cmd.Parameters.AddWithValue("@bw_price", bw_price);
                         cmd.Parameters.AddWithValue("@bw_total_price", bw_total_price);
+                        cmd.Parameters.AddWithValue("@wc_id", wc_id); // Add the wc_id
+
                         var ctr = cmd.ExecuteNonQuery();
                         if (ctr >= 1)
                         {
                             LoadBookingWasteData();
                             updatePanel1.Update(); // Update the UpdatePanel to reflect changes
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-                                "swal('Record Deleted!', 'Booking Waste record deleted successfully!', 'success')", true);
-
-                            // Refresh the data for the associated booking ID
-                            /*LoadBookingWasteData(bk_id);*/ // Call the method to refresh the data
+                            PopulateWasteCategory();
+                            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+                                "Swal.fire({ icon: 'success', title: 'Success!', text: 'Booking Waste record added successfully.', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
+                                true);
+                            txtbwUnit1.Text = string.Empty;
+                            txtTotalUnit1.Text = string.Empty;
+                            txtUnitPrice1.Text = string.Empty;
+                            txtTotalUnitPrice1.Text = string.Empty;
+                            ddlbwName1.SelectedIndex = 0; // Reset the dropdown to its default selection
                         }
                         else
                         {
-                            LoadBookingWasteData();
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-                                "swal('Not Found!', 'No record found to delete.', 'warning')", true);
+                            PopulateWasteCategory();
+                            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+                                "Swal.fire({ icon: 'warning', title: 'Failed!', text: 'Failed to add Booking Waste record.', background: '#fff3cd', confirmButtonColor: '#ffc107' });",
+                                true);
                         }
                     }
                 }
-
-                // Reload data after insertion
+            }
+            catch (Exception ex)
+            {
+                // Display error for unexpected issues
+                ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+                    $"Swal.fire({{ icon: 'error', title: 'Error!', text: '{ex.Message}', background: '#f8d7da', confirmButtonColor: '#f5c6cb' }});",
+                    true);
+            }
+            finally
+            {
                 LoadBookingWasteData();
+                PopulateWasteCategory();
+                this.ModalPopupExtender3.Hide();
+                txtTotalUnit1.Enabled = false;
+                txtbwUnit1.Text = string.Empty;
+                txtTotalUnit1.Text = string.Empty;
+                txtUnitPrice1.Text = string.Empty;
+                txtTotalUnitPrice1.Text = string.Empty;
+                ddlbwName1.SelectedIndex = 0; // Reset the dropdown to its default selection
+            }
+        }
 
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-                    "swal('Success!', 'Booking Waste record added successfully!', 'success')", true);
+
+        private void LoadBookingWasteData()
+        {
+            int bookingId;
+
+            // Try to convert the booking ID from TextBox1 and handle potential format errors
+            if (!int.TryParse(TextBox1.Text, out bookingId))
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "swal('Invalid Input!', 'Please enter a valid booking ID.', 'error')", true);
+                return; // Exit the method if the input is not valid
+            }
+            try
+            {
+                using (var db = new NpgsqlConnection(con))
+                {
+                    db.Open();
+
+                    // Query to get booking details and bind to the GridView
+                    using (var cmd = db.CreateCommand())
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandText = @"SELECT bw.bw_id, bw.bw_name, bw.bw_unit, bw.bw_total_unit, bw.bw_price, bw.bw_total_price, bw.bk_id
+                                    FROM BOOKING_WASTE bw
+                                    INNER JOIN BOOKING b ON bw.bk_id = b.bk_id
+                                    WHERE bw.bk_id = @bkId AND b.bk_status != 'Completed' ORDER BY bw.bw_id";
+
+                        cmd.Parameters.AddWithValue("@bkId", bookingId);
+
+                        DataTable bookingsDataTable = new DataTable();
+                        NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
+                        bookingsAdapter.Fill(bookingsDataTable);
+                        gridView2.DataSource = bookingsDataTable;
+                        gridView2.DataBind();
+                    }
+
+                    // Query to sum total price for the same booking ID and status != 'Completed'
+                    double totalPrice = 0;
+                    using (var cmdSum = db.CreateCommand())
+                    {
+                        cmdSum.CommandType = CommandType.Text;
+                        cmdSum.CommandText = @"SELECT SUM(bw.bw_total_price) AS TotalPrice
+                                       FROM BOOKING_WASTE bw
+                                       INNER JOIN BOOKING b ON bw.bk_id = b.bk_id
+                                       WHERE bw.bk_id = @bkId AND b.bk_status != 'Completed'";
+
+                        cmdSum.Parameters.AddWithValue("@bkId", bookingId);
+                        object result = cmdSum.ExecuteScalar();
+                        if (result != DBNull.Value)
+                        {
+                            totalPrice = Convert.ToDouble(result);
+                            netVatTxt.Text = totalPrice.ToString("N2");
+                        }
+                        else
+                        {
+                            netVatTxt.Text = "0";
+                        }
+                    }
+
+                    // Query to get the payment term details, including tax and periods
+                    double ptTax = 0;
+                    double ptLeadDays = 0;
+                    int accrualPeriod = 0, suspPeriod = 0, ptInterest = 0;
+                    using (var cmdTax = db.CreateCommand())
+                    {
+                        cmdTax.CommandType = CommandType.Text;
+                        cmdTax.CommandText = @"SELECT pt_tax, pt_lead_days, pt_accrual_period, pt_susp_period, pt_interest
+                                       FROM payment_term 
+                                       LIMIT 1"; // Assuming only one payment term is needed
+
+                        using (var reader = cmdTax.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                ptTax = reader.IsDBNull(0) ? 0 : reader.GetDouble(0);  // Tax percentage
+                                ptLeadDays = reader.IsDBNull(1) ? 0 : reader.GetDouble(1);  // Lead days
+                                accrualPeriod = reader.IsDBNull(2) || reader.GetInt32(2) == 0 ? 0 : reader.GetInt32(2);  // Accrual period (check for NULL or zero)
+                                suspPeriod = reader.IsDBNull(3) || reader.GetInt32(3) == 0 ? 0 : reader.GetInt32(3);  // Suspension period (check for NULL or zero)
+                                ptInterest = reader.IsDBNull(4) ? 0 : reader.GetInt32(4);  // Interest
+
+                                // Display payment term details in respective labels
+                                taxLabel.Text = "Tax: " + ptTax + "%"; // Displaying tax percentage
+                                interstLabel.Text = "Interest: " + ptInterest + "%"; // Displaying interest
+                                accrPerLabel.Text = "Accrual Period: " + accrualPeriod + " day(s)"; // Displaying accrual period
+                                susPerLabel.Text = "Suspension Period: " + suspPeriod + " day(s)"; // Displaying suspension period
+                            }
+                        }
+                    }
+
+                    // Store hidden fields
+                    ptLeadDaysHiddenField.Value = ptLeadDays.ToString();
+                    ptAccrualPeriodHiddenField.Value = accrualPeriod.ToString();
+                    ptSuspPeriodHiddenField.Value = suspPeriod.ToString();
+
+                    // Calculate Due Date based on current date + lead days
+                    DateTime currentDate = DateTime.Now;
+                    DateTime dueDate = currentDate.AddDays(ptLeadDays);
+                    dueDateTxt.Text = dueDate.ToString("yyyy-MM-ddTHH:mm"); // Set the Due Date in the textbox
+
+                    // Handle Accrual Date
+                    if (accrualPeriod > 0)
+                    {
+                        DateTime accrualDate = dueDate.AddDays(accrualPeriod);
+                        accDateTxt.Text = accrualDate.ToString("yyyy-MM-ddTHH:mm"); // Set the Accrual Date in the textbox
+                    }
+                    else
+                    {
+                        accDateTxt.Text = "No accrual date"; // Display "No accrual date" if accrual period is zero or not found
+                    }
+
+                    // Handle Suspension Date
+                    if (suspPeriod > 0)
+                    {
+                        DateTime suspensionDate = dueDate.AddDays(suspPeriod);
+                        susDateTxt.Text = suspensionDate.ToString("yyyy-MM-ddTHH:mm"); // Set the Suspension Date in the textbox
+                    }
+                    else
+                    {
+                        susDateTxt.Text = "No suspension date"; // Display "No suspension date" if suspension period is zero or not found
+                    }
+
+                    // Calculate tax amount based on total price
+                    double taxAmount = (ptTax / 100) * totalPrice;
+                    vatAmntTxt.Text = taxAmount.ToString("N2");
+
+                    // Calculate total sales (total price + tax amount)
+                    double totalSales = totalPrice + taxAmount;
+                    totSalesTxt.Text = totalSales.ToString("N2");
+
+                    // Set the current date and time in the required format for DateTimeLocal
+                    dateTodayTxt.Text = currentDate.ToString("yyyy-MM-ddTHH:mm");
+                    PopulateWasteCategory();
+                }
+                PopulateWasteCategory();
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
                     $"swal('Unsuccessful!', '{ex.Message}', 'error')", true);
             }
-            finally
-            {
-                LoadBookingWasteData();
-                // Close the modal
-                this.ModalPopupExtender3.Hide();
-
-                //this.ModalPopupExtender1.Show();
-
-            }
         }
 
-        private void LoadBookingWasteData()
+        private void DetailsLoadBookingWasteData()
         {
             int bookingId;
 
@@ -974,50 +1345,92 @@ namespace Capstone
         //}
 
 
+        //private void PopulateWasteCategory()
+        //{
+
+        //    using (NpgsqlConnection conn = new NpgsqlConnection(con))
+        //    {
+        //        // Example of fetching waste categories from the PostgreSQL database
+        //        string query = "SELECT wc_id, wc_name FROM waste_category";
+
+        //        NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
+        //        NpgsqlDataAdapter da = new NpgsqlDataAdapter(cmd);
+        //        DataTable dt = new DataTable();
+        //        da.Fill(dt);
+
+        //        ////EDIT BOOK WASTE PANEL
+        //        //// Binding the first dropdown list
+        //        //ddlbwName.Items.Clear();
+        //        //ddlbwName.DataSource = dt;
+        //        //ddlbwName.DataTextField = "wc_name";
+        //        //ddlbwName.DataValueField = "wc_id";
+        //        //ddlbwName.DataBind();
+
+        //        //// Inserting the default item and disabling it
+        //        //WebControls.ListItem defaultItem = new WebControls.ListItem("--Select Waste Category--", "0");
+        //        //defaultItem.Attributes.Add("disabled", "true");  // Disable the option
+        //        //defaultItem.Attributes.Add("selected", "true");  // Set as selected
+        //        //ddlbwName.Items.Insert(0, defaultItem);  // Insert it at the first position
+
+
+
+        //        //ADD BOOK WASTE PANEL
+        //        // Binding the second dropdown list
+        //        ddlbwName1.Items.Clear();
+        //        ddlbwName1.DataSource = dt;
+        //        ddlbwName1.DataTextField = "wc_name";
+        //        ddlbwName1.DataValueField = "wc_id";
+        //        ddlbwName1.DataBind();
+
+        //        // Inserting the default item and disabling it for the second dropdown
+        //        WebControls.ListItem defaultItem1 = new WebControls.ListItem("--Select Waste Category--", "0");
+        //        defaultItem1.Attributes.Add("disabled", "true");  // Disable the option
+        //        defaultItem1.Attributes.Add("selected", "true");  // Set as selected
+        //        ddlbwName1.Items.Insert(0, defaultItem1);  // Insert it at the first position
+        //    }
+        //}
         private void PopulateWasteCategory()
         {
-
             using (NpgsqlConnection conn = new NpgsqlConnection(con))
             {
-                // Example of fetching waste categories from the PostgreSQL database
-                string query = "SELECT wc_id, wc_name FROM waste_category";
+                // Get the booking ID from the textbox
+                int bk_id = string.IsNullOrWhiteSpace(txtbwID1.Text) ? 0 : Convert.ToInt32(TextBox1.Text);
 
+                // SQL Query to fetch waste categories that are NOT already associated with the given bk_id
+                string query = @"
+            SELECT wc.wc_id, wc.wc_name
+            FROM waste_category wc
+            WHERE wc.wc_id NOT IN (
+                SELECT bw.wc_id
+                FROM booking_waste bw
+                WHERE bw.bk_id = 1047
+            )";
+
+                // Prepare command
                 NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@bk_id", bk_id); // Pass the booking ID as a parameter
+
+                // Execute query and get the results
                 NpgsqlDataAdapter da = new NpgsqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
 
-                ////EDIT BOOK WASTE PANEL
-                //// Binding the first dropdown list
-                //ddlbwName.Items.Clear();
-                //ddlbwName.DataSource = dt;
-                //ddlbwName.DataTextField = "wc_name";
-                //ddlbwName.DataValueField = "wc_id";
-                //ddlbwName.DataBind();
-
-                //// Inserting the default item and disabling it
-                //WebControls.ListItem defaultItem = new WebControls.ListItem("--Select Waste Category--", "0");
-                //defaultItem.Attributes.Add("disabled", "true");  // Disable the option
-                //defaultItem.Attributes.Add("selected", "true");  // Set as selected
-                //ddlbwName.Items.Insert(0, defaultItem);  // Insert it at the first position
-
-
-
-                //ADD BOOK WASTE PANEL
-                // Binding the second dropdown list
+                // Bind the data to the dropdown list
                 ddlbwName1.Items.Clear();
                 ddlbwName1.DataSource = dt;
                 ddlbwName1.DataTextField = "wc_name";
                 ddlbwName1.DataValueField = "wc_id";
                 ddlbwName1.DataBind();
 
-                // Inserting the default item and disabling it for the second dropdown
+                // Insert the default item at the top of the dropdown list
                 WebControls.ListItem defaultItem1 = new WebControls.ListItem("--Select Waste Category--", "0");
-                defaultItem1.Attributes.Add("disabled", "true");  // Disable the option
-                defaultItem1.Attributes.Add("selected", "true");  // Set as selected
-                ddlbwName1.Items.Insert(0, defaultItem1);  // Insert it at the first position
+                defaultItem1.Attributes.Add("disabled", "true"); // Disable the option
+                defaultItem1.Attributes.Add("selected", "true"); // Set as selected
+                ddlbwName1.Items.Insert(0, defaultItem1); // Insert it at the first position
             }
         }
+
+
 
 
         protected void CancelGenerateBill_Click(object sender, EventArgs e)
@@ -1139,32 +1552,79 @@ namespace Capstone
         //ADD BOOK WASTE PANEL
         protected void ddlWasteCategory_SelectedIndexChanged1(object sender, EventArgs e)
         {
+            // Check for a valid selection
+            if (string.IsNullOrEmpty(ddlbwName1.SelectedValue) || ddlbwName1.SelectedValue == "0")
+            {
+                // Reset all fields and disable Total Unit TextBox
+                txtUnitPrice1.Text = "";
+                txtbwUnit1.Text = "";
+                txtTotalUnit1.Text = "";
+                txtTotalUnitPrice1.Text = "";
+                txtTotalUnit1.Enabled = false;
+                return;
+            }
+
             int selectedWasteID = Convert.ToInt32(ddlbwName1.SelectedValue);
 
             if (selectedWasteID > 0)
             {
-                // Query to get the unit and price for the selected waste category
                 string query = "SELECT wc_unit, wc_price FROM waste_category WHERE wc_id = @wc_id";
 
                 using (NpgsqlConnection connection = new NpgsqlConnection(con))
                 {
-                    NpgsqlCommand cmd = new NpgsqlCommand(query, connection);
-                    cmd.Parameters.AddWithValue("@wc_id", selectedWasteID); // Setting parameter value for wc_id
-
-                    connection.Open();
-                    NpgsqlDataReader reader = cmd.ExecuteReader();
-                    if (reader.Read())
+                    using (NpgsqlCommand cmd = new NpgsqlCommand(query, connection))
                     {
-                        txtUnitPrice1.Text = reader["wc_price"].ToString(); // Assign price to the textbox
-                                                                           // If you need to display the unit in another control, use:
-                        txtbwUnit1.Text = reader["wc_unit"].ToString();
-                        txtTotalUnit1.Text = "";
-                        txtTotalUnitPrice1.Text = "";
+                        cmd.Parameters.AddWithValue("@wc_id", selectedWasteID);
+
+                        connection.Open();
+                        using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                // Populate the unit and price fields
+                                txtUnitPrice1.Text = reader["wc_price"].ToString();
+                                txtbwUnit1.Text = reader["wc_unit"].ToString();
+                                txtTotalUnit1.Text = "";
+                                txtTotalUnitPrice1.Text = "";
+
+                                // Enable Total Unit TextBox
+                                txtTotalUnit1.Enabled = true;
+                            }
+                        }
+                        connection.Close();
                     }
-                    connection.Close();
                 }
             }
         }
+
+        //protected void ddlWasteCategory_SelectedIndexChanged1(object sender, EventArgs e)
+        //{
+        //    int selectedWasteID = Convert.ToInt32(ddlbwName1.SelectedValue);
+
+        //    if (selectedWasteID > 0)
+        //    {
+        //        // Query to get the unit and price for the selected waste category
+        //        string query = "SELECT wc_unit, wc_price FROM waste_category WHERE wc_id = @wc_id";
+
+        //        using (NpgsqlConnection connection = new NpgsqlConnection(con))
+        //        {
+        //            NpgsqlCommand cmd = new NpgsqlCommand(query, connection);
+        //            cmd.Parameters.AddWithValue("@wc_id", selectedWasteID); // Setting parameter value for wc_id
+
+        //            connection.Open();
+        //            NpgsqlDataReader reader = cmd.ExecuteReader();
+        //            if (reader.Read())
+        //            {
+        //                txtUnitPrice1.Text = reader["wc_price"].ToString(); // Assign price to the textbox
+        //                                                                   // If you need to display the unit in another control, use:
+        //                txtbwUnit1.Text = reader["wc_unit"].ToString();
+        //                txtTotalUnit1.Text = "";
+        //                txtTotalUnitPrice1.Text = "";
+        //            }
+        //            connection.Close();
+        //        }
+        //    }
+        //}
 
 
         private bool IsInitialLoad
@@ -1218,7 +1678,7 @@ namespace Capstone
             txtUnitPrice1.Text = string.Empty;
             txtTotalUnitPrice1.Text = string.Empty;
             ddlbwName1.SelectedIndex = 0; // Reset the dropdown to its default selection
-
+            txtTotalUnit1.Enabled = false;
             // Hide the panel/modal
             ModalPopupExtender3.Hide();
         }
@@ -1946,10 +2406,11 @@ namespace Capstone
             string cus_fullname = "";
             double totalSum = 0, vat_Amnt = 0;
             bool isProcessSuccessful = true;
-            LoadBookingList();
             ModalPopupExtender1.Hide();
             try
             {
+                LoadBookingList();
+                ModalPopupExtender1.Hide();
                 using (var conn = new NpgsqlConnection(con))
                 {
                     conn.Open();
@@ -1968,9 +2429,15 @@ namespace Capstone
                                 accrualPeriod = reader.IsDBNull(2) ? (int?)null : reader.GetInt32(2);
                                 suspensionPeriod = reader.IsDBNull(3) ? (int?)null : reader.GetInt32(3);
                                 tax = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4);
+                                LoadBookingList();
+                                ModalPopupExtender1.Hide();
                             }
+                            LoadBookingList();
+                            ModalPopupExtender1.Hide();
                         }
                     }
+                    LoadBookingList();
+                    ModalPopupExtender1.Hide();
 
                     // Step 2: Retrieve booking details
                     string findBkID = "SELECT * FROM booking WHERE bk_id = @BkId";
@@ -1992,8 +2459,11 @@ namespace Capstone
                                 throw new Exception("Booking ID not found.");
                             }
                         }
+                        LoadBookingList();
+                        ModalPopupExtender1.Hide();
                     }
-
+                    LoadBookingList();
+                    ModalPopupExtender1.Hide();
                     // Step 3: Validate `bw_total_price`
                     string totalQuery = @"
                 SELECT SUM(bw_total_price) AS total, 
@@ -2016,7 +2486,8 @@ namespace Capstone
                                         true);
                                     return; // Stop further execution
                                 }
-
+                                LoadBookingList();
+                                ModalPopupExtender1.Hide();
                                 object totalResult = reader["total"];
                                 double totalResultValue = totalResult != DBNull.Value ? Convert.ToDouble(totalResult) : 0;
 
@@ -2032,7 +2503,7 @@ namespace Capstone
                             }
                         }
                     }
-
+                    updatePanel1.Update();
                     // Step 4: Update booking status
                     string updateStatusQuery = "UPDATE booking SET bk_status = 'Billed' WHERE bk_id = @BkId";
                     using (var updateCmd = new NpgsqlCommand(updateStatusQuery, conn))
@@ -2087,23 +2558,34 @@ namespace Capstone
                         if (result != null)
                         {
                             insertedBillId = Convert.ToInt32(result);
+                            updatePanel1.Update();
                             LoadBookingList();
                             gridViewBookings.DataBind();
                             ModalPopupExtender1.Hide();
-                            ScriptManager.RegisterStartupScript(this, GetType(), "showSuccessAlert",
-    "Swal.fire({ icon: 'success', title: 'Bill Generated Successfully!', text: 'The bill has been generated and is ready for download.', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
-    true);
+                            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+                                        "Swal.fire({ icon: 'error', title: 'Empty Total Units!', text: 'Total Units has not been entered yet', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
+                                        true);
                         }
                         else
                         {
                             throw new Exception("Failed to insert bill.");
                         }
                     }
+                    updatePanel1.Update();
+                    LoadBookingList();
                 }
+                LoadBookingList();
+                updatePanel1.Update();
                 ModalPopupExtender1.Hide();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+                                        "Swal.fire({ icon: 'error', title: 'Empty Total Units!', text: 'Total Units has not been entered yet', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
+                                        true);
             }
             catch (Exception ex)
             {
+                updatePanel1.Update();
+                LoadBookingList();
+                ModalPopupExtender1.Hide();
                 isProcessSuccessful = false;
                 ScriptManager.RegisterStartupScript(this, GetType(), "errorAlert",
                     $"Swal.fire({{ icon: 'error', title: 'Error!', text: '{ex.Message}', background: '#f8d7da', confirmButtonColor: '#dc3545' }});",
@@ -2111,11 +2593,20 @@ namespace Capstone
             }
             finally
             {
+                updatePanel1.Update();
+                LoadBookingList();
                 ModalPopupExtender1.Hide(); // Ensure the modal always closes
+                ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+                                        "Swal.fire({ icon: 'error', title: 'Empty Total Units!', text: 'Total Units has not been entered yet', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
+                                        true);
             }
             if (isProcessSuccessful)
             {
+                updatePanel1.Update();
                 ModalPopupExtender1.Hide();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+                                        "Swal.fire({ icon: 'error', title: 'Empty Total Units!', text: 'Total Units has not been entered yet', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
+                                        true);
                 // Generate PDF if everything was successful
                 byte[] pdfBytes = GeneratePDFForRow(insertedBillId, bk_id);
 
@@ -2284,6 +2775,8 @@ namespace Capstone
                         {
                             totalSum += Convert.ToDouble(result);
                             vat_Amnt = (totalSum + addFee) * (taxValue / 100.0);
+                            LoadBookingList();
+                            ModalPopupExtender1.Hide();
                         }
                     }
                 }
@@ -2371,7 +2864,8 @@ namespace Capstone
                 // Add the terms content to the document
                 document.Add(termsContent);
 
-
+                LoadBookingList();
+                ModalPopupExtender1.Hide();
 
                 // Add Waste Details Table
                 iText.Layout.Element.Table wasteTable = new iText.Layout.Element.Table(new float[] { 100, 50, 80, 80, 100 }).UseAllAvailableWidth();
@@ -2471,7 +2965,8 @@ namespace Capstone
                 }
 
                 document.Add(wasteTable);
-
+                LoadBookingList();
+                ModalPopupExtender1.Hide();
 
                 // Define the width for the bottom line
                 float[] bottomLineWidths = new float[] { 1 }; // Single column for the line
@@ -2640,7 +3135,8 @@ namespace Capstone
                 document.Add(summarySection);
 
 
-
+                LoadBookingList();
+                ModalPopupExtender1.Hide();
 
                 // Close document
                 document.Close();

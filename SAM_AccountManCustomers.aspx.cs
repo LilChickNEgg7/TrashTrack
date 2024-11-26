@@ -2303,16 +2303,28 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                     db.Open();
 
                     // SQL query to join customer and verified_customer tables
-                    string query = @"
-    SELECT 
-        c.cus_fname, c.cus_mname, c.cus_lname, c.cus_contact, c.cus_email, c.cus_profile, 
-        vc.vc_valid_id, vc.vc_selfie, vc.vc_status, c.cus_status
-    FROM 
-        customer c
-    LEFT JOIN 
-        verified_customer vc ON c.cus_id = vc.cus_id
-    WHERE 
-        c.cus_id = @cus_id";
+                    string query = @"SELECT 
+                                        c.cus_fname, c.cus_mname, c.cus_lname, c.cus_contact, c.cus_email, c.cus_profile, 
+                                        vc.vc_valid_id, vc.vc_selfie, vc.vc_status, c.cus_status,
+                                        TRIM(
+                                            -- Concatenate non-empty address parts, only adding commas between them
+                                            COALESCE(NULLIF(c.cus_street, ''), '') ||
+                                            CASE WHEN NULLIF(c.cus_street, '') IS NOT NULL AND NULLIF(c.cus_brgy, '') IS NOT NULL THEN ', ' ELSE '' END ||
+                                            COALESCE(NULLIF(c.cus_brgy, ''), '') ||
+                                            CASE WHEN NULLIF(c.cus_brgy, '') IS NOT NULL AND NULLIF(c.cus_city, '') IS NOT NULL THEN ', ' ELSE '' END ||
+                                            COALESCE(NULLIF(c.cus_city, ''), '') ||
+                                            CASE WHEN NULLIF(c.cus_city, '') IS NOT NULL AND NULLIF(c.cus_province, '') IS NOT NULL THEN ', ' ELSE '' END ||
+                                            COALESCE(NULLIF(c.cus_province, ''), '') ||
+                                            CASE WHEN NULLIF(c.cus_province, '') IS NOT NULL AND NULLIF(c.cus_postal, '') IS NOT NULL THEN ', ' ELSE '' END ||
+                                            COALESCE(NULLIF(c.cus_postal, ''), '')
+                                        ) AS full_address
+                                    FROM 
+                                        customer c
+                                    LEFT JOIN 
+                                        verified_customer vc ON c.cus_id = vc.cus_id
+                                    WHERE 
+                                        c.cus_id = @cus_id
+                                    ";
 
                     using (var cmd = new NpgsqlCommand(query, db))
                     {
@@ -2329,6 +2341,10 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                                 txtLastname.Text = reader["cus_lname"].ToString();
                                 txtContact.Text = reader["cus_contact"].ToString();
                                 txtEmail.Text = reader["cus_email"].ToString();
+                                TextBox1.Text = reader["full_address"].ToString();
+                                
+
+
 
                                 // Display profile image
                                 byte[] profileImage = reader["cus_profile"] as byte[];

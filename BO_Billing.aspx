@@ -546,18 +546,30 @@
                                 <%--BOOKING GRIDVIEW--%>
                                 <asp:GridView ID="gridViewBookings" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="bk_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
                                     <Columns>
-                                        <asp:BoundField DataField="bk_id" HeaderText="ID" SortExpression="bk_id" ItemStyle-Width="100px">
+                                        <asp:BoundField DataField="cus_id" HeaderText="Customer ID" SortExpression="cus_id" ItemStyle-Width="100px">
                                             <ItemStyle Width="100px"></ItemStyle>
                                         </asp:BoundField>
                                         <asp:BoundField DataField="bk_date" HeaderText="Date" SortExpression="bk_date" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px">
                                             <ItemStyle Width="150px"></ItemStyle>
                                         </asp:BoundField>
+
                                         <asp:BoundField DataField="bk_fullname" HeaderText="Full Name" SortExpression="bk_fullname" ItemStyle-Width="300px">
                                             <ItemStyle Width="300px"></ItemStyle>
                                         </asp:BoundField>
                                         <asp:BoundField DataField="location" HeaderText="Location" SortExpression="location" ItemStyle-Width="300px">
                                             <ItemStyle Width="300px"></ItemStyle>
                                         </asp:BoundField>
+                                        <asp:BoundField DataField="cus_email" HeaderText="Email" SortExpression="cus_email" ItemStyle-Width="300px">
+                                            <ItemStyle Width="300px"></ItemStyle>
+                                        </asp:BoundField>
+                                        <asp:TemplateField HeaderText="Scale Slip" ItemStyle-Width="150px">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblWasteScaleSlip" runat="server"
+                                                    Text='<%# Eval("bk_waste_scale_slip") == DBNull.Value ? "None" : "Available" %>'
+                                                    ForeColor='<%# Eval("bk_waste_scale_slip") == DBNull.Value ? System.Drawing.Color.Gray : System.Drawing.Color.Red %>'>
+                </asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
                                         <asp:BoundField DataField="bk_status" HeaderText="Status" SortExpression="bk_status" ItemStyle-Width="150px">
                                             <ItemStyle Width="150px"></ItemStyle>
                                         </asp:BoundField>
@@ -571,11 +583,12 @@
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                     </Columns>
-                                    <RowStyle BackColor="White" ForeColor="Black" BorderStyle="Solid" BorderColor="#ccc" BorderWidth="1px" />
-                                    <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="Solid" BorderColor="#66CDAA" BorderWidth="1px" />
+                                    
                                 </asp:GridView>
                             </div>
                     </div>
+                        <%--<RowStyle BackColor="White" ForeColor="Black" BorderStyle="Solid" BorderColor="#ccc" BorderWidth="1px" />
+                                    <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="Solid" BorderColor="#66CDAA" BorderWidth="1px" />--%>
 
                         <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
                             <div class="gridview-container">
@@ -700,7 +713,7 @@
                                                 <asp:LinkButton ID="update" runat="server" OnClick="editBookWaste_Click" CommandArgument='<%# Eval("bw_id") %>'>
                                                     <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
                                                 </asp:LinkButton>
-                                                <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("bw_id") %>' OnClientClick="return confirm('Are you sure you want to remove this account manager?');">
+                                                <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("bw_id") %>' OnClientClick="return confirm('Are you sure you want to remove this bookwaste?');">
                                                     <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
                                                 </asp:LinkButton>
                                             </itemtemplate>
@@ -820,7 +833,7 @@
                     <!-- Footer Design -->
                     <div class="card-footer text-center" style="background-color: #0D342D; color: #26D8A8; padding: 10px;">
                         <asp:Button ID="Button1" CssClass="btn btn-secondary" runat="server" Text="Cancel" OnClick="CancelGenerateBill_Click" />
-                        <asp:Button ID="Button2" CssClass="btn btn-primary" runat="server" Text="Generate Bill" OnClick="btnGenerateBill_Click" OnClientClick="return confirm('Are you sure you want to generate bill?');" />
+                        <asp:Button ID="Button2" CssClass="btn btn-primary" runat="server" Text="Generate Bill" AutoPostBack="true" OnClick="btnGenerateBill_Click" OnClientClick="return confirm('Are you sure you want to generate bill?') && closeUpdatePanel();" />
                     </div>
                 </div>
             </contenttemplate>
@@ -832,13 +845,15 @@
         </asp:UpdatePanel>
 
     </div>
-    <ajaxToolkit:ModalPopupExtender ID="ModalPopupExtender1" runat="server"
-        CancelControlID="Button1"
-        PopupControlID="updatePanel1"
-        TargetControlID="LinkButton2"
-        BackgroundCssClass="Background"
-        DropShadow="True">
-    </ajaxToolkit:ModalPopupExtender>
+    <ajaxToolkit:ModalPopupExtender 
+    ID="ModalPopupExtender1" 
+    runat="server" 
+    CancelControlID="Button1"  
+    PopupControlID="updatePanel1"  
+    TargetControlID="LinkButton2"  
+    BackgroundCssClass="Background" 
+    DropShadow="True" />
+
 
 
     <%--EDIT BOOK WASTE PANEL--%>
@@ -978,8 +993,8 @@
                                 <div class="input-group input-group-sm mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px">Enter Total Unit</span>
-                                    </div>
-                                    <asp:TextBox ID="txtTotalUnit1" runat="server" type="number" CssClass="form-control" ClientIDMode="Static" aria-label="Small" AutoPostBack="true" aria-describedby="inputGroup-sizing-sm" OnTextChanged="txtTotalUnit_TextChanged1"></asp:TextBox>
+                                    </div><%--step="0.01" min="0.01"--%>
+                                    <asp:TextBox ID="txtTotalUnit1" runat="server" type="number" CssClass="form-control" ClientIDMode="Static" aria-label="Small" AutoPostBack="true" aria-describedby="inputGroup-sizing-sm" Enabled="false" OnTextChanged="txtTotalUnit_TextChanged1"></asp:TextBox>
                                 </div>
                             </div>
 
@@ -1423,8 +1438,17 @@
                         });
         });
 
+        function closeModal() {
+            console.log("Modal is being closed");
+            var modalPopupExtender = $find('<%= ModalPopupExtender1.ClientID %>');
+            if (modalPopupExtender) {
+                modalPopupExtender.hide();
+            }
+            return true;
+        }
 
-                </script>
+
+    </script>
                 <script src="https://code.jquery.com/jquery-3.5.2.min.js"></script>
 
 

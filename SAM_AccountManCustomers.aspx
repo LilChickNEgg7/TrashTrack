@@ -943,8 +943,10 @@
                                                     CssClass="btn btn-outline-success"
                                                     OnClick="Approve_Click"
                                                     CommandArgument='<%# Eval("vc_id") %>'
-                                                    OnClientClick="return confirm('Are you sure you want to Approved/Verify this customer?');"
-                                                    Visible='<%# Eval("vc_status").ToString() == "Pending" %>'>Approve
+                                                    OnClientClick="return confirm('Are you sure you want to Approve/Verify this customer?');"
+                                                    Visible='<%# Eval("vc_status").ToString() == "Pending" %>'
+                                                    Style="font-size: 12px; padding: 5px 10px;">
+            Approve
                                                 </asp:LinkButton>
 
                                                 <asp:LinkButton
@@ -952,11 +954,10 @@
                                                     runat="server"
                                                     CssClass="btn btn-outline-danger"
                                                     OnClientClick='<%# "showDeclineModal(" + Eval("vc_id") + ", " + Eval("cus_id") + "); return false;" %>'
-                                                    Visible='<%# Eval("vc_status").ToString() == "Pending" %>'>
-                Decline
+                                                    Visible='<%# Eval("vc_status").ToString() == "Pending" %>'
+                                                    Style="font-size: 12px; padding: 5px 10px;">
+            Decline
                                                 </asp:LinkButton>
-
-
 
                                                 <asp:Label
                                                     ID="lblApproved"
@@ -973,10 +974,9 @@
                                                     CssClass="badge bg-danger"
                                                     Visible='<%# Eval("vc_status").ToString() == "Rejected" %>'>
                                                 </asp:Label>
-
-
                                             </ItemTemplate>
                                         </asp:TemplateField>
+
 
                                         <asp:TemplateField HeaderText="Action">
                                             <ItemTemplate>
@@ -1395,6 +1395,17 @@
                                             <asp:Label ID="Label18" runat="server" Text="Email" Style="color: chartreuse"></asp:Label>
 
                                             <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" ClientIDMode="Static" onkeyup="validateUpdateEmail()"></asp:TextBox>
+                                            <div class="valid-feedback">Looks good!</div>
+                                            <div class="invalid-feedback">Please provide a valid email address.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Address -->
+                                    <div class="col-12 mb-3">
+                                        <div class="mb-3">
+                                            <asp:Label ID="Label7" runat="server" Text="Address" Style="color: chartreuse"></asp:Label>
+
+                                            <asp:TextBox ID="TextBox1" runat="server" CssClass="form-control" ClientIDMode="Static" onkeyup="validateUpdateEmail()" Enabled="false"></asp:TextBox>
                                             <div class="valid-feedback">Looks good!</div>
                                             <div class="invalid-feedback">Please provide a valid email address.</div>
                                         </div>

@@ -626,12 +626,12 @@
                                 </div>
 
                                 <!-- Address -->
-                                <div class="mb-3">
+                                <%--<div class="mb-3">
                                     <asp:Label ID="Label11" runat="server" Text="Address" for="inputText" Style="color: chartreuse"></asp:Label>
                                     <asp:TextBox ID="emp_address" runat="server" class="form-control" onkeyup="validateAddress()"></asp:TextBox>
                                     <div class="valid-feedback">Looks good!</div>
                                     <div class="invalid-feedback">Please provide a valid address.</div>
-                                </div>
+                                </div>--%>
 
                                 <!-- Email -->
                                 <div class="mb-3">
@@ -1172,18 +1172,18 @@
                                             </div>
                                         </div>
 
-                                    <!-- Dropdown (Role) -->
-                                    <div class="col-12 mb-3">
-                                        <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" style="width: 100px; padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Role</span>
-                                            <asp:DropDownList ID="promoteddl" class="form-select" Style="border-bottom-right-radius: 5px; border-top-right-radius: 5px" aria-label="Default select example" runat="server" onChange="validateRole()">
-                                            </asp:DropDownList>
-                                            <div class="invalid-feedback">Please select a role.</div>
+                                        <!-- Dropdown (Role) -->
+                                        <div class="col-12 mb-3">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <span class="input-group-text" style="width: 100px; padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Role</span>
+                                                <asp:DropDownList ID="promoteddl" class="form-select" Style="border-bottom-right-radius: 5px; border-top-right-radius: 5px" aria-label="Default select example" runat="server" onChange="validateRole()">
+                                                </asp:DropDownList>
+                                                <div class="invalid-feedback">Please select a role.</div>
+                                            </div>
                                         </div>
-                                    </div>
 
 
-                                    <!-- Email -->
+                                        <!-- Email -->
                                     <div class="col-12 mb-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" style="width: 100px; padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Email</span>
@@ -1192,23 +1192,33 @@
                                             <div class="invalid-feedback">Please provide a valid email address.</div>
                                         </div>
                                     </div>
-                                    <!-- Password -->
-                                    <div class="col-12 mb-3">
-                                        <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" style="padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Password</span>                                            
-                                                <asp:Button
-                                                    ID="btnResetPass"
-                                                    CssClass="form-control"
-                                                    runat="server"
-                                                    Text="Reset Password"
-                                                    OnClick="btnResetPass_Click"
-                                                    OnClientClick="return confirm('Are you sure you want to reset password?');"
-                                                    Style="background-color: green; color: white;border-bottom-right-radius: 5px; border-top-right-radius: 5px" />
+
+                                        <!-- Address -->
+                                        <div class="col-12 mb-3">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <span class="input-group-text" style="width: 100px; padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Address</span>
+                                                <asp:TextBox ID="txtAddress" runat="server" Style="border-bottom-right-radius: 5px; border-top-right-radius: 5px" CssClass="form-control" ClientIDMode="Static" Enabled="false"></asp:TextBox>
+                                                <%--<div class="valid-feedback">Looks good!</div>
+                                                <div class="invalid-feedback">Please provide a valid email address.</div>--%>
+                                            </div>
                                         </div>
-                                    </div>
+
+                                        <!-- Password -->
+                                        <div class="col-12 mb-3">
+                                            <asp:Label ID="Label7" runat="server" Text="Reset password of this staff?" for="inputText" Style="color: chartreuse"></asp:Label>
+
+                                            <asp:Button
+                                                ID="btnResetPass"
+                                                CssClass="form-control"
+                                                runat="server"
+                                                Text="Reset Password"
+                                                OnClick="btnResetPass_Click"
+                                                OnClientClick="return confirm('Are you sure you want to reset password?');"
+                                                Style="background-color: green; color: white; border-bottom-right-radius: 5px; border-top-right-radius: 5px" />
+                                        </div>
 
 
-                                    <!-- Picture Upload -->
+                                        <!-- Picture Upload -->
                                     <div class="col-12 mb-3">
 
                                         <asp:Label ID="Label20" runat="server" Text="Picture" Style="color: chartreuse"></asp:Label>
@@ -1320,7 +1330,7 @@
                     }
 
 
-                    function validateAddress() {
+                    <%--function validateAddress() {
                         const address = document.getElementById('<%= emp_address.ClientID %>');
                         if (address.value.trim() === "") {
                             address.classList.add('is-invalid');
@@ -1329,7 +1339,7 @@
                             address.classList.remove('is-invalid');
                             address.classList.add('is-valid');
                         }
-                    }
+                    }--%>
 
                     <%--function validatePassword() {
                         const password = document.getElementById('<%= emp_pass.ClientID %>');

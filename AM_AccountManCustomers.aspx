@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
     <!-- Include Bootstrap CSS -->
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Favicons -->
     <link href="Pictures/logo_bgRM.png" rel="icon">
@@ -48,6 +48,56 @@
 
 
     <style>
+        /*Container Styles */
+        .gridview-container {
+            max-height: 530px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+            /* WebKit Scrollbar Styles */
+            .gridview-container::-webkit-scrollbar {
+                width: 12px; /* Width of scrollbar */
+            }
+
+            .gridview-container::-webkit-scrollbar-thumb {
+                background: linear-gradient(180deg, chartreuse, aquamarine); /* Gradient from chartreuse to violet to red */
+                border-radius: 15px; /* Rounded shape */
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Larger shadow for depth */ /* Slight shadow for depth */
+                transition: background 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+            }
+
+            .gridview-container::-webkit-scrollbar-track {
+                /*background-color: #051c2d;*/ /* Black track for high contrast */
+                background-color: transparent; /* Black track for high contrast */
+                border-radius: 10px;
+                /*box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);*/ /* Subtle inner shadow for depth */
+            }
+
+            /*Animation for Hover Effect */
+            .gridview-container::-webkit-scrollbar-thumb:hover {
+                background: linear-gradient(180deg, aquamarine, chartreuse); /* Reverse gradient on hover */
+                /*box-shadow: 0 0 9px rgba(58, 192, 164, 0.7);*/ /*Increased glow on hover */
+            }
+
+            .gridview-container::-webkit-scrollbar-track:hover {
+                /*background-color: grey;*/
+                background-color: transparent;
+            }
+
+            .gridview-container::-webkit-scrollbar-thumb:active {
+                background-color: #134f45;
+            }
+
+            .gridview-container::-webkit-scrollbar-track:active {
+                /*background-color: #051c2d;*/
+                background-color: transparent; /* Black track for high contrast */
+            }
+
+
+
+
+
         .scrollable-panel {
             max-height: 680px; /* Adjust the height as needed */
             overflow-y: auto; /* Enables vertical scrolling */
@@ -116,64 +166,64 @@
                     border-bottom: none; /* Remove any bottom border */
                 }
         /* Styling the GridView Container */
-        .gridview-container {
+        /*.gridview-container {
             padding: 20px;
-            border: 1px solid #ddd; /* Soft border around the grid */
-            border-top: none; /* Remove border between tabs and gridview */
-            border-radius: 0 0 12px 12px; /* Rounded bottom corners */
-            background-color: #f9f9f9; /* Light background color */
-            margin-top: -1px; /* Seamless connection between tabs and content */
-            overflow: hidden; /* Prevent overflow and maintain rounded corners */
-        }
+            border: 1px solid #ddd;*/ /* Soft border around the grid */
+        /*border-top: none;*/ /* Remove border between tabs and gridview */
+        /*border-radius: 0 0 12px 12px;*/ /* Rounded bottom corners */
+        /*background-color: #f9f9f9;*/ /* Light background color */
+        /*margin-top: -1px;*/ /* Seamless connection between tabs and content */
+        /*overflow: hidden;*/ /* Prevent overflow and maintain rounded corners */
+        /*}*/
 
-            /* GridView Header Styles */
-            .gridview-container .gridview-header {
-                background: #66CDAA; /* Luminous green for header */
-                color: white;
-                font-size: 16px; /* Slightly smaller font for a refined look */
-                font-weight: 600; /* Medium weight for balanced appearance */
-                text-align: center;
+        /* GridView Header Styles */
+        /*.gridview-container .gridview-header {
+                background: #66CDAA;*/ /* Luminous green for header */
+        /*color: white;
+                font-size: 16px;*/ /* Slightly smaller font for a refined look */
+        /*font-weight: 600;*/ /* Medium weight for balanced appearance */
+        /*text-align: center;
                 padding: 12px;
-                border-radius: 12px 12px 0 0; /* Rounded top corners */
-            }
+                border-radius: 12px 12px 0 0;*/ /* Rounded top corners */
+        /*}*/
 
-            /* GridView Row Styles */
-            .gridview-container .gridview-row {
-                border-bottom: 1px solid #ddd; /* Light row separators */
-                padding: 12px;
-                font-size: 14px; /* Smaller font size */
-                font-weight: 500; /* Medium weight for row text */
-                color: #333; /* Darker text color */
-                word-wrap: break-word; /* Text wraps neatly */
-            }
+        /* GridView Row Styles */
+        /*.gridview-container .gridview-row {
+                border-bottom: 1px solid #ddd;*/ /* Light row separators */
+        /*padding: 12px;
+                font-size: 14px;*/ /* Smaller font size */
+        /*font-weight: 500;*/ /* Medium weight for row text */
+        /*color: #333;*/ /* Darker text color */
+        /*word-wrap: break-word;*/ /* Text wraps neatly */
+        /*}*/
 
-                /* Hover Effect for Grid Rows */
-                .gridview-container .gridview-row:hover {
-                    background: #eef8ee; /* Subtle hover effect */
-                }
+        /* Hover Effect for Grid Rows */
+        /*.gridview-container .gridview-row:hover {
+                    background: #eef8ee;*/ /* Subtle hover effect */
+        /*}*/
 
-            /* GridView Text Styles */
-            .gridview-container .gridview-row,
+        /* GridView Text Styles */
+        /*.gridview-container .gridview-row,
             .gridview-container .gridview-header {
-                font-family: 'Arial', sans-serif; /* Clean, formal font */
-                line-height: 1.5; /* Comfortable line height */
-            }
+                font-family: 'Arial', sans-serif;*/ /* Clean, formal font */
+        /*line-height: 1.5;*/ /* Comfortable line height */
+        /*}*/
 
-            /* Optional: Adding Footer Rounded Corners */
-            .gridview-container .gridview-footer {
-                border-radius: 0 0 12px 12px; /* Ensure footer has rounded corners */
-            }
+        /* Optional: Adding Footer Rounded Corners */
+        /*.gridview-container .gridview-footer {
+                border-radius: 0 0 12px 12px;*/ /* Ensure footer has rounded corners */
+        /*}*/
 
-            /* Additional Styling for Buttons and Labels */
-            .gridview-container .gridview-row .btnUnsuspend, .gridview-container .gridview-row .btnSuspend {
-                font-size: 12px; /* Adjusted button font size */
-                border-radius: 8px; /* Slightly rounded buttons */
-                padding: 5px 10px; /* Comfortable padding */
-            }
+        /* Additional Styling for Buttons and Labels */
+        /*.gridview-container .gridview-row .btnUnsuspend, .gridview-container .gridview-row .btnSuspend {
+                font-size: 12px;*/ /* Adjusted button font size */
+        /*border-radius: 8px;*/ /* Slightly rounded buttons */
+        /*padding: 5px 10px;*/ /* Comfortable padding */
+        /*}
 
             .gridview-container .gridview-row .imgEdit, .gridview-container .gridview-row .Image1 {
-                border-radius: 8px; /* Rounded corners for images */
-            }
+                border-radius: 8px;*/ /* Rounded corners for images */
+        /*}*/
         /*end of tabs design*/
 
 
@@ -358,8 +408,8 @@
         function search() {
             var searchText = document.getElementById('<%= txtSearch.ClientID %>').value.toUpperCase();
 
-        // Array of your GridView IDs
-        var gridViewIds = [
+            // Array of your GridView IDs
+            var gridViewIds = [
 
             '<%= gridView1.ClientID %>'
             ];
@@ -409,10 +459,6 @@
             }
         }
 </script>--%>
-
-
-
-
 </head>
 <form id="form2" runat="server" class="row g-3 needs-validation" novalidate>
     <div>
@@ -584,11 +630,12 @@
 
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="AM_Reports.aspx">
-                            <i class="bi bi-grid"></i>
+                            <i class="ri-secure-payment-line"></i>
                             <span>Reports</span>
                         </a>
 
                     </li>
+
 
                     <%--<li class="nav-item">
                         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
@@ -670,6 +717,7 @@
 
                     </div>
                 </section>
+                <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -733,7 +781,7 @@
                                     <div class="invalid-feedback">Password must be at least 6 characters long and contain at least one uppercase letter, one number, and one special character.</div>
                                 </div>--%>
                                 <!-- Password -->
-                                    <%--<div class="col-12 mb-3">
+                                <%--<div class="col-12 mb-3">
                                         <div class="input-group input-group-sm">
                                             <span class="input-group-text" style="padding: 10px; padding-right: 20px; color: darkblue; font-weight: 700">Password</span>                                            
                                                 <asp:Button
@@ -797,9 +845,9 @@
 
 
                 <section style="background-color: #052507; padding: 25px; border-radius: 8px; box-shadow: 0 0 5px rgba(0, 0, 0, .2)">
-                    <div>
+                    <%-- <div>
                         <asp:ImageMap ID="ImageMap1" runat="server" ImageUrl="Pictures//box_format.png" Style="float: right; margin-right: 0px; margin-top: 0px; width: 50px"></asp:ImageMap>
-                    </div>
+                    </div>--%>
                     <div style="margin-top: 50px; margin-bottom: 30px">
                         <asp:TextBox Style="border-radius: 10px; padding-left: 10px; padding: 2px; margin-top: 7px; border-color: aquamarine; border-width: 3px" placeholder="Search" ID="txtSearch" runat="server" oninput="search();" AutoPostBack="false"></asp:TextBox>
                         <button type="button" class="btn btn-primary" style="margin: 10px; float: right; background-color: #052507; border-color: aquamarine; border-radius: 8px; border-width: 3px" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -808,155 +856,134 @@
                     </div>
 
                     <%--ADD BUTTON--%>
-          
+
 
                     <%-- START TABS DESIGN GRIDVIEW--%>
 
-
-                    <%--<ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <asp:HiddenField ID="hfActiveTab" runat="server" />
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="sam-tab" data-bs-toggle="tab" data-bs-target="#sam" type="button" role="tab" aria-controls="sam" aria-selected="true" style="color: #061f0d; font-weight: 900">Contractual</button>
+                            <button class="nav-link active" id="sam-tab" href="#sam" data-bs-toggle="tab" data-bs-target="#sam" type="button" role="tab" aria-controls="sam" aria-selected="true" style="color: #061f0d; font-weight: 900">Customer</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="am-tab" data-bs-toggle="tab" data-bs-target="#am" type="button" role="tab" aria-controls="am" aria-selected="false" style="color: #061f0d; font-weight: 900">Non-Contractual</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="apply-tab" data-bs-toggle="tab" data-bs-target="#apply" type="button" role="tab" aria-controls="apply" aria-selected="false" style="color: #061f0d; font-weight: 900">Requests for Contractual</button>
-                        </li>
-                    </ul>--%>
+                        <%--<li class="nav-item" role="presentation">
+                            <button class="nav-link" id="am-tab" href="#am" data-bs-toggle="tab" data-bs-target="#am" type="button" role="tab" aria-controls="am" aria-selected="false" style="color: #061f0d; font-weight: 900">Requests Verification</button>
+                        </li>--%>
+                      
+                    </ul>
 
 
                     <div id="myTabContent" class="tab-content pt-2">
 
-                            <div class="tab-pane fade show active" id="sam" role="tabpanel" aria-labelledby="sam-tab">
-                                <%--<div style="margin: 0">
+                        <div class="tab-pane fade show active" id="sam" role="tabpanel" aria-labelledby="sam-tab">
+                            <%--<div style="margin: 0">
                                     <h1 style="color: #dda214; padding-top: 50px; padding-bottom: 0; font-family: 'Raleway',sans-serif; font-size: 62px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center; text-transform: uppercase;">Super Account Manager
                                     </h1>
                                 </div>--%>
-                                <%--<div class="gridview-container">--%>
-                                    <asp:GridView Style="width: 100%; word-break: break-all; table-layout: fixed" ID="gridView1" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True"
-                                        DataKeyNames="cus_id" AllowPaging="False" CellPadding="20" GridLines="None">
-                                        <AlternatingRowStyle BackColor="white" ForeColor="Black" />
-
-                                        <Columns>
-                                            <asp:BoundField DataField="cus_id" HeaderText="ID" InsertVisible="False" ReadOnly="True" SortExpression="cus_id" ItemStyle-Width="100px">
-                                                <ItemStyle Width="100px" Wrap="true" />
-                                            </asp:BoundField>
-                                            <asp:BoundField DataField="cus_fname" HeaderText="First Name" SortExpression="cus_fname" ItemStyle-Width="150px">
-                                                <ItemStyle Width="150px" Wrap="true" />
-                                            </asp:BoundField>
-                                            <asp:BoundField DataField="cus_mname" HeaderText="M.I" SortExpression="cus_mname" ItemStyle-Width="100px">
-                                                <ItemStyle Width="100px" Wrap="true" />
-                                            </asp:BoundField>
-                                            <asp:BoundField DataField="cus_lname" HeaderText="Last Name" SortExpression="cus_lname" ItemStyle-Width="150px">
-                                                <ItemStyle Width="150px" Wrap="true" />
-                                            </asp:BoundField>
-                                            <asp:BoundField DataField="cus_contact" HeaderText="Contact" SortExpression="cus_contact" ItemStyle-Width="100px">
-                                                <ItemStyle Width="100px" Wrap="true" />
-                                            </asp:BoundField>
-                                            <asp:BoundField DataField="cus_email" HeaderText="Email" SortExpression="cus_email" ItemStyle-Width="200px">
-                                                <ItemStyle Width="200px" Wrap="true" />
-                                            </asp:BoundField>
-                                            <asp:BoundField DataField="cus_created_at" HeaderText="Created At" SortExpression="cus_created_at" ItemStyle-Width="150px">
-                                                <ItemStyle Width="150px" Wrap="true" />
-                                            </asp:BoundField>
-                                            <asp:BoundField DataField="cus_updated_at" HeaderText="Updated At" SortExpression="cus_updated_at" ItemStyle-Width="150px">
-                                                <ItemStyle Width="150px" Wrap="true" />
-                                            </asp:BoundField>
-
-                                            <asp:TemplateField HeaderText="Status">
-                                                <ItemTemplate>
-                                                    <asp:Button Style="font-size: 10px; color: orangered; font-weight: bold;" ID="btnUnsuspend" runat="server" Text='<%# Eval("cus_status") + " ▼"%>'
-                                                        OnClick="Unsuspend_Click"
-                                                        OnClientClick="return confirm('Are you sure you want to Unsuspend this account manager?');"
-                                                        Visible='<%# Eval("cus_status").ToString() == "Suspend" %>' CommandArgument='<%# Eval("cus_id") %>' />
-                                                    <asp:Label ID="Label9" runat="server" Text='<%# Eval("cus_status")%>' Visible='<%# Eval("cus_status").ToString() == "Inactive" %>' />
-                                                    <asp:Button Style="font-size: 10px; color: lawngreen; font-weight: bold;" ID="btnSuspend" runat="server" Text='<%# Eval("cus_status") + " ▲"%>'
-                                                        OnClick="Suspend_Click"
-                                                        OnClientClick="return confirm('Are you sure you want to Suspend this account manager?');"
-                                                        Visible='<%# Eval("cus_status").ToString() == "Active" %>' CommandArgument='<%# Eval("cus_id") %>' />
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-
-                                            <asp:TemplateField HeaderText="Action">
-                                                <ItemTemplate>
-                                                    <asp:LinkButton ID="update" runat="server" OnClick="Update_Click" CommandArgument='<%# Eval("cus_id") %>'>
-                                                        <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
-                                                    </asp:LinkButton>
-                                                    <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("cus_id") %>' OnClientClick="return confirm('Are you sure you want to remove this account manager?');">
-                                                        <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
-                                                    </asp:LinkButton>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                        </Columns>
-
-                                        <RowStyle BackColor="White" ForeColor="Black" />
-                                        <EditRowStyle BackColor="#90EE90" />
-                                        <FooterStyle BackColor="Black" Font-Bold="True" ForeColor="#f9cfb4" />
-                                        <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="None" />
-                                        <PagerStyle BorderColor="#CC9900" Font-Size="20px" BackColor="White" ForeColor="#f9cfb4" HorizontalAlign="Center" />
-                                        <SelectedRowStyle BackColor="#C5BBAF" Font-Bold="True" ForeColor="White" />
-                                        <SortedAscendingCellStyle BackColor="Black" />
-                                        <SortedAscendingHeaderStyle BackColor="#246B61" />
-                                        <SortedDescendingCellStyle BackColor="Black" />
-                                        <SortedDescendingHeaderStyle BackColor="#15524A" />
-                                    </asp:GridView>
-                                <%--</div>--%>
-                            </div>
-
-
-                        <%--<div class="tab-pane fade" id="am" role="tabpanel" aria-labelledby="am-tab">
-                           
-                                <asp:GridView Style="width: 100%; word-break: break-all; table-layout: fixed" ID="gridView2" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True"
-                                    DataKeyNames="cus_id" AllowPaging="False" CellPadding="20" GridLines="None">
+                            <div class="gridview-container">
+                                <asp:GridView Style="width: 100%; word-break: break-all; table-layout: fixed" ID="gridView1" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True"
+                                    DataKeyNames="cus_id" AllowPaging="False" CellPadding="20" GridLines="None" AutoPostBack="True">
                                     <AlternatingRowStyle BackColor="white" ForeColor="Black" />
 
                                     <Columns>
                                         <asp:BoundField DataField="cus_id" HeaderText="ID" InsertVisible="False" ReadOnly="True" SortExpression="cus_id" ItemStyle-Width="100px">
                                             <ItemStyle Width="100px" Wrap="true" />
                                         </asp:BoundField>
-                                        <asp:BoundField DataField="cus_fname" HeaderText="First Name" SortExpression="cus_fname" ItemStyle-Width="150px">
+                                        <asp:BoundField DataField="FullName" HeaderText="Full Name" SortExpression="FullName" ItemStyle-Width="150px">
                                             <ItemStyle Width="150px" Wrap="true" />
                                         </asp:BoundField>
-                                        <asp:BoundField DataField="cus_mname" HeaderText="M.I" SortExpression="cus_mname" ItemStyle-Width="100px">
+                                        <asp:BoundField DataField="vc_id" HeaderText="Verification ID" SortExpression="vc_id" ItemStyle-Width="100px">
                                             <ItemStyle Width="100px" Wrap="true" />
                                         </asp:BoundField>
-                                        <asp:BoundField DataField="cus_lname" HeaderText="Last Name" SortExpression="cus_lname" ItemStyle-Width="150px">
-                                            <ItemStyle Width="150px" Wrap="true" />
-                                        </asp:BoundField>
-                                        <asp:BoundField DataField="cus_contact" HeaderText="Contact" SortExpression="cus_contact" ItemStyle-Width="100px">
-                                            <ItemStyle Width="100px" Wrap="true" />
-                                        </asp:BoundField>
-                                        <asp:BoundField DataField="cus_email" HeaderText="Email" SortExpression="cus_email" ItemStyle-Width="200px">
+                                        <asp:BoundField DataField="vc_status" HeaderText="Verification Status" SortExpression="vc_status" ItemStyle-Width="200px">
                                             <ItemStyle Width="200px" Wrap="true" />
                                         </asp:BoundField>
-                                        <asp:BoundField DataField="cus_created_at" HeaderText="Created At" SortExpression="cus_created_at" ItemStyle-Width="150px">
-                                            <ItemStyle Width="150px" Wrap="true" />
+                                        <asp:BoundField DataField="cus_status" HeaderText="Customer Status" SortExpression="cus_status" ItemStyle-Width="200px">
+                                            <ItemStyle Width="200px" Wrap="true" />
                                         </asp:BoundField>
-                                        <asp:BoundField DataField="cus_updated_at" HeaderText="Updated At" SortExpression="cus_updated_at" ItemStyle-Width="150px">
+
+                                        <asp:BoundField DataField="valid_id_uploaded" HeaderText="Valid ID Uploaded" SortExpression="valid_id_uploaded" ItemStyle-Width="150px">
                                             <ItemStyle Width="150px" Wrap="true" />
                                         </asp:BoundField>
 
+                                        <asp:BoundField DataField="selfie_uploaded" HeaderText="Selfie Uploaded" SortExpression="selfie_uploaded" ItemStyle-Width="150px">
+                                            <ItemStyle Width="150px" Wrap="true" />
+                                        </asp:BoundField>
+
+                                        <asp:TemplateField HeaderText="Type">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblVerifiedStatus" runat="server"
+                                                    Text='<%# Convert.ToBoolean(Eval("cus_isverified")) ? "Verified" : "Unverified" %>'
+                                                    CssClass='<%# Convert.ToBoolean(Eval("cus_isverified")) ? "badge rounded-pill bg-warning text-dark" : "badge rounded-pill bg-secondary" %>'>
+                                                </asp:Label>
+                                            </ItemTemplate>
+                                            <ItemStyle Width="150px" Wrap="true" />
+                                        </asp:TemplateField>
+
+
+
                                         <asp:TemplateField HeaderText="Status">
                                             <ItemTemplate>
-                                                <asp:Button Style="font-size: 10px; color: orangered; font-weight: bold;" ID="btnUnsuspend" runat="server" Text='<%# Eval("cus_status") + " ▼"%>'
+                                                <asp:Button Style="font-size: 10px; font-weight: bold;" CssClass="btn btn-outline-danger" ID="btnUnsuspend" runat="server" Text='<%# Eval("cus_status") + " ▼"%>'
                                                     OnClick="Unsuspend_Click"
-                                                    OnClientClick="return confirm('Are you sure you want to Unsuspend this account manager?');"
+                                                    OnClientClick="return confirm('Are you sure you want to Unsuspend this customer?');"
                                                     Visible='<%# Eval("cus_status").ToString() == "Suspend" %>' CommandArgument='<%# Eval("cus_id") %>' />
                                                 <asp:Label ID="Label9" runat="server" Text='<%# Eval("cus_status")%>' Visible='<%# Eval("cus_status").ToString() == "Inactive" %>' />
-                                                <asp:Button Style="font-size: 10px; color: lawngreen; font-weight: bold;" ID="btnSuspend" runat="server" Text='<%# Eval("cus_status") + " ▲"%>'
+                                                <asp:Button Style="font-size: 10px; font-weight: bold;" CssClass="btn btn-outline-success" ID="btnSuspend" runat="server" Text='<%# Eval("cus_status") + " ▲"%>'
                                                     OnClick="Suspend_Click"
-                                                    OnClientClick="return confirm('Are you sure you want to Suspend this account manager?');"
+                                                    OnClientClick="return confirm('Are you sure you want to Suspend this customer?');"
                                                     Visible='<%# Eval("cus_status").ToString() == "Active" %>' CommandArgument='<%# Eval("cus_id") %>' />
                                             </ItemTemplate>
                                         </asp:TemplateField>
+
+                                        <asp:TemplateField HeaderText="Verify Action">
+                                            <ItemTemplate>
+                                                <asp:LinkButton
+                                                    ID="btnApprove"
+                                                    runat="server"
+                                                    CssClass="btn btn-outline-success"
+                                                    OnClick="Approve_Click"
+                                                    CommandArgument='<%# Eval("vc_id") %>'
+                                                    OnClientClick="return confirm('Are you sure you want to Approve/Verify this customer?');"
+                                                    Visible='<%# Eval("vc_status").ToString() == "Pending" %>'
+                                                    Style="font-size: 12px; padding: 5px 10px;">
+            Approve
+                                                </asp:LinkButton>
+
+                                                <asp:LinkButton
+                                                    ID="btnDecline"
+                                                    runat="server"
+                                                    CssClass="btn btn-outline-danger"
+                                                    OnClientClick='<%# "showDeclineModal(" + Eval("vc_id") + ", " + Eval("cus_id") + "); return false;" %>'
+                                                    Visible='<%# Eval("vc_status").ToString() == "Pending" %>'
+                                                    Style="font-size: 12px; padding: 5px 10px;">
+            Decline
+                                                </asp:LinkButton>
+
+                                                <asp:Label
+                                                    ID="lblApproved"
+                                                    runat="server"
+                                                    Text="Approved"
+                                                    CssClass="badge bg-success"
+                                                    Visible='<%# Eval("vc_status").ToString() == "Approved" %>'>
+                                                </asp:Label>
+
+                                                <asp:Label
+                                                    ID="lblDeclined"
+                                                    runat="server"
+                                                    Text="Declined"
+                                                    CssClass="badge bg-danger"
+                                                    Visible='<%# Eval("vc_status").ToString() == "Rejected" %>'>
+                                                </asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+
 
                                         <asp:TemplateField HeaderText="Action">
                                             <ItemTemplate>
                                                 <asp:LinkButton ID="update" runat="server" OnClick="Update_Click" CommandArgument='<%# Eval("cus_id") %>'>
                                                     <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
                                                 </asp:LinkButton>
-                                                <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("cus_id") %>' OnClientClick="return confirm('Are you sure you want to remove this account manager?');">
+                                                <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("cus_id") %>' OnClientClick="return confirm('Are you sure you want to remove this customer?');">
                                                     <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
                                                 </asp:LinkButton>
                                             </ItemTemplate>
@@ -974,7 +1001,201 @@
                                     <SortedDescendingCellStyle BackColor="Black" />
                                     <SortedDescendingHeaderStyle BackColor="#15524A" />
                                 </asp:GridView>
+                            </div>
                         </div>
+
+
+                        <div class="tab-pane fade" id="am" role="tabpanel" aria-labelledby="am-tab">
+                            <asp:GridView Style="width: 100%; word-break: break-all; table-layout: fixed" ID="gridView2" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True"
+                                DataKeyNames="cus_id" AllowPaging="False" CellPadding="20" GridLines="None">
+                                <AlternatingRowStyle BackColor="white" ForeColor="Black" />
+
+                                <Columns>
+                                    <asp:BoundField DataField="vc_status" HeaderText="Status" SortExpression="vc_status" ItemStyle-Width="100px">
+                                        <ItemStyle Width="100px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="vc_id" HeaderText="Verification ID" SortExpression="vc_id" ItemStyle-Width="100px">
+                                        <ItemStyle Width="100px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="cus_contact" HeaderText="Contact" SortExpression="cus_contact" ItemStyle-Width="150px">
+                                        <ItemStyle Width="150px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="vc_created_at" HeaderText="Verification Created At" SortExpression="vc_created_at" ItemStyle-Width="200px">
+                                        <ItemStyle Width="200px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="full_name" HeaderText="Full Name" SortExpression="full_name" ItemStyle-Width="200px">
+                                        <ItemStyle Width="200px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="cus_id" HeaderText="Customer ID" SortExpression="cus_id" ItemStyle-Width="100px">
+                                        <ItemStyle Width="100px" Wrap="true" />
+                                    </asp:BoundField>
+                                    <asp:TemplateField HeaderText="Action">
+                                        <ItemTemplate>
+                                            <asp:LinkButton
+                                                ID="btnApprove"
+                                                runat="server"
+                                                CssClass="btn btn-outline-success"
+                                                OnClick="Approve_Click"
+                                                CommandArgument='<%# Eval("vc_id") %>'
+                                                Visible='<%# Eval("vc_status").ToString() == "Pending" %>'>Approve
+                                            </asp:LinkButton>
+
+                                            <asp:LinkButton
+                                                ID="btnDecline"
+                                                runat="server"
+                                                CssClass="btn btn-outline-danger"
+                                                OnClientClick='<%# "showDeclineModal(" + Eval("vc_id") + ", " + Eval("cus_id") + "); return false;" %>'
+                                                Visible='<%# Eval("vc_status").ToString() == "Pending" %>'>
+                                                    Decline
+                                            </asp:LinkButton>
+
+
+
+                                            <asp:Label
+                                                ID="lblApproved"
+                                                runat="server"
+                                                Text="Approved"
+                                                CssClass="badge bg-success"
+                                                Visible='<%# Eval("vc_status").ToString() == "Approved" %>'>
+                                            </asp:Label>
+
+                                            <asp:Label
+                                                ID="lblDeclined"
+                                                runat="server"
+                                                Text="Declined"
+                                                CssClass="badge bg-danger"
+                                                Visible='<%# Eval("vc_status").ToString() == "Declined" %>'>
+                                            </asp:Label>
+
+
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+
+
+                                    <asp:TemplateField HeaderText="Action">
+                                        <ItemTemplate>
+                                            <%--<asp:LinkButton ID="VerificationDetails" runat="server" OnClick="VerificationDetails_Click"
+                                                OnClientClick="return false;" CommandArgument='<%# Eval("VC_ID") %>'>Show Details</asp:LinkButton>--%>
+                                            <%--<asp:LinkButton ID="VCSeeDetails" runat="server" OnClick="VCSeeDetails_Click"
+                                                 CommandArgument='<%# Eval("vc_id") %>'>See Details</asp:LinkButton>--%>
+                                            <%--<asp:LinkButton ID="update" runat="server" OnClick="VerificationDetails_Click"
+                                                OnClientClick='<%# "showFullModal(" + Eval("vc_id") + "," + Eval("cus_id") + "); return false;" %>'>
+                                                <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
+                                            </asp:LinkButton>--%>
+
+                                            <!-- Add Button for Viewing Slip -->
+                                            <asp:Button ID="btnViewSlip" CssClass="btn btn-success rounded-pill" runat="server" Text="View Slip" OnClick="btnViewSlip_Click" CommandArgument='<%#Eval ("vc_id") %>' />
+
+
+
+                                            <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("cus_id") %>' OnClientClick="return confirm('Are you sure you want to remove this customer?');">
+                                                <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
+                                            </asp:LinkButton>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
+
+                                <RowStyle BackColor="White" ForeColor="Black" />
+                                <EditRowStyle BackColor="#90EE90" />
+                                <FooterStyle BackColor="Black" Font-Bold="True" ForeColor="#f9cfb4" />
+                                <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="None" />
+                                <PagerStyle BorderColor="#CC9900" Font-Size="20px" BackColor="White" ForeColor="#f9cfb4" HorizontalAlign="Center" />
+                                <SelectedRowStyle BackColor="#C5BBAF" Font-Bold="True" ForeColor="White" />
+                                <SortedAscendingCellStyle BackColor="Black" />
+                                <SortedAscendingHeaderStyle BackColor="#246B61" />
+                                <SortedDescendingCellStyle BackColor="Black" />
+                                <SortedDescendingHeaderStyle BackColor="#15524A" />
+                            </asp:GridView>
+                        </div>
+
+
+                        <!-- View Scale Slip Panel -->
+                        <asp:LinkButton ID="LinkButton4" runat="server"></asp:LinkButton>
+
+                        <div class="container" style="height: 100vh; display: flex; justify-content: center; align-items: center;">
+                            <!-- Modal Panel for Verification IDs -->
+                            <asp:Panel ID="verificationPanel" CssClass="card shadow-lg scrollable-panel" runat="server" Style="max-width: 600px; background-color: #052507; border: 1px solid aquamarine; border-radius: 8px;">
+                                <contenttemplate>
+                                    <!-- Header Section -->
+                                    <div class="card-header text-center" style="background-color: #052507; color: aquamarine;">
+                                        <h4 class="mb-0">Verification ID</h4>
+                                    </div>
+
+                                    <!-- Body Section -->
+                                    <div class="card-body" style="background-color: #052507; padding-top: 10px">
+                                        <div class="row">
+                                            <!-- Valid ID -->
+                                            <div class="col-12 mb-3">
+                                                <asp:Label ID="lblValidID" runat="server" Text="Valid ID Picture" Style="color: chartreuse"></asp:Label>
+                                                <asp:Image ID="Image2" runat="server" AlternateText="Valid ID" CssClass="img-thumbnail mt-2" Style="max-width: 100%;" />
+                                            </div>
+
+                                            <!-- Valid Selfie -->
+                                            <div class="col-12 mb-3">
+                                                <asp:Label ID="lblSelfie" runat="server" Text="Selfie Picture" Style="color: chartreuse"></asp:Label>
+                                                <asp:Image ID="Image3" runat="server" AlternateText="Selfie" CssClass="img-thumbnail mt-2" Style="max-width: 100%;" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Footer Section -->
+                                    <div class="card-footer text-center" style="background-color: #0D342D; color: #26D8A8; padding: 15px;">
+                                        <asp:Button ID="btnCloseVerification" CssClass="btn btn-secondary" runat="server" Text="Close" OnClick="btnCloseSlip_Click" />
+                                    </div>
+                                </contenttemplate>
+                            </asp:Panel>
+                        </div>
+                        <ajaxToolkit:ModalPopupExtender ID="ModalPopupExtender4" runat="server"
+                            CancelControlID="btnCloseVerification" PopupControlID="verificationPanel" TargetControlID="LinkButton4"
+                            BackgroundCssClass="Background" DropShadow="True">
+                        </ajaxToolkit:ModalPopupExtender>
+
+
+
+
+                        <!--Original! -->
+                        <%--  <div class="modal-overlay">
+        <!-- Main Panel Design -->
+        <asp:UpdatePanel ID="updatePanel3" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="true">
+            <contenttemplate>
+                <div class="card shadow-lg draggable" style="max-width: 820px; padding: 0; border: 2px solid #26D8A8; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);">
+                    <div class="card-header text-center" style="background-color: #0D342D; color: #26D8A8; padding: 20px;">
+                        <h4>Verification ID</h4>
+                    </div>
+
+
+                    <div class="card-body" style="padding: 40px; background-color: #052507;">
+                        <div class="row d-flex justify-content-center" style="margin-top: 5px;">
+                           <asp:Image ID="Image2" runat="server" alt="Valid ID" Style="display: none; width: 100%; height: auto;" />
+<asp:Image ID="Image3" runat="server" alt="Selfie" Style="display: none; width: 100%; height: auto;" />
+
+                        </div>
+                    </div
+
+                        <div class="card-footer text-center" style="background-color: #0D342D; color: #26D8A8; padding: 15px;">
+                        <asp:Button ID="Button6" CssClass="btn btn-secondary" runat="server" Text="Close" OnClick="btnCloseSlip_Click" />
+                    </div>
+                </div>
+            </contenttemplate>
+            <!-- 
+             <triggers>
+                <asp:AsyncPostBackTrigger ControlID="btnViewSlip" EventName="Click" />
+            </triggers> -->
+        </asp:UpdatePanel>
+    </div>
+
+    <!-- Modal Popup Extender -->
+    <ajaxToolkit:ModalPopupExtender ID="ModalPopupExtender4" runat="server"
+        CancelControlID="Button6" PopupControlID="updatePanel3" TargetControlID="LinkButton4"
+        BackgroundCssClass="Background" DropShadow="True">
+    </ajaxToolkit:ModalPopupExtender>--%>
+
+
+
+
+
+
+
 
 
                         <div class="tab-pane fade" id="apply" role="tabpanel" aria-labelledby="apply-tab">
@@ -1007,13 +1228,11 @@
                                     </asp:BoundField>
                                     <asp:TemplateField HeaderText="Action">
                                         <ItemTemplate>
-                                            <asp:LinkButton ID="btnAccept" runat="server" OnClick="Accept_Click" CommandArgument='<%# Eval("cont_id") %>'>
-                        Accept
-                    </asp:LinkButton>
+                                            <asp:LinkButton ID="btnAccept" runat="server" OnClick="Accept_Click" CommandArgument='<%# Eval("cont_id") %>'>Accept
+                                            </asp:LinkButton>
                                             <asp:LinkButton ID="btnDecline" runat="server"
-                                                OnClientClick='<%# "showDeclineModal(" + Eval("cont_id") + "); return false;" %>'>
-                        Decline
-                    </asp:LinkButton>
+                                                OnClientClick='<%# "showDeclineModal(" + Eval("cont_id") + "); return false;" %>'>Decline
+                                            </asp:LinkButton>
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                 </Columns>
@@ -1028,7 +1247,7 @@
                                 <SortedDescendingCellStyle BackColor="Black" />
                                 <SortedDescendingHeaderStyle BackColor="#15524A" />
                             </asp:GridView>
-                        </div>--%>
+                        </div>
 
 
                     </div>
@@ -1038,15 +1257,25 @@
                 <%--END TABS DESIGN GRIDVIEW--%>
 
                 <!-- Full Screen Modal -->
-                <div class="modal fade" id="fullscreenModal" tabindex="-1" aria-labelledby="fullscreenModalLabel" aria-hidden="true">
+                <%--       <div class="modal fade" id="fullscreenModal" tabindex="-1" aria-labelledby="fullscreenModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-fullscreen">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Contract Details</h5>
+                                <h5 class="modal-title">Details</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <asp:HiddenField ID="HiddenField1" runat="server" />
+                                <asp:HiddenField ID="HiddenField2" runat="server" />
                             </div>
                             <div class="modal-body">
-                                <p id="contractDetails">Loading...</p>
+                                <div class="mb-3">
+                                    <asp:TextBox
+                                        ID="TextBox1"
+                                        runat="server"
+                                        CssClass="form-control">
+                                    </asp:TextBox>
+                                </div>
+
+                                <!-- This will be updated dynamically -->
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -1054,28 +1283,39 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>--%>
+                <!-- End Full Screen Modal -->
+
+                <!-- Full Screen Modal -->
+
                 <!-- End Full Screen Modal -->
 
 
+
                 <!-- Vertically centered Modal -->
-                <%--<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered">
-                    Vertically centered
-                </button>--%>
                 <div class="modal fade" id="verticalycentered" tabindex="-1">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title">Decline Reason</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <asp:HiddenField ID="hide_vcID" runat="server" />
+                                <asp:HiddenField ID="hide_cusID" runat="server" />
                             </div>
                             <div class="modal-body">
                                 <label for="declineReason">Please enter your reason for declining:</label>
-                                <textarea id="declineReason" class="form-control" rows="3" placeholder="Enter your reason here..."></textarea>
+                                <asp:TextBox
+                                    ID="declineReasons"
+                                    runat="server"
+                                    CssClass="form-control"
+                                    TextMode="MultiLine"
+                                    Rows="3"
+                                    Placeholder="Enter your reason here...">
+                                </asp:TextBox>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" id="btnSubmitDecline">Submit</button>
+                                <asp:Button class="btn btn-primary" runat="server" OnClick="Reject_Click" ID="btnSubmitDecline" Text="Submit" />
                             </div>
                         </div>
                     </div>
@@ -1084,7 +1324,7 @@
 
 
                 <asp:LinkButton ID="LinkButton1" runat="server"></asp:LinkButton>
-                <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+
 
                 <!-- Centering the panel and enhancing its look -->
                 <div class="container" style="height: 100vh; display: flex; justify-content: center; align-items: center;">
@@ -1103,7 +1343,7 @@
                                         <!-- ID (Disabled) -->
                                         <div class="col-12 mb-3">
                                             <div class="input-group input-group-sm">
-                                                    <span class="input-group-text" style="padding: 10px; ">ID</span>
+                                                <span class="input-group-text" style="padding: 10px;">ID</span>
                                                 <asp:TextBox ID="txtbxID" runat="server" CssClass="form-control" ClientIDMode="Static" Enabled="false"></asp:TextBox>
                                             </div>
                                         </div>
@@ -1160,6 +1400,17 @@
                                         </div>
                                     </div>
 
+                                    <!-- Address -->
+                                    <div class="col-12 mb-3">
+                                        <div class="mb-3">
+                                            <asp:Label ID="Label7" runat="server" Text="Address" Style="color: chartreuse"></asp:Label>
+
+                                            <asp:TextBox ID="TextBox1" runat="server" CssClass="form-control" ClientIDMode="Static" onkeyup="validateUpdateEmail()" Enabled="false"></asp:TextBox>
+                                            <div class="valid-feedback">Looks good!</div>
+                                            <div class="invalid-feedback">Please provide a valid email address.</div>
+                                        </div>
+                                    </div>
+
                                     <%--<!-- Password -->
                                     <div class="col-12 mb-3">
 
@@ -1181,7 +1432,7 @@
                                                 runat="server"
                                                 Text="Reset Password"
                                                 OnClick="btnResetPass_Click"
-                                                OnClientClick="return confirm('Are you sure you want to update category?');"
+                                                OnClientClick="return confirm('Are you sure you want to reset password?');"
                                                 Style="background-color: green; color: white; border-bottom-right-radius: 5px; border-top-right-radius: 5px" />
                                         </div>
                                     </div>
@@ -1194,13 +1445,42 @@
                                         <asp:Image ID="imagePreviewUpdate" runat="server" AlternateText="Image Preview" CssClass="img-thumbnail mt-2" Style="max-width: 150px;" />
                                         <span id="fileErrorUpdate" class="text-danger" style="display: none;">File uploaded is not an image.</span>
                                     </div>
+
+                                    <!-- Valid ID -->
+                                    <div class="col-12 mb-3">
+                                        <asp:Label ID="Label21" runat="server" Text="Valid ID Pic" Style="color: chartreuse"></asp:Label>
+                                        <br />
+                                        <asp:Image ID="valid_id" runat="server" class="form-control" AlternateText="Valid ID" CssClass="img-thumbnail mt-2" Style="max-width: 100%;" onclick="expandImage(this)" />
+                                    </div>
+
+                                    <div class="card-footer text-center" style="background-color: #0D342D; color: #26D8A8; padding: 15px;">
+                                        <asp:Button ID="valid_idbtndownload" CssClass="btn btn-secondary" runat="server" Text="Download Pic" OnClick="valid_idbtndownload_Click" />
+                                    </div>
+
+                                    <!-- Valid Selfie -->
+                                    <div class="col-12 mb-3">
+                                        <asp:Label ID="Label6" runat="server" Text="Valid Selfie" Style="color: chartreuse"></asp:Label>
+                                        <br />
+                                        <asp:Image ID="valid_selfie" runat="server" class="form-control" AlternateText="Selfie" CssClass="img-thumbnail mt-2" Style="max-width: 100%;" onclick="expandImage(this)" />
+                                    </div>
+
+                                    <div class="card-footer text-center" style="background-color: #0D342D; color: #26D8A8; padding: 15px;">
+                                        <asp:Button ID="valid_selfiebtndownload" CssClass="btn btn-secondary" runat="server" Text="Download Pic" OnClick="valid_selfiebtndownload_Click" />
+                                    </div>
+
+
+
+
                                 </div>
                             </div>
 
                             <!-- Footer Section -->
                             <div class="card-footer text-center" style="background-color: #052507; color: aquamarine;">
                                 <asp:Button ID="btncancel" CssClass="btn btn-secondary" runat="server" Text="Cancel" />
-                                <asp:Button ID="btnUpdate" CssClass="btn btn-primary" runat="server" Text="Update" OnClick="UpdateCustomerInfo" OnClientClick="return confirm('Are you sure you want to update category?');" />
+                                <asp:Button ID="btnUpdate" CssClass="btn btn-primary" runat="server" Text="Update" OnClick="UpdateCustomerInfo" OnClientClick="return confirm('Are you sure you want to update customer information?');" />
+
+                                <%-- <asp:Button ID="btnVerify" CssClass="btn btn-success" runat="server" Text="Verify Customer" OnClick="btnVerify_Click" OnClientClick="return confirm('Are you sure you want to verify this customer?');" />
+ <asp:Button ID="btnReject" CssClass="btn btn-danger" runat="server" Text="Reject Customer" OnClick="btnReject_Click" OnClientClick="return confirm('Are you sure you want to reject this customer?');" />--%>
                             </div>
 
                         </contenttemplate>
@@ -1213,8 +1493,22 @@
                 <ajaxToolkit:ModalPopupExtender ID="ModalPopupExtender2" runat="server" CancelControlID="btncancel" PopupControlID="updatePanel" TargetControlID="LinkButton1" BackgroundCssClass="Background" DropShadow="True"></ajaxToolkit:ModalPopupExtender>
 
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
                 <script>
+
+                    //To download Image
+                    function downloadImage(imageUrl, filename) {
+                        const link = document.createElement('a');
+                        link.href = imageUrl;
+                        link.download = filename;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+
+
+
                     /*fullscreen modal*/
                     <%--document.querySelectorAll('#<%= gridView3.ClientID %> tr').forEach(function (row) {
                         row.addEventListener('click', function () {
@@ -1238,13 +1532,82 @@
                     });--%>
                     /*end of full screen modal*/
                     /*modal for failed description*/
-                    var currentContId;
+                    //var currentContId;
 
-                    function showDeclineModal(contId) {
-                        currentContId = contId; // Store the cont_id for later use
+                    //function showDeclineModal(contId) {
+                    //    currentContId = contId; // Store the cont_id for later use
+                    //    var declineModal = new bootstrap.Modal(document.getElementById('verticalycentered'));
+                    //    declineModal.show(); // Show the modal
+                    //}
+
+                    var currentContId;
+                    var currentCusId;
+
+                    function showDeclineModal(vcId, cusId) {
+                        currentContId = vcId; // Store the vc_id for later use
+                        currentCusId = cusId; // Store the cus_id for later use
+
+                        // Set the hidden field values
+                        document.getElementById('<%= hide_vcID.ClientID %>').value = vcId;
+                        document.getElementById('<%= hide_cusID.ClientID %>').value = cusId;
+
+                        // Show the modal
                         var declineModal = new bootstrap.Modal(document.getElementById('verticalycentered'));
-                        declineModal.show(); // Show the modal
+                        declineModal.show();
+
+                        // Display an alert with the vc_id and cus_id values for testing
+                        /* alert('Customer ID: ' + cusId + ', Verification ID: ' + vcId);*/
                     }
+
+
+                    //Original showDeclineModal
+                   <%-- function showDeclineModal(vcId, cusId) {
+                        currentContId = vcId; // Store the vc_id for later use
+                        currentCusId = cusId; // Store the cus_id for later use
+
+                        // Set the hidden field values
+                        document.getElementById('<%= hide_vcID.ClientID %>').value = vcId;
+                        document.getElementById('<%= hide_cusID.ClientID %>').value = cusId;
+
+                        // Show the modal
+                        var declineModal = new bootstrap.Modal(document.getElementById('verticalycentered'));
+                        declineModal.show();
+                    }--%>
+
+                    var currentContIdd;
+                    var currentCusIdd;
+
+                    <%--function showFullModal(vcId, cusId) {
+                        // Set the hidden field values for use in the server-side function
+                        document.getElementById('<%= HiddenField1.ClientID %>').value = vcId;
+                        document.getElementById('<%= HiddenField2.ClientID %>').value = cusId;
+
+                        // Display the modal
+                        var modal = new bootstrap.Modal(document.getElementById('fullscreenModal'), {});
+                        modal.show();
+                    }--%>
+
+
+
+
+                    //document.getElementById('btnSubmitDecline').onclick = function () {
+                    //    var declineReason = document.getElementById('declineReason').value;
+
+                    //    // Check if the decline reason is empty
+                    //    if (declineReason.trim() === "") {
+                    //        alert("Please enter a reason for declining.");
+                    //        return;
+                    //    }
+
+                    //    // Use __doPostBack to trigger the server-side method
+                    //    __doPostBack('btnDecline', currentContId + '|' + declineReason);
+
+                    //    // Hide the modal
+                    //    var declineModal = bootstrap.Modal.getInstance(document.getElementById('verticalycentered'));
+                    //    declineModal.hide();
+                    //};
+                    /*end of modal failed description*/
+
 
                     document.getElementById('btnSubmitDecline').onclick = function () {
                         var declineReason = document.getElementById('declineReason').value;
@@ -1256,13 +1619,14 @@
                         }
 
                         // Use __doPostBack to trigger the server-side method
-                        __doPostBack('btnDecline', currentContId + '|' + declineReason);
+                        var vcId = document.getElementById('<%= hide_vcID.ClientID %>').value; // Get vc_id from hidden field
+                        __doPostBack('btnDecline', vcId + '|' + declineReason);  // Pass vc_id and reason
 
                         // Hide the modal
                         var declineModal = bootstrap.Modal.getInstance(document.getElementById('verticalycentered'));
                         declineModal.hide();
                     };
-                    /*end of modal failed description*/
+
 
                     // Validation Functions for Add Account Manager
                     function validateFirstname() {
@@ -1609,109 +1973,21 @@
                             event.preventDefault();
                         }
                     };
+
+
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const activeTab = document.getElementById('<%= hfActiveTab.ClientID %>').value;
+                        if (activeTab) {
+                            const targetTab = document.querySelector(`button[data-bs-target="${activeTab}"]`);
+                            if (targetTab) {
+                                const bootstrapTab = new bootstrap.Tab(targetTab);
+                                bootstrapTab.show();
+                            }
+                        }
+                    });
                 </script>
 
-
-
-
-
-                <style>
-                    /* Container Styles */
-                    .gridview-container {
-                        max-height: 530px;
-                        overflow-y: auto;
-                        position: relative;
-                    }
-
-                        /* WebKit Scrollbar Styles */
-                        .gridview-container::-webkit-scrollbar {
-                            width: 12px;
-                        }
-
-                        .gridview-container::-webkit-scrollbar-thumb {
-                            background-color: #1C5E55;
-                            border-radius: 10px;
-                            border: 3px solid aquamarine;
-                        }
-
-                        .gridview-container::-webkit-scrollbar-track {
-                            background-color: #f5f5f5;
-                            border-radius: 10px;
-                        }
-
-                    /* Firefox Scrollbar Styles */
-                    .gridview-container {
-                        scrollbar-color: #1C5E55 #f5f5f5;
-                    }
-
-                        /* Table Styles */
-                        .gridview-container table {
-                            table-layout: fixed;
-                            width: 100%;
-                        }
-
-                        .gridview-container th,
-                        .gridview-container td {
-                            white-space: nowrap;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                        }
-
-                        .gridview-container .description-column {
-                            white-space: normal;
-                            word-wrap: break-word;
-                        }
-
-                        .gridview-container thead {
-                            position: sticky;
-                            top: 0;
-                            background-color: #1C5E55;
-                            color: white;
-                            z-index: 2; /* Keep the header on top */
-                        }
-
-                            .gridview-container thead th {
-                                position: sticky;
-                                top: 0;
-                                background-color: #1C5E55;
-                                color: white;
-                                z-index: 3; /* Increase z-index to keep the header text on top */
-                            }
-
-                        /* Animation for Hover Effect */
-                        .gridview-container::-webkit-scrollbar-thumb:hover {
-                            background-color: #167c6d;
-                        }
-
-                        .gridview-container::-webkit-scrollbar-track:hover {
-                            background-color: #d8d8d8;
-                        }
-
-                        .gridview-container::-webkit-scrollbar-thumb:active {
-                            background-color: #134f45;
-                        }
-
-                        .gridview-container::-webkit-scrollbar-track:active {
-                            background-color: #c2c2c2;
-                        }
-                </style>
-
                 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-                <%--search bar--%>
-                <%--<script>
-                    $(document).ready(function () {
-                        $('#<%= gridViewAccountMan.ClientID %> .edit-button').on('click', function () {
-
-                            var rowIndex = $(this).closest('tr').index();
-                            $('#<%= gridViewAccountMan.ClientID %> tr').height('auto'); // Reset all rows to auto height
-                            $('#<%= gridViewAccountMan.ClientID %> tr:eq(' + rowIndex + ')').height($('#<%= gridViewAccountMan.ClientID %> tr:eq(' + rowIndex + ')').height());
-                        });
-                    });
-
-                </script>--%>
-                <%--end of searchbar--%>
-
-
 
 
                 <!-- End General Form Elements -->
@@ -1731,7 +2007,7 @@
             <!-- Vendor JS Files -->
             <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
             <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-            
+
             <script src="assets/vendor/chart.js/chart.umd.js"></script>
             <script src="assets/vendor/echarts/echarts.min.js"></script>
             <script src="assets/vendor/quill/quill.min.js"></script>
@@ -1739,10 +2015,10 @@
             <script src="assets/vendor/tinymce/tinymce.min.js"></script>
             <script src="assets/vendor/php-email-form/validate.js"></script>
             <!-- Include jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Include Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+            <!-- Include Bootstrap JS -->
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
             <%--Location Google API--%>
             <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
