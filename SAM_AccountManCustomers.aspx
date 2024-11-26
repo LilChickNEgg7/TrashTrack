@@ -635,52 +635,6 @@
                         </a>
 
                     </li>
-
-
-                    <%--<li class="nav-item">
-                        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-                            <i class="ri-bill-line"></i><span>Reports</span><i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <ul id="tables-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                            <li>
-                                <a href="Admin_Billing_GenerateBill.aspx">
-                                    <i class="bi bi-circle"></i><span>Generate Bill</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="Admin_Billing_Controls.aspx">
-                                    <i class="bi bi-circle"></i><span>Controls</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>--%>
-
-                    <%-- <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#receipt-nav" data-bs-toggle="collapse" href="#">
-                <i class="ri-secure-payment-line"></i><span>Payment</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="receipt-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="Admin_Payment_ViewPays.aspx">
-                        <i class="bi bi-circle"></i><span>View Payments</span>
-                    </a>
-                </li>
-            </ul>
-        </li>--%>
-
-
-                    <%--  <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-          <i class="ri-bar-chart-2-line"></i><span>Reports</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="components-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="WAREHOUSE_VIEW_REQUESTS.aspx">
-              <i class="bi bi-circle"></i><span>Requests</span>
-            </a>
-          </li>
-      </li>--%><!-- End Transaction Nav -->
                 </ul>
             </aside>
             <!-- End Sidebar-->
@@ -841,9 +795,6 @@
                 </div>
 
 
-
-
-
                 <section style="background-color: #052507; padding: 25px; border-radius: 8px; box-shadow: 0 0 5px rgba(0, 0, 0, .2)">
                     <%-- <div>
                         <asp:ImageMap ID="ImageMap1" runat="server" ImageUrl="Pictures//box_format.png" Style="float: right; margin-right: 0px; margin-top: 0px; width: 50px"></asp:ImageMap>
@@ -918,8 +869,6 @@
                                             </ItemTemplate>
                                             <ItemStyle Width="150px" Wrap="true" />
                                         </asp:TemplateField>
-
-
 
                                         <asp:TemplateField HeaderText="Status">
                                             <ItemTemplate>

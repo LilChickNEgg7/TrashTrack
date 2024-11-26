@@ -446,9 +446,9 @@ namespace Capstone
             int cusId = Convert.ToInt32(hide_cusID.Value);
             //hfActiveTab.Value = "#am"; // Set tab am as active
 
-            int adminId = 1011;
-            //int adminId = (int)Session["am_id"];  // Retrieve admin ID from session
-            string roleName = (string)Session["am_rolename"];
+            //int adminId = 1011;
+            int adminId = (int)Session["sam_id"];  // Retrieve admin ID from session
+            string roleName = (string)Session["sam_rolename"];
 
 
             string declineReason = declineReasons.Text; // Retrieve decline reason
@@ -470,6 +470,8 @@ namespace Capstone
                 {
                     try
                     {
+                        string full_name = "";
+
                         // Update vc_status to 'Rejected' and set vc_reason in the verified_customer table
                         using (var cmd = db.CreateCommand())
                         {
@@ -482,6 +484,59 @@ namespace Capstone
                             cmd.Parameters.AddWithValue("@declineReason", declineReason);
                             cmd.Parameters.AddWithValue("@empid", adminId);
                             cmd.Transaction = transaction;
+                            cmd.ExecuteNonQuery();
+                        }
+
+
+                        using (var checkcusname = db.CreateCommand())
+                        {
+                            checkcusname.CommandType = CommandType.Text;
+                            checkcusname.CommandText = @"SELECT
+                                    TRIM(
+                                            -- Concatenate non-empty address parts, only adding commas between them
+                                            COALESCE(NULLIF(cus_fname, ''), '') ||
+                                            CASE WHEN NULLIF(cus_fname, '') IS NOT NULL AND NULLIF(cus_mname, '') IS NOT NULL THEN ', ' ELSE '' END ||
+                                            COALESCE(NULLIF(cus_mname, ''), '') ||
+                                            CASE WHEN NULLIF(cus_mname, '') IS NOT NULL AND NULLIF(cus_lname, '') IS NOT NULL THEN ', ' ELSE '' END ||
+                                            COALESCE(NULLIF(cus_lname, ''), '')
+                                        ) AS full_name
+                                    FROM 
+                                        customer
+                                    WHERE 
+                                        cus_id = @cus_id
+                                    ";
+                            checkcusname.Parameters.AddWithValue("@cus_id", cusId);
+                            //checkcusname.Transaction = transaction;
+
+                            using (var readerr = checkcusname.ExecuteReader())
+                            {
+                                if (readerr.Read())
+                                {
+                                    full_name = readerr["full_name"].ToString();
+                                    //cus_id = Convert.ToInt32(readerr["cus_id"]);
+
+                                }
+                            }
+                        }
+
+
+                        string message = "Your account has been rejected 🧾. \n\n" +
+                                       "------------------------------------------\n" +
+                                       "Customer# " + cusId + "\n\n" +
+                                       "Dear " + full_name + ",\n\n" +
+                                       "Your request to verify your account has been rejected due to your invalid ID's and documents submitted" +
+                                       "Thank you for you for trying 💜";
+                        using (var cmd = db.CreateCommand())
+                        {
+                            cmd.CommandType = CommandType.Text;
+                            cmd.CommandText = @"INSERT into NOTIFICATION (notif_message, emp_id, cus_id, notif_type)
+                                                VALUES (@message, @emp_id, @cus_id, @notif_type)
+                        ";
+                            cmd.Parameters.AddWithValue("@message", message);
+                            cmd.Parameters.AddWithValue("@emp_id", adminId);
+                            cmd.Parameters.AddWithValue("@cus_id", cusId);
+                            cmd.Parameters.AddWithValue("@notif_type", "account verification");
+                            //cmd.Transaction = transaction;
                             cmd.ExecuteNonQuery();
                         }
 
@@ -847,10 +902,8 @@ namespace Capstone
         protected void Approve_Click(object sender, EventArgs e)
         {
             LinkButton btnApprove = (LinkButton)sender;
-            int vcId = Convert.ToInt32(btnApprove.CommandArgument);
-
-            int adminId = 1011;
-            /*int adminId = (int)Session["sam_id"];*/  // Retrieve admin ID from session
+            int vcId = Convert.ToInt32(btnApprove.CommandArgument);            
+            int adminId = (int)Session["sam_id"];  // Retrieve admin ID from session
             string roleName = (string)Session["sam_rolename"];
 
             using (var db = new NpgsqlConnection(con))
@@ -865,13 +918,14 @@ namespace Capstone
                         // Check if the valid_id_pic and valid_selfie are null
                         bool isValidPicNull = false;
                         bool isSelfiePicNull = false;
-
+                        int cus_id = 0;
+                        string full_name = "";
                         // Execute the SELECT query to check for nulls in vc_valid_id and vc_selfie
                         using (var checkCmd = db.CreateCommand())
                         {
                             checkCmd.CommandType = CommandType.Text;
                             checkCmd.CommandText = @"
-                        SELECT vc_valid_id, vc_selfie 
+                        SELECT vc_valid_id, vc_selfie, cus_id 
                         FROM verified_customer 
                         WHERE vc_id = @vcId";
                             checkCmd.Parameters.AddWithValue("@vcId", vcId);
@@ -884,6 +938,8 @@ namespace Capstone
                                     // Check if valid_id_pic or selfie_pic are null
                                     isValidPicNull = reader["vc_valid_id"] == DBNull.Value;
                                     isSelfiePicNull = reader["vc_selfie"] == DBNull.Value;
+                                    cus_id = Convert.ToInt32(reader["cus_id"]);
+
                                 }
                             }
                         }
@@ -927,6 +983,61 @@ namespace Capstone
                             WHERE vc_id = @vcId
                         );";
                             cmd.Parameters.AddWithValue("@vcId", vcId);
+                            cmd.Transaction = transaction;
+                            cmd.ExecuteNonQuery();
+                        }
+
+
+                        using (var checkcusname = db.CreateCommand())
+                        {
+                            checkcusname.CommandType = CommandType.Text;
+                            checkcusname.CommandText = @"SELECT
+                                    TRIM(
+                                            -- Concatenate non-empty address parts, only adding commas between them
+                                            COALESCE(NULLIF(cus_fname, ''), '') ||
+                                            CASE WHEN NULLIF(cus_fname, '') IS NOT NULL AND NULLIF(cus_mname, '') IS NOT NULL THEN ', ' ELSE '' END ||
+                                            COALESCE(NULLIF(cus_mname, ''), '') ||
+                                            CASE WHEN NULLIF(cus_mname, '') IS NOT NULL AND NULLIF(cus_lname, '') IS NOT NULL THEN ', ' ELSE '' END ||
+                                            COALESCE(NULLIF(cus_lname, ''), '')
+                                        ) AS full_name
+                                    FROM 
+                                        customer
+                                    WHERE 
+                                        cus_id = @cus_id
+                                    ";
+                            checkcusname.Parameters.AddWithValue("@cus_id", cus_id);
+                            checkcusname.Transaction = transaction;
+
+                            using (var readerr = checkcusname.ExecuteReader())
+                            {
+                                if (readerr.Read())
+                                {
+                                    full_name = readerr["full_name"].ToString();
+                                    //cus_id = Convert.ToInt32(readerr["cus_id"]);
+
+                                }
+                            }
+                        }
+
+
+
+
+                        string message = "Your account has been verified 🧾. \n\n" +
+                                       "------------------------------------------\n" +
+                                       "Customer# " + cus_id + "\n\n" +
+                                       "Dear " + full_name + ",\n\n" +
+                                       "You can now book a service in just some few taps and let your garbage be picked up" +
+                                       "Thank you for you for verifying 💜";
+                        using (var cmd = db.CreateCommand())
+                        {
+                            cmd.CommandType = CommandType.Text;
+                            cmd.CommandText = @"INSERT into NOTIFICATION (notif_message, emp_id, cus_id, notif_type)
+                                                VALUES (@message, @emp_id, @cus_id, @notif_type)
+                        ";
+                            cmd.Parameters.AddWithValue("@message", message);
+                            cmd.Parameters.AddWithValue("@emp_id", adminId);
+                            cmd.Parameters.AddWithValue("@cus_id", cus_id);
+                            cmd.Parameters.AddWithValue("@notif_type", "account verification");
                             cmd.Transaction = transaction;
                             cmd.ExecuteNonQuery();
                         }
@@ -2127,8 +2238,6 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
 
 
 
-
-
         public static void Send_Email(string toAddress, string subject, string body)
         {
             
@@ -2147,8 +2256,6 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
 
             smtpClient.Send(mailMessage);
         }
-
-
 
 
         protected void ClearForm_Click(object sender, EventArgs e)
@@ -2428,8 +2535,6 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
             // Refresh the account manager list (if needed)
             //ContractList();
         }
-
-
 
 
         public void GetAdminInfo(int admID)
@@ -3086,7 +3191,8 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
                     string cus_lname = "";
                     string cus_fname = "";
                     string cus_mname = "";
-
+                    string full_name = "";
+                    //int cus_id = 0;
                     // Get Customer Info
                     using (var cmd3 = db.CreateCommand())
                     {

@@ -678,6 +678,7 @@
     <Content Include="Pictures\white.jpg" />
     <Content Include="libmongocrypt.so" />
     <Content Include="libmongocrypt.dylib" />
+    <Content Include="DownloadPdfHandler.ashx" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="SAM_Reports.aspx" />
     <Content Include="Scripts\jquery-1.6.4.js" />
@@ -2479,6 +2480,9 @@
     </Compile>
     <Compile Include="Dispatcher_Dashboard.aspx.designer.cs">
       <DependentUpon>Dispatcher_Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DownloadPdfHandler.ashx.cs">
+      <DependentUpon>DownloadPdfHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

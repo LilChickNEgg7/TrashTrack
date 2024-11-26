@@ -201,46 +201,6 @@ namespace Capstone
             }
         }
 
-        //protected void GeneratedBillList()
-        //{
-        //    using (var db = new NpgsqlConnection(con))
-        //    {
-        //        db.Open();
-        //        using (var cmd = db.CreateCommand())
-        //        {
-        //            cmd.CommandType = CommandType.Text;
-        //            // Query to fetch booking data from the database
-        //            cmd.CommandText = @"SELECT 
-        //                                    gb.gb_id, 
-        //                                    gb.gb_date_issued, 
-        //                                    gb.gb_date_due, 
-        //                                    gb.bk_id, 
-        //                                    gb.gb_total_amnt_interest, 
-        //                                    gb.gb_total_sales, 
-        //                                    gb.gb_status, 
-        //                                    p.p_amount, 
-        //                                    p.p_method, 
-        //                                    p.p_date_paid, 
-        //                                    p.p_checkout_id
-        //                                FROM 
-        //                                    generate_bill gb
-        //                                LEFT JOIN 
-        //                                    payment p ON gb.gb_id = p.gb_id
-        //                                ORDER BY 
-        //                                    gb.gb_status DESC, gb.gb_id DESC";
-
-        //            // Execute the query and bind the results to the GridView
-        //            DataTable bookingsDataTable = new DataTable();
-        //            NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
-        //            bookingsAdapter.Fill(bookingsDataTable);
-
-        //            // Bind the data to the GridView
-        //            gridView1.DataSource = bookingsDataTable;
-        //            gridView1.DataBind();
-        //        }
-        //        db.Close();
-        //    }
-        //}
         protected void GeneratedBillList()
         {
             using (var db = new NpgsqlConnection(con))
@@ -270,7 +230,7 @@ namespace Capstone
                                             payment p ON gb.gb_id = p.gb_id
                                         ORDER BY 
                                             gb.gb_date_issued DESC,
-                                            gb.gb_id DESC"; 
+                                            gb.gb_id DESC";
 
 
                     // Execute the query and fill the DataTable
@@ -287,9 +247,6 @@ namespace Capstone
         }
 
 
-
-
-        // Deletion of the admin or update the status to Inactive if the admin is inactive anymore
         protected void Remove_Click(object sender, EventArgs e)
         {
             LinkButton btn = (LinkButton)sender;
@@ -477,201 +434,6 @@ namespace Capstone
 
         }
 
-        //protected void addBookWaste_Click(object sender, EventArgs e)
-        //{
-        //    // Fetch values from the textboxes
-        //    int bk_id = Convert.ToInt32(TextBox1.Text); // Booking ID
-        //    string bw_name = ddlbwName1.SelectedItem.Text; // Waste type name from the dropdown (Text, not value)
-        //    string bw_unit = txtbwUnit1.Text; // Waste unit from the textbox
-        //    double bw_total_unit = Convert.ToDouble(txtTotalUnit1.Text); // Total unit from the textbox
-        //    double bw_price = Convert.ToDouble(txtUnitPrice1.Text); // Price per unit from the textbox
-        //    double bw_total_price = Convert.ToDouble(txtTotalUnitPrice1.Text); // Total price from the textbox (already computed in UI)
-
-        //    try
-        //    {
-        //        using (var db = new NpgsqlConnection(con))
-        //        {
-        //            db.Open();
-
-        //            // Verify that the booking ID exists
-        //            using (var checkBookingCmd = db.CreateCommand())
-        //            {
-        //                checkBookingCmd.CommandText = "SELECT COUNT(*) FROM BOOKING WHERE bk_id = @bkId";
-        //                checkBookingCmd.Parameters.AddWithValue("@bkId", bk_id);
-
-        //                object result = checkBookingCmd.ExecuteScalar();
-        //                if (result == null || Convert.ToInt32(result) == 0)
-        //                {
-
-        //                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-        //                    //    "swal('Not Found!', 'No associated booking ID found for this Booking Waste.', 'warning')", true);
-
-        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-        //                               "Swal.fire({ icon: 'error', title: 'Not Found!', text: 'No associated booking ID found for this Booking Waste', background: '#e9f7ef', confirmButtonColor: '#28a745' });", true);
-        //                    return; // Exit if no booking ID found
-        //                }
-        //            }
-
-        //            // Insert the new booking waste record
-        //            string insertBookingWasteQuery = @"INSERT INTO booking_waste 
-        //                                       (bk_id, bw_name, bw_unit, bw_total_unit, bw_price, bw_total_price)
-        //                                       VALUES 
-        //                                       (@bk_id, @bw_name, @bw_unit, @bw_total_unit, @bw_price, @bw_total_price)";
-
-        //            using (var cmd = new NpgsqlCommand(insertBookingWasteQuery, db))
-        //            {
-        //                cmd.Parameters.AddWithValue("@bk_id", bk_id);
-        //                cmd.Parameters.AddWithValue("@bw_name", bw_name);
-        //                cmd.Parameters.AddWithValue("@bw_unit", bw_unit);
-        //                cmd.Parameters.AddWithValue("@bw_total_unit", bw_total_unit);
-        //                cmd.Parameters.AddWithValue("@bw_price", bw_price);
-        //                cmd.Parameters.AddWithValue("@bw_total_price", bw_total_price);
-        //                var ctr = cmd.ExecuteNonQuery();
-        //                if (ctr >= 1)
-        //                {
-        //                    LoadBookingWasteData();
-        //                    updatePanel1.Update(); // Update the UpdatePanel to reflect changes
-
-        //                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-        //                        "swal('Record Deleted!', 'Booking Waste record deleted successfully!', 'success')", true);
-
-        //                    // Refresh the data for the associated booking ID
-        //                    /*LoadBookingWasteData(bk_id);*/ // Call the method to refresh the data
-        //                }
-        //                else
-        //                {
-        //                    LoadBookingWasteData();
-        //                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-        //                        "swal('Not Found!', 'No record found to delete.', 'warning')", true);
-        //                }
-        //            }
-        //        }
-        //        txtTotalUnit1.Enabled = false;
-        //        // Reload data after insertion
-        //        LoadBookingWasteData();
-
-        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-        //            "swal('Success!', 'Booking Waste record added successfully!', 'success')", true);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-        //            $"swal('Unsuccessful!', '{ex.Message}', 'error')", true);
-        //    }
-        //    finally
-        //    {
-        //        LoadBookingWasteData();
-        //        // Close the modal
-        //        this.ModalPopupExtender3.Hide();
-        //        txtTotalUnit1.Enabled = false;
-        //        //this.ModalPopupExtender1.Show();
-
-        //    }
-        //}
-        //protected void addBookWaste_Click(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        // Fetch values from the textboxes
-        //        int bk_id = Convert.ToInt32(TextBox1.Text); // Booking ID
-        //        string bw_name = ddlbwName1.SelectedItem.Text; // Waste type name from the dropdown (Text, not value)
-        //        string bw_unit = txtbwUnit1.Text; // Waste unit from the textbox
-        //        double bw_total_unit = Convert.ToDouble(txtTotalUnit1.Text); // Total unit from the textbox
-        //        double bw_price = Convert.ToDouble(txtUnitPrice1.Text); // Price per unit from the textbox
-        //        double bw_total_price = Convert.ToDouble(txtTotalUnitPrice1.Text); // Total price from the textbox (already computed in UI)
-
-        //        // Validate that Total Unit is greater than 0
-        //        if (!double.TryParse(txtTotalUnit1.Text, out bw_total_unit) || bw_total_unit <= 0)
-        //        {
-        //            // Display an error message and stop submission
-        //            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-        //                "Swal.fire({ icon: 'error', title: 'Invalid Input', text: 'Total Unit must be greater than 0.', background: '#f8d7da', confirmButtonColor: '#f5c6cb' });",
-        //                true);
-        //            return; // Prevent form submission
-        //        }
-
-        //        // Calculate the total price
-        //        bw_total_price = bw_total_unit * bw_price;
-
-        //        using (var db = new NpgsqlConnection(con))
-        //        {
-        //            db.Open();
-
-        //            // Verify that the booking ID exists
-        //            using (var checkBookingCmd = db.CreateCommand())
-        //            {
-        //                checkBookingCmd.CommandText = "SELECT COUNT(*) FROM BOOKING WHERE bk_id = @bkId";
-        //                checkBookingCmd.Parameters.AddWithValue("@bkId", bk_id);
-
-        //                object result = checkBookingCmd.ExecuteScalar();
-        //                if (result == null || Convert.ToInt32(result) == 0)
-        //                {
-        //                    // Display error if no associated booking ID is found
-        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-        //                        "Swal.fire({ icon: 'error', title: 'Not Found!', text: 'No associated booking ID found for this Booking Waste.', background: '#f8d7da', confirmButtonColor: '#f5c6cb' });",
-        //                        true);
-        //                    return; // Prevent form submission
-        //                }
-        //            }
-
-        //            // Insert the new booking waste record
-        //            string insertBookingWasteQuery = @"INSERT INTO booking_waste 
-        //                                   (bk_id, bw_name, bw_unit, bw_total_unit, bw_price, bw_total_price)
-        //                                   VALUES 
-        //                                   (@bk_id, @bw_name, @bw_unit, @bw_total_unit, @bw_price, @bw_total_price)";
-
-        //            using (var cmd = new NpgsqlCommand(insertBookingWasteQuery, db))
-        //            {
-        //                cmd.Parameters.AddWithValue("@bk_id", bk_id);
-        //                cmd.Parameters.AddWithValue("@bw_name", bw_name);
-        //                cmd.Parameters.AddWithValue("@bw_unit", bw_unit);
-        //                cmd.Parameters.AddWithValue("@bw_total_unit", bw_total_unit);
-        //                cmd.Parameters.AddWithValue("@bw_price", bw_price);
-        //                cmd.Parameters.AddWithValue("@bw_total_price", bw_total_price);
-
-        //                var ctr = cmd.ExecuteNonQuery();
-        //                if (ctr >= 1)
-        //                {
-        //                    LoadBookingWasteData();
-        //                    updatePanel1.Update(); // Update the UpdatePanel to reflect changes
-
-        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-        //                        "Swal.fire({ icon: 'success', title: 'Success!', text: 'Booking Waste record added successfully.', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
-        //                        true);
-        //                    txtbwUnit1.Text = string.Empty;
-        //                    txtTotalUnit1.Text = string.Empty;
-        //                    txtUnitPrice1.Text = string.Empty;
-        //                    txtTotalUnitPrice1.Text = string.Empty;
-        //                    ddlbwName1.SelectedIndex = 0; // Reset the dropdown to its default selection
-        //                }
-        //                else
-        //                {
-        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-        //                        "Swal.fire({ icon: 'warning', title: 'Failed!', text: 'Failed to add Booking Waste record.', background: '#fff3cd', confirmButtonColor: '#ffc107' });",
-        //                        true);
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Display error for unexpected issues
-        //        ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-        //            $"Swal.fire({{ icon: 'error', title: 'Error!', text: '{ex.Message}', background: '#f8d7da', confirmButtonColor: '#f5c6cb' }});",
-        //            true);
-        //    }
-        //    finally
-        //    {
-        //        LoadBookingWasteData();
-        //        this.ModalPopupExtender3.Hide();
-        //        txtTotalUnit1.Enabled = false;
-        //        txtbwUnit1.Text = string.Empty;
-        //        txtTotalUnit1.Text = string.Empty;
-        //        txtUnitPrice1.Text = string.Empty;
-        //        txtTotalUnitPrice1.Text = string.Empty;
-        //        ddlbwName1.SelectedIndex = 0; // Reset the dropdown to its default selection
-        //    }
-        //}
         protected void addBookWaste_Click(object sender, EventArgs e)
         {
             try
@@ -818,6 +580,8 @@ namespace Capstone
                         bookingsAdapter.Fill(bookingsDataTable);
                         gridView2.DataSource = bookingsDataTable;
                         gridView2.DataBind();
+                        //gridView3.DataSource = bookingsDataTable;
+                        //gridView3.DataBind();
                     }
 
                     // Query to sum total price for the same booking ID and status != 'Completed'
@@ -1198,197 +962,6 @@ namespace Capstone
             ModalPopupExtender4.Show();
         }
 
-
-        //protected void openBookWaste_Click(object sender, EventArgs e)
-        //{
-        //    LinkButton btn = sender as LinkButton;
-        //    int id = Convert.ToInt32(btn.CommandArgument);
-
-        //    txtbwID1.Text = id.ToString();
-        //    TextBox1.Text = id.ToString();
-        //    LoadBookingWasteData(id);
-
-
-        //    //txtbwID.Text = id.ToString();
-        //    try
-        //    {
-        //        using (var db = new NpgsqlConnection(con))
-        //        {
-        //            db.Open();
-
-        //            //// First query to get booking details and bind to the GridView
-        //            //using (var cmd = db.CreateCommand())
-        //            //{
-        //            //    cmd.CommandType = CommandType.Text;
-        //            //    cmd.CommandText = @"SELECT bw.bw_id, bw.bw_name, bw.bw_unit, bw.bw_total_unit, bw.bw_price, bw.bw_total_price, bw.bk_id
-        //            //                FROM BOOKING_WASTE bw
-        //            //                INNER JOIN BOOKING b ON bw.bk_id = b.bk_id
-        //            //                WHERE bw.bk_id = @bkId AND b.bk_status != 'Completed'";
-
-        //            //    cmd.Parameters.AddWithValue("@bkId", id);
-
-        //            //    DataTable bookingsDataTable = new DataTable();
-        //            //    NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
-        //            //    bookingsAdapter.Fill(bookingsDataTable);
-        //            //    gridView2.DataSource = bookingsDataTable;
-        //            //    gridView2.DataBind();
-        //            //}
-
-        //            // Second query to sum total price for the same booking ID and status != 'Completed'
-        //            double totalPrice = 0;
-        //            using (var cmdSum = db.CreateCommand())
-        //            {
-        //                cmdSum.CommandType = CommandType.Text;
-        //                cmdSum.CommandText = @"SELECT SUM(bw.bw_total_price) AS TotalPrice
-        //                               FROM BOOKING_WASTE bw
-        //                               INNER JOIN BOOKING b ON bw.bk_id = b.bk_id
-        //                               WHERE bw.bk_id = @bkId AND b.bk_status != 'Completed'";
-
-        //                cmdSum.Parameters.AddWithValue("@bkId", id);
-        //                object result = cmdSum.ExecuteScalar();
-        //                if (result != DBNull.Value)
-        //                {
-        //                    totalPrice = Convert.ToDouble(result);
-        //                    netVatTxt.Text = totalPrice.ToString("N2");
-        //                }
-        //                else
-        //                {
-        //                    netVatTxt.Text = "0";
-        //                }
-        //            }
-
-        //            // Third query to get the payment term details, including tax and periods
-        //            double ptTax = 0;
-        //            double ptLeadDays = 0;
-        //            int accrualPeriod = 0, suspPeriod = 0, ptInterest = 0;
-        //            using (var cmdTax = db.CreateCommand())
-        //            {
-        //                cmdTax.CommandType = CommandType.Text;
-        //                cmdTax.CommandText = @"SELECT pt_tax, pt_lead_days, pt_accrual_period, pt_susp_period, pt_interest
-        //                               FROM payment_term 
-        //                               LIMIT 1"; // Assuming only one payment term is needed
-
-        //                using (var reader = cmdTax.ExecuteReader())
-        //                {
-        //                    if (reader.Read())
-        //                    {
-        //                        ptTax = reader.IsDBNull(0) ? 0 : reader.GetDouble(0);  // Tax percentage
-        //                        ptLeadDays = reader.IsDBNull(1) ? 0 : reader.GetDouble(1);  // Lead days
-        //                        accrualPeriod = reader.IsDBNull(2) || reader.GetInt32(2) == 0 ? 0 : reader.GetInt32(2);  // Accrual period (check for NULL or zero)
-        //                        suspPeriod = reader.IsDBNull(3) || reader.GetInt32(3) == 0 ? 0 : reader.GetInt32(3);  // Suspension period (check for NULL or zero)
-        //                        ptInterest = reader.IsDBNull(4) ? 0 : reader.GetInt32(4);  // Suspension period
-
-        //                        // Display payment term details in respective labels
-        //                        taxLabel.Text = "Tax: " + ptTax + "%"; // Displaying tax percentage
-        //                        interstLabel.Text = "Interest: " + ptInterest + "%"; // Displaying interest
-        //                        accrPerLabel.Text = "Accrual Period: " + accrualPeriod + " day(s)"; // Displaying accrual period
-        //                        susPerLabel.Text = "Suspension Period: " + suspPeriod + " day(s)"; // Displaying suspension period
-
-
-
-        //                    }
-        //                }
-        //            }
-
-
-        //            ptLeadDaysHiddenField.Value = ptLeadDays.ToString();
-        //            ptAccrualPeriodHiddenField.Value = accrualPeriod.ToString();
-        //            ptSuspPeriodHiddenField.Value = suspPeriod.ToString();
-
-        //            // Calculate Due Date based on current date + lead days
-        //            DateTime currentDate = DateTime.Now;
-        //            DateTime dueDate = currentDate.AddDays(ptLeadDays);
-        //            dueDateTxt.Text = dueDate.ToString("yyyy-MM-ddTHH:mm"); // Set the Due Date in the textbox
-
-        //            // Handle Accrual Date
-        //            if (accrualPeriod > 0)
-        //            {
-        //                DateTime accrualDate = dueDate.AddDays(accrualPeriod);
-        //                accDateTxt.Text = accrualDate.ToString("yyyy-MM-ddTHH:mm"); // Set the Accrual Date in the textbox
-        //            }
-        //            else
-        //            {
-        //                accDateTxt.Text = "No accrual date"; // Display "No accrual date" if accrual period is zero or not found
-        //            }
-
-        //            // Handle Suspension Date
-        //            if (suspPeriod > 0)
-        //            {
-        //                DateTime suspensionDate = dueDate.AddDays(suspPeriod);
-        //                susDateTxt.Text = suspensionDate.ToString("yyyy-MM-ddTHH:mm"); // Set the Suspension Date in the textbox
-        //            }
-        //            else
-        //            {
-        //                susDateTxt.Text = "No suspension date"; // Display "No suspension date" if suspension period is zero or not found
-        //            }
-
-        //            // Calculate tax amount based on total price
-        //            double taxAmount = (ptTax / 100) * totalPrice;
-        //            vatAmntTxt.Text = taxAmount.ToString("N2");
-
-        //            // Calculate total sales (total price + tax amount)
-        //            double totalSales = totalPrice + taxAmount;
-        //            totSalesTxt.Text = totalSales.ToString("N2");
-
-        //            // Set the current date and time in the required format for DateTimeLocal
-        //            dateTodayTxt.Text = currentDate.ToString("yyyy-MM-ddTHH:mm");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-        //            $"swal('Unsuccessful!', '{ex.Message}', 'error')", true);
-        //        return;
-        //    }
-
-        //    this.ModalPopupExtender1.Show();
-        //}
-
-
-        //private void PopulateWasteCategory()
-        //{
-
-        //    using (NpgsqlConnection conn = new NpgsqlConnection(con))
-        //    {
-        //        // Example of fetching waste categories from the PostgreSQL database
-        //        string query = "SELECT wc_id, wc_name FROM waste_category";
-
-        //        NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
-        //        NpgsqlDataAdapter da = new NpgsqlDataAdapter(cmd);
-        //        DataTable dt = new DataTable();
-        //        da.Fill(dt);
-
-        //        ////EDIT BOOK WASTE PANEL
-        //        //// Binding the first dropdown list
-        //        //ddlbwName.Items.Clear();
-        //        //ddlbwName.DataSource = dt;
-        //        //ddlbwName.DataTextField = "wc_name";
-        //        //ddlbwName.DataValueField = "wc_id";
-        //        //ddlbwName.DataBind();
-
-        //        //// Inserting the default item and disabling it
-        //        //WebControls.ListItem defaultItem = new WebControls.ListItem("--Select Waste Category--", "0");
-        //        //defaultItem.Attributes.Add("disabled", "true");  // Disable the option
-        //        //defaultItem.Attributes.Add("selected", "true");  // Set as selected
-        //        //ddlbwName.Items.Insert(0, defaultItem);  // Insert it at the first position
-
-
-
-        //        //ADD BOOK WASTE PANEL
-        //        // Binding the second dropdown list
-        //        ddlbwName1.Items.Clear();
-        //        ddlbwName1.DataSource = dt;
-        //        ddlbwName1.DataTextField = "wc_name";
-        //        ddlbwName1.DataValueField = "wc_id";
-        //        ddlbwName1.DataBind();
-
-        //        // Inserting the default item and disabling it for the second dropdown
-        //        WebControls.ListItem defaultItem1 = new WebControls.ListItem("--Select Waste Category--", "0");
-        //        defaultItem1.Attributes.Add("disabled", "true");  // Disable the option
-        //        defaultItem1.Attributes.Add("selected", "true");  // Set as selected
-        //        ddlbwName1.Items.Insert(0, defaultItem1);  // Insert it at the first position
-        //    }
-        //}
         private void PopulateWasteCategory()
         {
             using (NpgsqlConnection conn = new NpgsqlConnection(con))
@@ -1497,8 +1070,6 @@ namespace Capstone
         }
 
 
-
-
         protected void txtTotalUnit_TextChanged(object sender, EventArgs e)
         {
             // Calculate total price based on unit price and total unit
@@ -1517,39 +1088,6 @@ namespace Capstone
             txtTotalUnitPrice1.Text = (unitPrice * totalUnit).ToString("0.00");
         }
 
-
-        //EDIT BOOK WASTE PANEL
-        //protected void ddlWasteCategory_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    int selectedWasteID = Convert.ToInt32(ddlbwName.SelectedValue);
-
-        //    if (selectedWasteID > 0)
-        //    {
-        //        // Query to get the unit and price for the selected waste category
-        //        string query = "SELECT wc_unit, wc_price FROM waste_category WHERE wc_id = @wc_id";
-
-        //        using (NpgsqlConnection connection = new NpgsqlConnection(con))
-        //        {
-        //            NpgsqlCommand cmd = new NpgsqlCommand(query, connection);
-        //            cmd.Parameters.AddWithValue("@wc_id", selectedWasteID); // Setting parameter value for wc_id
-
-        //            connection.Open();
-        //            NpgsqlDataReader reader = cmd.ExecuteReader();
-        //            if (reader.Read())
-        //            {
-        //                txtUnitPrice.Text = reader["wc_price"].ToString(); // Assign price to the textbox
-        //                                                                   // If you need to display the unit in another control, use:
-        //                txtbwUnit.Text = reader["wc_unit"].ToString();
-        //                txtTotalUnit.Text = "";
-        //                txtTotalUnitPrice.Text = "";
-        //            }
-        //            connection.Close();
-        //        }
-        //    }
-        //}
-
-
-        //ADD BOOK WASTE PANEL
         protected void ddlWasteCategory_SelectedIndexChanged1(object sender, EventArgs e)
         {
             // Check for a valid selection
@@ -1632,7 +1170,7 @@ namespace Capstone
             get { return ViewState["IsInitialLoad"] as bool? ?? true; }
             set { ViewState["IsInitialLoad"] = value; }
         }
-  
+
 
         protected void btnCloseSlip_Click(object sender, EventArgs e)
         {
@@ -1644,11 +1182,11 @@ namespace Capstone
         document.getElementById('Image2').style.display = 'none';
         document.getElementById('Image2').src = '';";
 
-    //        string resetScript = @"
-    //    document.getElementById('loading-spinner').style.display = 'block';
-    //    document.getElementById('Image2').style.display = 'none';
-    //    document.getElementById('Image2').src = '';
-    //";
+            //        string resetScript = @"
+            //    document.getElementById('loading-spinner').style.display = 'block';
+            //    document.getElementById('Image2').style.display = 'none';
+            //    document.getElementById('Image2').src = '';
+            //";
             ScriptManager.RegisterStartupScript(this, GetType(), "ResetModal", resetScript, true);
 
         }
@@ -1864,25 +1402,25 @@ namespace Capstone
 
                 // Create the logo cell
                 Cell logoCell = new Cell()
-                    .SetBorder(Border.NO_BORDER) 
+                    .SetBorder(Border.NO_BORDER)
                     .Add(logo);
 
                 // Define the green color
-                DeviceRgb greenColor = new DeviceRgb(0, 128, 0); 
+                DeviceRgb greenColor = new DeviceRgb(0, 128, 0);
 
                 // Create the TrashTrack text without margin and padding
                 Paragraph trashTrackText = new Paragraph("TrashTrack")
-                    .SetFont(boldFont) 
-                    .SetFontSize(30) 
-                    .SetFontColor(greenColor) 
-                    .SetTextAlignment(TextAlignment.LEFT) 
-                    .SetMargin(0) 
-                    .SetPadding(0); 
+                    .SetFont(boldFont)
+                    .SetFontSize(30)
+                    .SetFontColor(greenColor)
+                    .SetTextAlignment(TextAlignment.LEFT)
+                    .SetMargin(0)
+                    .SetPadding(0);
 
                 // Create a cell for the TrashTrack text
                 Cell textCell = new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(trashTrackText); 
+                    .SetBorder(Border.NO_BORDER)
+                    .Add(trashTrackText);
 
                 // Add both cells to the logoTextTable
                 logoTextTable.AddCell(logoCell);
@@ -1890,13 +1428,13 @@ namespace Capstone
 
                 // Add the logo and text table to the headerTable
                 headerTable.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(logoTextTable)); 
+                    .SetBorder(Border.NO_BORDER)
+                    .Add(logoTextTable));
 
                 // Add Company Address to the second cell
                 Paragraph address = new Paragraph("Binaliw Cebu Dumpsite\nCebu City, Cebu\nPhilippines")
                     .SetFont(font)
-                    .SetTextAlignment(TextAlignment.RIGHT); 
+                    .SetTextAlignment(TextAlignment.RIGHT);
 
                 headerTable.AddCell(new Cell()
                     .SetBorder(Border.NO_BORDER)
@@ -2093,8 +1631,6 @@ namespace Capstone
                 // Add the terms content to the document
                 document.Add(termsContent);
 
-
-
                 // Add Waste Details Table
                 iText.Layout.Element.Table wasteTable = new iText.Layout.Element.Table(new float[] { 100, 50, 80, 80, 100 }).UseAllAvailableWidth();
                 wasteTable.SetMarginTop(20);
@@ -2201,10 +1737,10 @@ namespace Capstone
 
                 // Add a cell for the line with a top border
                 btmLine.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("") 
-                        .SetBorder(Border.NO_BORDER) 
-                        .SetBorderTop(new SolidBorder(1f)) 
+                    .SetBorder(Border.NO_BORDER)
+                    .Add(new Paragraph("")
+                        .SetBorder(Border.NO_BORDER)
+                        .SetBorderTop(new SolidBorder(1f))
                     )
                 );
 
@@ -2319,7 +1855,7 @@ namespace Capstone
 
                 // Add Total Sales label
                 summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
+                    .SetBorder(Border.NO_BORDER)
                     .Add(new Paragraph("Total Sales: ")
                         .SetFont(boldFont)
                         .SetTextAlignment(TextAlignment.LEFT)
@@ -2327,13 +1863,11 @@ namespace Capstone
 
                 // Add Total Sales amount
                 summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
+                    .SetBorder(Border.NO_BORDER)
                     .Add(new Paragraph("₱" + totalSales.ToString("N2"))
                         .SetFont(font)
                         .SetTextAlignment(TextAlignment.LEFT)
                         .SetBorder(Border.NO_BORDER)));
-
-                
 
 
                 // Add empty cells for spacing
@@ -2344,7 +1878,7 @@ namespace Capstone
 
                 // Add Total Amount label
                 summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
+                    .SetBorder(Border.NO_BORDER)
                     .Add(new Paragraph("Total Amount: ")
                         .SetFont(boldFont)
                         .SetFontColor(redColor)
@@ -2356,7 +1890,7 @@ namespace Capstone
 
                 // Add Total Amount due
                 summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
+                    .SetBorder(Border.NO_BORDER)
                     .Add(new Paragraph("₱" + totalPayment.ToString("N2"))
                         .SetFont(boldFont)
                         .SetFontColor(redColor)
@@ -2367,10 +1901,6 @@ namespace Capstone
                 document.Add(summarySection);
 
 
-
-
-                
-
                 // Close document
                 document.Close();
 
@@ -2379,8 +1909,8 @@ namespace Capstone
             }
         }
 
-        
 
+        //LATEST 11/26/2024 nga MUGANA
         protected void btnGenerateBill_Click(object sender, EventArgs e)
         {
             int empId = (int)Session["bo_id"]; // Retrieve admin ID from session
@@ -2406,11 +1936,11 @@ namespace Capstone
             string cus_fullname = "";
             double totalSum = 0, vat_Amnt = 0;
             bool isProcessSuccessful = true;
-            ModalPopupExtender1.Hide();
+            this.ModalPopupExtender1.Hide();
             try
             {
                 LoadBookingList();
-                ModalPopupExtender1.Hide();
+                this.ModalPopupExtender1.Hide();
                 using (var conn = new NpgsqlConnection(con))
                 {
                     conn.Open();
@@ -2429,15 +1959,12 @@ namespace Capstone
                                 accrualPeriod = reader.IsDBNull(2) ? (int?)null : reader.GetInt32(2);
                                 suspensionPeriod = reader.IsDBNull(3) ? (int?)null : reader.GetInt32(3);
                                 tax = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4);
-                                LoadBookingList();
-                                ModalPopupExtender1.Hide();
+
                             }
-                            LoadBookingList();
-                            ModalPopupExtender1.Hide();
+
                         }
                     }
-                    LoadBookingList();
-                    ModalPopupExtender1.Hide();
+
 
                     // Step 2: Retrieve booking details
                     string findBkID = "SELECT * FROM booking WHERE bk_id = @BkId";
@@ -2503,7 +2030,6 @@ namespace Capstone
                             }
                         }
                     }
-                    updatePanel1.Update();
                     // Step 4: Update booking status
                     string updateStatusQuery = "UPDATE booking SET bk_status = 'Billed' WHERE bk_id = @BkId";
                     using (var updateCmd = new NpgsqlCommand(updateStatusQuery, conn))
@@ -2516,6 +2042,7 @@ namespace Capstone
                         }
                         ModalPopupExtender1.Hide();
                         LoadBookingList();
+                        GeneratedBillList();
                     }
 
                     // Step 5: Insert bill details
@@ -2558,34 +2085,104 @@ namespace Capstone
                         if (result != null)
                         {
                             insertedBillId = Convert.ToInt32(result);
-                            updatePanel1.Update();
                             LoadBookingList();
+                            GeneratedBillList();
                             gridViewBookings.DataBind();
-                            ModalPopupExtender1.Hide();
-                            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-                                        "Swal.fire({ icon: 'error', title: 'Empty Total Units!', text: 'Total Units has not been entered yet', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
-                                        true);
+                            this.ModalPopupExtender1.Hide();
+                            //ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+                            //            "Swal.fire({ icon: 'error', title: 'Empty Total Units!', text: 'Total Units has not been entered yet', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
+                            //            true);
                         }
                         else
                         {
                             throw new Exception("Failed to insert bill.");
                         }
                     }
-                    updatePanel1.Update();
+
+                    string notif_message = "Your bill is now available for payment 🧾. \n\n" +
+                                       "------------------------------------------\n" +
+                                       "BILL# " + insertedBillId + "\n\n" +
+                                       "Dear " + cus_fullname + ",\n\n" +
+                                       "You can now review the details at your convenience. Please check it as soon as possible to avoid any delays. " +
+                                       "Thank you for your cooperation 💜";
+                    string queryNotif = @"
+                            INSERT INTO notification (
+                                notif_message, emp_id, cus_id, bk_id, gb_id
+                            ) 
+                            VALUES (
+                                @Message, @EmpId, @CusId, @BkId, @GbId
+                            ) 
+                            RETURNING gb_id;";
+
+                    using (var cmd = new NpgsqlCommand(queryNotif, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Message", notif_message ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@EmpId", empId);
+                        cmd.Parameters.AddWithValue("@CusId", cus_id);
+                        cmd.Parameters.AddWithValue("@BkId", Convert.ToInt32(TextBox1.Text));
+                        cmd.Parameters.AddWithValue("@GbId", insertedBillId);
+
+                        var result = cmd.ExecuteScalar();
+                        if (result != null)
+                        {
+                            insertedBillId = Convert.ToInt32(result);
+                            updatePanel1.Update();
+                            LoadBookingList();
+                        }
+                        else
+                        {
+                            throw new Exception("No ID returned from insert.");
+                        }
+                    }
+
+
+
+
                     LoadBookingList();
                 }
                 LoadBookingList();
-                updatePanel1.Update();
-                ModalPopupExtender1.Hide();
-                ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-                                        "Swal.fire({ icon: 'error', title: 'Empty Total Units!', text: 'Total Units has not been entered yet', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
-                                        true);
+                this.ModalPopupExtender1.Hide();
+                //ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+                //                        "Swal.fire({ icon: 'error', title: 'Empty Total Units!', text: 'Total Units has not been entered yet', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
+                //                        true);
+
+                if (isProcessSuccessful)
+                {
+                    this.ModalPopupExtender1.Hide();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+                                            "Swal.fire({ icon: 'error', title: 'Empty Total Units!', text: 'Total Units has not been entered yet', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
+                                            true);
+                    //                ScriptManager.RegisterStartupScript(this, GetType(), "DownloadPdf",
+                    //"window.open('DownloadPdf.aspx', '_blank');", true);
+
+
+                    ScriptManager.RegisterStartupScript(this, GetType(), "DownloadPdf",
+                    "window.open('DownloadPdfHandler.ashx?billId=" + insertedBillId + "&bkId=" + bk_id + "', '_blank');", true);
+
+                    // Generate PDF if everything was successful
+                    //byte[] pdfBytes = GeneratePDFForRow(insertedBillId, bk_id);
+
+                    ////// Send the PDF for download. Ang problema kay naa dri maong di maclose and murefresh ang updatePanel
+                    //Response.Clear();
+                    //Response.ContentType = "application/pdf";
+                    //Response.AddHeader("content-disposition", $"attachment;filename=Bill_{insertedBillId}.pdf");
+                    //Response.Buffer = true;
+                    //Response.Cache.SetCacheability(HttpCacheability.NoCache);
+                    //Response.BinaryWrite(pdfBytes);
+                    //Response.End();
+                    LoadBookingList();
+                    gridViewBookings.DataBind();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showSuccessAlert",
+        "Swal.fire({ icon: 'success', title: 'Bill Generated Successfully!', text: 'The bill has been generated and is ready for download.', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
+        true);
+                    this.ModalPopupExtender1.Hide();
+                }
+
             }
             catch (Exception ex)
             {
-                updatePanel1.Update();
                 LoadBookingList();
-                ModalPopupExtender1.Hide();
+                this.ModalPopupExtender1.Hide();
                 isProcessSuccessful = false;
                 ScriptManager.RegisterStartupScript(this, GetType(), "errorAlert",
                     $"Swal.fire({{ icon: 'error', title: 'Error!', text: '{ex.Message}', background: '#f8d7da', confirmButtonColor: '#dc3545' }});",
@@ -2593,559 +2190,533 @@ namespace Capstone
             }
             finally
             {
-                updatePanel1.Update();
                 LoadBookingList();
-                ModalPopupExtender1.Hide(); // Ensure the modal always closes
+                this.ModalPopupExtender1.Hide(); // Ensure the modal always closes
                 ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
                                         "Swal.fire({ icon: 'error', title: 'Empty Total Units!', text: 'Total Units has not been entered yet', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
                                         true);
             }
-            if (isProcessSuccessful)
-            {
-                updatePanel1.Update();
-                ModalPopupExtender1.Hide();
-                ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-                                        "Swal.fire({ icon: 'error', title: 'Empty Total Units!', text: 'Total Units has not been entered yet', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
-                                        true);
-                // Generate PDF if everything was successful
-                byte[] pdfBytes = GeneratePDFForRow(insertedBillId, bk_id);
-
-                // Send the PDF for download
-                Response.Clear();
-                Response.ContentType = "application/pdf";
-                Response.AddHeader("content-disposition", $"attachment;filename=Bill_{insertedBillId}.pdf");
-                Response.Buffer = true;
-                Response.Cache.SetCacheability(HttpCacheability.NoCache);
-                Response.BinaryWrite(pdfBytes);
-                Response.End();
-                LoadBookingList();
-                gridViewBookings.DataBind();
-                ScriptManager.RegisterStartupScript(this, GetType(), "showSuccessAlert",
-    "Swal.fire({ icon: 'success', title: 'Bill Generated Successfully!', text: 'The bill has been generated and is ready for download.', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
-    true);
-                ModalPopupExtender1.Hide();
-            }
-            ModalPopupExtender1.Hide();
+            this.ModalPopupExtender1.Hide();
         }
 
 
-        //PDF in BOOKING GENERATE BILL
-        private byte[] GeneratePDFForRow(int buttonText, int bkID)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                PdfWriter writer = new PdfWriter(ms);
-                PdfDocument pdf = new PdfDocument(writer);
-                ITextDocument document = new ITextDocument(pdf);
-
-                // Define fonts and colors
-                PdfFont boldFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
-                DeviceRgb redColor = new DeviceRgb(255, 0, 0);
-                string fontPath = Server.MapPath("~/fonts/Roboto/Roboto-Regular.ttf");
-                PdfFont font = PdfFontFactory.CreateFont(fontPath, "Identity-H", PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
-
-                LoadBookingList();
-                ModalPopupExtender1.Hide();
-
-                // Create a table with one row and two columns for the logo and address
-                iText.Layout.Element.Table headerTable = new iText.Layout.Element.Table(new float[] { 1, 3 })
-                    .UseAllAvailableWidth();
-
-                // Add company logo (if any)
-                string logoPath = Server.MapPath("~/Pictures/logo_bgRM.png");
-                iText.Layout.Element.Image logo = new iText.Layout.Element.Image(ImageDataFactory.Create(logoPath));
-                logo.ScaleToFit(100, 50); 
-
-                // Create a table for the logo and TrashTrack text
-                iText.Layout.Element.Table logoTextTable = new iText.Layout.Element.Table(2)
-                    .UseAllAvailableWidth();
-
-                // Create the logo cell
-                Cell logoCell = new Cell()
-                    .SetBorder(Border.NO_BORDER) // No border for the cell
-                    .Add(logo); // Add the logo
-
-                // Define the green color
-                DeviceRgb greenColor = new DeviceRgb(0, 128, 0); // Dark green color
-
-                // Create the TrashTrack text without margin and padding
-                Paragraph trashTrackText = new Paragraph("TrashTrack")
-                    .SetFont(boldFont) 
-                    .SetFontSize(30) 
-                    .SetFontColor(greenColor) 
-                    .SetTextAlignment(TextAlignment.LEFT) 
-                    .SetMargin(0) 
-                    .SetPadding(0); 
-
-                // Create a cell for the TrashTrack text
-                Cell textCell = new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(trashTrackText); 
-
-                // Add both cells to the logoTextTable
-                logoTextTable.AddCell(logoCell);
-                logoTextTable.AddCell(textCell);
-
-                // Add the logo and text table to the headerTable
-                headerTable.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(logoTextTable)); 
-
-                // Add Company Address to the second cell
-                Paragraph address = new Paragraph("Binaliw Cebu Dumpsite\nCebu City, Cebu\nPhilippines")
-                    .SetFont(font)
-                    .SetTextAlignment(TextAlignment.RIGHT); 
-
-                headerTable.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(address));
-
-                // Add the header table to the document
-                document.Add(headerTable);
-
-                // Initialize variables with default values to avoid uninitialized errors
-                int leadDays = 0;
-                int taxValue = 0;
-                int accPerValue = 0;
-                int susPerValue = 0;
-                double totalSum = 0;
-                double vat_Amnt = 0;
-                double netVat = 0;
-                double addFee = 0;
-                DateTime dateIssued = DateTime.Now; 
-                // Database connection and fetching values
-                using (var db = new NpgsqlConnection(con))
-                {
-                    db.Open();
-                    // Fetch interest and leadDays values from PostgreSQL
-                    string controlQuery = @"SELECT * FROM payment_term";
-
-                    using (var cmd = new NpgsqlCommand(controlQuery, db))
-                    {
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                // Read values from the database
-                                leadDays = Convert.ToInt32(reader["pt_lead_days"]);
-                                taxValue = Convert.ToInt32(reader["pt_tax"]);
-                                accPerValue = Convert.ToInt32(reader["pt_accrual_period"]);
-                                susPerValue = Convert.ToInt32(reader["pt_susp_period"]);
-                            }
-                            else
-                            {
-                                // Handle the case where no rows are returned (optional)
-                                Console.WriteLine("No payment term data found. Using default values.");
-                            }
-                        }
-                    }
-                    // Fetch date issued from generate_bill
-                    string billQuery = @"SELECT * FROM generate_bill WHERE gb_id = @BillId"; 
-                    using (var billCmd = new NpgsqlCommand(billQuery, db))
-                    {
-                        billCmd.Parameters.AddWithValue("@BillId", buttonText); 
-                        using (var reader = billCmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                dateIssued = Convert.ToDateTime(reader["gb_date_issued"]);
-                                addFee = reader["gb_add_fees"] != DBNull.Value ? Convert.ToDouble(reader["gb_add_fees"]) : 0;
-                                //vat_Amnt = Convert.ToDouble(reader[""]);
-                                //totalSum = Convert.ToDouble(reader[""]);
-
-                            }
-                            else
-                            {
-                                // Handle the case where no rows are returned (optional)
-                                Console.WriteLine("No payment term data found. Using default values.");
-                            }
-                        }
-
-                    }
-                    
-
-                    string totalQuery = @"SELECT SUM(bw_total_price) FROM booking_waste WHERE bk_id = @BkId";
-                    using (var totalCmd = new NpgsqlCommand(totalQuery, db))
-                    {
-                        totalCmd.Parameters.AddWithValue("@BkId", bkID);
-                        object result = totalCmd.ExecuteScalar(); // Execute the query and get the total
-
-                        // Check if result is not null and assign it to totalSum
-                        if (result != DBNull.Value)
-                        {
-                            totalSum += Convert.ToDouble(result);
-                            vat_Amnt = (totalSum + addFee) * (taxValue / 100.0);
-                            LoadBookingList();
-                            ModalPopupExtender1.Hide();
-                        }
-                    }
-                }
-                netVat = totalSum + addFee;
-                double totAmnt = vat_Amnt + netVat;
-                DateTime dueDate = dateIssued.AddDays(leadDays);
-
-                // Add Title
-                Paragraph title = new Paragraph("Billing Statement")
-                    .SetFont(boldFont)
-                    .SetFontSize(16)
-                    .SetTextAlignment(TextAlignment.CENTER);
-                document.Add(title);
-
-                iText.Layout.Element.Table infoTable = new iText.Layout.Element.Table(2).UseAllAvailableWidth();
-
-                // Remove all borders for each cell and content
-                infoTable.SetBorder(Border.NO_BORDER);
-
-                // Bill ID cell
-                infoTable.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph($"Bill ID: {buttonText}")
-                        .SetFont(boldFont)
-                        .SetBorder(Border.NO_BORDER))); 
-
-                // Invoice # cell, aligned to the right
-                infoTable.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph($"Invoice #: ######")
-                        .SetFont(boldFont)
-                        .SetTextAlignment(TextAlignment.RIGHT)
-                        .SetBorder(Border.NO_BORDER))); 
-
-                // Booking ID cell
-                infoTable.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph($"Booking ID: {bkID}")
-                        .SetFont(boldFont)
-                        .SetBorder(Border.NO_BORDER))); 
-
-                // Date Issued cell, aligned to the right
-                infoTable.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph($"Date Issued: {DateTime.Now.ToString("MM/dd/yyyy")}")
-                        .SetFont(boldFont)
-                        .SetTextAlignment(TextAlignment.RIGHT)
-                        .SetBorder(Border.NO_BORDER))); 
-
-                // Empty cell for spacing
-                infoTable.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
-
-                // Due Date cell, aligned to the right
-                infoTable.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph($"Due Date: {dueDate:MM/dd/yyyy}")
-                        .SetFont(boldFont)
-                        .SetTextAlignment(TextAlignment.RIGHT)
-                        .SetBorder(Border.NO_BORDER))); 
-
-                // Add the table to the document
-                document.Add(infoTable);
-
-                
-                // Add Terms
-                Paragraph termsTitle = new Paragraph("TERMS:")
-                    .SetFont(boldFont)
-                    .SetFontSize(12);
-                document.Add(termsTitle);
-
-                // Create terms content paragraph with formatted strings using default values
-                Paragraph termsContent = new Paragraph(
-                    $"The bill shall be due for payment and collection ({leadDays}) day/s after issuance. " +
-                    $"Failure by the customer to make payment without valid and justifiable reason will result in a late payment charge of ({taxValue}%) " +
-                    $"per {accPerValue} day/s applied to any outstanding balance until {susPerValue} day/s. " +
-                    $"Additionally, TrashTrack reserves the right to stop collecting waste materials from the customer's premises if payment is not made, " +
-                    $"preventing further processing and disposal services."
-                )
-                .SetFont(font)
-                .SetTextAlignment(TextAlignment.JUSTIFIED)
-                .SetFontSize(10);
-
-                // Add the terms content to the document
-                document.Add(termsContent);
-
-                LoadBookingList();
-                ModalPopupExtender1.Hide();
-
-                // Add Waste Details Table
-                iText.Layout.Element.Table wasteTable = new iText.Layout.Element.Table(new float[] { 100, 50, 80, 80, 100 }).UseAllAvailableWidth();
-                wasteTable.SetMarginTop(20);
-
-                // Add table headers with bottom border
-                wasteTable.AddHeaderCell(new Cell()
-                    .Add(new Paragraph("Waste Type").SetFont(boldFont))
-                    .SetTextAlignment(TextAlignment.LEFT)
-                    .SetBorderTop(Border.NO_BORDER)
-                    .SetBorderLeft(Border.NO_BORDER)
-                    .SetBorderRight(Border.NO_BORDER)
-                    .SetBorderBottom(new SolidBorder(1f)));  
-
-                wasteTable.AddHeaderCell(new Cell()
-                    .Add(new Paragraph("Unit").SetFont(boldFont))
-                    .SetTextAlignment(TextAlignment.LEFT)
-                    .SetBorderTop(Border.NO_BORDER)
-                    .SetBorderLeft(Border.NO_BORDER)
-                    .SetBorderRight(Border.NO_BORDER)
-                    .SetBorderBottom(new SolidBorder(1f))); 
-
-                wasteTable.AddHeaderCell(new Cell()
-                    .Add(new Paragraph("Total Unit").SetFont(boldFont))
-                    .SetTextAlignment(TextAlignment.LEFT)
-                    .SetBorderTop(Border.NO_BORDER)
-                    .SetBorderLeft(Border.NO_BORDER)
-                    .SetBorderRight(Border.NO_BORDER)
-                    .SetBorderBottom(new SolidBorder(1f)));  
-
-                wasteTable.AddHeaderCell(new Cell()
-                    .Add(new Paragraph("Unit Price").SetFont(boldFont))
-                    .SetTextAlignment(TextAlignment.LEFT)
-                    .SetBorderTop(Border.NO_BORDER)
-                    .SetBorderLeft(Border.NO_BORDER)
-                    .SetBorderRight(Border.NO_BORDER)
-                    .SetBorderBottom(new SolidBorder(1f)));
-
-                wasteTable.AddHeaderCell(new Cell()
-                    .Add(new Paragraph("Total Price").SetFont(boldFont))
-                    .SetTextAlignment(TextAlignment.LEFT)
-                    .SetBorderTop(Border.NO_BORDER)
-                    .SetBorderLeft(Border.NO_BORDER)
-                    .SetBorderRight(Border.NO_BORDER)
-                    .SetBorderBottom(new SolidBorder(1f))); 
-
-                
-
-                // Fetch booking_waste entries related to the booking ID
-                using (var db = new NpgsqlConnection(con))
-                {
-                    db.Open();
-
-                    string wasteQuery = @"SELECT bw_name, bw_unit, bw_total_unit, bw_price, bw_total_price 
-                                  FROM booking_waste 
-                                  WHERE bk_id = @BkId";
-                    using (var wasteCmd = new NpgsqlCommand(wasteQuery, db))
-                    {
-                        wasteCmd.Parameters.AddWithValue("@BkId", bkID);
-
-                        using (var wasteReader = wasteCmd.ExecuteReader())
-                        {
-                            while (wasteReader.Read())
-                            {
-                                // Add detail rows without borders
-                                wasteTable.AddCell(new Cell()
-                                    .Add(new Paragraph(wasteReader["bw_name"].ToString()))
-                                    .SetFont(font)
-                                    .SetTextAlignment(TextAlignment.LEFT)
-                                    .SetBorder(Border.NO_BORDER));
-
-                                wasteTable.AddCell(new Cell()
-                                    .Add(new Paragraph(wasteReader["bw_unit"].ToString()))
-                                    .SetTextAlignment(TextAlignment.LEFT)
-                                    .SetBorder(Border.NO_BORDER));
-
-                                wasteTable.AddCell(new Cell()
-                                    .Add(new Paragraph(wasteReader["bw_total_unit"].ToString()))
-                                    .SetTextAlignment(TextAlignment.LEFT)
-                                    .SetBorder(Border.NO_BORDER));
-
-                                wasteTable.AddCell(new Cell()
-                                    .Add(new Paragraph("₱" + wasteReader["bw_price"].ToString()))
-                                    .SetFont(font)
-                                    .SetTextAlignment(TextAlignment.LEFT)
-                                    .SetBorder(Border.NO_BORDER));
-
-                                wasteTable.AddCell(new Cell()
-                                    .Add(new Paragraph("₱ " + wasteReader["bw_total_price"].ToString()))
-                                    .SetFont(font)
-                                    .SetTextAlignment(TextAlignment.LEFT)
-                                    .SetBorder(Border.NO_BORDER));
-                            }
-                        }
-                    }
-
-                }
-
-                document.Add(wasteTable);
-                LoadBookingList();
-                ModalPopupExtender1.Hide();
-
-                // Define the width for the bottom line
-                float[] bottomLineWidths = new float[] { 1 }; // Single column for the line
-                iText.Layout.Element.Table btmLine = new iText.Layout.Element.Table(bottomLineWidths).UseAllAvailableWidth();
-
-                // Add a cell for the line with a top border
-                btmLine.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("") 
-                        .SetBorder(Border.NO_BORDER) 
-                        .SetBorderTop(new SolidBorder(1f)) 
-                    )
-                );
-                //netVat
-                // Add the bottom line table to the document
-                document.Add(btmLine);
-
-
-                float[] columnWidths = new float[] { 100, 40, 30, 80, 100 }; // Set fixed pixel widths
-                iText.Layout.Element.Table summarySection = new iText.Layout.Element.Table(columnWidths).UseAllAvailableWidth();
-
-                // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER)));
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER)));
-                // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER)));
-                // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph("Total Sum: ").SetFont(boldFont)
-                        .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER)));
-                //totAmnt, totAmnt + addFee;
-                // Add Sum Amount cell, aligned to the left
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph("₱" + totalSum.ToString("N2"))
-                        .SetFont(boldFont)
-                        .SetFont(font)
-                        .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER)));
-
-
-
-                // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER)));
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER)));
-                // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER)));
-                // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph("Added Fee: ").SetFont(boldFont)
-                        .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER)));
-                //totAmnt, totAmnt + addFee;
-                // Add Sum Amount cell, aligned to the left
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph("₱" + addFee.ToString("N2"))
-                        .SetFont(boldFont)
-                        .SetFont(font)
-                        .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER)));
-
-
-                // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
-                // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
-                // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("Net of VAT: ").SetFont(boldFont)
-                        .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER)));
-                
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("₱" + netVat.ToString("N2"))
-                        .SetFont(boldFont)
-                        .SetFont(font)
-                        .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER))); 
-
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
-
-                // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
-
-                // Add Bill ID cell (empty for spacing)
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
-
-                // Add empty cell for spacing
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("VAT (12%): ")
-                        .SetFont(boldFont)
-                        .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER))); 
-
-                // Add VAT Amount cell, aligned to the left
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("₱" + vat_Amnt.ToString("N2"))
-                        .SetFont(boldFont)
-                        .SetFont(font)
-                        .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER))); 
-
-                
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
-
-                // Add empty cell for spacing
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("Total Amount: ")
-                        .SetFont(boldFont)
-                        .SetFontColor(redColor)
-                        .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER))); 
-
-                // Add Total Amount cell, aligned to the left
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER) 
-                    .Add(new Paragraph("₱" + totAmnt.ToString("N2"))
-                        .SetFont(boldFont)
-                        .SetFontColor(redColor)
-                        .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER))); 
-
-                // Add the summary section table to the document
-                document.Add(summarySection);
-
-
-                LoadBookingList();
-                ModalPopupExtender1.Hide();
-
-                // Close document
-                document.Close();
-
-                return ms.ToArray();
-
-            }
-
-        }
+        ////PDF in BOOKING GENERATE BILL
+        //private byte[] GeneratePDFForRow(int buttonText, int bkID)
+        //{
+        //    using (MemoryStream ms = new MemoryStream())
+        //    {
+        //        PdfWriter writer = new PdfWriter(ms);
+        //        PdfDocument pdf = new PdfDocument(writer);
+        //        ITextDocument document = new ITextDocument(pdf);
+
+        //        // Define fonts and colors
+        //        PdfFont boldFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+        //        DeviceRgb redColor = new DeviceRgb(255, 0, 0);
+        //        string fontPath = Server.MapPath("~/fonts/Roboto/Roboto-Regular.ttf");
+        //        PdfFont font = PdfFontFactory.CreateFont(fontPath, "Identity-H", PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
+
+        //        LoadBookingList();
+        //        this.ModalPopupExtender1.Hide();
+
+        //        // Create a table with one row and two columns for the logo and address
+        //        iText.Layout.Element.Table headerTable = new iText.Layout.Element.Table(new float[] { 1, 3 })
+        //            .UseAllAvailableWidth();
+
+        //        // Add company logo (if any)
+        //        string logoPath = Server.MapPath("~/Pictures/logo_bgRM.png");
+        //        iText.Layout.Element.Image logo = new iText.Layout.Element.Image(ImageDataFactory.Create(logoPath));
+        //        logo.ScaleToFit(100, 50); 
+
+        //        // Create a table for the logo and TrashTrack text
+        //        iText.Layout.Element.Table logoTextTable = new iText.Layout.Element.Table(2)
+        //            .UseAllAvailableWidth();
+
+        //        // Create the logo cell
+        //        Cell logoCell = new Cell()
+        //            .SetBorder(Border.NO_BORDER) // No border for the cell
+        //            .Add(logo); // Add the logo
+
+        //        // Define the green color
+        //        DeviceRgb greenColor = new DeviceRgb(0, 128, 0); // Dark green color
+
+        //        // Create the TrashTrack text without margin and padding
+        //        Paragraph trashTrackText = new Paragraph("TrashTrack")
+        //            .SetFont(boldFont) 
+        //            .SetFontSize(30) 
+        //            .SetFontColor(greenColor) 
+        //            .SetTextAlignment(TextAlignment.LEFT) 
+        //            .SetMargin(0) 
+        //            .SetPadding(0); 
+
+        //        // Create a cell for the TrashTrack text
+        //        Cell textCell = new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(trashTrackText); 
+
+        //        // Add both cells to the logoTextTable
+        //        logoTextTable.AddCell(logoCell);
+        //        logoTextTable.AddCell(textCell);
+
+        //        // Add the logo and text table to the headerTable
+        //        headerTable.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(logoTextTable)); 
+
+        //        // Add Company Address to the second cell
+        //        Paragraph address = new Paragraph("Binaliw Cebu Dumpsite\nCebu City, Cebu\nPhilippines")
+        //            .SetFont(font)
+        //            .SetTextAlignment(TextAlignment.RIGHT); 
+
+        //        headerTable.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(address));
+
+        //        // Add the header table to the document
+        //        document.Add(headerTable);
+
+        //        // Initialize variables with default values to avoid uninitialized errors
+        //        int leadDays = 0;
+        //        int taxValue = 0;
+        //        int accPerValue = 0;
+        //        int susPerValue = 0;
+        //        double totalSum = 0;
+        //        double vat_Amnt = 0;
+        //        double netVat = 0;
+        //        double addFee = 0;
+        //        DateTime dateIssued = DateTime.Now; 
+        //        // Database connection and fetching values
+        //        using (var db = new NpgsqlConnection(con))
+        //        {
+        //            db.Open();
+        //            // Fetch interest and leadDays values from PostgreSQL
+        //            string controlQuery = @"SELECT * FROM payment_term";
+
+        //            using (var cmd = new NpgsqlCommand(controlQuery, db))
+        //            {
+        //                using (var reader = cmd.ExecuteReader())
+        //                {
+        //                    if (reader.Read())
+        //                    {
+        //                        // Read values from the database
+        //                        leadDays = Convert.ToInt32(reader["pt_lead_days"]);
+        //                        taxValue = Convert.ToInt32(reader["pt_tax"]);
+        //                        accPerValue = Convert.ToInt32(reader["pt_accrual_period"]);
+        //                        susPerValue = Convert.ToInt32(reader["pt_susp_period"]);
+        //                    }
+        //                    else
+        //                    {
+        //                        // Handle the case where no rows are returned (optional)
+        //                        Console.WriteLine("No payment term data found. Using default values.");
+        //                    }
+        //                }
+        //            }
+        //            // Fetch date issued from generate_bill
+        //            string billQuery = @"SELECT * FROM generate_bill WHERE gb_id = @BillId"; 
+        //            using (var billCmd = new NpgsqlCommand(billQuery, db))
+        //            {
+        //                billCmd.Parameters.AddWithValue("@BillId", buttonText); 
+        //                using (var reader = billCmd.ExecuteReader())
+        //                {
+        //                    if (reader.Read())
+        //                    {
+        //                        dateIssued = Convert.ToDateTime(reader["gb_date_issued"]);
+        //                        addFee = reader["gb_add_fees"] != DBNull.Value ? Convert.ToDouble(reader["gb_add_fees"]) : 0;
+        //                        //vat_Amnt = Convert.ToDouble(reader[""]);
+        //                        //totalSum = Convert.ToDouble(reader[""]);
+
+        //                    }
+        //                    else
+        //                    {
+        //                        // Handle the case where no rows are returned (optional)
+        //                        Console.WriteLine("No payment term data found. Using default values.");
+        //                    }
+        //                }
+
+        //            }
+
+
+        //            string totalQuery = @"SELECT SUM(bw_total_price) FROM booking_waste WHERE bk_id = @BkId";
+        //            using (var totalCmd = new NpgsqlCommand(totalQuery, db))
+        //            {
+        //                totalCmd.Parameters.AddWithValue("@BkId", bkID);
+        //                object result = totalCmd.ExecuteScalar(); // Execute the query and get the total
+
+        //                // Check if result is not null and assign it to totalSum
+        //                if (result != DBNull.Value)
+        //                {
+        //                    totalSum += Convert.ToDouble(result);
+        //                    vat_Amnt = (totalSum + addFee) * (taxValue / 100.0);
+        //                    LoadBookingList();
+        //                    ModalPopupExtender1.Hide();
+        //                }
+        //            }
+        //        }
+        //        netVat = totalSum + addFee;
+        //        double totAmnt = vat_Amnt + netVat;
+        //        DateTime dueDate = dateIssued.AddDays(leadDays);
+
+        //        // Add Title
+        //        Paragraph title = new Paragraph("Billing Statement")
+        //            .SetFont(boldFont)
+        //            .SetFontSize(16)
+        //            .SetTextAlignment(TextAlignment.CENTER);
+        //        document.Add(title);
+
+        //        iText.Layout.Element.Table infoTable = new iText.Layout.Element.Table(2).UseAllAvailableWidth();
+
+        //        // Remove all borders for each cell and content
+        //        infoTable.SetBorder(Border.NO_BORDER);
+
+        //        // Bill ID cell
+        //        infoTable.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph($"Bill ID: {buttonText}")
+        //                .SetFont(boldFont)
+        //                .SetBorder(Border.NO_BORDER))); 
+
+        //        // Invoice # cell, aligned to the right
+        //        infoTable.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph($"Invoice #: ######")
+        //                .SetFont(boldFont)
+        //                .SetTextAlignment(TextAlignment.RIGHT)
+        //                .SetBorder(Border.NO_BORDER))); 
+
+        //        // Booking ID cell
+        //        infoTable.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph($"Booking ID: {bkID}")
+        //                .SetFont(boldFont)
+        //                .SetBorder(Border.NO_BORDER))); 
+
+        //        // Date Issued cell, aligned to the right
+        //        infoTable.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER)
+        //            .Add(new Paragraph($"Date Issued: {DateTime.Now.ToString("MM/dd/yyyy")}")
+        //                .SetFont(boldFont)
+        //                .SetTextAlignment(TextAlignment.RIGHT)
+        //                .SetBorder(Border.NO_BORDER))); 
+
+        //        // Empty cell for spacing
+        //        infoTable.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
+
+        //        // Due Date cell, aligned to the right
+        //        infoTable.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph($"Due Date: {dueDate:MM/dd/yyyy}")
+        //                .SetFont(boldFont)
+        //                .SetTextAlignment(TextAlignment.RIGHT)
+        //                .SetBorder(Border.NO_BORDER))); 
+
+        //        // Add the table to the document
+        //        document.Add(infoTable);
+
+
+        //        // Add Terms
+        //        Paragraph termsTitle = new Paragraph("TERMS:")
+        //            .SetFont(boldFont)
+        //            .SetFontSize(12);
+        //        document.Add(termsTitle);
+
+        //        // Create terms content paragraph with formatted strings using default values
+        //        Paragraph termsContent = new Paragraph(
+        //            $"The bill shall be due for payment and collection ({leadDays}) day/s after issuance. " +
+        //            $"Failure by the customer to make payment without valid and justifiable reason will result in a late payment charge of ({taxValue}%) " +
+        //            $"per {accPerValue} day/s applied to any outstanding balance until {susPerValue} day/s. " +
+        //            $"Additionally, TrashTrack reserves the right to stop collecting waste materials from the customer's premises if payment is not made, " +
+        //            $"preventing further processing and disposal services."
+        //        )
+        //        .SetFont(font)
+        //        .SetTextAlignment(TextAlignment.JUSTIFIED)
+        //        .SetFontSize(10);
+
+        //        // Add the terms content to the document
+        //        document.Add(termsContent);
+
+        //        LoadBookingList();
+        //        ModalPopupExtender1.Hide();
+
+        //        // Add Waste Details Table
+        //        iText.Layout.Element.Table wasteTable = new iText.Layout.Element.Table(new float[] { 100, 50, 80, 80, 100 }).UseAllAvailableWidth();
+        //        wasteTable.SetMarginTop(20);
+
+        //        // Add table headers with bottom border
+        //        wasteTable.AddHeaderCell(new Cell()
+        //            .Add(new Paragraph("Waste Type").SetFont(boldFont))
+        //            .SetTextAlignment(TextAlignment.LEFT)
+        //            .SetBorderTop(Border.NO_BORDER)
+        //            .SetBorderLeft(Border.NO_BORDER)
+        //            .SetBorderRight(Border.NO_BORDER)
+        //            .SetBorderBottom(new SolidBorder(1f)));  
+
+        //        wasteTable.AddHeaderCell(new Cell()
+        //            .Add(new Paragraph("Unit").SetFont(boldFont))
+        //            .SetTextAlignment(TextAlignment.LEFT)
+        //            .SetBorderTop(Border.NO_BORDER)
+        //            .SetBorderLeft(Border.NO_BORDER)
+        //            .SetBorderRight(Border.NO_BORDER)
+        //            .SetBorderBottom(new SolidBorder(1f))); 
+
+        //        wasteTable.AddHeaderCell(new Cell()
+        //            .Add(new Paragraph("Total Unit").SetFont(boldFont))
+        //            .SetTextAlignment(TextAlignment.LEFT)
+        //            .SetBorderTop(Border.NO_BORDER)
+        //            .SetBorderLeft(Border.NO_BORDER)
+        //            .SetBorderRight(Border.NO_BORDER)
+        //            .SetBorderBottom(new SolidBorder(1f)));  
+
+        //        wasteTable.AddHeaderCell(new Cell()
+        //            .Add(new Paragraph("Unit Price").SetFont(boldFont))
+        //            .SetTextAlignment(TextAlignment.LEFT)
+        //            .SetBorderTop(Border.NO_BORDER)
+        //            .SetBorderLeft(Border.NO_BORDER)
+        //            .SetBorderRight(Border.NO_BORDER)
+        //            .SetBorderBottom(new SolidBorder(1f)));
+
+        //        wasteTable.AddHeaderCell(new Cell()
+        //            .Add(new Paragraph("Total Price").SetFont(boldFont))
+        //            .SetTextAlignment(TextAlignment.LEFT)
+        //            .SetBorderTop(Border.NO_BORDER)
+        //            .SetBorderLeft(Border.NO_BORDER)
+        //            .SetBorderRight(Border.NO_BORDER)
+        //            .SetBorderBottom(new SolidBorder(1f))); 
+
+
+
+        //        // Fetch booking_waste entries related to the booking ID
+        //        using (var db = new NpgsqlConnection(con))
+        //        {
+        //            db.Open();
+
+        //            string wasteQuery = @"SELECT bw_name, bw_unit, bw_total_unit, bw_price, bw_total_price 
+        //                          FROM booking_waste 
+        //                          WHERE bk_id = @BkId";
+        //            using (var wasteCmd = new NpgsqlCommand(wasteQuery, db))
+        //            {
+        //                wasteCmd.Parameters.AddWithValue("@BkId", bkID);
+
+        //                using (var wasteReader = wasteCmd.ExecuteReader())
+        //                {
+        //                    while (wasteReader.Read())
+        //                    {
+        //                        // Add detail rows without borders
+        //                        wasteTable.AddCell(new Cell()
+        //                            .Add(new Paragraph(wasteReader["bw_name"].ToString()))
+        //                            .SetFont(font)
+        //                            .SetTextAlignment(TextAlignment.LEFT)
+        //                            .SetBorder(Border.NO_BORDER));
+
+        //                        wasteTable.AddCell(new Cell()
+        //                            .Add(new Paragraph(wasteReader["bw_unit"].ToString()))
+        //                            .SetTextAlignment(TextAlignment.LEFT)
+        //                            .SetBorder(Border.NO_BORDER));
+
+        //                        wasteTable.AddCell(new Cell()
+        //                            .Add(new Paragraph(wasteReader["bw_total_unit"].ToString()))
+        //                            .SetTextAlignment(TextAlignment.LEFT)
+        //                            .SetBorder(Border.NO_BORDER));
+
+        //                        wasteTable.AddCell(new Cell()
+        //                            .Add(new Paragraph("₱" + wasteReader["bw_price"].ToString()))
+        //                            .SetFont(font)
+        //                            .SetTextAlignment(TextAlignment.LEFT)
+        //                            .SetBorder(Border.NO_BORDER));
+
+        //                        wasteTable.AddCell(new Cell()
+        //                            .Add(new Paragraph("₱ " + wasteReader["bw_total_price"].ToString()))
+        //                            .SetFont(font)
+        //                            .SetTextAlignment(TextAlignment.LEFT)
+        //                            .SetBorder(Border.NO_BORDER));
+        //                    }
+        //                }
+        //            }
+
+        //        }
+
+        //        document.Add(wasteTable);
+        //        LoadBookingList();
+        //        ModalPopupExtender1.Hide();
+
+        //        // Define the width for the bottom line
+        //        float[] bottomLineWidths = new float[] { 1 }; // Single column for the line
+        //        iText.Layout.Element.Table btmLine = new iText.Layout.Element.Table(bottomLineWidths).UseAllAvailableWidth();
+
+        //        // Add a cell for the line with a top border
+        //        btmLine.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("") 
+        //                .SetBorder(Border.NO_BORDER) 
+        //                .SetBorderTop(new SolidBorder(1f)) 
+        //            )
+        //        );
+        //        //netVat
+        //        // Add the bottom line table to the document
+        //        document.Add(btmLine);
+
+
+        //        float[] columnWidths = new float[] { 100, 40, 30, 80, 100 }; // Set fixed pixel widths
+        //        iText.Layout.Element.Table summarySection = new iText.Layout.Element.Table(columnWidths).UseAllAvailableWidth();
+
+        //        // Add Bill ID cell (empty for spacing)
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER)
+        //            .Add(new Paragraph("").SetBorder(Border.NO_BORDER)));
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER)
+        //            .Add(new Paragraph("").SetBorder(Border.NO_BORDER)));
+        //        // Add Bill ID cell (empty for spacing)
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER)
+        //            .Add(new Paragraph("").SetBorder(Border.NO_BORDER)));
+        //        // Add Bill ID cell (empty for spacing)
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER)
+        //            .Add(new Paragraph("Total Sum: ").SetFont(boldFont)
+        //                .SetTextAlignment(TextAlignment.LEFT)
+        //                .SetBorder(Border.NO_BORDER)));
+        //        //totAmnt, totAmnt + addFee;
+        //        // Add Sum Amount cell, aligned to the left
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER)
+        //            .Add(new Paragraph("₱" + totalSum.ToString("N2"))
+        //                .SetFont(boldFont)
+        //                .SetFont(font)
+        //                .SetTextAlignment(TextAlignment.LEFT)
+        //                .SetBorder(Border.NO_BORDER)));
+
+
+
+        //        // Add Bill ID cell (empty for spacing)
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER)
+        //            .Add(new Paragraph("").SetBorder(Border.NO_BORDER)));
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER)
+        //            .Add(new Paragraph("").SetBorder(Border.NO_BORDER)));
+        //        // Add Bill ID cell (empty for spacing)
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER)
+        //            .Add(new Paragraph("").SetBorder(Border.NO_BORDER)));
+        //        // Add Bill ID cell (empty for spacing)
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER)
+        //            .Add(new Paragraph("Added Fee: ").SetFont(boldFont)
+        //                .SetTextAlignment(TextAlignment.LEFT)
+        //                .SetBorder(Border.NO_BORDER)));
+        //        //totAmnt, totAmnt + addFee;
+        //        // Add Sum Amount cell, aligned to the left
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER)
+        //            .Add(new Paragraph("₱" + addFee.ToString("N2"))
+        //                .SetFont(boldFont)
+        //                .SetFont(font)
+        //                .SetTextAlignment(TextAlignment.LEFT)
+        //                .SetBorder(Border.NO_BORDER)));
+
+
+        //        // Add Bill ID cell (empty for spacing)
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
+        //        // Add Bill ID cell (empty for spacing)
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
+        //        // Add Bill ID cell (empty for spacing)
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("Net of VAT: ").SetFont(boldFont)
+        //                .SetTextAlignment(TextAlignment.LEFT)
+        //                .SetBorder(Border.NO_BORDER)));
+
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("₱" + netVat.ToString("N2"))
+        //                .SetFont(boldFont)
+        //                .SetFont(font)
+        //                .SetTextAlignment(TextAlignment.LEFT)
+        //                .SetBorder(Border.NO_BORDER))); 
+
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
+
+        //        // Add Bill ID cell (empty for spacing)
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
+
+        //        // Add Bill ID cell (empty for spacing)
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
+
+        //        // Add empty cell for spacing
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("VAT (12%): ")
+        //                .SetFont(boldFont)
+        //                .SetTextAlignment(TextAlignment.LEFT)
+        //                .SetBorder(Border.NO_BORDER))); 
+
+        //        // Add VAT Amount cell, aligned to the left
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("₱" + vat_Amnt.ToString("N2"))
+        //                .SetFont(boldFont)
+        //                .SetFont(font)
+        //                .SetTextAlignment(TextAlignment.LEFT)
+        //                .SetBorder(Border.NO_BORDER))); 
+
+
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("").SetBorder(Border.NO_BORDER))); 
+
+        //        // Add empty cell for spacing
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("Total Amount: ")
+        //                .SetFont(boldFont)
+        //                .SetFontColor(redColor)
+        //                .SetTextAlignment(TextAlignment.LEFT)
+        //                .SetBorder(Border.NO_BORDER))); 
+
+        //        // Add Total Amount cell, aligned to the left
+        //        summarySection.AddCell(new Cell()
+        //            .SetBorder(Border.NO_BORDER) 
+        //            .Add(new Paragraph("₱" + totAmnt.ToString("N2"))
+        //                .SetFont(boldFont)
+        //                .SetFontColor(redColor)
+        //                .SetTextAlignment(TextAlignment.LEFT)
+        //                .SetBorder(Border.NO_BORDER))); 
+
+        //        // Add the summary section table to the document
+        //        document.Add(summarySection);
+
+
+        //        LoadBookingList();
+        //        ModalPopupExtender1.Hide();
+
+        //        // Close document
+        //        document.Close();
+
+        //        return ms.ToArray();
+
+        //    }
+
+        //}
 
         protected void Unpaid_Click(object sender, EventArgs e)
         {
@@ -3196,14 +2767,13 @@ namespace Capstone
             Button btn = (Button)sender;
             int managerId = Convert.ToInt32(btn.CommandArgument);
 
-            hfActiveTab.Value = "#tab2"; // Set the tab to display
-            TextBox3.Text = managerId.ToString(); // Set ID in TextBox
-                                                  // Store the manager ID in a hidden field for later use
+            hfActiveTab.Value = "#tab2";
+            TextBox3.Text = managerId.ToString();
             hfManagerId.Value = managerId.ToString();
             ModalPopupExtender1.Hide();
             // Show the modal popup
             ModalPopupExtender6.Show();
-            hfActiveTab.Value = "#tab2"; // Set Tab 1 as the default
+            hfActiveTab.Value = "#tab2";
 
             // Optional: Load other details related to managerId if needed
             this.ModalPopupExtender6.Show(); // Show the modal
@@ -3279,9 +2849,6 @@ namespace Capstone
         }
 
 
-
-
-
         // validate if the admin status is Suspend
         protected Boolean IsSuspended(string status)
         {
@@ -3293,431 +2860,6 @@ namespace Capstone
         {
             return status == "paid";
         }
-
-
-        //protected void btnGenerateBill_Click(object sender, EventArgs e)
-        //{
-        //    int empId = (int)Session["bo_id"]; // Retrieve admin ID from session
-
-        //    // Retrieve values from your controls
-        //    string note = noteTxt.Text;
-        //    double? additionalFees = string.IsNullOrWhiteSpace(addFeeTxt.Text) ? (double?)null : Convert.ToDouble(addFeeTxt.Text);
-        //    double? netVat = string.IsNullOrWhiteSpace(netVatTxt.Text) ? (double?)null : Convert.ToDouble(netVatTxt.Text);
-        //    double? vatAmount = string.IsNullOrWhiteSpace(vatAmntTxt.Text) ? (double?)null : Convert.ToDouble(vatAmntTxt.Text);
-        //    double? totalSales = string.IsNullOrWhiteSpace(totSalesTxt.Text) ? (double?)null : Convert.ToDouble(totSalesTxt.Text);
-        //    DateTime? dateIssued = DateTime.TryParse(dateTodayTxt.Text, out DateTime issuedDate) ? (DateTime?)issuedDate : null;
-        //    DateTime? dateDue = DateTime.TryParse(dueDateTxt.Text, out DateTime dueDate) ? (DateTime?)dueDate : null;
-        //    DateTime? accrualDate = DateTime.TryParse(accDateTxt.Text, out DateTime accDate) ? (DateTime?)accDate : null;
-        //    DateTime? suspensionDate = DateTime.TryParse(susDateTxt.Text, out DateTime susDate) ? (DateTime?)susDate : null;
-
-        //    // Variables for payment terms
-        //    double? interest = null;
-        //    int? leadDays = null;
-        //    int? accrualPeriod = null;
-        //    int? suspensionPeriod = null;
-        //    int? tax = null;
-
-        //    // Retrieve payment term values from the database
-        //    using (var conn = new NpgsqlConnection(con))
-        //    {
-        //        conn.Open();
-        //        string paymentTermQuery = "SELECT pt_interest, pt_lead_days, pt_accrual_period, pt_susp_period, pt_tax FROM payment_term WHERE emp_id = @EmpId";
-        //        using (var cmd = new NpgsqlCommand(paymentTermQuery, conn))
-        //        {
-        //            cmd.Parameters.AddWithValue("@EmpId", empId);
-        //            using (var reader = cmd.ExecuteReader())
-        //            {
-        //                if (reader.Read())
-        //                {
-        //                    interest = reader.IsDBNull(0) ? (double?)null : reader.GetDouble(0);
-        //                    leadDays = reader.IsDBNull(1) ? (int?)null : reader.GetInt32(1);
-        //                    accrualPeriod = reader.IsDBNull(2) ? (int?)null : reader.GetInt32(2);
-        //                    suspensionPeriod = reader.IsDBNull(3) ? (int?)null : reader.GetInt32(3);
-        //                    tax = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4);
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    int bk_id, cus_id;
-        //    string cus_fullname;
-
-        //    using (var conn = new NpgsqlConnection(con))
-        //    {
-        //        conn.Open();
-        //        string findBkID = "SELECT * FROM booking WHERE bk_id = @BkId";
-        //        using (var cmd = new NpgsqlCommand(findBkID, conn))
-        //        {
-        //            cmd.Parameters.AddWithValue("@BkId", Convert.ToInt32(TextBox1.Text));
-        //            using (var reader = cmd.ExecuteReader())
-        //            {
-        //                if (reader.Read())
-        //                {
-        //                    bk_id = Convert.ToInt32(reader["bk_id"]);
-        //                    cus_id = Convert.ToInt32(reader["cus_id"]);
-        //                    cus_fullname = reader["bk_fullname"].ToString();
-        //                    LoadBookingList();
-        //                }
-        //                else
-        //                {
-        //                    throw new Exception("Booking ID not found.");
-        //                }
-        //            }
-        //        }
-
-        //        string updateStatusQuery = "UPDATE booking SET bk_status = 'Billed' WHERE bk_id = @BkId";
-        //        using (var updateCmd = new NpgsqlCommand(updateStatusQuery, conn))
-        //        {
-        //            updateCmd.Parameters.AddWithValue("@BkId", bk_id);
-        //            int rowsAffected = updateCmd.ExecuteNonQuery();
-        //            if (rowsAffected > 0)
-        //            {
-        //                Console.WriteLine("Booking status updated to 'Billed' successfully.");
-        //                updatePanel1.Update();
-        //                LoadBookingList();
-        //            }
-        //            else
-        //            {
-        //                throw new Exception("Failed to update booking status.");
-        //            }
-        //        }
-
-
-        //    }
-
-        //    int insertedBillId;
-
-        //    using (var conn = new NpgsqlConnection(con))
-        //    {
-        //        conn.Open();
-        //        string query = @"
-        //    INSERT INTO generate_bill (
-        //        gb_note, gb_add_fees, gb_net_vat, gb_vat_amnt, gb_total_sales, 
-        //        gb_date_issued, gb_date_due, gb_interest, gb_lead_days, 
-        //        gb_accrual_period, gb_suspend_period, gb_accrual_date, 
-        //        gb_suspend_date, gb_tax, gb_status, bk_id, emp_id
-        //    ) 
-        //    VALUES (
-        //        @Note, @AddFees, @NetVat, @VatAmount, @TotalSales, 
-        //        @DateIssued, @DateDue, @Interest, @LeadDays, 
-        //        @AccrualPeriod, @SuspensionPeriod, @AccrualDate, 
-        //        @SuspensionDate, @Tax, @Status, @BkId, @EmpId
-        //    ) 
-        //    RETURNING gb_id;";
-
-        //        using (var cmd = new NpgsqlCommand(query, conn))
-        //        {
-        //            cmd.Parameters.AddWithValue("@Note", note ?? (object)DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@AddFees", additionalFees ?? (object)DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@NetVat", netVat ?? (object)DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@VatAmount", vatAmount ?? (object)DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@TotalSales", totalSales ?? (object)DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@DateIssued", dateIssued ?? (object)DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@DateDue", dateDue ?? (object)DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@Interest", interest ?? (object)DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@LeadDays", leadDays ?? (object)DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@AccrualPeriod", accrualPeriod ?? (object)DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@SuspensionPeriod", suspensionPeriod ?? (object)DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@AccrualDate", accrualDate ?? (object)DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@SuspensionDate", suspensionDate ?? (object)DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@Tax", tax ?? (object)DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@Status", "unpaid");
-        //            cmd.Parameters.AddWithValue("@BkId", Convert.ToInt32(TextBox1.Text));
-        //            cmd.Parameters.AddWithValue("@EmpId", empId);
-
-        //            var result = cmd.ExecuteScalar();
-        //            if (result != null)
-        //            {
-        //                insertedBillId = Convert.ToInt32(result);
-        //                updatePanel1.Update();
-        //                LoadBookingList();
-        //            }
-        //            else
-        //            {
-        //                throw new Exception("No ID returned from insert.");
-        //            }
-        //        }
-        //    }
-
-        //    string notif_message = "Your bill is now available for payment 🧾. \n\n" +
-        //                           "------------------------------------------\n" +
-        //                           "BILL# " + insertedBillId + "\n\n" +
-        //                           "Dear " + cus_fullname + ",\n\n" +
-        //                           "You can now review the details at your convenience. Please check it as soon as possible to avoid any delays. " +
-        //                           "Thank you for your cooperation 💜";
-
-        //    using (var conn = new NpgsqlConnection(con))
-        //    {
-        //        conn.Open();
-        //        string query = @"
-        //    INSERT INTO notification (
-        //        notif_message, emp_id, cus_id, bk_id, gb_id
-        //    ) 
-        //    VALUES (
-        //        @Message, @EmpId, @CusId, @BkId, @GbId
-        //    ) 
-        //    RETURNING gb_id;";
-
-        //        using (var cmd = new NpgsqlCommand(query, conn))
-        //        {
-        //            cmd.Parameters.AddWithValue("@Message", notif_message ?? (object)DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@EmpId", empId);
-        //            cmd.Parameters.AddWithValue("@CusId", cus_id);
-        //            cmd.Parameters.AddWithValue("@BkId", Convert.ToInt32(TextBox1.Text));
-        //            cmd.Parameters.AddWithValue("@GbId", insertedBillId);
-
-        //            var result = cmd.ExecuteScalar();
-        //            if (result != null)
-        //            {
-        //                insertedBillId = Convert.ToInt32(result);
-        //                updatePanel1.Update();
-        //                LoadBookingList();
-        //            }
-        //            else
-        //            {
-        //                throw new Exception("No ID returned from insert.");
-        //            }
-        //        }
-        //    }
-
-        //    LoadBookingList();
-        //    byte[] pdfBytes = GeneratePDFForRow(insertedBillId, bk_id);
-        //    LoadBookingList();
-        //    // Send the PDF for download.
-        //    Response.Clear();
-        //    Response.ContentType = "application/pdf";
-        //    Response.AddHeader("content-disposition", $"attachment;filename=Bill_{insertedBillId}.pdf");
-        //    Response.Buffer = true;
-        //    Response.Cache.SetCacheability(HttpCacheability.NoCache);
-        //    Response.BinaryWrite(pdfBytes);
-        //    Response.End();
-        //    LoadBookingList();
-        //}
-
-
-
-        //    protected void btnGenerateBill_Click(object sender, EventArgs e)
-        //    {
-        //        int empId = (int)Session["bo_id"]; // Retrieve admin ID from session
-
-        //        // Retrieve values from your controls
-        //        string note = noteTxt.Text;
-        //        double? additionalFees = string.IsNullOrWhiteSpace(addFeeTxt.Text) ? (double?)null : Convert.ToDouble(addFeeTxt.Text);
-        //        double? netVat = string.IsNullOrWhiteSpace(netVatTxt.Text) ? (double?)null : Convert.ToDouble(netVatTxt.Text);
-        //        double? vatAmount = string.IsNullOrWhiteSpace(vatAmntTxt.Text) ? (double?)null : Convert.ToDouble(vatAmntTxt.Text);
-        //        double? totalSales = string.IsNullOrWhiteSpace(totSalesTxt.Text) ? (double?)null : Convert.ToDouble(totSalesTxt.Text);
-        //        DateTime? dateIssued = DateTime.TryParse(dateTodayTxt.Text, out DateTime issuedDate) ? (DateTime?)issuedDate : null;
-        //        DateTime? dateDue = DateTime.TryParse(dueDateTxt.Text, out DateTime dueDate) ? (DateTime?)dueDate : null;
-        //        DateTime? accrualDate = DateTime.TryParse(accDateTxt.Text, out DateTime accDate) ? (DateTime?)accDate : null;
-        //        DateTime? suspensionDate = DateTime.TryParse(susDateTxt.Text, out DateTime susDate) ? (DateTime?)susDate : null;
-
-        //        // Variables for payment terms
-        //        double? interest = null;
-        //        int? leadDays = null;
-        //        int? accrualPeriod = null;
-        //        int? suspensionPeriod = null;
-        //        int? tax = null;
-        //        int bk_id, cus_id;
-        //        string cus_fullname;
-        //        int insertedBillId;
-        //        int taxValue = 0;
-        //        double totalSum = 0;
-        //        double vat_Amnt = 0;
-        //        // Retrieve payment term values from the database
-        //        using (var conn = new NpgsqlConnection(con))
-        //        {
-        //            conn.Open();
-        //            string paymentTermQuery = "SELECT pt_interest, pt_lead_days, pt_accrual_period, pt_susp_period, pt_tax FROM payment_term WHERE emp_id = @EmpId";
-        //            using (var cmd = new NpgsqlCommand(paymentTermQuery, conn))
-        //            {
-        //                cmd.Parameters.AddWithValue("@EmpId", empId);
-        //                using (var reader = cmd.ExecuteReader())
-        //                {
-        //                    if (reader.Read())
-        //                    {
-        //                        interest = reader.IsDBNull(0) ? (double?)null : reader.GetDouble(0);
-        //                        leadDays = reader.IsDBNull(1) ? (int?)null : reader.GetInt32(1);
-        //                        accrualPeriod = reader.IsDBNull(2) ? (int?)null : reader.GetInt32(2);
-        //                        suspensionPeriod = reader.IsDBNull(3) ? (int?)null : reader.GetInt32(3);
-        //                        tax = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4);
-        //                    }
-        //                }
-        //            }
-
-
-
-        //            string findBkID = "SELECT * FROM booking WHERE bk_id = @BkId";
-        //            using (var cmd = new NpgsqlCommand(findBkID, conn))
-        //            {
-        //                cmd.Parameters.AddWithValue("@BkId", Convert.ToInt32(TextBox1.Text));
-        //                using (var reader = cmd.ExecuteReader())
-        //                {
-        //                    if (reader.Read())
-        //                    {
-        //                        bk_id = Convert.ToInt32(reader["bk_id"]);
-        //                        cus_id = Convert.ToInt32(reader["cus_id"]);
-        //                        cus_fullname = reader["bk_fullname"].ToString();
-        //                        LoadBookingList();
-        //                    }
-        //                    else
-        //                    {
-        //                        throw new Exception("Booking ID not found.");
-        //                    }
-        //                }
-        //            }
-
-        //            string updateStatusQuery = "UPDATE booking SET bk_status = 'Billed' WHERE bk_id = @BkId";
-        //            using (var updateCmd = new NpgsqlCommand(updateStatusQuery, conn))
-        //            {
-        //                updateCmd.Parameters.AddWithValue("@BkId", bk_id);
-        //                int rowsAffected = updateCmd.ExecuteNonQuery();
-        //                if (rowsAffected > 0)
-        //                {
-        //                    Console.WriteLine("Booking status updated to 'Billed' successfully.");
-        //                    updatePanel1.Update();
-        //                    LoadBookingList();
-        //                }
-        //                else
-        //                {
-        //                    throw new Exception("Failed to update booking status.");
-        //                }
-        //            }
-
-
-        //            string totalQuery = @"
-        //SELECT SUM(bw_total_price) AS total, 
-        //       COUNT(*) FILTER (WHERE bw_total_price IS NULL OR bw_total_price = 0) AS invalid_count
-        //FROM booking_waste 
-        //WHERE bk_id = @BkId";
-
-        //            using (var totalCmd = new NpgsqlCommand(totalQuery, conn))
-        //            {
-        //                totalCmd.Parameters.AddWithValue("@BkId", bk_id);
-        //                using (var reader = totalCmd.ExecuteReader())
-        //                {
-        //                    if (reader.Read())
-        //                    {
-        //                        int invalidCount = reader.GetInt32(1);
-
-        //                        // Check if there are invalid values
-        //                        if (invalidCount > 0)
-        //                        {
-        //                            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-        //                                "Swal.fire({ icon: 'error', title: 'Empty Total Units!', text: 'Total Units has not been entered yet', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
-        //                                true);
-        //                            this.ModalPopupExtender1.Show();
-        //                            return; // Stop the process
-        //                        }
-
-        //                        object totalResult = reader["total"];
-        //                        if (totalResult != DBNull.Value)
-        //                        {
-        //                            totalSum += Convert.ToDouble(totalResult);
-        //                            vat_Amnt = totalSum * (taxValue / 100.0);
-        //                        }
-        //                    }
-        //                }
-        //            }
-
-        //            string query = @"
-        //        INSERT INTO generate_bill (
-        //            gb_note, gb_add_fees, gb_net_vat, gb_vat_amnt, gb_total_sales, 
-        //            gb_date_issued, gb_date_due, gb_interest, gb_lead_days, 
-        //            gb_accrual_period, gb_suspend_period, gb_accrual_date, 
-        //            gb_suspend_date, gb_tax, gb_status, bk_id, emp_id
-        //        ) 
-        //        VALUES (
-        //            @Note, @AddFees, @NetVat, @VatAmount, @TotalSales, 
-        //            @DateIssued, @DateDue, @Interest, @LeadDays, 
-        //            @AccrualPeriod, @SuspensionPeriod, @AccrualDate, 
-        //            @SuspensionDate, @Tax, @Status, @BkId, @EmpId
-        //        ) 
-        //        RETURNING gb_id;";
-
-        //            using (var cmd = new NpgsqlCommand(query, conn))
-        //            {
-        //                cmd.Parameters.AddWithValue("@Note", note ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@AddFees", additionalFees ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@NetVat", netVat ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@VatAmount", vatAmount ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@TotalSales", totalSales ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@DateIssued", dateIssued ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@DateDue", dateDue ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@Interest", interest ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@LeadDays", leadDays ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@AccrualPeriod", accrualPeriod ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@SuspensionPeriod", suspensionPeriod ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@AccrualDate", accrualDate ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@SuspensionDate", suspensionDate ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@Tax", tax ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@Status", "unpaid");
-        //                cmd.Parameters.AddWithValue("@BkId", Convert.ToInt32(TextBox1.Text));
-        //                cmd.Parameters.AddWithValue("@EmpId", empId);
-
-        //                var result = cmd.ExecuteScalar();
-        //                if (result != null)
-        //                {
-        //                    insertedBillId = Convert.ToInt32(result);
-        //                    updatePanel1.Update();
-        //                    LoadBookingList();
-        //                }
-        //                else
-        //                {
-        //                    throw new Exception("No ID returned from insert.");
-        //                }
-        //            }
-        //            string notif_message = "Your bill is now available for payment 🧾. \n\n" +
-        //                               "------------------------------------------\n" +
-        //                               "BILL# " + insertedBillId + "\n\n" +
-        //                               "Dear " + cus_fullname + ",\n\n" +
-        //                               "You can now review the details at your convenience. Please check it as soon as possible to avoid any delays. " +
-        //                               "Thank you for your cooperation 💜";
-        //            string queryNotif = @"
-        //        INSERT INTO notification (
-        //            notif_message, emp_id, cus_id, bk_id, gb_id
-        //        ) 
-        //        VALUES (
-        //            @Message, @EmpId, @CusId, @BkId, @GbId
-        //        ) 
-        //        RETURNING gb_id;";
-
-        //            using (var cmd = new NpgsqlCommand(queryNotif, conn))
-        //            {
-        //                cmd.Parameters.AddWithValue("@Message", notif_message ?? (object)DBNull.Value);
-        //                cmd.Parameters.AddWithValue("@EmpId", empId);
-        //                cmd.Parameters.AddWithValue("@CusId", cus_id);
-        //                cmd.Parameters.AddWithValue("@BkId", Convert.ToInt32(TextBox1.Text));
-        //                cmd.Parameters.AddWithValue("@GbId", insertedBillId);
-
-        //                var result = cmd.ExecuteScalar();
-        //                if (result != null)
-        //                {
-        //                    insertedBillId = Convert.ToInt32(result);
-        //                    updatePanel1.Update();
-        //                    LoadBookingList();
-        //                }
-        //                else
-        //                {
-        //                    throw new Exception("No ID returned from insert.");
-        //                }
-        //            }
-        //        }
-
-
-
-        //        LoadBookingList();
-        //        byte[] pdfBytes = GeneratePDFForRow(insertedBillId, bk_id);
-        //        LoadBookingList();
-        //        // Send the PDF for download.
-        //        Response.Clear();
-        //        Response.ContentType = "application/pdf";
-        //        Response.AddHeader("content-disposition", $"attachment;filename=Bill_{insertedBillId}.pdf");
-        //        Response.Buffer = true;
-        //        Response.Cache.SetCacheability(HttpCacheability.NoCache);
-        //        Response.BinaryWrite(pdfBytes);
-        //        Response.End();
-        //        LoadBookingList();
-        //    }
 
     }
 }

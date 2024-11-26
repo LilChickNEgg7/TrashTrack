@@ -149,6 +149,18 @@ namespace Capstone
                 Response.Redirect("Dispatcher_Dashboard.aspx");
                 Response.Write($"<script>alert('Login Successful! WELCOME {roleName.ToUpper()}');</script>");
             }
+            else if (IsHauler(loginEmail, loginPass, out userId, out storedHashedPassword, out roleName))
+            {
+                // Store necessary session data
+                //Session["od_email"] = loginEmail;
+                //Session["od_password"] = storedHashedPassword;
+                //Session["od_id"] = userId;  // Store the user ID in the session
+                //Session["od_rolename"] = roleName;
+
+                //// Redirect to Admin dashboard
+                //Response.Redirect("Dispatcher_Dashboard.aspx");
+                Response.Write($"<script>alert('Haulers need to login to Mobile Application! {roleName.ToUpper()}');</script>");
+            }
             else
             {
                 // Invalid login
@@ -471,6 +483,65 @@ namespace Capstone
             return false; // Login failed
         }
 
+        private bool IsHauler(string email, string password, out int userId, out string storedHashedPassword, out string roleName)
+        {
+            userId = 0; // Initialize userId
+            storedHashedPassword = null; // Initialize storedHashedPassword
+            roleName = null; // Initialize roleName
+
+            try
+            {
+                using (var db = new NpgsqlConnection(con))
+                {
+                    db.Open();
+
+                    using (var cmd = db.CreateCommand())
+                    {
+                        cmd.CommandType = CommandType.Text;
+
+                        // Query to get emp_id, emp_password, and role_name where role_id = 2
+                        cmd.CommandText = @"
+                SELECT e.emp_id, e.emp_password, r.role_name 
+                FROM employee e
+                JOIN roles r ON e.role_id = r.role_id 
+                WHERE e.emp_email = @Email AND e.role_id = 4 AND e.emp_status = 'Active'";
+
+                        cmd.Parameters.AddWithValue("@Email", email);
+
+                        using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                userId = reader.GetInt32(0); // Get emp_id
+                                storedHashedPassword = reader.GetString(1); // Get emp_password (hashed)
+                                roleName = reader.GetString(2); // Get role_name
+
+                                // Hash the provided password
+                                string hashedPassword = HashPassword(password);
+
+                                // Compare the hashed password with the stored one
+                                if (hashedPassword == storedHashedPassword)
+                                {
+                                    return true; // Login successful
+                                }
+                            }
+                            //else
+                            //{
+                            //    // If no matching user found, show error
+                            //    Response.Write("<script>alert('The login credentials associated were not found or suspended!');</script>");
+                            //}
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                Response.Write("<script>alert('Error: " + ex.Message + "');</script>");
+            }
+
+            return false; // Login failed
+        }
 
 
         ////FOR IsHauler
