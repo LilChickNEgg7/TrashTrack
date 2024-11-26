@@ -53,7 +53,7 @@ namespace Capstone
                 GeneratedBillList();
                 PopulateWasteCategory();
                 LoadBookingWasteData();
-                DetailsLoadBookingWasteData();
+                //DetailsLoadBookingWasteData();
                 hfActiveTab.Value = "#tab1"; // Set Tab 1 as the default
 
             }
@@ -690,143 +690,185 @@ namespace Capstone
             }
         }
 
-        private void DetailsLoadBookingWasteData()
-        {
-            int bookingId;
 
-            // Try to convert the booking ID from TextBox1 and handle potential format errors
-            if (!int.TryParse(TextBox1.Text, out bookingId))
+        protected void openViewBill_Click(object sender, EventArgs e)
+        {
+            LinkButton btn = (LinkButton)sender;
+            int gb_id = Convert.ToInt32(btn.CommandArgument);
+            int bk_id = 0;
+            this.ModalPopupExtender5.Show(); // Show the modal
+            dateEntered.Text = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
+
+            // Call the method to load booking waste data
+
+            hfActiveTab.Value = "#tab2";
+            //this.ModalPopupExtender5.Show();
+
+            try
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "swal('Invalid Input!', 'Please enter a valid booking ID.', 'error')", true);
-                return; // Exit the method if the input is not valid
+                using (var db = new NpgsqlConnection(con))
+                {
+                    db.Open();
+                    using (var cmd = db.CreateCommand())
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandText = @"
+                SELECT gb.*, bk.bk_id
+                FROM generate_bill gb
+                LEFT JOIN booking bk ON gb.bk_id = bk.bk_id
+                WHERE gb.gb_id = @gb_id";
+                        cmd.Parameters.AddWithValue("@gb_id", gb_id);
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+
+                                //// Display payment term details in respective labels
+                                //Label4.Text = "Tax: " + ptTax + "%"; // Displaying tax percentage
+                                //Label5.Text = "Interest: " + ptInterest + "%"; // Displaying interest
+                                //Label6.Text = "Accrual Period: " + accrualPeriod + " day(s)"; // Displaying accrual period
+                                //Label7.Text = "Suspension Period: " + suspPeriod + " day(s)"; // Displaying suspension period
+
+
+                                //// Populate fields with data from the `generate_bill` table
+                                //ptTax = reader["gb_tax"].ToString();
+                                //ptInterest = reader["gb_interest"].ToString();
+                                //accrualPeriod = reader["gb_accrual_period"].ToString();
+                                //suspPeriod = reader["gb_suspend_period"].ToString();
+
+                                // Populate fields with data from the `generate_bill` table
+                                Label4.Text = reader["gb_tax"].ToString();
+                                Label5.Text = reader["gb_interest"].ToString();
+                                Label6.Text = reader["gb_accrual_period"].ToString();
+                                Label7.Text = reader["gb_suspend_period"].ToString();
+                                TextBox2.Text = reader["gb_id"].ToString();
+                                Date.Text = Convert.ToDateTime(reader["gb_date_issued"]).ToString("yyyy-MM-ddTHH:mm");
+                                TextBox7.Text = Convert.ToDateTime(reader["gb_date_due"]).ToString("yyyy-MM-ddTHH:mm");
+                                TextBox4.Text = reader["gb_net_vat"].ToString();
+                                TextBox5.Text = reader["gb_vat_amnt"].ToString();
+                                TextBox6.Text = reader["gb_total_sales"].ToString();
+                                TextBox8.Text = Convert.ToDateTime(reader["gb_accrual_date"]).ToString("yyyy-MM-ddTHH:mm");
+                                TextBox9.Text = Convert.ToDateTime(reader["gb_suspend_date"]).ToString("yyyy-MM-ddTHH:mm");
+                                TextBox10.Text = reader["gb_add_fees"].ToString();
+                                TextBox11.Text = reader["gb_note"].ToString();
+
+                                // Populate the associated `bk_id`
+                                if (reader["bk_id"] != DBNull.Value)
+                                {
+                                    bkidviewbill.Value = reader["bk_id"].ToString(); // Set the hidden field value
+                                    bk_id = Convert.ToInt32(reader["bk_id"]);
+                                    DetailsLoadBookingWasteData(bk_id);
+
+                                }
+                                else
+                                {
+                                    bkidviewbill.Value = "No booking ID associated";
+                                }
+                            }
+                        }
+                    }
+                    hfActiveTab.Value = "#tab2"; // Set the default active tab
+                    updatePanel4.Update();       // Update the UpdatePanel
+                }
             }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "showError",
+                    $"Swal.fire({{ icon: 'error', title: 'Error', text: '{ex.Message}' }});", true);
+            }
+        }
+
+        private void DetailsLoadBookingWasteData(int bookingId)
+        {
+            //int bookingId;
+
+            // Fetch the bk_id from the generate_bill table using gb_id
             try
             {
                 using (var db = new NpgsqlConnection(con))
                 {
                     db.Open();
 
-                    // Query to get booking details and bind to the GridView
+                    // Query to get booking waste details and bind to the GridView
                     using (var cmd = db.CreateCommand())
                     {
                         cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = @"SELECT bw.bw_id, bw.bw_name, bw.bw_unit, bw.bw_total_unit, bw.bw_price, bw.bw_total_price, bw.bk_id
-                                    FROM BOOKING_WASTE bw
-                                    INNER JOIN BOOKING b ON bw.bk_id = b.bk_id
-                                    WHERE bw.bk_id = @bkId AND b.bk_status != 'Completed' ORDER BY bw.bw_id";
+                        cmd.CommandText = @"
+                    SELECT bw.bw_id, bw.bw_name, bw.bw_unit, bw.bw_total_unit, bw.bw_price, bw.bw_total_price, bw.bk_id
+                    FROM BOOKING_WASTE bw
+                    INNER JOIN BOOKING b ON bw.bk_id = b.bk_id
+                    WHERE bw.bk_id = @bkId AND b.bk_status != 'Completed'
+                    ORDER BY bw.bw_id";
 
                         cmd.Parameters.AddWithValue("@bkId", bookingId);
 
                         DataTable bookingsDataTable = new DataTable();
                         NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
                         bookingsAdapter.Fill(bookingsDataTable);
-                        gridView2.DataSource = bookingsDataTable;
-                        gridView2.DataBind();
+
+                        gridView3.DataSource = bookingsDataTable;
+                        gridView3.DataBind();
                     }
 
-                    // Query to sum total price for the same booking ID and status != 'Completed'
-                    double totalPrice = 0;
-                    using (var cmdSum = db.CreateCommand())
+                    // Optionally, you can display a message if no records are found
+                    if (gridView3.Rows.Count == 0)
                     {
-                        cmdSum.CommandType = CommandType.Text;
-                        cmdSum.CommandText = @"SELECT SUM(bw.bw_total_price) AS TotalPrice
-                                       FROM BOOKING_WASTE bw
-                                       INNER JOIN BOOKING b ON bw.bk_id = b.bk_id
-                                       WHERE bw.bk_id = @bkId AND b.bk_status != 'Completed'";
-
-                        cmdSum.Parameters.AddWithValue("@bkId", bookingId);
-                        object result = cmdSum.ExecuteScalar();
-                        if (result != DBNull.Value)
-                        {
-                            totalPrice = Convert.ToDouble(result);
-                            netVatTxt.Text = totalPrice.ToString("N2");
-                        }
-                        else
-                        {
-                            netVatTxt.Text = "0";
-                        }
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "info",
+                            "swal('No Data!', 'No booking waste data found for the given Booking ID.', 'info')", true);
                     }
-
-                    // Query to get the payment term details, including tax and periods
-                    double ptTax = 0;
-                    double ptLeadDays = 0;
-                    int accrualPeriod = 0, suspPeriod = 0, ptInterest = 0;
-                    using (var cmdTax = db.CreateCommand())
-                    {
-                        cmdTax.CommandType = CommandType.Text;
-                        cmdTax.CommandText = @"SELECT pt_tax, pt_lead_days, pt_accrual_period, pt_susp_period, pt_interest
-                                       FROM payment_term 
-                                       LIMIT 1"; // Assuming only one payment term is needed
-
-                        using (var reader = cmdTax.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                ptTax = reader.IsDBNull(0) ? 0 : reader.GetDouble(0);  // Tax percentage
-                                ptLeadDays = reader.IsDBNull(1) ? 0 : reader.GetDouble(1);  // Lead days
-                                accrualPeriod = reader.IsDBNull(2) || reader.GetInt32(2) == 0 ? 0 : reader.GetInt32(2);  // Accrual period (check for NULL or zero)
-                                suspPeriod = reader.IsDBNull(3) || reader.GetInt32(3) == 0 ? 0 : reader.GetInt32(3);  // Suspension period (check for NULL or zero)
-                                ptInterest = reader.IsDBNull(4) ? 0 : reader.GetInt32(4);  // Interest
-
-                                // Display payment term details in respective labels
-                                taxLabel.Text = "Tax: " + ptTax + "%"; // Displaying tax percentage
-                                interstLabel.Text = "Interest: " + ptInterest + "%"; // Displaying interest
-                                accrPerLabel.Text = "Accrual Period: " + accrualPeriod + " day(s)"; // Displaying accrual period
-                                susPerLabel.Text = "Suspension Period: " + suspPeriod + " day(s)"; // Displaying suspension period
-                            }
-                        }
-                    }
-
-                    // Store hidden fields
-                    ptLeadDaysHiddenField.Value = ptLeadDays.ToString();
-                    ptAccrualPeriodHiddenField.Value = accrualPeriod.ToString();
-                    ptSuspPeriodHiddenField.Value = suspPeriod.ToString();
-
-                    // Calculate Due Date based on current date + lead days
-                    DateTime currentDate = DateTime.Now;
-                    DateTime dueDate = currentDate.AddDays(ptLeadDays);
-                    dueDateTxt.Text = dueDate.ToString("yyyy-MM-ddTHH:mm"); // Set the Due Date in the textbox
-
-                    // Handle Accrual Date
-                    if (accrualPeriod > 0)
-                    {
-                        DateTime accrualDate = dueDate.AddDays(accrualPeriod);
-                        accDateTxt.Text = accrualDate.ToString("yyyy-MM-ddTHH:mm"); // Set the Accrual Date in the textbox
-                    }
-                    else
-                    {
-                        accDateTxt.Text = "No accrual date"; // Display "No accrual date" if accrual period is zero or not found
-                    }
-
-                    // Handle Suspension Date
-                    if (suspPeriod > 0)
-                    {
-                        DateTime suspensionDate = dueDate.AddDays(suspPeriod);
-                        susDateTxt.Text = suspensionDate.ToString("yyyy-MM-ddTHH:mm"); // Set the Suspension Date in the textbox
-                    }
-                    else
-                    {
-                        susDateTxt.Text = "No suspension date"; // Display "No suspension date" if suspension period is zero or not found
-                    }
-
-                    // Calculate tax amount based on total price
-                    double taxAmount = (ptTax / 100) * totalPrice;
-                    vatAmntTxt.Text = taxAmount.ToString("N2");
-
-                    // Calculate total sales (total price + tax amount)
-                    double totalSales = totalPrice + taxAmount;
-                    totSalesTxt.Text = totalSales.ToString("N2");
-
-                    // Set the current date and time in the required format for DateTimeLocal
-                    dateTodayTxt.Text = currentDate.ToString("yyyy-MM-ddTHH:mm");
                 }
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-                    $"swal('Unsuccessful!', '{ex.Message}', 'error')", true);
+                    $"swal('Error!', '{ex.Message}', 'error')", true);
             }
+
+
+            // Now load the booking waste data based on bk_id
+            //try
+            //{
+            //    using (var db = new NpgsqlConnection(con))
+            //    {
+            //        db.Open();
+
+            //        // Query to get booking waste details and bind to the GridView
+            //        using (var cmd = db.CreateCommand())
+            //        {
+            //            cmd.CommandType = CommandType.Text;
+            //            cmd.CommandText = @"
+            //        SELECT bw.bw_id, bw.bw_name, bw.bw_unit, bw.bw_total_unit, bw.bw_price, bw.bw_total_price, bw.bk_id
+            //        FROM BOOKING_WASTE bw
+            //        INNER JOIN BOOKING b ON bw.bk_id = b.bk_id
+            //        WHERE bw.bk_id = @bkId AND b.bk_status != 'Completed'
+            //        ORDER BY bw.bw_id";
+
+            //            cmd.Parameters.AddWithValue("@bkId", bookingId);
+
+            //            DataTable bookingsDataTable = new DataTable();
+            //            NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
+            //            bookingsAdapter.Fill(bookingsDataTable);
+
+            //            gridView3.DataSource = bookingsDataTable;
+            //            gridView3.DataBind();
+            //        }
+
+            //        // Optionally, you can display a message if no records are found
+            //        if (gridView3.Rows.Count == 0)
+            //        {
+            //            ClientScript.RegisterClientScriptBlock(this.GetType(), "info",
+            //                "swal('No Data!', 'No booking waste data found for the given Booking ID.', 'info')", true);
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
+            //        $"swal('Error!', '{ex.Message}', 'error')", true);
+            //}
         }
+
 
         protected void openBookWaste_Click(object sender, EventArgs e)
         {
@@ -1220,70 +1262,85 @@ namespace Capstone
             // Hide the panel/modal
             ModalPopupExtender3.Hide();
         }
+        //LinkButton btn = sender as LinkButton;
+        //int id = Convert.ToInt32(btn.CommandArgument);
+        //txtbwID1.Text = id.ToString();
+        //TextBox1.Text = id.ToString();
+        //LoadBookingWasteData(); // Load the relevant data for the booking ID
+        //protected void openViewBill_Click(object sender, EventArgs e)
+        //{
+        //    LinkButton btn = (LinkButton)sender;
+        //    int gb_id = Convert.ToInt32(btn.CommandArgument);
 
+        //    this.ModalPopupExtender5.Show(); // Show the modal
+        //    dateEntered.Text = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
 
-        private void ClearValues()
-        {
-            //// Clear the values in TextBoxes
-            //txtSumKilo.Text = string.Empty;
-            //txtNetVat.Text = string.Empty;
-            //txtVatAmnt.Text = string.Empty;
-            //txtTotSales.Text = string.Empty;
-        }
+        //    DetailsLoadBookingWasteData();
+        //    hfActiveTab.Value = "#tab2";
+        //    this.ModalPopupExtender1.Show();
 
+        //    try
+        //    {
+        //        using (var db = new NpgsqlConnection(con))
+        //        {
+        //            db.Open();
+        //            using (var cmd = db.CreateCommand())
+        //            {
+        //                cmd.CommandType = CommandType.Text;
+        //                cmd.CommandText = @"
+        //            SELECT gb.*, bk.bk_id
+        //            FROM generate_bill gb
+        //            LEFT JOIN booking bk ON gb.bk_id = bk.bk_id
+        //            WHERE gb.gb_id = @gb_id";
+        //                cmd.Parameters.AddWithValue("@gb_id", gb_id);
 
-        protected void openViewBill_Click(object sender, EventArgs e)
-        {
-            LinkButton btn = (LinkButton)sender;
-            int gb_id = Convert.ToInt32(btn.CommandArgument);
-            this.ModalPopupExtender5.Show(); // Show the modal
-            dateEntered.Text = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
+        //                using (var reader = cmd.ExecuteReader())
+        //                {
+        //                    if (reader.Read())
+        //                    {
+        //                        // Populate fields with data from the `generate_bill` table
+        //                        Label4.Text = reader["gb_tax"].ToString();
+        //                        Label5.Text = reader["gb_interest"].ToString();
+        //                        Label6.Text = reader["gb_accrual_period"].ToString();
+        //                        Label7.Text = reader["gb_suspend_period"].ToString();
+        //                        TextBox2.Text = reader["gb_id"].ToString();
+        //                        Date.Text = Convert.ToDateTime(reader["gb_date_issued"]).ToString("yyyy-MM-ddTHH:mm");
+        //                        TextBox7.Text = Convert.ToDateTime(reader["gb_date_due"]).ToString("yyyy-MM-ddTHH:mm");
+        //                        TextBox4.Text = reader["gb_net_vat"].ToString();
+        //                        TextBox5.Text = reader["gb_vat_amnt"].ToString();
+        //                        TextBox6.Text = reader["gb_total_sales"].ToString();
+        //                        TextBox8.Text = Convert.ToDateTime(reader["gb_accrual_date"]).ToString("yyyy-MM-ddTHH:mm");
+        //                        TextBox9.Text = Convert.ToDateTime(reader["gb_suspend_date"]).ToString("yyyy-MM-ddTHH:mm");
+        //                        TextBox10.Text = reader["gb_add_fees"].ToString();
+        //                        TextBox11.Text = reader["gb_note"].ToString();
 
-            try
-            {
-                using (var db = new NpgsqlConnection(con))
-                {
-                    db.Open();
-                    using (var cmd = db.CreateCommand())
-                    {
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = @"SELECT *
-                                    FROM generate_bill WHERE gb_id = @gb_id";
-                        cmd.Parameters.AddWithValue("@gb_id", gb_id);
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                Label4.Text = reader["gb_tax"].ToString();
-                                Label5.Text = reader["gb_interest"].ToString();
-                                Label6.Text = reader["gb_accrual_period"].ToString();
-                                Label7.Text = reader["gb_suspend_period"].ToString();
-                                TextBox2.Text = reader["gb_id"].ToString();
-                                Date.Text = Convert.ToDateTime(reader["gb_date_issued"]).ToString("yyyy-MM-ddTHH:mm");
-                                TextBox7.Text = Convert.ToDateTime(reader["gb_date_due"]).ToString("yyyy-MM-ddTHH:mm");
-                                TextBox4.Text = reader["gb_net_vat"].ToString();
-                                TextBox5.Text = reader["gb_vat_amnt"].ToString();
-                                TextBox6.Text = reader["gb_total_sales"].ToString();
-                                TextBox8.Text = Convert.ToDateTime(reader["gb_accrual_date"]).ToString("yyyy-MM-ddTHH:mm");
-                                TextBox9.Text = Convert.ToDateTime(reader["gb_suspend_date"]).ToString("yyyy-MM-ddTHH:mm");
-                                TextBox10.Text = reader["gb_add_fees"].ToString();
-                                TextBox11.Text = reader["gb_note"].ToString();
-                            }
-                        }
-                    }
-                    hfActiveTab.Value = "#tab2"; // Set Tab 1 as the default
-                    //LoadBillDetails(gb_id);  // Load data into the GridView
-                    updatePanel4.Update();   // Update the UpdatePanel
-                    //this.ModalPopupExtender5.Show(); // Show the modal
-                }
-            }
-            catch (Exception ex)
-            {
-                ScriptManager.RegisterStartupScript(this, GetType(), "showError",
-                    $"Swal.fire({{ icon: 'error', title: 'Error', text: '{ex.Message}' }});", true);
-            }
-        }
+        //                        // Populate the associated `bk_id`
+        //                        if (reader["bk_id"] != DBNull.Value)
+        //                        {
+        //                            bkidviewbill.Value = reader["bk_id"].ToString(); // Ensure you have a control to display bk_id
+        //                                                                             // Retrieve bk_id from the HiddenField and pass it to DetailsLoadBookingWasteData
+        //                            //if (!string.IsNullOrEmpty(bkidviewbill.Value) && int.TryParse(bkidviewbill.Value, out int bk_id))
+        //                            //{
+        //                            //    //DetailsLoadBookingWasteData(bk_id); // Call the method with bk_id
+        //                            //}
+        //                        }
+        //                        else
+        //                        {
+        //                            bkidviewbill.Value = "No booking ID associated";
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //            hfActiveTab.Value = "#tab2"; // Set the default active tab
+        //            updatePanel4.Update();       // Update the UpdatePanel
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ScriptManager.RegisterStartupScript(this, GetType(), "showError",
+        //            $"Swal.fire({{ icon: 'error', title: 'Error', text: '{ex.Message}' }});", true);
+        //    }
+        //}
 
         protected void ViewBill_Click(object sender, EventArgs e)
         {

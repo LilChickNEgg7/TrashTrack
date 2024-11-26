@@ -183,7 +183,7 @@
 
 
         /* Styling for GridView Tables */
-        #gridViewBookings, #gridView1, #gridView2, #gridView4 {
+        #gridViewBookings, #gridView1, #gridView2, #gridView3, #gridView4 {
             width: 100%;
             border-collapse: separate; /* Allows styling of borders separately */
             border-spacing: 0; /* Removes additional spacing */
@@ -195,7 +195,7 @@
         }
 
             /* GridView Header Styling */
-            #gridViewBookings th, #gridView1 th, #gridView2 th, #gridView4 th {
+            #gridViewBookings th, #gridView1 th, #gridView2 th, #gridView3 th, #gridView4 th {
                 background: #66CDAA; /* Luminous green for header */
                 color: white;
                 font-size: 16px; /* Slightly smaller font for a refined look */
@@ -206,7 +206,7 @@
             }
 
             /* GridView Row Styles */
-            #gridViewBookings td, #gridView1 td, #gridView2 td, #gridView4 td {
+            #gridViewBookings td, #gridView1 td, #gridView2 td, #gridView3 td, #gridView4 td {
                 padding: 12px;
                 font-size: 14px; /* Smaller font size */
                 font-weight: 500; /* Medium weight for row text */
@@ -217,12 +217,12 @@
             }
 
             /* Hover Effect for GridView Rows */
-            #gridViewBookings tr:hover, #gridView1 tr:hover, #gridView2 tr:hover, #gridView4 tr:hover {
+            #gridViewBookings tr:hover, #gridView1 tr:hover, #gridView2 tr:hover, #gridView3 tr:hover, #gridView4 tr:hover {
                 background: #eef8ee; /* Subtle hover effect */
             }
 
             /* Styling the GridView Footer */
-            #gridViewBookings .FooterStyle, #gridView1 .FooterStyle, #gridView2 .FooterStyle, #gridView4 .FooterStyle {
+            #gridViewBookings .FooterStyle, #gridView1 .FooterStyle, #gridView2 .FooterStyle, #gridView3 .FooterStyle, #gridView4 .FooterStyle {
                 border-radius: 0 0 12px 12px; /* Rounded bottom corners */
                 background: #66CDAA;
                 color: #fff;
@@ -231,15 +231,15 @@
             }
 
             /* Optional: Styling for the Status and Action Buttons */
-            #gridViewBookings .btnUnsuspend, #gridView1 .btnUnsuspend, #gridView2 .btnUnsuspend, #gridView4 .btnUnsuspend,
-            #gridViewBookings .btnSuspend, #gridView1 .btnSuspend, #gridView2 .btnSuspend, #gridView4 .btnSuspend {
+            #gridViewBookings .btnUnsuspend, #gridView1 .btnUnsuspend, #gridView2 .btnUnsuspend, #gridView3 .btnUnsuspend, #gridView4 .btnUnsuspend,
+            #gridViewBookings .btnSuspend, #gridView1 .btnSuspend, #gridView2 .btnSuspend, #gridView3 .btnSuspend, #gridView4 .btnSuspend {
                 font-size: 12px; /* Adjusted button font size */
                 border-radius: 8px; /* Slightly rounded buttons */
                 padding: 5px 10px; /* Comfortable padding */
             }
 
-            #gridViewBookings .imgEdit, #gridView1 .imgEdit, #gridView2 .imgEdit, #gridView4 .imgEdit,
-            #gridViewBookings .Image1, #gridView1 .Image1, #gridView2 .Image1, #gridView4 .Image1 {
+            #gridViewBookings .imgEdit, #gridView1 .imgEdit, #gridView2 .imgEdit, #gridView3 .imgEdit, #gridView4 .imgEdit,
+            #gridViewBookings .Image1, #gridView1 .Image1, #gridView2 .Image1, #gridView3 .Image1, #gridView4 .Image1 {
                 border-radius: 8px; /* Rounded corners for images */
                 margin-right: 10px; /* Margin between images */
             }
@@ -1090,6 +1090,7 @@
                                 <!-- Card Header Design -->
                                 <div class="card-header text-center" style="background-color: #0D342D; color: #26D8A8; padding: 15px;">
                                     <h4>View Bill Details</h4>
+                                    <asp:HiddenField ID="bkidviewbill" runat="server" Value="<%= leadDays %>" />
                                 </div>
 
                                 <!-- Card Body with Form Elements - Scrollable Section -->
@@ -1129,50 +1130,45 @@
                                         </div>
 
                                         <!-- GridView inside modal body -->
-                                        <div class="gridview-container">
+                                                                                <div class="gridview-container">
                                             <asp:GridView ID="gridView3" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="bw_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
                                                 <Columns>
-                                                    <asp:BoundField DataField="gb_id" HeaderText="Transaction No." SortExpression="gb_id" ItemStyle-Width="100px">
+                                                    <asp:BoundField DataField="bw_id" HeaderText="Booking Waste ID" SortExpression="bw_id" ItemStyle-Width="100px">
                                                         <ItemStyle Width="100px"></ItemStyle>
                                                     </asp:BoundField>
-
-                                                    <asp:BoundField DataField="gb_date_issued" HeaderText="Issued Date" SortExpression="gb_date_issued" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px">
+                                                    <asp:BoundField DataField="bw_name" HeaderText="Waste Type" SortExpression="bw_name" ItemStyle-Width="150px">
+                                                        <ItemStyle Width="150px"></ItemStyle>
+                                                    </asp:BoundField>
+                                                    <asp:BoundField DataField="bk_id" HeaderText="Booking ID" SortExpression="bk_id" ItemStyle-Width="150px">
+                                                        <ItemStyle Width="150px"></ItemStyle>
+                                                    </asp:BoundField>
+                                                    <asp:BoundField DataField="bw_total_unit" HeaderText="Total Unit" SortExpression="bw_total_unit" ItemStyle-Width="150px">
+                                                        <ItemStyle Width="150px"></ItemStyle>
+                                                    </asp:BoundField>
+                                                    <asp:BoundField DataField="bw_price" HeaderText="Price" SortExpression="bw_price" ItemStyle-Width="150px">
+                                                        <ItemStyle Width="150px"></ItemStyle>
+                                                    </asp:BoundField>
+                                                    <asp:BoundField DataField="bw_total_price" HeaderText="Total Price" SortExpression="bw_total_price" ItemStyle-Width="150px">
                                                         <ItemStyle Width="150px"></ItemStyle>
                                                     </asp:BoundField>
 
-                                                    <asp:BoundField DataField="gb_date_due" HeaderText="Due Date" SortExpression="gb_date_due" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px">
-                                                        <ItemStyle Width="150px"></ItemStyle>
-                                                    </asp:BoundField>
-
-                                                    <asp:BoundField DataField="gb_status" HeaderText="Status" SortExpression="gb_status" ItemStyle-Width="150px">
-                                                        <ItemStyle Width="150px"></ItemStyle>
-                                                    </asp:BoundField>
-
-                                                    <asp:BoundField DataField="bk_id" HeaderText="Book ID" SortExpression="bk_id" ItemStyle-Width="150px">
-                                                        <ItemStyle Width="150px"></ItemStyle>
-                                                    </asp:BoundField>
-
-                                                    <asp:BoundField DataField="gb_total_amnt_interest" HeaderText="Amount Interest" SortExpression="gb_total_amnt_interest" DataFormatString="{0:C2}" ItemStyle-Width="150px">
-                                                        <ItemStyle Width="150px"></ItemStyle>
-                                                    </asp:BoundField>
-
-                                                    <asp:BoundField DataField="gb_total_sales" HeaderText="Total Sales" SortExpression="gb_total_sales" DataFormatString="{0:C2}" ItemStyle-Width="100px">
-                                                        <ItemStyle Width="100px"></ItemStyle>
-                                                    </asp:BoundField>
-
-                                                    <asp:TemplateField HeaderText="Generate Bill">
+                                                    <%--<asp:TemplateField HeaderText="Action">
                                                         <ItemTemplate>
-                                                            <asp:LinkButton ID="update" runat="server" CommandArgument='<%# Eval("gb_id") %>' OnClick="btnGenerateBill_Click">
+                                                            <asp:LinkButton ID="update" runat="server" OnClick="editBookWaste_Click" CommandArgument='<%# Eval("bw_id") %>'>
                                                                 <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
                                                             </asp:LinkButton>
+                                                            <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("bw_id") %>' OnClientClick="return confirm('Are you sure you want to remove this bookwaste?');">
+                                                                <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
+                                                            </asp:LinkButton>
                                                         </ItemTemplate>
-                                                    </asp:TemplateField>
+                                                    </asp:TemplateField>--%>
                                                 </Columns>
-
                                                 <RowStyle BackColor="White" ForeColor="Black" BorderStyle="Solid" BorderColor="#ccc" BorderWidth="1px" />
                                                 <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="Solid" BorderColor="#66CDAA" BorderWidth="1px" />
+                                                <%--#66CDAA--%>
                                             </asp:GridView>
                                         </div>
+
 
                                         <div class="col-6">
                                             <div class="input-group input-group-sm mb-3"></div>
@@ -1283,7 +1279,7 @@
                                 <!-- Footer Design -->
                                 <div class="card-footer text-center" style="background-color: #0D342D; color: #26D8A8; padding: 10px;">
                                     <asp:Button ID="Button11" CssClass="btn btn-secondary" runat="server" Text="Cancel" />
-                                    <asp:Button ID="Button12" CssClass="btn btn-primary" runat="server" Text="Generate Bill" OnClick="btnGenerateBill_Click" OnClientClick="return confirm('Are you sure you want to generate bill?');" />
+<%--                                    <asp:Button ID="Button12" CssClass="btn btn-primary" runat="server" Text="Generate Bill" OnClick="btnGenerateBill_Click" OnClientClick="return confirm('Are you sure you want to generate bill?');" />--%>
                                 </div>
                             </div>
                         </ContentTemplate>
@@ -1291,7 +1287,6 @@
                             <asp:PostBackTrigger ControlID="Button11" />
 
                             <asp:PostBackTrigger ControlID="Button8" />
-                            <asp:PostBackTrigger ControlID="Button12" />
                             <asp:PostBackTrigger ControlID="Button2" />
                         </Triggers>
                     </asp:UpdatePanel>
