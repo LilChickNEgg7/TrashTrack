@@ -1741,11 +1741,11 @@
             <!-- End #main -->
 
             <!-- ======= Footer ======= -->
-            <footer id="footer" class="footer" style="border-top-color: chartreuse">
+            <%--<footer id="footer" class="footer" style="border-top-color: chartreuse">
                 <div class="copyright" style="color: #d4f3cf">
                     &copy; Copyright <strong><span style="color: #d4f3cf">Pinoy Basurero Corporation</span></strong>. All Rights Reserved
                 </div>
-            </footer>
+            </footer>--%>
             <!-- End Footer -->
 
 

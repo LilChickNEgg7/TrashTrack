@@ -11,6 +11,7 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
 
+
     <%--draggable panel--%>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -763,11 +764,11 @@
             <!-- End #main -->
 
             <!-- ======= Footer ======= -->
-            <footer id="footer" class="footer" style="border-top-color: chartreuse">
+            <%--<footer id="footer" class="footer" style="border-top-color: chartreuse">
                 <div class="copyright" style="color: #d4f3cf">
                     &copy; Copyright <strong><span style="color: #d4f3cf">TrashTrack</span></strong>. All Rights Reserved
                 </div>
-            </footer>
+            </footer>--%>
             <!-- End Footer -->
 
             <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
