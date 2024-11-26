@@ -444,8 +444,8 @@ namespace Capstone
             int cusId = Convert.ToInt32(hide_cusID.Value);
             //hfActiveTab.Value = "#am"; // Set tab am as active
 
-            int adminId = 1011;
-            //int adminId = (int)Session["am_id"];  // Retrieve admin ID from session
+            //int adminId = 1011;
+            int adminId = (int)Session["am_id"];  // Retrieve admin ID from session
             string roleName = (string)Session["am_rolename"];
 
 
@@ -468,6 +468,8 @@ namespace Capstone
                 {
                     try
                     {
+                        string full_name = "";
+
                         // Update vc_status to 'Rejected' and set vc_reason in the verified_customer table
                         using (var cmd = db.CreateCommand())
                         {
@@ -480,6 +482,61 @@ namespace Capstone
                             cmd.Parameters.AddWithValue("@declineReason", declineReason);
                             cmd.Parameters.AddWithValue("@empid", adminId);
                             cmd.Transaction = transaction;
+                            cmd.ExecuteNonQuery();
+                        }
+
+
+                        using (var checkcusname = db.CreateCommand())
+                        {
+                            checkcusname.CommandType = CommandType.Text;
+                            checkcusname.CommandText = @"SELECT
+                                    TRIM(
+                                            -- Concatenate non-empty address parts, only adding commas between them
+                                            COALESCE(NULLIF(cus_fname, ''), '') ||
+                                            CASE WHEN NULLIF(cus_fname, '') IS NOT NULL AND NULLIF(cus_mname, '') IS NOT NULL THEN ', ' ELSE '' END ||
+                                            COALESCE(NULLIF(cus_mname, ''), '') ||
+                                            CASE WHEN NULLIF(cus_mname, '') IS NOT NULL AND NULLIF(cus_lname, '') IS NOT NULL THEN ', ' ELSE '' END ||
+                                            COALESCE(NULLIF(cus_lname, ''), '')
+                                        ) AS full_name
+                                    FROM 
+                                        customer
+                                    WHERE 
+                                        cus_id = @cus_id
+                                    ";
+                            checkcusname.Parameters.AddWithValue("@cus_id", cusId);
+                            //checkcusname.Transaction = transaction;
+
+                            using (var readerr = checkcusname.ExecuteReader())
+                            {
+                                if (readerr.Read())
+                                {
+                                    full_name = readerr["full_name"].ToString();
+                                    //cus_id = Convert.ToInt32(readerr["cus_id"]);
+
+                                }
+                            }
+                        }
+
+
+                        string message = "Your Account Verification Request: Rejected ❌\n\n" +
+                 "------------------------------------------\n" +
+                 "Customer ID: " + cusId + "\n\n" +
+                 "Dear " + full_name + ",\n\n" +
+                 declineReason +
+                 "Best regards,\n" +
+                 "TrashTrack Team";
+
+                        using (var cmd = db.CreateCommand())
+                        {
+                            cmd.CommandType = CommandType.Text;
+                            cmd.CommandText = @"INSERT into NOTIFICATION (notif_message, emp_id, cus_id, notif_type)
+                                                VALUES (@message, @emp_id, @cus_id, @notif_type)
+                        ";
+                            cmd.Parameters.AddWithValue("@message", message);
+                            cmd.Parameters.AddWithValue("@emp_id", adminId);
+                            cmd.Parameters.AddWithValue("@cus_id", cusId);
+                            cmd.Parameters.AddWithValue("@notif_type", "account verification");
+                            //cmd.Transaction = transaction;
                             cmd.ExecuteNonQuery();
                         }
 
@@ -845,26 +902,26 @@ namespace Capstone
         protected void Approve_Click(object sender, EventArgs e)
         {
             LinkButton btnApprove = (LinkButton)sender;
-            int vcId = Convert.ToInt32(btnApprove.CommandArgument);
 
-            int adminId = 1011;
-            /*int adminId = (int)Session["sam_id"];*/  // Retrieve admin ID from session
-            string roleName = (string)Session["am_rolename"];
+            // Split CommandArgument to get vc_id and cus_id
+            string[] arguments = btnApprove.CommandArgument.Split(',');
+            int vcId = Convert.ToInt32(arguments[0]); // First value is vc_id
+            int cusId = Convert.ToInt32(arguments[1]); // Second value is cus_id
+
+            int adminId = (int)Session["am_id"]; // Retrieve admin ID from session
 
             using (var db = new NpgsqlConnection(con))
             {
                 db.Open();
 
-                // Start a transaction to ensure data consistency
                 using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
-                        // Check if the valid_id_pic and valid_selfie are null
+                        // Check if valid_id and selfie are null
                         bool isValidPicNull = false;
                         bool isSelfiePicNull = false;
 
-                        // Execute the SELECT query to check for nulls in vc_valid_id and vc_selfie
                         using (var checkCmd = db.CreateCommand())
                         {
                             checkCmd.CommandType = CommandType.Text;
@@ -879,32 +936,28 @@ namespace Capstone
                             {
                                 if (reader.Read())
                                 {
-                                    // Check if valid_id_pic or selfie_pic are null
                                     isValidPicNull = reader["vc_valid_id"] == DBNull.Value;
                                     isSelfiePicNull = reader["vc_selfie"] == DBNull.Value;
                                 }
                             }
                         }
 
-                        // If either picture is null, show an alert and stop execution
+                        // Handle missing valid_id or selfie
                         if (isValidPicNull || isSelfiePicNull)
                         {
                             ClientScript.RegisterStartupScript(this.GetType(), "swal",
                                 "Swal.fire({title: 'Error!', text: 'Both valid ID and selfie picture must be provided before approval.', icon: 'error', confirmButtonColor: '#d33'});", true);
-
-                            transaction.Rollback(); // Rollback the transaction
-                            return; // Stop further execution
+                            transaction.Rollback();
+                            return;
                         }
 
-                        // Proceed with approval if both pictures are not null
-                        // Update vc_status to 'Approved' in the verified_customer table
+                        // Update verified_customer table
                         using (var cmd = db.CreateCommand())
                         {
                             cmd.CommandType = CommandType.Text;
                             cmd.CommandText = @"
                         UPDATE verified_customer 
-                        SET vc_status = 'Approved',
-                            emp_id = @empid
+                        SET vc_status = 'Approved', emp_id = @empid
                         WHERE vc_id = @vcId;";
                             cmd.Parameters.AddWithValue("@empid", adminId);
                             cmd.Parameters.AddWithValue("@vcId", vcId);
@@ -912,19 +965,40 @@ namespace Capstone
                             cmd.ExecuteNonQuery();
                         }
 
-                        // Set cus_isverified to true in the customer table
+                        // Create the notification message
+                        string message = "Your Account Has Been Verified ✅\n\n" +
+                                         "------------------------------------------\n" +
+                                         "Customer ID: " + cusId + "\n\n" +
+                                         "Dear Customer,\n\n" +
+                                         "Congratulations! Your account has been successfully verified. You can now easily book a service with just a few taps and have your garbage picked up conveniently.\n\n" +
+                                         "Thank you for completing the verification process. 💜\n\n" +
+                                         "Best regards,\n" +
+                                         "TrashTrack Team";
+
+                        // Insert notification for the customer
+                        using (var cmd = db.CreateCommand())
+                        {
+                            cmd.CommandType = CommandType.Text;
+                            cmd.CommandText = @"
+                        INSERT INTO notification (notif_message, emp_id, cus_id, notif_type)
+                        VALUES (@message, @empid, @cusid, @notiftype);";
+                            cmd.Parameters.AddWithValue("@message", message);
+                            cmd.Parameters.AddWithValue("@empid", adminId);
+                            cmd.Parameters.AddWithValue("@cusid", cusId);
+                            cmd.Parameters.AddWithValue("@notiftype", "Account Verification");
+                            cmd.Transaction = transaction;
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // Update customer table to set cus_isverified to true
                         using (var cmd = db.CreateCommand())
                         {
                             cmd.CommandType = CommandType.Text;
                             cmd.CommandText = @"
                         UPDATE customer 
                         SET cus_isverified = TRUE 
-                        WHERE cus_id = (
-                            SELECT cus_id 
-                            FROM verified_customer 
-                            WHERE vc_id = @vcId
-                        );";
-                            cmd.Parameters.AddWithValue("@vcId", vcId);
+                        WHERE cus_id = @cusId;";
+                            cmd.Parameters.AddWithValue("@cusId", cusId);
                             cmd.Transaction = transaction;
                             cmd.ExecuteNonQuery();
                         }
@@ -932,27 +1006,22 @@ namespace Capstone
                         // Commit the transaction
                         transaction.Commit();
 
-                        // Show success message using SweetAlert
+                        // Show success message
                         ClientScript.RegisterStartupScript(this.GetType(), "swal",
                             "Swal.fire({title: 'Success!', text: 'Customer successfully approved and verified!', icon: 'success', confirmButtonColor: '#3085d6'});", true);
                     }
                     catch (Exception ex)
                     {
-                        // Rollback the transaction in case of an error
+                        // Rollback on error
                         transaction.Rollback();
-
-                        // Show error message using SweetAlert
                         ClientScript.RegisterStartupScript(this.GetType(), "swal",
                             $"Swal.fire({{title: 'Error!', text: 'An error occurred: {ex.Message}', icon: 'error', confirmButtonColor: '#d33'}});", true);
-
-                        throw; // Optionally rethrow the error after showing the alert
+                        throw;
                     }
                 }
-
-                db.Close();
             }
 
-            // Refresh the grid view to reflect the changes
+            // Refresh the grid view to reflect changes
             CustomerList();
         }
 

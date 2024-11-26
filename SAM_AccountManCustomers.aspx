@@ -891,12 +891,12 @@
                                                     runat="server"
                                                     CssClass="btn btn-outline-success"
                                                     OnClick="Approve_Click"
-                                                    CommandArgument='<%# Eval("vc_id") %>'
-                                                    OnClientClick="return confirm('Are you sure you want to Approve/Verify this customer?');"
+                                                    CommandArgument='<%# Eval("vc_id") +"," + Eval("cus_id") %>'
+                                                    OnClientClick="return confirm('Are you sure you want to Approved/Verify this customer?');"
                                                     Visible='<%# Eval("vc_status").ToString() == "Pending" %>'
-                                                    Style="font-size: 12px; padding: 5px 10px;">
-            Approve
+                                                    Style="font-size: 12px; padding: 5px 10px;">Approve
                                                 </asp:LinkButton>
+
 
                                                 <asp:LinkButton
                                                     ID="btnDecline"
