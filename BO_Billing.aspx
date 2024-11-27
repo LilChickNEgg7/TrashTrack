@@ -542,7 +542,7 @@
 
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
-                            <div class="gridview-container">
+                            <div class="gridview-container" id="gridviewContainer">
                                 <%--BOOKING GRIDVIEW--%>
                                 <asp:GridView ID="gridViewBookings" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="bk_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
                                     <Columns>
@@ -605,7 +605,7 @@
                                         <asp:BoundField DataField="gb_total_sales" HeaderText="Total Sales" SortExpression="gb_total_sales" DataFormatString="₱{0:N2}" ItemStyle-Width="100px" />
                                         <asp:BoundField DataField="p_amount" HeaderText="Paid Amount" SortExpression="p_amount" DataFormatString="₱{0:N2}" ItemStyle-Width="100px" />
                                         <asp:BoundField DataField="p_method" HeaderText="Payment Method" SortExpression="p_method" ItemStyle-Width="150px" />
-                                        <asp:BoundField DataField="p_date_paid" HeaderText="Payment Date" SortExpression="p_date_paid" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px" />
+                                        <asp:BoundField DataField="p_date_paid" HeaderText="Date Paid" SortExpression="p_date_paid" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px" />
                                         <asp:BoundField DataField="p_checkout_id" HeaderText="Checkout ID" SortExpression="p_checkout_id" ItemStyle-Width="150px" />
                                         <asp:TemplateField HeaderText="Details">
                                             <ItemTemplate>
@@ -1448,9 +1448,32 @@
                         return true;
                     }
 
+                    // Function to refresh the GridView
+                    //function refreshGridView() {
+                    //    $.ajax({
+                    //        type: 'POST',
+                    //        url: 'BO_Billing.aspx/LoadBookingList', // URL to call the WebMethod
+                    //        data: JSON.stringify({ connectionString: 'Server=localhost;Port=5432;User Id=postgres;Password=123456;Database=trashtrack' }), // Pass the connection string
+                    //        contentType: 'application/json; charset=utf-8',
+                    //        dataType: 'json',
+                    //        success: function (response) {
+                    //            // Replace the content of the gridview container with the new GridView HTML
+                    //            $('#gridviewContainer').html(response.d);
+                    //        },
+                    //        error: function (error) {
+                    //            console.error('Error refreshing GridView: ', error);
+                    //        }
+                    //    });
+                    //}
+
+                    //// Refresh every 5 seconds
+                    //setInterval(refreshGridView, 1000);
+                    
+
 
                 </script>
                 <script src="https://code.jquery.com/jquery-3.5.2.min.js"></script>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
                 <!-- TAB SCRIPTS-->

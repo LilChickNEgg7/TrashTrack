@@ -6,13 +6,11 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
-//using System.Web.UI.WebControls;
 
 using WebControls = System.Web.UI.WebControls;
 using MongoDB.Driver.Linq;
 using System.Data.SqlClient;
 using Amazon.SecurityToken.Model;
-//using AjaxControlToolkit.HtmlEditor.ToolbarButtons;
 using Amazon.Runtime.Documents;
 using Npgsql.Internal;
 using System.IO;
@@ -36,13 +34,15 @@ using iText.Layout.Borders;
 using AjaxControlToolkit;
 using System.EnterpriseServices;
 using System.Web.Services.Description;
+using System.Web.Services;
+using MongoDB.Driver.Core.Configuration;
 
 
 namespace Capstone
 {
     public partial class BO_Billing : System.Web.UI.Page
     {
-        private readonly string con = "Server=localhost;Port=5432;User Id=postgres;Password=123456;Database=trashtrack";
+        public static readonly string con = "Server=localhost;Port=5432;User Id=postgres;Password=123456;Database=trashtrack";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -160,6 +160,8 @@ namespace Capstone
 
         }
 
+        //not real-time
+        [WebMethod]
         protected void LoadBookingList()
         {
             using (var db = new NpgsqlConnection(con))
@@ -196,10 +198,278 @@ namespace Capstone
                     // Bind the data to the GridView
                     gridViewBookings.DataSource = bookingsDataTable;
                     gridViewBookings.DataBind();
+
                 }
                 db.Close();
             }
         }
+
+
+        //[WebMethod]
+        //public static string LoadBookingList()
+        //{
+        //    StringWriter sw = new StringWriter();
+
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            cmd.CommandText = @"
+        //        SELECT 
+        //            b.bk_id, 
+        //            b.bk_date,
+        //            b.bk_fullname,
+        //            b.bk_status, 
+        //            CONCAT(b.bk_street, ', ', b.bk_brgy, ', ', b.bk_city, ', ', b.bk_province, ' ', b.bk_postal) AS location,
+        //            c.cus_id,
+        //            c.cus_email
+        //        FROM 
+        //            booking b
+        //        JOIN 
+        //            customer c ON b.cus_id = c.cus_id
+        //        WHERE 
+        //            b.bk_status NOT IN ('Completed', 'Billed', 'Cancelled', 'Failed') 
+        //        ORDER BY 
+        //            b.bk_date DESC, b.bk_id DESC";
+
+        //            DataTable bookingsDataTable = new DataTable();
+        //            NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
+        //            bookingsAdapter.Fill(bookingsDataTable);
+
+        //            // Create GridView instance to render rows only
+        //            GridView gridView = new GridView();
+        //            gridView.DataSource = bookingsDataTable;
+        //            gridView.DataBind();
+
+        //            // Render only the rows (<tbody>) of the GridView
+        //            foreach (GridViewRow row in gridView.Rows)
+        //            {
+        //                row.RenderControl(new HtmlTextWriter(sw));
+        //            }
+        //        }
+        //        db.Close();
+        //    }
+
+        //    // Return the <tbody> HTML (the rows)
+        //    return sw.ToString();
+        //}
+
+
+
+        //[WebMethod]
+        //public static string LoadBookingList()
+        //{
+        //    StringWriter sw = new StringWriter();
+
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            cmd.CommandText = @"
+        //        SELECT 
+        //            b.bk_id, 
+        //            b.bk_date,
+        //            b.bk_fullname,
+        //            b.bk_status, 
+        //            b.bk_waste_scale_slip,
+        //            CONCAT(b.bk_street, ', ', b.bk_brgy, ', ', b.bk_city, ', ', b.bk_province, ' ', b.bk_postal) AS location,
+        //            c.cus_id,
+        //            c.cus_email
+        //        FROM 
+        //            booking b
+        //        JOIN 
+        //            customer c ON b.cus_id = c.cus_id
+        //        WHERE 
+        //            b.bk_status NOT IN ('Completed', 'Billed', 'Cancelled', 'Failed') 
+        //        ORDER BY 
+        //            b.bk_date DESC, b.bk_id DESC";
+
+
+        //            // Execute the query and bind the results to the GridView
+        //            //DataTable bookingsDataTable = new DataTable();
+        //            //NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
+        //            //bookingsAdapter.Fill(bookingsDataTable);
+
+        //            //// Bind the data to the GridView
+        //            //gridViewBookings.DataSource = bookingsDataTable;
+        //            //gridViewBookings.DataBind();
+
+
+
+
+
+        //            DataTable bookingsDataTable = new DataTable();
+        //            NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
+        //            bookingsAdapter.Fill(bookingsDataTable);
+
+        //            // Render the GridView to HTML
+        //            //GridView gridView = new GridView();
+        //            gridViewBookings.DataSource = bookingsDataTable;
+        //            gridViewBookings.DataBind();
+        //            gridViewBookings.RenderControl(new HtmlTextWriter(sw));
+        //        }
+        //        db.Close();
+        //    }
+
+        //    // Return the HTML of the GridView as a string
+        //    return sw.ToString();
+        //}
+
+
+
+        //[WebMethod]
+        //protected void LoadBookingList()
+        //{
+        //    StringWriter sw = new StringWriter();
+
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            // Query to fetch booking data from the database
+        //            cmd.CommandText = @"SELECT 
+        //                b.bk_id, 
+        //                b.bk_date,
+        //                b.bk_fullname,
+        //                b.bk_status, 
+        //                b.bk_waste_scale_slip,
+        //                CONCAT(b.bk_street, ', ', b.bk_brgy, ', ', b.bk_city, ', ', b.bk_province, ' ', b.bk_postal) AS location,
+        //                c.cus_id,
+        //                c.cus_email
+        //            FROM 
+        //                booking b
+        //            JOIN 
+        //                customer c ON b.cus_id = c.cus_id
+        //            WHERE 
+        //                b.bk_status NOT IN ('Completed', 'Billed', 'Cancelled', 'Failed') 
+        //            ORDER BY 
+        //                b.bk_date DESC, b.bk_id DESC";
+
+
+        //            //// Execute the query and bind the results to the GridView
+        //            //DataTable bookingsDataTable = new DataTable();
+        //            //NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
+        //            //bookingsAdapter.Fill(bookingsDataTable);
+
+        //            //// Bind the data to the GridView
+        //            //gridViewBookings.DataSource = bookingsDataTable;
+        //            //gridViewBookings.DataBind();
+
+        //            DataTable bookingsDataTable = new DataTable();
+        //            NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
+        //            bookingsAdapter.Fill(bookingsDataTable);
+
+        //            // Render the GridView to HTML
+        //            GridView gridView = new GridView();
+        //            gridView.DataSource = bookingsDataTable;
+        //            gridView.DataBind();
+        //            gridView.RenderControl(new HtmlTextWriter(sw));
+
+        //        }
+        //        db.Close();
+        //    }
+        //    return sw.ToString(); // Return the HTML of the GridView
+
+        //}
+
+
+        //[WebMethod]
+        //public static string LoadBookingList()
+        //{
+        //    StringWriter sw = new StringWriter();
+        //    GridView gridViewBookings = new GridView(); // Instantiate the GridView here
+
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            cmd.CommandText = @"
+        //        SELECT 
+        //            b.bk_id, 
+        //            b.bk_date,
+        //            b.bk_fullname,
+        //            b.bk_status, 
+        //            b.bk_waste_scale_slip,
+        //            CONCAT(b.bk_street, ', ', b.bk_brgy, ', ', b.bk_city, ', ', b.bk_province, ' ', b.bk_postal) AS location,
+        //            c.cus_id,
+        //            c.cus_email
+        //        FROM 
+        //            booking b
+        //        JOIN 
+        //            customer c ON b.cus_id = c.cus_id
+        //        WHERE 
+        //            b.bk_status NOT IN ('Completed', 'Billed', 'Cancelled', 'Failed') 
+        //        ORDER BY 
+        //            b.bk_date DESC, b.bk_id DESC";
+
+        //            DataTable bookingsDataTable = new DataTable();
+        //            NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
+        //            bookingsAdapter.Fill(bookingsDataTable);
+
+        //            // Bind the DataTable to the GridView
+        //            gridViewBookings.DataSource = bookingsDataTable;
+        //            gridViewBookings.DataBind();
+        //        }
+        //        db.Close();
+        //    }
+
+        //    // Render the GridView to HTML and return it as a string
+        //    gridViewBookings.RenderControl(new HtmlTextWriter(sw));
+        //    return sw.ToString();
+        //}
+
+        //[WebMethod]
+        //public static string LoadBookingList()
+        //{
+        //    // Create a DataTable to hold the data
+        //    DataTable bookingsDataTable = new DataTable();
+
+        //    // Fetch data from the database
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            cmd.CommandText = @"
+        //        SELECT 
+        //            b.bk_id, 
+        //            b.bk_date,
+        //            b.bk_fullname,
+        //            b.bk_status, 
+        //            b.bk_waste_scale_slip,
+        //            CONCAT(b.bk_street, ', ', b.bk_brgy, ', ', b.bk_city, ', ', b.bk_province, ' ', b.bk_postal) AS location,
+        //            c.cus_id,
+        //            c.cus_email
+        //        FROM 
+        //            booking b
+        //        JOIN 
+        //            customer c ON b.cus_id = c.cus_id
+        //        WHERE 
+        //            b.bk_status NOT IN ('Completed', 'Billed', 'Cancelled', 'Failed') 
+        //        ORDER BY 
+        //            b.bk_date DESC, b.bk_id DESC";
+
+        //            NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
+        //            bookingsAdapter.Fill(bookingsDataTable);
+        //        }
+        //        db.Close();
+        //    }
+
+        //    // Serialize the DataTable to JSON to return to the client
+        //    return Newtonsoft.Json.JsonConvert.SerializeObject(bookingsDataTable);
+        //}
+
+
+
 
         protected void GeneratedBillList()
         {
@@ -283,12 +553,9 @@ namespace Capstone
                         }
                     }
 
-                    // Now proceed to delete the record
                     using (var cmd = db.CreateCommand())
                     {
                         cmd.CommandType = CommandType.Text;
-
-                        // Execute a DELETE statement to remove the record
                         cmd.CommandText = "DELETE FROM BOOKING_WASTE WHERE bw_id = @id";
                         cmd.Parameters.AddWithValue("@id", bwId);
 
@@ -350,8 +617,6 @@ namespace Capstone
                                     txtTotalUnit.Text = reader["bw_total_unit"].ToString();
                                     txtUnitPrice.Text = reader["bw_price"].ToString();
                                     txtTotalUnitPrice.Text = reader["bw_total_price"].ToString();
-
-
                                     //Response.Write("<script>alert('Yeehaw!')</script>");
                                 }
                             }
@@ -364,7 +629,7 @@ namespace Capstone
                 {
 
                 }
-                updatePanel.Update(); // If using UpdatePanel, force an update to reflect changes
+                updatePanel.Update();
 
                 // Show the modal popup
                 ModalPopupExtender2.Show();
@@ -421,8 +686,6 @@ namespace Capstone
 
             // Optionally, refresh the page or data after update
             this.ModalPopupExtender2.Hide(); // Close the modal after saving
-
-            // Refresh data in grid or UI here (if applicable)
         }
 
         //OPEN ADD BOOK WASTE PANEL
@@ -439,16 +702,15 @@ namespace Capstone
             try
             {
                 // Fetch values from the textboxes
-                int bk_id = Convert.ToInt32(TextBox1.Text); // Booking ID
-                string bw_name = ddlbwName1.SelectedItem.Text; // Waste type name from the dropdown (Text, not value)
-                string bw_unit = txtbwUnit1.Text; // Waste unit from the textbox
-                double bw_total_unit = Convert.ToDouble(txtTotalUnit1.Text); // Total unit from the textbox
-                double bw_price = Convert.ToDouble(txtUnitPrice1.Text); // Price per unit from the textbox
-                double bw_total_price = Convert.ToDouble(txtTotalUnitPrice1.Text); // Total price from the textbox (already computed in UI)
+                int bk_id = Convert.ToInt32(TextBox1.Text); 
+                string bw_name = ddlbwName1.SelectedItem.Text; 
+                string bw_unit = txtbwUnit1.Text; 
+                double bw_total_unit = Convert.ToDouble(txtTotalUnit1.Text); 
+                double bw_price = Convert.ToDouble(txtUnitPrice1.Text); 
+                double bw_total_price = Convert.ToDouble(txtTotalUnitPrice1.Text); 
 
                 // Fetch the wc_id from the dropdown selection
-                int wc_id = Convert.ToInt32(ddlbwName1.SelectedValue); // wc_id from the dropdown's selected value
-
+                int wc_id = Convert.ToInt32(ddlbwName1.SelectedValue); 
                 // Validate that Total Unit is greater than 0
                 if (!double.TryParse(txtTotalUnit1.Text, out bw_total_unit) || bw_total_unit <= 0)
                 {
@@ -698,11 +960,7 @@ namespace Capstone
             int bk_id = 0;
             this.ModalPopupExtender5.Show(); // Show the modal
             dateEntered.Text = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
-
-            // Call the method to load booking waste data
-
             hfActiveTab.Value = "#tab2";
-            //this.ModalPopupExtender5.Show();
 
             try
             {
@@ -824,49 +1082,6 @@ namespace Capstone
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
                     $"swal('Error!', '{ex.Message}', 'error')", true);
             }
-
-
-            // Now load the booking waste data based on bk_id
-            //try
-            //{
-            //    using (var db = new NpgsqlConnection(con))
-            //    {
-            //        db.Open();
-
-            //        // Query to get booking waste details and bind to the GridView
-            //        using (var cmd = db.CreateCommand())
-            //        {
-            //            cmd.CommandType = CommandType.Text;
-            //            cmd.CommandText = @"
-            //        SELECT bw.bw_id, bw.bw_name, bw.bw_unit, bw.bw_total_unit, bw.bw_price, bw.bw_total_price, bw.bk_id
-            //        FROM BOOKING_WASTE bw
-            //        INNER JOIN BOOKING b ON bw.bk_id = b.bk_id
-            //        WHERE bw.bk_id = @bkId AND b.bk_status != 'Completed'
-            //        ORDER BY bw.bw_id";
-
-            //            cmd.Parameters.AddWithValue("@bkId", bookingId);
-
-            //            DataTable bookingsDataTable = new DataTable();
-            //            NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
-            //            bookingsAdapter.Fill(bookingsDataTable);
-
-            //            gridView3.DataSource = bookingsDataTable;
-            //            gridView3.DataBind();
-            //        }
-
-            //        // Optionally, you can display a message if no records are found
-            //        if (gridView3.Rows.Count == 0)
-            //        {
-            //            ClientScript.RegisterClientScriptBlock(this.GetType(), "info",
-            //                "swal('No Data!', 'No booking waste data found for the given Booking ID.', 'info')", true);
-            //        }
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-            //        $"swal('Error!', '{ex.Message}', 'error')", true);
-            //}
         }
 
 
@@ -1046,8 +1261,6 @@ namespace Capstone
         }
 
 
-
-
         protected void CancelGenerateBill_Click(object sender, EventArgs e)
         {
             addFeeTxt.Text = string.Empty;
@@ -1177,35 +1390,6 @@ namespace Capstone
             }
         }
 
-        //protected void ddlWasteCategory_SelectedIndexChanged1(object sender, EventArgs e)
-        //{
-        //    int selectedWasteID = Convert.ToInt32(ddlbwName1.SelectedValue);
-
-        //    if (selectedWasteID > 0)
-        //    {
-        //        // Query to get the unit and price for the selected waste category
-        //        string query = "SELECT wc_unit, wc_price FROM waste_category WHERE wc_id = @wc_id";
-
-        //        using (NpgsqlConnection connection = new NpgsqlConnection(con))
-        //        {
-        //            NpgsqlCommand cmd = new NpgsqlCommand(query, connection);
-        //            cmd.Parameters.AddWithValue("@wc_id", selectedWasteID); // Setting parameter value for wc_id
-
-        //            connection.Open();
-        //            NpgsqlDataReader reader = cmd.ExecuteReader();
-        //            if (reader.Read())
-        //            {
-        //                txtUnitPrice1.Text = reader["wc_price"].ToString(); // Assign price to the textbox
-        //                                                                   // If you need to display the unit in another control, use:
-        //                txtbwUnit1.Text = reader["wc_unit"].ToString();
-        //                txtTotalUnit1.Text = "";
-        //                txtTotalUnitPrice1.Text = "";
-        //            }
-        //            connection.Close();
-        //        }
-        //    }
-        //}
-
 
         private bool IsInitialLoad
         {
@@ -1247,8 +1431,6 @@ namespace Capstone
             ModalPopupExtender2.Hide();
         }
 
-
-
         protected void btncancel_Click1(object sender, EventArgs e)
         {
             // Reset the fields to default or initial values
@@ -1262,86 +1444,6 @@ namespace Capstone
             // Hide the panel/modal
             ModalPopupExtender3.Hide();
         }
-        //LinkButton btn = sender as LinkButton;
-        //int id = Convert.ToInt32(btn.CommandArgument);
-        //txtbwID1.Text = id.ToString();
-        //TextBox1.Text = id.ToString();
-        //LoadBookingWasteData(); // Load the relevant data for the booking ID
-        //protected void openViewBill_Click(object sender, EventArgs e)
-        //{
-        //    LinkButton btn = (LinkButton)sender;
-        //    int gb_id = Convert.ToInt32(btn.CommandArgument);
-
-        //    this.ModalPopupExtender5.Show(); // Show the modal
-        //    dateEntered.Text = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
-
-        //    DetailsLoadBookingWasteData();
-        //    hfActiveTab.Value = "#tab2";
-        //    this.ModalPopupExtender1.Show();
-
-        //    try
-        //    {
-        //        using (var db = new NpgsqlConnection(con))
-        //        {
-        //            db.Open();
-        //            using (var cmd = db.CreateCommand())
-        //            {
-        //                cmd.CommandType = CommandType.Text;
-        //                cmd.CommandText = @"
-        //            SELECT gb.*, bk.bk_id
-        //            FROM generate_bill gb
-        //            LEFT JOIN booking bk ON gb.bk_id = bk.bk_id
-        //            WHERE gb.gb_id = @gb_id";
-        //                cmd.Parameters.AddWithValue("@gb_id", gb_id);
-
-        //                using (var reader = cmd.ExecuteReader())
-        //                {
-        //                    if (reader.Read())
-        //                    {
-        //                        // Populate fields with data from the `generate_bill` table
-        //                        Label4.Text = reader["gb_tax"].ToString();
-        //                        Label5.Text = reader["gb_interest"].ToString();
-        //                        Label6.Text = reader["gb_accrual_period"].ToString();
-        //                        Label7.Text = reader["gb_suspend_period"].ToString();
-        //                        TextBox2.Text = reader["gb_id"].ToString();
-        //                        Date.Text = Convert.ToDateTime(reader["gb_date_issued"]).ToString("yyyy-MM-ddTHH:mm");
-        //                        TextBox7.Text = Convert.ToDateTime(reader["gb_date_due"]).ToString("yyyy-MM-ddTHH:mm");
-        //                        TextBox4.Text = reader["gb_net_vat"].ToString();
-        //                        TextBox5.Text = reader["gb_vat_amnt"].ToString();
-        //                        TextBox6.Text = reader["gb_total_sales"].ToString();
-        //                        TextBox8.Text = Convert.ToDateTime(reader["gb_accrual_date"]).ToString("yyyy-MM-ddTHH:mm");
-        //                        TextBox9.Text = Convert.ToDateTime(reader["gb_suspend_date"]).ToString("yyyy-MM-ddTHH:mm");
-        //                        TextBox10.Text = reader["gb_add_fees"].ToString();
-        //                        TextBox11.Text = reader["gb_note"].ToString();
-
-        //                        // Populate the associated `bk_id`
-        //                        if (reader["bk_id"] != DBNull.Value)
-        //                        {
-        //                            bkidviewbill.Value = reader["bk_id"].ToString(); // Ensure you have a control to display bk_id
-        //                                                                             // Retrieve bk_id from the HiddenField and pass it to DetailsLoadBookingWasteData
-        //                            //if (!string.IsNullOrEmpty(bkidviewbill.Value) && int.TryParse(bkidviewbill.Value, out int bk_id))
-        //                            //{
-        //                            //    //DetailsLoadBookingWasteData(bk_id); // Call the method with bk_id
-        //                            //}
-        //                        }
-        //                        else
-        //                        {
-        //                            bkidviewbill.Value = "No booking ID associated";
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //            hfActiveTab.Value = "#tab2"; // Set the default active tab
-        //            updatePanel4.Update();       // Update the UpdatePanel
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ScriptManager.RegisterStartupScript(this, GetType(), "showError",
-        //            $"Swal.fire({{ icon: 'error', title: 'Error', text: '{ex.Message}' }});", true);
-        //    }
-        //}
-
         protected void ViewBill_Click(object sender, EventArgs e)
         {
             int gb_id = Convert.ToInt32(TextBox2.Text);
@@ -1996,6 +2098,7 @@ namespace Capstone
             this.ModalPopupExtender1.Hide();
             try
             {
+                GeneratedBillList();
                 LoadBookingList();
                 this.ModalPopupExtender1.Hide();
                 using (var conn = new NpgsqlConnection(con))
@@ -2035,6 +2138,16 @@ namespace Capstone
                                 bk_id = Convert.ToInt32(reader["bk_id"]);
                                 cus_id = Convert.ToInt32(reader["cus_id"]);
                                 cus_fullname = reader["bk_fullname"].ToString();
+
+                                if (reader["bk_waste_scale_slip"] == DBNull.Value)
+                                {
+                                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+                                        "Swal.fire({ icon: 'error', title: 'Cannot Generate Bill', text: 'Scale slip is not yet available for this booking.', background: '#f8d7da', confirmButtonColor: '#dc3545' });",
+                                        true);
+
+                                    return; 
+                                }
+
                                 ModalPopupExtender1.Hide();
                                 LoadBookingList();
                             }
@@ -2043,17 +2156,15 @@ namespace Capstone
                                 throw new Exception("Booking ID not found.");
                             }
                         }
-                        LoadBookingList();
-                        ModalPopupExtender1.Hide();
                     }
+
                     LoadBookingList();
                     ModalPopupExtender1.Hide();
                     // Step 3: Validate `bw_total_price`
-                    string totalQuery = @"
-                SELECT SUM(bw_total_price) AS total, 
-                       COUNT(*) FILTER (WHERE bw_total_price IS NULL OR bw_total_price = 0) AS invalid_count
-                FROM booking_waste 
-                WHERE bk_id = @BkId";
+                    string totalQuery = @"SELECT SUM(bw_total_price) AS total, 
+                                               COUNT(*) FILTER (WHERE bw_total_price IS NULL OR bw_total_price = 0) AS invalid_count
+                                        FROM booking_waste 
+                                        WHERE bk_id = @BkId";
 
                     using (var totalCmd = new NpgsqlCommand(totalQuery, conn))
                     {
@@ -2104,19 +2215,19 @@ namespace Capstone
 
                     // Step 5: Insert bill details
                     string insertBillQuery = @"
-                INSERT INTO generate_bill (
-                    gb_note, gb_add_fees, gb_net_vat, gb_vat_amnt, gb_total_sales, 
-                    gb_date_issued, gb_date_due, gb_interest, gb_lead_days, 
-                    gb_accrual_period, gb_suspend_period, gb_accrual_date, 
-                    gb_suspend_date, gb_tax, gb_status, bk_id, emp_id
-                ) 
-                VALUES (
-                    @Note, @AddFees, @NetVat, @VatAmount, @TotalSales, 
-                    @DateIssued, @DateDue, @Interest, @LeadDays, 
-                    @AccrualPeriod, @SuspensionPeriod, @AccrualDate, 
-                    @SuspensionDate, @Tax, @Status, @BkId, @EmpId
-                ) 
-                RETURNING gb_id;";
+                                            INSERT INTO generate_bill (
+                                                gb_note, gb_add_fees, gb_net_vat, gb_vat_amnt, gb_total_sales, 
+                                                gb_date_issued, gb_date_due, gb_interest, gb_lead_days, 
+                                                gb_accrual_period, gb_suspend_period, gb_accrual_date, 
+                                                gb_suspend_date, gb_tax, gb_status, bk_id, emp_id
+                                            ) 
+                                            VALUES (
+                                                @Note, @AddFees, @NetVat, @VatAmount, @TotalSales, 
+                                                @DateIssued, @DateDue, @Interest, @LeadDays, 
+                                                @AccrualPeriod, @SuspensionPeriod, @AccrualDate, 
+                                                @SuspensionDate, @Tax, @Status, @BkId, @EmpId
+                                            ) 
+                                            RETURNING gb_id;";
 
                     using (var cmd = new NpgsqlCommand(insertBillQuery, conn))
                     {
@@ -2146,9 +2257,7 @@ namespace Capstone
                             GeneratedBillList();
                             gridViewBookings.DataBind();
                             this.ModalPopupExtender1.Hide();
-                            //ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-                            //            "Swal.fire({ icon: 'error', title: 'Empty Total Units!', text: 'Total Units has not been entered yet', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
-                            //            true);
+                            
                         }
                         else
                         {
@@ -2163,13 +2272,13 @@ namespace Capstone
                                        "You can now review the details at your convenience. Please check it as soon as possible to avoid any delays. " +
                                        "Thank you for your cooperation 💜";
                     string queryNotif = @"
-                            INSERT INTO notification (
-                                notif_message, emp_id, cus_id, bk_id, gb_id
-                            ) 
-                            VALUES (
-                                @Message, @EmpId, @CusId, @BkId, @GbId
-                            ) 
-                            RETURNING gb_id;";
+                                        INSERT INTO notification (
+                                            notif_message, emp_id, cus_id, bk_id, gb_id
+                                        ) 
+                                        VALUES (
+                                            @Message, @EmpId, @CusId, @BkId, @GbId
+                                        ) 
+                                        RETURNING gb_id;";
 
                     using (var cmd = new NpgsqlCommand(queryNotif, conn))
                     {
@@ -2191,12 +2300,10 @@ namespace Capstone
                             throw new Exception("No ID returned from insert.");
                         }
                     }
-
-
-
-
+                    GeneratedBillList();
                     LoadBookingList();
                 }
+                GeneratedBillList();
                 LoadBookingList();
                 this.ModalPopupExtender1.Hide();
                 //ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
@@ -2209,8 +2316,6 @@ namespace Capstone
                     ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
                                             "Swal.fire({ icon: 'error', title: 'Empty Total Units!', text: 'Total Units has not been entered yet', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
                                             true);
-                    //                ScriptManager.RegisterStartupScript(this, GetType(), "DownloadPdf",
-                    //"window.open('DownloadPdf.aspx', '_blank');", true);
 
 
                     ScriptManager.RegisterStartupScript(this, GetType(), "DownloadPdf",
@@ -2227,6 +2332,7 @@ namespace Capstone
                     //Response.Cache.SetCacheability(HttpCacheability.NoCache);
                     //Response.BinaryWrite(pdfBytes);
                     //Response.End();
+                    GeneratedBillList();
                     LoadBookingList();
                     gridViewBookings.DataBind();
                     ScriptManager.RegisterStartupScript(this, GetType(), "showSuccessAlert",

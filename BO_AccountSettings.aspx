@@ -91,7 +91,7 @@
         <header style="background-color: black; height: 80px" id="header" class="header fixed-top d-flex align-items-center">
 
             <div class="d-flex align-items-center justify-content-between">
-                <a href="Customer_Dashboard.aspx" class="logo d-flex align-items-center">
+                <a href="#" class="logo d-flex align-items-center">
                     <img style="border-radius: 1px" src="Pictures/logo_bgRM.png" alt="" />
                     <span style="color: aqua; font-weight: 900; font-family: 'Agency FB'" class="d-none d-lg-block">TrashTrack</span>
                 </a>
@@ -201,8 +201,8 @@
 
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="BO_Dashboard.aspx">
-                            <i class="bi bi-grid" style="color: aquamarine"></i>
-                            <span style="color: aquamarine">Dashboard</span>
+                            <i class="bi bi-grid"></i>
+                            <span>Dashboard</span>
                         </a>
 
                     </li>

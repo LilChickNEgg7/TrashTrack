@@ -370,39 +370,7 @@
     </style>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <%--start of searchbar script--%>
-    <%--<script type="text/javascript">
-        function search() {
-            var searchText = document.getElementById('<%= txtSearch.ClientID %>').value.toUpperCase();
-            var grid = document.getElementById('<%= gridViewAccountMan.ClientID %>');
-
-            for (var i = 1; i < grid.rows.length; i++) {
-                var row = grid.rows[i];
-                var id = row.cells[0].innerHTML.toUpperCase();
-                var firstname = row.cells[1].innerHTML.toUpperCase();
-                var mi = row.cells[2].innerHTML.toUpperCase();
-                var lastname = row.cells[3].innerHTML.toUpperCase();
-                var username = row.cells[4].innerHTML.toUpperCase();
-                var contact = row.cells[5].innerHTML.toUpperCase();
-                var email = row.cells[6].innerHTML.toUpperCase();
-                var created_at = row.cells[7].innerHTML.toUpperCase();
-                var updated_at = row.cells[8].innerHTML.toUpperCase();
-                var status = row.cells[9].innerHTML.toUpperCase();
-                //var date = row.cells[9].innerHTML.toUpperCase();
-                //var stock_level = row.cells[10].innerHTML.toUpperCase();
-                if (id.indexOf(searchText) > -1 || firstname.indexOf(searchText) > -1 || mi.indexOf(searchText) > -1 ||
-                    lastname.indexOf(searchText) > -1 || username.indexOf(searchText) > -1 ||
-                    contact.indexOf(searchText) > -1 || email.indexOf(searchText) > -1 ||
-                    created_at.indexOf(searchText) > -1 || updated_at.indexOf(searchText) > -1 ||
-                    status.indexOf(searchText) > -1) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            }
-        }
-
-
-    </script>--%>
+    
 
     <script type="text/javascript">
         function search() {

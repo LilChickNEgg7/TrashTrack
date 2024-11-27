@@ -80,12 +80,6 @@ namespace Capstone
         }
         public bool IsReusable => false;
 
-        //private byte[] GeneratePDFForRow(int billId, int bkId)
-        //{
-        //    //// Your PDF generation logic here
-        //    //return new byte[0];
-
-        //}
         private byte[] GeneratePDFForRow(int buttonText, int bkID)
         {
             using (MemoryStream ms = new MemoryStream())
