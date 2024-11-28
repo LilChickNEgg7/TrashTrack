@@ -487,7 +487,7 @@ namespace Capstone
                         if (ctr >= 1)
                         {
 
-                            Response.Write("<script>alert('BUTTON IS CLICKED!');</script>");
+                            Response.Write("<script>alert('BOOKING SCHEDULE HAS BEEN SET!');</script>");
                             ClientScript.RegisterStartupScript(this.GetType(), "swal", "Swal.fire({title: 'Success', text: 'Booking Limit Scheduled Successfully!', icon: 'success', confirmButtonColor: '#3085d6', cancelButtonColor: '#d33'});", true);
 
 

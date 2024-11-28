@@ -1450,7 +1450,7 @@
 
                     // Function to refresh the GridView
                     //function refreshGridView() {
-                    //    $.ajax({
+                    //    $.ajax({  
                     //        type: 'POST',
                     //        url: 'BO_Billing.aspx/LoadBookingList', // URL to call the WebMethod
                     //        data: JSON.stringify({ connectionString: 'Server=localhost;Port=5432;User Id=postgres;Password=123456;Database=trashtrack' }), // Pass the connection string
