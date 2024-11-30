@@ -16,6 +16,14 @@ using System.Diagnostics;
 using System.Net.Mail;
 using System.Net;
 using System.Xml.Linq;
+using System.Web.Services;
+using Microsoft.AspNet.SignalR;
+using static Capstone.Account_Manager_ManageAccount;
+using MongoDB.Driver.Core.Configuration;
+using System.Data.SqlClient;
+using static Capstone.PaymentController;
+using Org.BouncyCastle.Asn1.Ocsp;
+using AjaxControlToolkit;
 
 
 
@@ -24,7 +32,7 @@ namespace Capstone
     public partial class Account_Manager_ManageAccount : System.Web.UI.Page
     {
         // Database Connection String
-        private readonly string con = "Server=localhost;Port=5432;User Id=postgres;Password=123456;Database=trashtrack";
+        private static string con = "Server=localhost;Port=5432;User Id=postgres;Password=123456;Database=trashtrack";
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -40,9 +48,346 @@ namespace Capstone
                 LoadChangeRoles();
                 ClearFormFields();
                 hfActiveTab.Value = "#sam"; // Set Tab 1 as the default
+                BindNotifications();
+                //LoadNotifications();
+                GetUnreadNotificationCount();
+                //BindNotifications();
+                //UpdateNotificationCount();
+                //GetNotifications();
+
             }
 
         }
+        //// This method is exposed as a WebMethod for AJAX calls
+        //[WebMethod]
+        //public static int GetUnreadNotificationCount()
+        //{
+        //    return new Notifications().GetUnreadNotificationCount();
+        //}
+
+        // Helper method to get the unread notification count from the database
+        public int GetUnreadNotificationCount()
+        {
+            int unreadCount = 0;
+
+            // Replace with your actual PostgreSQL connection string
+            using (var connection = new NpgsqlConnection(con))
+            {
+                connection.Open();
+                string query = "SELECT COUNT(*) FROM notification WHERE notif_read = false AND notif_type = 'request verification'";
+
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    unreadCount = Convert.ToInt32(command.ExecuteScalar());
+                }
+            }
+
+            return unreadCount;
+        }
+
+        //private void LoadNotifications()
+        //{
+        //    string query = "SELECT * FROM notification ORDER BY notif_created_at DESC";
+        //    using (NpgsqlConnection conn = new NpgsqlConnection(con))
+        //    {
+        //        using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+        //        {
+        //            conn.Open();
+        //            NotificationRepeater.DataSource = cmd.ExecuteReader();
+        //            NotificationRepeater.DataBind();
+        //        }
+        //    }
+        //}
+
+        //protected void AddNotification(string message)
+        //{
+        //    string query = "INSERT INTO notification (notif_message, notif_created_at, notif_read, notif_status) VALUES (@message, CURRENT_TIMESTAMP, false, 'Active')";
+        //    using (NpgsqlConnection conn = new NpgsqlConnection(con))
+        //    {
+        //        using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+        //        {
+        //            cmd.Parameters.AddWithValue("@message", message);
+        //            conn.Open();
+        //            cmd.ExecuteNonQuery();
+        //        }
+        //    }
+
+        //    // Trigger SignalR notification
+        //    NotificationHub.NotifyClients(message);
+        //}
+        //public string GetNotificationIcon(string notifStatus)
+        //{
+        //    switch (notifStatus.ToLower())
+        //    {
+        //        case "success":
+        //            return "bi bi-check-circle-fill text-success"; // Green check icon
+        //        case "error":
+        //            return "bi bi-exclamation-circle-fill text-danger"; // Red error icon
+        //        case "warning":
+        //            return "bi bi-exclamation-triangle-fill text-warning"; // Yellow warning icon
+        //        case "info":
+        //        default:
+        //            return "bi bi-info-circle-fill text-primary"; // Blue info icon (default)
+        //    }
+        //}
+        //protected void Notification_Click(object sender, EventArgs e)
+        //{
+        //    // Cast sender to LinkButton to access its properties
+        //    LinkButton clickedLinkButton = sender as LinkButton;
+
+        //    if (clickedLinkButton != null)
+        //    {
+        //        // Retrieve the CommandArgument (e.g., cus_id)
+        //        string customerId = clickedLinkButton.CommandArgument;
+
+        //        // Add logic to handle the notification click
+        //        // For example, mark the notification as read or navigate to another page
+        //        //Response.Redirect($"SAM_AccountManCustomers.aspx?cus_id={customerId}");
+        //        Response.Redirect($"SAM_AccountManCustomers.aspx");
+
+        //    }
+        //}
+
+
+
+
+
+
+        /// <summary>
+        /// MUGANAAAA LATEST 11/30/24 12:21
+        /// </summary>
+        /// 
+        protected void NotificationTimer_Tick(object sender, EventArgs e)
+        {
+            // Fetch updated notifications
+            var notifications = GetNotificationsFromDb();
+
+            // Bind to the Repeater
+            NotificationRepeater.DataSource = notifications;
+            NotificationRepeater.DataBind();
+
+            // Update the notification count
+            int unreadCount = notifications.Count(n => !n.NotifRead);
+            notificationCount.InnerText = unreadCount.ToString();
+            notificationCount.Style["display"] = unreadCount > 0 ? "block" : "none";
+
+            // Update the header count
+            notificationHeader.InnerText = unreadCount.ToString();
+
+        }
+
+
+        //protected void NotificationTimer_Tick(object sender, EventArgs e)
+        //{
+        //    // Fetch updated notifications
+        //    var notifications = GetNotificationsFromDb();
+
+        //    // Bind to the Repeater
+        //    NotificationRepeater.DataSource = notifications;
+        //    NotificationRepeater.DataBind();
+
+        //    // Update the notification count
+        //    int unreadCount = notifications.Count(n => !n.NotifRead);
+        //    notificationCount.InnerText = unreadCount.ToString();
+        //    notificationCount.Style["display"] = unreadCount > 0 ? "block" : "none";
+
+        //    // Update the header count
+        //    notificationHeader.InnerText = unreadCount.ToString();
+
+        //    // Trigger JavaScript to handle timer refresh flag
+        //    ScriptManager.RegisterStartupScript(this, this.GetType(), "HandleTimerRefresh", "handleTimerRefresh();", true);
+        //}
+
+
+        private void BindNotifications()
+        {
+            var notifications = GetNotificationsFromDb();  // This gets a List<Notification>
+            NotificationRepeater.DataSource = notifications;
+            NotificationRepeater.DataBind();
+            // Update notification count (if applicable)
+            // Optionally, update the notification count and header
+            notificationCount.InnerText = notifications.Count.ToString();
+            notificationCount.Visible = notifications.Count > 0;  // Hide if there are no notifications
+            notificationHeader.InnerText = notifications.Count.ToString() + " new notifications";
+        }
+        private List<Notification> GetNotificationsFromDb()
+        {
+            string query = "SELECT notif_id, notif_message, notif_created_at, notif_read, notif_type, cus_id, notif_status FROM notification WHERE notif_status != 'Deleted' AND notif_type = 'request verification' ORDER BY notif_created_at DESC;";
+            var notifications = new List<Notification>();
+
+            using (var connection = new NpgsqlConnection(con))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand(query, connection))
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        notifications.Add(new Notification
+                        {
+                            NotifId = reader.GetInt32(0),
+                            NotifMessage = reader.GetString(1),
+                            NotifCreatedAt = reader.GetDateTime(2),
+                            NotifRead = reader.GetBoolean(3),
+                            NotifType = reader.GetString(4),
+                            CusId = reader.GetInt32(5),
+                            NotifStatus = reader.GetString(6)
+                        });
+                    }
+                }
+            }
+
+            return notifications;
+        }
+
+        protected void NotificationBell_Click(object sender, EventArgs e)
+        {
+            // Call the method to retrieve notifications (replace with your actual logic)
+            BindNotifications();
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "OpenDropdown",
+                   "$('#LinkButton3').dropdown('show');", true);
+            //Response.Redirect($"SAM_AccountManCustomers.aspx");
+
+            UpdatePanelNotifications.Update();
+            Response.Redirect($"SAM_AccountMan.aspx");
+            //this.ModalPopupExtender12.Show();
+
+        }
+
+        protected void Notification_Click(object sender, EventArgs e)
+        {
+            LinkButton btn = sender as LinkButton;
+            if (btn != null)
+            {
+                int notifId = Convert.ToInt32(btn.CommandArgument);
+                MarkNotificationAsRead(notifId);
+                Response.Redirect($"SAM_AccountManCustomers.aspx");
+
+                // Rebind notifications to reflect the change
+                BindNotifications();
+            }
+        }
+
+
+        protected void ViewAllNotifications_Click(object sender, EventArgs e)
+        {
+            string query = "UPDATE notification SET notif_read = true WHERE notif_type = 'request verification';";
+            using (var connection = new NpgsqlConnection(con))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.ExecuteNonQuery();
+                    BindNotifications();
+                }
+            }
+        }
+        protected void DeleteAllNotifications_Click(object sender, EventArgs e)
+        {
+
+            string query = "UPDATE notification SET notif_status = 'Deleted', notif_read = true WHERE notif_type = 'request verification' AND notif_status != 'Deleted';";
+            using (var connection = new NpgsqlConnection(con))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.ExecuteNonQuery();
+                    BindNotifications();
+                    GetUnreadNotificationCount();
+
+                }
+            }
+            //BindNotifications();
+            //DeleteAllNotificationsFromDb();
+            //GetUnreadNotificationCount();
+
+        }
+        private void MarkNotificationAsRead(int notifId)
+        {
+            string query = "UPDATE notification SET notif_read = true WHERE notif_id = @notifId;";
+            using (var connection = new NpgsqlConnection(con))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@notifId", notifId);
+                    command.ExecuteNonQuery();
+                    BindNotifications();
+                    GetUnreadNotificationCount();
+                }
+            }
+        }
+        protected string GetNotificationIcon(string status)
+        {
+            switch (status)
+            {
+                case "Pending":
+                    return "bi bi-exclamation-circle text-warning";
+                case "Declined":
+                    return "bi bi-x-circle text-danger";
+                case "Approved":
+                    return "bi bi-check-circle text-success";
+                default:
+                    return "bi bi-info-circle text-primary";
+            }
+        }
+
+        
+
+        //private void DeleteAllNotificationsFromDb()
+        //{
+
+
+        //    string query = "UPDATE notification SET notif_status = 'Deleted', notif_read = true WHERE notif_type = 'request verification';"; 
+        //    using (var connection = new NpgsqlConnection(con))
+        //    {
+        //        connection.Open();
+        //        using (var command = new NpgsqlCommand(query, connection))
+        //        {
+        //            command.ExecuteNonQuery();
+        //            BindNotifications();
+
+        //        }
+        //    }
+        //}
+
+
+
+
+        protected void DeleteNotification_Click(object sender, EventArgs e)
+        {
+            // Get the ID of the notification to be deleted from the CommandArgument
+            LinkButton btnDelete = (LinkButton)sender;
+            string notifId = btnDelete.CommandArgument;
+
+            // Logic to mark the notification as deleted in the database
+            DeleteNotificationFromDatabase(notifId);
+            GetUnreadNotificationCount();
+            // Refresh the notification list by re-binding the repeater
+            BindNotifications();
+
+            // Update the UpdatePanel to reflect the changes on the UI
+            UpdatePanelNotifications.Update();
+        }
+
+        private void DeleteNotificationFromDatabase(string notifId)
+        {
+            string query = "UPDATE notification SET notif_status = 'Deleted', notif_read = true WHERE notif_id = @notifId AND notif_type = 'request verification';";
+            using (var connection = new NpgsqlConnection(con))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@notifId", notifId);
+                    command.ExecuteNonQuery();
+                    BindNotifications();
+                    GetUnreadNotificationCount();
+                }
+            }
+        }
+
+
 
         //protected void BindNotifications()
         //{
@@ -79,81 +424,509 @@ namespace Capstone
         //}
 
 
-        // Helper function to get the corresponding icon based on the status
-        protected string GetNotificationIcon(string status)
-        {
-            switch (status)
-            {
-                case "Pending":
-                    return "bi bi-exclamation-circle text-warning";
-                case "Declined":
-                    return "bi bi-x-circle text-danger";
-                case "Approved":
-                    return "bi bi-check-circle text-success";
-                default:
-                    return "bi bi-info-circle text-primary";
-            }
-        }
-
-        protected void NotificationRepeater_ItemCommand(object source, RepeaterCommandEventArgs e)
-        {
-            if (e.CommandName == "MarkAsRead")
-            {
-                int notificationId = Convert.ToInt32(e.CommandArgument);
-
-                // Call a method to mark this notification as read in the database
-                MarkNotificationAsRead(notificationId);
-
-                // Update the notification count
-                int currentCount = Convert.ToInt32(notificationCount.InnerText); // Get current count
-                notificationCount.InnerText = (currentCount - 1).ToString(); // Decrement the count
-
-                // Update the header count as well
-                notificationHeader.InnerText = notificationCount.InnerText;
-
-                // Re-fetch and re-bind the notifications to reflect the updated status
-                //BindNotifications();
-            }
-        }
-
-        private void MarkNotificationAsRead(int notificationId)
-        {
-            using (var db = new NpgsqlConnection(con))
-            {
-                db.Open();
-                using (var cmd = db.CreateCommand())
-                {
-                    // Update the notification status in the database
-                    cmd.CommandText = "UPDATE contractual SET read_status = 'Read' WHERE cont_id = @notificationId";
-                    cmd.Parameters.AddWithValue("@notificationId", notificationId);
-                    cmd.ExecuteNonQuery();
-                }
-                db.Close();
-            }
-        }
 
 
-        protected void Notification_Click(object sender, EventArgs e)
-        {
-            // Get the clicked notification's ID
-            LinkButton lnkButton = (LinkButton)sender;
-            int notificationId = Convert.ToInt32(lnkButton.CommandArgument);
+        //protected void NotificationRepeater_ItemCommand(object source, RepeaterCommandEventArgs e)
+        //{
+        //    if (e.CommandName == "MarkAsRead")
+        //    {
+        //        int notificationId = Convert.ToInt32(e.CommandArgument);
 
-            // Logic to handle the notification (mark as read)
-            MarkNotificationAsRead(notificationId);
+        //        // Call a method to mark this notification as read in the database
+        //        MarkNotificationAsRead(notificationId);
 
-            // Update notification count
-            int currentCount = Convert.ToInt32(notificationCount.InnerText);
-            notificationCount.InnerText = (currentCount - 1).ToString();
+        //        // Update the notification count
+        //        int currentCount = Convert.ToInt32(notificationCount.InnerText); // Get current count
+        //        notificationCount.InnerText = (currentCount - 1).ToString(); // Decrement the count
 
-            // Optionally: Update the notification header count
-            int headerCount = Convert.ToInt32(notificationHeader.InnerText);
-            notificationHeader.InnerText = (headerCount - 1).ToString();
+        //        // Update the header count as well
+        //        notificationHeader.InnerText = notificationCount.InnerText;
 
-            // Re-bind notifications to update the view
-            //BindNotifications();
-        }
+        //        // Re-fetch and re-bind the notifications to reflect the updated status
+        //        //BindNotifications();
+        //    }
+        //}
 
+        //private void MarkNotificationAsRead(int notificationId)
+        //{
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            // Update the notification status in the database
+        //            cmd.CommandText = "UPDATE contractual SET read_status = 'Read' WHERE cont_id = @notificationId";
+        //            cmd.Parameters.AddWithValue("@notificationId", notificationId);
+        //            cmd.ExecuteNonQuery();
+        //        }
+        //        db.Close();
+        //    }
+        //}
+
+
+        //protected void Notification_Click(object sender, EventArgs e)
+        //{
+        //    // Get the clicked notification's ID
+        //    LinkButton lnkButton = (LinkButton)sender;
+        //    int notificationId = Convert.ToInt32(lnkButton.CommandArgument);
+
+        //    // Logic to handle the notification (mark as read)
+        //    MarkNotificationAsRead(notificationId);
+
+        //    // Update notification count
+        //    int currentCount = Convert.ToInt32(notificationCount.InnerText);
+        //    notificationCount.InnerText = (currentCount - 1).ToString();
+
+        //    // Optionally: Update the notification header count
+        //    int headerCount = Convert.ToInt32(notificationHeader.InnerText);
+        //    notificationHeader.InnerText = (headerCount - 1).ToString();
+
+        //    // Re-bind notifications to update the view
+        //    //BindNotifications();
+        //}
+
+
+
+        //private void LoadNotifications()
+        //{
+        //    NotificationRepeater.DataSource = GetNotifications();
+        //    NotificationRepeater.DataBind();
+
+        //    int unreadCount = GetUnreadNotificationsCount();
+        //    notificationCount.InnerText = unreadCount.ToString();
+        //    notificationHeader.InnerText = unreadCount.ToString();
+        //}
+
+        //protected void Notification_Click(object sender, EventArgs e)
+        //{
+        //    LinkButton btn = (LinkButton)sender;
+        //    int notifId = Convert.ToInt32(btn.CommandArgument);
+        //    MarkNotificationAsRead(notifId);
+        //    LoadNotifications(); // Refresh notifications
+        //}
+
+        //protected int GetUnreadNotificationCount()
+        //{
+        //    string query = "SELECT COUNT(*) FROM notification WHERE notif_type = 'request verification' AND notif_read = false;";
+        //    using (var connection = new NpgsqlConnection(con))
+        //    {
+        //        connection.Open();
+        //        using (var command = new NpgsqlCommand(query, connection))
+        //        {
+        //            return Convert.ToInt32(command.ExecuteScalar());
+        //        }
+        //    }
+        //}
+        //protected DataTable GetNotifications()
+        //{
+        //    string query = "SELECT notif_id, notif_message, notif_created_at, notif_read FROM notification WHERE notif_type = 'request verification' ORDER BY notif_created_at DESC;";
+        //    using (var connection = new NpgsqlConnection(con))
+        //    {
+        //        connection.Open();
+        //        using (var adapter = new NpgsqlDataAdapter(query, connection))
+        //        {
+        //            var dataTable = new DataTable();
+        //            adapter.Fill(dataTable);
+        //            return dataTable;
+        //        }
+        //    }
+        //}
+
+        //protected void MarkNotificationAsRead(int notifId)
+        //{
+        //    string query = "UPDATE notification SET notif_read = true WHERE notif_id = @notifId;";
+        //    using (var connection = new NpgsqlConnection(con))
+        //    {
+        //        connection.Open();
+        //        using (var command = new NpgsqlCommand(query, connection))
+        //        {
+        //            command.Parameters.AddWithValue("@notifId", notifId);
+        //            command.ExecuteNonQuery();
+        //        }
+        //    }
+        //}
+
+
+        //private void BindNotifications()
+        //{
+        //    NotificationRepeater.DataSource = GetNotifications();
+        //    NotificationRepeater.DataBind();
+        //}
+
+        //private void UpdateNotificationCount()
+        //{
+        //    int unreadCount = GetUnreadNotificationCount();
+        //    notificationCount.InnerText = unreadCount.ToString();
+        //    notificationHeader.InnerText = unreadCount.ToString();
+        //}
+
+        //protected void Notification_Click(object sender, EventArgs e)
+        //{
+        //    LinkButton btn = (LinkButton)sender;
+        //    int notifId = Convert.ToInt32(btn.CommandArgument);
+        //    MarkNotificationAsRead(notifId);
+
+        //    // Refresh notifications and count
+        //    BindNotifications();
+        //    UpdateNotificationCount();
+        //}
+
+
+
+        //[WebMethod]
+        //public static List<Notification> GetNotifications()
+        //{
+        //    List<Notification> notifications = new List<Notification>();
+        //    string query = "SELECT notif_id, notif_message, notif_created_at, notif_read FROM notification WHERE notif_type = 'request verification' ORDER BY notif_created_at DESC;";
+        //    using (var connection = new NpgsqlConnection(con))
+        //    {
+        //        connection.Open();
+        //        using (var command = new NpgsqlCommand(query, connection))
+        //        {
+        //            using (var reader = command.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    notifications.Add(new Notification
+        //                    {
+        //                        notif_id = reader.GetInt32(0),
+        //                        notif_message = reader.GetString(1),
+        //                        notif_created_at = reader.GetDateTime(2).ToString(),
+        //                        notif_read = reader.GetBoolean(3),
+        //                        iconClass = reader.GetBoolean(3) ? "bi bi-check-circle" : "bi bi-info-circle",
+        //                    });
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return notifications;
+        //}
+
+        //public class Notification
+        //{
+        //    public int notif_id { get; set; }
+        //    public string notif_message { get; set; }
+        //    public string notif_created_at { get; set; }
+        //    public bool notif_read { get; set; }
+        //    public string iconClass { get; set; }
+        //}
+
+
+        //[WebMethod]
+        //public static void MarkNotificationAsRead(int notifId)
+        //{
+        //    string query = "UPDATE notification SET notif_read = true WHERE notif_id = @notifId;";
+        //    using (var connection = new NpgsqlConnection(con))
+        //    {
+        //        connection.Open();
+        //        using (var command = new NpgsqlCommand(query, connection))
+        //        {
+        //            command.Parameters.AddWithValue("@notifId", notifId);
+        //            command.ExecuteNonQuery();
+        //        }
+        //    }
+        //}
+        //[WebMethod]
+        //public static object GetNotifications()
+        //{
+        //    List<Notification> notifications = new List<Notification>();
+        //    int unreadCount = 0;
+
+        //    string query = "SELECT notif_id, notif_message, notif_created_at, notif_read FROM notification WHERE notif_type = 'request verification' ORDER BY notif_created_at DESC;";
+
+        //    using (var connection = new NpgsqlConnection(con))
+        //    {
+        //        connection.Open();
+        //        using (var command = new NpgsqlCommand(query, connection))
+        //        {
+        //            using (var reader = command.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    var notification = new Notification
+        //                    {
+        //                        notif_id = reader.GetInt32(0),
+        //                        notif_message = reader.GetString(1),
+        //                        notif_created_at = reader.GetDateTime(2).ToString(),
+        //                        notif_read = reader.GetBoolean(3),
+        //                        iconClass = reader.GetBoolean(3) ? "bi bi-check-circle" : "bi bi-info-circle"
+        //                    };
+
+        //                    notifications.Add(notification);
+
+        //                    // Count unread notifications
+        //                    if (!reader.GetBoolean(3)) unreadCount++;
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    // Push the updates to all connected clients via SignalR
+        //    var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+        //    context.Clients.All.updateNotifications(unreadCount, notifications);
+
+        //    return new
+        //    {
+        //        unreadCount,
+        //        notifications
+        //    };
+        //}
+
+
+
+        //public class Notification
+        //{
+        //    public int notif_id { get; set; }
+        //    public string notif_message { get; set; }
+        //    public string notif_created_at { get; set; }
+        //    public bool notif_read { get; set; }
+        //    public string iconClass { get; set; }
+        //}
+
+
+        //[WebMethod]
+        //public static object GetNotifications()
+        //{
+        //    List<Notification> notifications = new List<Notification>();
+        //    int unreadCount = 0;
+
+        //    string query = "SELECT notif_id, notif_message, notif_created_at, notif_read FROM notification WHERE notif_type = 'request verification' ORDER BY notif_created_at DESC;";
+        //    using (var connection = new NpgsqlConnection(con))
+        //    {
+        //        connection.Open();
+        //        using (var command = new NpgsqlCommand(query, connection))
+        //        {
+        //            using (var reader = command.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    var notification = new Notification
+        //                    {
+        //                        notif_id = reader.GetInt32(0),
+        //                        notif_message = reader.GetString(1),
+        //                        notif_created_at = reader.GetDateTime(2).ToString(),
+        //                        notif_read = reader.GetBoolean(3),
+        //                        iconClass = reader.GetBoolean(3) ? "bi bi-check-circle" : "bi bi-info-circle"
+        //                    };
+
+        //                    notifications.Add(notification);
+
+        //                    // Count unread notifications
+        //                    if (!reader.GetBoolean(3)) unreadCount++;
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    return new
+        //    {
+        //        unreadCount,
+        //        notifications
+        //    };
+        //}
+
+        //[WebMethod]
+        //public static void MarkNotificationAsRead(int notifId)
+        //{
+        //    string query = "UPDATE notification SET notif_read = true WHERE notif_id = @notifId;";
+        //    using (var connection = new NpgsqlConnection(con))
+        //    {
+        //        connection.Open();
+        //        using (var command = new NpgsqlCommand(query, connection))
+        //        {
+        //            command.Parameters.AddWithValue("@notifId", notifId);
+        //            command.ExecuteNonQuery();
+        //        }
+        //    }
+        //}
+
+        //private static void InsertOrUpdateNotification(int notifId)
+        //{
+        //    // Insert or update logic here
+
+        //    // After inserting/updating, push the notification to all clients via SignalR
+        //    var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+        //    context.Clients.All.updateNotifications(unreadCount, notifications); // You might need to refresh the data from the database
+        //}
+
+        //[WebMethod]
+        //public static void MarkNotificationAsRead(int notifId)
+        //{
+        //    string query = "UPDATE notification SET notif_read = true WHERE notif_id = @notifId;";
+        //    using (var connection = new NpgsqlConnection(con))
+        //    {
+        //        connection.Open();
+        //        using (var command = new NpgsqlCommand(query, connection))
+        //        {
+        //            command.Parameters.AddWithValue("@notifId", notifId);
+        //            command.ExecuteNonQuery();
+        //        }
+        //    }
+
+        //    // Optionally call GetNotifications here to refresh the notifications after marking as read
+        //}
+
+
+        //[WebMethod]
+        //public static object GetNotifications()
+        //{
+        //    List<Notification> notifications = new List<Notification>();
+        //    int unreadCount = 0;
+
+        //    string query = "SELECT notif_id, notif_message, notif_created_at, notif_read FROM notification WHERE notif_type = 'request verification' ORDER BY notif_created_at DESC;";
+
+        //    using (var connection = new NpgsqlConnection(con))
+        //    {
+        //        connection.Open();
+        //        using (var command = new NpgsqlCommand(query, connection))
+        //        {
+        //            using (var reader = command.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    var notification = new Notification
+        //                    {
+        //                        notif_id = reader.GetInt32(0),
+        //                        notif_message = reader.GetString(1),
+        //                        notif_created_at = reader.GetDateTime(2).ToString(),
+        //                        notif_read = reader.GetBoolean(3),
+        //                        iconClass = reader.GetBoolean(3) ? "bi bi-check-circle" : "bi bi-info-circle"
+        //                    };
+
+        //                    notifications.Add(notification);
+
+        //                    // Count unread notifications
+        //                    if (!reader.GetBoolean(3)) unreadCount++;
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    // Push the updates to all connected clients via SignalR
+        //    var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+        //    context.Clients.All.updateNotifications(unreadCount, notifications);
+
+        //    return new
+        //    {
+        //        unreadCount,
+        //        notifications
+        //    };
+        //}
+
+        //public class Notification
+        //{
+        //    public int notif_id { get; set; }
+        //    public string notif_message { get; set; }
+        //    public string notif_created_at { get; set; }
+        //    public bool notif_read { get; set; }
+        //    public string iconClass { get; set; }
+        //}
+
+
+        //    // Method to insert or update notification
+        //    public void InsertOrUpdateNotification(int notifId)
+        //    {
+        //        // Insert or update logic here
+        //        string query = "INSERT INTO notification (notif_message, notif_type, notif_read) VALUES (@notif_message, @notif_type, @notif_read)";
+
+        //        using (var connection = new SqlConnection(con))
+        //        {
+        //            connection.Open();
+        //            using (var command = new SqlCommand(query, connection))
+        //            {
+        //                // Example values, you would replace these with actual data
+        //                command.Parameters.AddWithValue("@notif_message", "New Notification");
+        //                command.Parameters.AddWithValue("@notif_type", "request verification");
+        //                command.Parameters.AddWithValue("@notif_read", false);
+        //                command.ExecuteNonQuery();
+        //            }
+        //        }
+
+        //        // After inserting/updating, push the notification to all clients via SignalR
+        //        PushNotificationUpdate();
+        //    }
+        //    private void MarkNotificationAsRead(int notifId)
+        //    {
+        //        string query = "UPDATE notification SET notif_read = true WHERE notif_id = @notifId;";
+        //        using (var connection = new SqlConnection(con))
+        //        {
+        //            connection.Open();
+        //            using (var command = new SqlCommand(query, connection))
+        //            {
+        //                command.Parameters.AddWithValue("@notifId", notifId);
+        //                command.ExecuteNonQuery();
+        //            }
+        //        }
+        //    }
+        //    // Method to push the notification update to all clients
+        //    public void PushNotificationUpdate()
+        //    {
+        //        List<Notification> notifications = GetNotificationsFromDb();
+        //        int unreadCount = GetUnreadNotificationCount();
+
+        //        var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+        //        context.Clients.All.updateNotifications(unreadCount, notifications); // Push to all clients
+        //    }
+
+        //    // Method to fetch notifications from the database
+        //    private List<Notification> GetNotificationsFromDb()
+        //    {
+        //        List<Notification> notifications = new List<Notification>();
+        //        string query = "SELECT notif_id, notif_message, notif_created_at, notif_read FROM notification WHERE notif_type = 'request verification' ORDER BY notif_created_at DESC;";
+
+        //        using (var connection = new SqlConnection(con))
+        //        {
+        //            connection.Open();
+        //            using (var command = new SqlCommand(query, connection))
+        //            {
+        //                using (var reader = command.ExecuteReader())
+        //                {
+        //                    while (reader.Read())
+        //                    {
+        //                        notifications.Add(new Notification
+        //                        {
+        //                            notif_id = reader.GetInt32(0),
+        //                            notif_message = reader.GetString(1),
+        //                            notif_created_at = reader.GetDateTime(2).ToString(),
+        //                            notif_read = reader.GetBoolean(3),
+        //                            iconClass = reader.GetBoolean(3) ? "bi bi-check-circle" : "bi bi-info-circle"
+        //                        });
+        //                    }
+        //                }
+        //            }
+        //        }
+
+        //        return notifications;
+        //    }
+
+        //    // Method to get unread notification count
+        //    private int GetUnreadNotificationCount()
+        //    {
+        //        int unreadCount = 0;
+        //        string query = "SELECT COUNT(*) FROM notification WHERE notif_read = false;";
+
+        //        using (var connection = new SqlConnection(con))
+        //        {
+        //            connection.Open();
+        //            using (var command = new SqlCommand(query, connection))
+        //            {
+        //                unreadCount = (int)command.ExecuteScalar();
+        //            }
+        //        }
+
+        //        return unreadCount;
+        //    }
+
+
+        //// Notification model class
+        //public class Notification
+        //{
+        //    public int notif_id { get; set; }
+        //    public string notif_message { get; set; }
+        //    public string notif_created_at { get; set; }
+        //    public bool notif_read { get; set; }
+        //    public string iconClass { get; set; }
+        //}
 
 
 

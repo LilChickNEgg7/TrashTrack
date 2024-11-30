@@ -12,7 +12,9 @@ using System;
 using System.Web.Http;
 using Microsoft.AspNet.SignalR;
 using System.Web.Routing;
-
+using System;
+using System.Web;
+using Microsoft.AspNet.SignalR;
 
 namespace Capstone
 {
@@ -21,9 +23,16 @@ namespace Capstone
 
         protected void Application_Start(object sender, EventArgs e)
         {
+
+            //RouteTable.Routes.MapHubs();
+
+
+            //NotificationHub.StartListeningToDatabase();
+
+            //RouteTable.Routes.MapSignalR();
             // Register Web API routes
             GlobalConfiguration.Configure(WebApiConfig.Register);
-
+            //RouteTable.Routes.MapHubs();
             // Register SignalR hubs
             //RouteTable.Routes.MapHubs();
         }

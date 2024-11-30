@@ -327,7 +327,7 @@ namespace Capstone
                             cmd.Parameters.AddWithValue("@message", message);
                             cmd.Parameters.AddWithValue("@empid", adminId);
                             cmd.Parameters.AddWithValue("@cusid", cusId);
-                            cmd.Parameters.AddWithValue("@notiftype", "Account Verification");
+                            cmd.Parameters.AddWithValue("@notiftype", "account verification");
                             cmd.Transaction = transaction;
                             cmd.ExecuteNonQuery();
                         }

@@ -33,6 +33,7 @@ using iText.Kernel.Colors;
 using iText.IO.Font.Constants;
 using iText.Kernel.Font;
 using iText.Layout.Borders;
+using Amazon.Runtime.Internal.Util;
 
 namespace Capstone
 {
@@ -43,7 +44,39 @@ namespace Capstone
         protected void Page_Load(object sender, EventArgs e)
         {
             LoadBookingList();
+            BindNotifications();
         }
+
+        private void BindNotifications()
+        {
+
+            using (NpgsqlConnection conn = new NpgsqlConnection(con))
+            {
+                string query = "SELECT notif_id, notif_message, notif_created_at, notif_updated_at, notif_read, notif_type, notif_status FROM notification";
+
+                using (NpgsqlDataAdapter da = new NpgsqlDataAdapter(query, conn))
+                {
+                    DataTable dt = new DataTable();
+
+                    try
+                    {
+                        conn.Open();
+                        da.Fill(dt);
+
+                        gridView2.DataSource = dt;
+                        gridView2.DataBind();
+                    }
+                    catch (Exception ex)
+                    {
+                        // Handle exception (optional)
+                        lblMessage.Text = "Error: " + ex.Message;
+                        lblMessage.ForeColor = System.Drawing.Color.Red;
+                    }
+                }
+            }
+        }
+
+
 
         protected void btnGenerateBill_Click(object sender, EventArgs e)
         {

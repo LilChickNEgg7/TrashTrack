@@ -219,15 +219,93 @@ namespace Capstone
             //LoadCategoryData();
         }
 
+        ////WITH INTEREST AND SUCH OR MURAG LOAN
+        ////protected void changeTerm_Click(object sender, EventArgs e)
+        ////{
+        ////    // Validate inputs
+        ////    if (double.TryParse(interest.Text, out double interestValue) &&
+        ////        int.TryParse(leaddays.Text, out int leadDays) &&
+        ////        double.TryParse(vat.Text, out double vatValue) &&
+        ////        int.TryParse(acc_per.Text, out int accrualPeriod) &&
+        ////        int.TryParse(susp_per.Text, out int suspensionPeriod))
+        ////    {
+        ////        using (var conn = new NpgsqlConnection(con))
+        ////        {
+        ////            conn.Open();
 
+        ////            // Check if there are any existing records in the PAYMENT_TERM table
+        ////            string checkQuery = "SELECT COUNT(*) FROM PAYMENT_TERM";
+        ////            using (var checkCmd = new NpgsqlCommand(checkQuery, conn))
+        ////            {
+        ////                int recordCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+        ////                if (recordCount > 0)
+        ////                {
+        ////                    // Update the existing record
+        ////                    string updateQuery = @"
+        ////                UPDATE PAYMENT_TERM 
+        ////                SET pt_interest = @interestValue, 
+        ////                    pt_lead_days = @leadDays,
+        ////                    pt_tax = @vatValue,
+        ////                    pt_accrual_period = @accrualPeriod,
+        ////                    pt_susp_period = @suspensionPeriod,
+        ////                    pt_updated_at = NOW()"; // Specify the control_id or appropriate condition
+
+        ////                    using (var updateCmd = new NpgsqlCommand(updateQuery, conn))
+        ////                    {
+        ////                        updateCmd.Parameters.AddWithValue("@interestValue", interestValue);
+        ////                        updateCmd.Parameters.AddWithValue("@leadDays", leadDays);
+        ////                        updateCmd.Parameters.AddWithValue("@vatValue", vatValue);
+        ////                        updateCmd.Parameters.AddWithValue("@accrualPeriod", accrualPeriod);
+        ////                        updateCmd.Parameters.AddWithValue("@suspensionPeriod", suspensionPeriod);
+        ////                        updateCmd.ExecuteNonQuery();
+        ////                    }
+
+        ////                    Response.Write("<script>alert('Payment term updated successfully!')</script>");
+        ////                    showPaymentTerm();
+        ////                    WasteCatList();
+        ////                }
+        ////                else
+        ////                {
+        ////                    // Insert a new record if no records exist
+        ////                    string insertQuery = @"
+        ////                INSERT INTO PAYMENT_TERM (pt_interest, pt_lead_days, pt_tax, pt_accrual_period, pt_susp_period, emp_id, pt_created_at, pt_updated_at) 
+        ////                VALUES (@interestValue, @leadDays, @vatValue, @accrualPeriod, @suspensionPeriod, @empId, NOW(), NOW())";
+
+        ////                    using (var insertCmd = new NpgsqlCommand(insertQuery, conn))
+        ////                    {
+        ////                        insertCmd.Parameters.AddWithValue("@interestValue", interestValue);
+        ////                        insertCmd.Parameters.AddWithValue("@leadDays", leadDays);
+        ////                        insertCmd.Parameters.AddWithValue("@vatValue", vatValue);
+        ////                        insertCmd.Parameters.AddWithValue("@accrualPeriod", accrualPeriod);
+        ////                        insertCmd.Parameters.AddWithValue("@suspensionPeriod", suspensionPeriod);
+        ////                        insertCmd.Parameters.AddWithValue("@empId", Convert.ToInt32(Session["bo_id"])); // Using session value for emp_id
+        ////                        insertCmd.ExecuteNonQuery();
+        ////                    }
+
+        ////                    Response.Write("<script>alert('Payment term added successfully!')</script>");
+        ////                    showPaymentTerm();
+        ////                    LoadProfile();
+        ////                    WasteCatList();
+        ////                }
+        ////            }
+
+        ////            conn.Close(); // Closing the connection
+        ////        }
+        ////    }
+        ////    else
+        ////    {
+        ////        // Handle the case where any input is not valid
+        ////        Response.Write("<script>alert('Invalid input values. Please enter valid values for all fields.')</script>");
+        ////    }
+        ////}
+
+
+        ////IMODIFY PALANG
         protected void changeTerm_Click(object sender, EventArgs e)
         {
             // Validate inputs
-            if (double.TryParse(interest.Text, out double interestValue) &&
-                int.TryParse(leaddays.Text, out int leadDays) &&
-                double.TryParse(vat.Text, out double vatValue) &&
-                int.TryParse(acc_per.Text, out int accrualPeriod) &&
-                int.TryParse(susp_per.Text, out int suspensionPeriod))
+            if (double.TryParse(vat.Text, out double vatValue))
             {
                 using (var conn = new NpgsqlConnection(con))
                 {
@@ -242,26 +320,17 @@ namespace Capstone
                         if (recordCount > 0)
                         {
                             // Update the existing record
-                            string updateQuery = @"
-                        UPDATE PAYMENT_TERM 
-                        SET pt_interest = @interestValue, 
-                            pt_lead_days = @leadDays,
-                            pt_tax = @vatValue,
-                            pt_accrual_period = @accrualPeriod,
-                            pt_susp_period = @suspensionPeriod,
-                            pt_updated_at = NOW()"; // Specify the control_id or appropriate condition
+                            string updateQuery = @"UPDATE PAYMENT_TERM 
+                                                    SET pt_tax = @vatValue,
+                                                        pt_updated_at = NOW()"; // Specify the control_id or appropriate condition
 
                             using (var updateCmd = new NpgsqlCommand(updateQuery, conn))
                             {
-                                updateCmd.Parameters.AddWithValue("@interestValue", interestValue);
-                                updateCmd.Parameters.AddWithValue("@leadDays", leadDays);
                                 updateCmd.Parameters.AddWithValue("@vatValue", vatValue);
-                                updateCmd.Parameters.AddWithValue("@accrualPeriod", accrualPeriod);
-                                updateCmd.Parameters.AddWithValue("@suspensionPeriod", suspensionPeriod);
                                 updateCmd.ExecuteNonQuery();
                             }
 
-                            Response.Write("<script>alert('Payment term updated successfully!')</script>");
+                            Response.Write("<script>alert('Value-Added Tax updated successfully!')</script>");
                             showPaymentTerm();
                             WasteCatList();
                         }
@@ -269,21 +338,18 @@ namespace Capstone
                         {
                             // Insert a new record if no records exist
                             string insertQuery = @"
-                        INSERT INTO PAYMENT_TERM (pt_interest, pt_lead_days, pt_tax, pt_accrual_period, pt_susp_period, emp_id, pt_created_at, pt_updated_at) 
-                        VALUES (@interestValue, @leadDays, @vatValue, @accrualPeriod, @suspensionPeriod, @empId, NOW(), NOW())";
+                        INSERT INTO PAYMENT_TERM (pt_tax, emp_id, pt_created_at, pt_updated_at) 
+                        VALUES (@vatValue, @empId, NOW(), NOW())";
 
                             using (var insertCmd = new NpgsqlCommand(insertQuery, conn))
                             {
-                                insertCmd.Parameters.AddWithValue("@interestValue", interestValue);
-                                insertCmd.Parameters.AddWithValue("@leadDays", leadDays);
+
                                 insertCmd.Parameters.AddWithValue("@vatValue", vatValue);
-                                insertCmd.Parameters.AddWithValue("@accrualPeriod", accrualPeriod);
-                                insertCmd.Parameters.AddWithValue("@suspensionPeriod", suspensionPeriod);
                                 insertCmd.Parameters.AddWithValue("@empId", Convert.ToInt32(Session["bo_id"])); // Using session value for emp_id
                                 insertCmd.ExecuteNonQuery();
                             }
 
-                            Response.Write("<script>alert('Payment term added successfully!')</script>");
+                            Response.Write("<script>alert('Value-Added Tax added successfully!')</script>");
                             showPaymentTerm();
                             LoadProfile();
                             WasteCatList();
@@ -300,8 +366,6 @@ namespace Capstone
             }
         }
 
-
-        //IMODIFY PALANG
         protected void Update_Click(object sender, EventArgs e)
         {
             LinkButton btn = sender as LinkButton;
@@ -413,6 +477,33 @@ namespace Capstone
         }
 
 
+        //WITH INTEREST
+        //protected void showPaymentTerm()
+        //{
+        //    using (var conn = new NpgsqlConnection(con))
+        //    {
+        //        conn.Open();
+
+        //        // Query to get all relevant fields from the PAYMENT_TERM table
+        //        string query = "SELECT pt_lead_days, pt_interest, pt_tax, pt_accrual_period, pt_susp_period FROM PAYMENT_TERM";
+
+        //        using (var cmd = new NpgsqlCommand(query, conn))
+        //        {
+        //            using (var reader = cmd.ExecuteReader())
+        //            {
+        //                if (reader.Read())
+        //                {
+        //                    // Set the values for lead days, interest, VAT, accrual period, and suspension period
+        //                    leaddays.Text = reader["pt_lead_days"] != DBNull.Value ? reader["pt_lead_days"].ToString() : "0";
+        //                    interest.Text = reader["pt_interest"] != DBNull.Value ? reader["pt_interest"].ToString() : "0";
+        //                    vat.Text = reader["pt_tax"] != DBNull.Value ? reader["pt_tax"].ToString() : "0";
+        //                    acc_per.Text = reader["pt_accrual_period"] != DBNull.Value ? reader["pt_accrual_period"].ToString() : "0";
+        //                    susp_per.Text = reader["pt_susp_period"] != DBNull.Value ? reader["pt_susp_period"].ToString() : "0";
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
         protected void showPaymentTerm()
         {
@@ -421,7 +512,7 @@ namespace Capstone
                 conn.Open();
 
                 // Query to get all relevant fields from the PAYMENT_TERM table
-                string query = "SELECT pt_lead_days, pt_interest, pt_tax, pt_accrual_period, pt_susp_period FROM PAYMENT_TERM";
+                string query = "SELECT pt_tax FROM PAYMENT_TERM";
 
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
@@ -430,11 +521,7 @@ namespace Capstone
                         if (reader.Read())
                         {
                             // Set the values for lead days, interest, VAT, accrual period, and suspension period
-                            leaddays.Text = reader["pt_lead_days"] != DBNull.Value ? reader["pt_lead_days"].ToString() : "0";
-                            interest.Text = reader["pt_interest"] != DBNull.Value ? reader["pt_interest"].ToString() : "0";
                             vat.Text = reader["pt_tax"] != DBNull.Value ? reader["pt_tax"].ToString() : "0";
-                            acc_per.Text = reader["pt_accrual_period"] != DBNull.Value ? reader["pt_accrual_period"].ToString() : "0";
-                            susp_per.Text = reader["pt_susp_period"] != DBNull.Value ? reader["pt_susp_period"].ToString() : "0";
                         }
                     }
                 }

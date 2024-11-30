@@ -46,6 +46,42 @@
     <link href="assets/css/style.css" rel="stylesheet">
     <%--#052507--%>
     <style>
+        /* Background for View Bill Modal */
+    .Background {
+        z-index: 1050 !important;
+    }
+
+    /* Background for View Scale Slip Modal */
+    .Background-scale-slip {
+        z-index: 1060 !important; /* Higher than View Bill */
+    }
+
+    /* Card for View Bill Modal */
+    .modal-overlay .card {
+        z-index: 1060 !important; /* For View Bill */
+    }
+
+    /* Card for View Scale Slip Modal */
+    .modal-overlay-scale-slip .card {
+        z-index: 1070 !important; /* Higher than View Bill */
+    }
+
+
+
+        .notifications {
+    max-height: 431px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    padding: 10px;
+}
+
+.notification-item.read-notification {
+    background-color: #f8f9fa;
+}
+
+
         /*Container Styles */
         .gridview-container {
             max-height: 530px;
@@ -364,7 +400,7 @@
                 <!-- End Logo -->
                 <nav class="header-nav ms-auto">
                     <ul class="d-flex align-items-center">
-                        <li class="nav-item dropdown">
+                        <%--<li class="nav-item dropdown">
                             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
                                 <li>
                                     <hr class="dropdown-divider">
@@ -385,6 +421,127 @@
                             </ul>
                             <!-- End Notification Dropdown Items -->
 
+                        </li>--%>
+                        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+
+
+                        <li class="nav-item dropdown">
+                            <asp:UpdatePanel ID="UpdatePanelNotifications1" runat="server" UpdateMode="Conditional">
+                                <ContentTemplate>
+                                    <asp:LinkButton
+                                        data-bs-toggle="dropdown"
+                                        ID="LinkButton7"
+                                        runat="server"
+                                        OnClick="NotificationBell_Click"
+                                        aria-expanded="false"
+                                        CssClass="nav-link nav-icon">
+                                        <i class="bi bi-bell"></i>
+                                        <span id="notificationCount1" runat="server" class="badge bg-primary badge-number" style="display: none;">0</span>
+                                    </asp:LinkButton>
+                                            <asp:Timer ID="NotificationTimer1" runat="server" Interval="5000" OnTick="NotificationTimer_Tick" />
+
+                                    <!-- Notification Dropdown -->
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications" id="notificationDropdown1">
+                                        <!-- Header -->
+                                        <li class="dropdown-header">You have <span id="notificationHeader1" runat="server">0</span> new notifications
+                   
+                                            <asp:LinkButton
+                                                ID="lnkViewAllNotifications1"
+                                                runat="server"
+                                                OnClick="ViewAllNotifications_Click"
+                                                CssClass="badge rounded-pill bg-primary p-2 ms-2">
+                        View all
+                    </asp:LinkButton>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+
+                                        <!-- Scrollable Repeater Container -->
+                                        <div style="max-height: 305px; overflow-y: auto;">
+                                            <asp:Repeater ID="NotificationRepeater1" runat="server">
+                                                <ItemTemplate>
+                                                    <!-- Notification Item -->
+
+
+
+
+                                                    <li id="notifReadHighLight1" class="notification-item <%# Eval("NotifRead1").ToString() == "True" ? "" : "bg-highlight" %>">
+                                                        <i id="notifTypee1" class="<%# GetNotificationIcon(Eval("NotifType1").ToString()) %> me-2"></i>
+                                                        <div>
+                                                            <h4>
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <!-- Notification Type -->
+                                                                    <asp:LinkButton
+                                                                        ID="LinkButton2"
+                                                                        runat="server"
+                                                                        CommandArgument='<%# Eval("NotifId1") %>'
+                                                                        OnClick="Notification_Click"
+                                                                        CssClass="notification-header"
+                                                                        Style="color: inherit;"
+                                                                        onmouseover="this.style.color='black'; this.style.textDecoration='none';"
+                                                                        onmouseout="this.style.color='inherit';">
+                                                <%# Eval("NotifType1") %>
+                                                                    </asp:LinkButton>
+
+                                                                    <!-- Badge for New Notifications -->
+                                                                    <asp:Literal
+                                                                        ID="litNewBadge1"
+                                                                        runat="server"
+                                                                        Visible='<%# Eval("NotifRead1").ToString() == "False" %>'>
+                                                <span style="margin-left: 5px" class="badge bg-success text-white">New</span>
+                                                                    </asp:Literal>
+
+                                                                    <!-- Delete Button -->
+                                                                    <asp:LinkButton
+                                                                        ID="btnDeleteNotification1"
+                                                                        runat="server"
+                                                                        CommandArgument='<%# Eval("NotifId1") %>'
+                                                                        OnClick="DeleteNotification_Click"
+                                                                        CssClass="bi bi-x-circle-fill text-danger ms-auto">
+                                                                    </asp:LinkButton>
+                                                                </div>
+                                                            </h4>
+                                                            <p>
+                                                                <asp:LinkButton
+                                                                    ID="lnkNotification1"
+                                                                    runat="server"
+                                                                    CommandArgument='<%# Eval("NotifId1") %>'
+                                                                    OnClick="Notification_Click"
+                                                                    CssClass="notification-link"
+                                                                    Style="color: inherit;"
+                                                                    onmouseover="this.style.color='black'; this.style.textDecoration='none';"
+                                                                    onmouseout="this.style.color='inherit';">
+                                            <%# Eval("NotifMessage1") %>
+                                                                </asp:LinkButton>
+                                                            </p>
+                                                            <p class="notification-footer">
+                                                                <span id="createdAt1" class="text-muted"><%# Eval("NotifCreatedAt1", "{0:yyyy-MM-dd HH:mm}") %></span>
+                                                                <span id="custID1" class="text-muted ms-2">Customer ID: <%# Eval("CusId1") %></span>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <hr class="dropdown-divider">
+                                                    </li>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                        </div>
+
+                                        <!-- Footer -->
+                                        <li class="dropdown-footer">
+                                            <asp:LinkButton ID="btnDeleteAllNotifications1" runat="server" OnClick="DeleteAllNotifications_Click" CssClass="btn btn-link">
+                        Delete all notifications
+                    </asp:LinkButton>
+                                        </li>
+                                    </ul>
+                                </ContentTemplate>
+                                <Triggers>
+                                    <asp:AsyncPostBackTrigger ControlID="LinkButton7" EventName="Click" />
+                                        <asp:AsyncPostBackTrigger ControlID="NotificationTimer1" EventName="Tick" />
+
+                                </Triggers>
+                            </asp:UpdatePanel>
                         </li>
                         <!-- End Notification Nav -->
 
@@ -590,8 +747,6 @@
                                 </asp:GridView>
                             </div>
                         </div>
-                        <%--<RowStyle BackColor="White" ForeColor="Black" BorderStyle="Solid" BorderColor="#ccc" BorderWidth="1px" />
-                                    <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="Solid" BorderColor="#66CDAA" BorderWidth="1px" />--%>
 
                         <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
                             <div class="gridview-container">
@@ -601,7 +756,6 @@
                                         <asp:BoundField DataField="gb_date_issued" HeaderText="Issued Date" SortExpression="gb_date_issued" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px" />
                                         <asp:BoundField DataField="gb_date_due" HeaderText="Due Date" SortExpression="gb_date_due" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px" />
                                         <asp:BoundField DataField="bk_id" HeaderText="Book ID" SortExpression="bk_id" ItemStyle-Width="150px" />
-                                        <%--                                        <asp:BoundField DataField="gb_total_amnt_interest" HeaderText="Amount Interest" SortExpression="gb_total_amnt_interest" ItemStyle-Width="150px" />--%>
                                         <asp:BoundField DataField="gb_total_sales" HeaderText="Total Sales" SortExpression="gb_total_sales" DataFormatString="₱{0:N2}" ItemStyle-Width="100px" />
                                         <asp:BoundField DataField="p_amount" HeaderText="Paid Amount" SortExpression="p_amount" DataFormatString="₱{0:N2}" ItemStyle-Width="100px" />
                                         <asp:BoundField DataField="p_method" HeaderText="Payment Method" SortExpression="p_method" ItemStyle-Width="150px" />
@@ -634,11 +788,11 @@
 
 
                 <%-- POP-UP PANELS AND MODALS--%>
-                <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+<%--                <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>--%>
 
                 <%-- GENERATE BILL PANEL 1--%>
                 <asp:LinkButton ID="LinkButton2" runat="server"></asp:LinkButton>
-                <div class="container" style="max-height: 100vh; overflow-y: hidden; display: flex; justify-content: center; align-items: center; z-index: 200">
+                <%--<div class="container" style="max-height: 100vh; overflow-y: hidden; display: flex; justify-content: center; align-items: center; z-index: 200">
                     <!-- Main Panel Design -->
                     <asp:UpdatePanel ID="updatePanel1" runat="server" CssClass="card shadow-lg scrollable-panel" UpdateMode="Conditional" ChildrenAsTriggers="true" style="position: relative;">
                         <ContentTemplate>
@@ -666,11 +820,9 @@
                                                 <asp:TextBox ID="TextBox1" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
                                             </div>
                                         </div>
-                                        <%--add book waste button--%>
                                         <div class="col-7">
                                             <asp:Button runat="server" Text="Add Book Waste +" ID="openAddBW" class="btn btn-primary" OnClick="openAddBW_Click" Style="margin: 0px; float: right; background-color: #052507; border-color: aquamarine; border-radius: 8px; border-width: 3px" data-bs-toggle="modal"></asp:Button>
                                         </div>
-                                        <%--end add book waste button--%>
                                         <div class="col-2">
                                             <asp:Label ID="taxLabel" runat="server" Text="Tax" Style="color: antiquewhite"></asp:Label>
                                         </div>
@@ -723,7 +875,6 @@
                                                 </Columns>
                                                 <RowStyle BackColor="White" ForeColor="Black" BorderStyle="Solid" BorderColor="#ccc" BorderWidth="1px" />
                                                 <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="Solid" BorderColor="#66CDAA" BorderWidth="1px" />
-                                                <%--#66CDAA--%>
                                             </asp:GridView>
                                         </div>
 
@@ -825,19 +976,192 @@
 
                                         <div class="col-6">
                                             <asp:Button ID="btnViewSlip" CssClass="btn btn-success rounded-pill" runat="server" Text="View Slip" OnClick="btnViewSlip_Click" />
-                                            <%--<span class="bi bi-check-circle"></span>--%>
                                             <asp:Button ID="btnOtherAction" CssClass="btn btn-success rounded-pill" runat="server" Text="Download Slip" OnClick="btnOtherAction_Click" />
-                                            <%--<i class="bi bi-exclamation-octagon">--%>
                                         </div>
                                     </div>
                                 </div>
-                                <%--<asp:AsyncPostBackTrigger ControlID="addFeeTxt" EventName="TextChanged" />--%>
+                                <!-- Footer Design -->
+                                <div class="card-footer text-center" style="background-color: #0D342D; color: #26D8A8; padding: 10px;">
+                                    <asp:Button ID="Button1" CssClass="btn btn-secondary" runat="server" Text="Cancel" OnClick="CancelGenerateBill_Click" />
+                                    <asp:Button ID="Button2" CssClass="btn btn-primary" runat="server" Text="Generate Bill" OnClick="btnGenerateBill_Click" OnClientClick="return confirm('Are you sure you want to generate bill?')" />
+                                </div>
+                            </div>
+                        </ContentTemplate>
+                        <Triggers>
+                            <asp:PostBackTrigger ControlID="Button3" />
+                            <asp:PostBackTrigger ControlID="Button1" />
+                            <asp:PostBackTrigger ControlID="Button2" />
+
+                        </Triggers>
+                    </asp:UpdatePanel>
+                </div>--%>
+
+                <div class="container" style="max-height: 100vh; overflow-y: hidden; display: flex; justify-content: center; align-items: center; z-index: 200">
+                    <!-- Main Panel Design -->
+                    <asp:UpdatePanel ID="updatePanel1" runat="server" CssClass="card shadow-lg scrollable-panel" UpdateMode="Conditional" ChildrenAsTriggers="true" style="position: relative;">
+                        <ContentTemplate>
+                            <!-- Card Container -->
+                            <div class="card shadow-lg" style="max-width: 1000px; padding: 0; border: 2px solid #26D8A8; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);">
+
+                                <div class="modal-header" style="background-color: #0D342D; color: #26D8A8;">
+                                    <asp:Button ID="Button3" class="btn-close" runat="server" OnClick="btncancel_Click" />
+                                </div>
+
+                                <!-- Card Header Design -->
+                                <div class="card-header text-center" style="background-color: #0D342D; color: #26D8A8; padding: 15px;">
+                                    <h4>Generate Bill</h4>
+                                </div>
+
+                                <!-- Card Body with Form Elements - Scrollable Section -->
+                                <div class="card-body scrollable-content" style="padding: 30px; background-color: #052507; max-height: 400px; overflow-y: auto;">
+                                    <div class="row" style="margin-top: 15px;">
+                                        <div class="col-5">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px">Booking ID</span>
+                                                </div>
+
+                                                <asp:TextBox ID="TextBox1" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <%--add book waste button--%>
+                                        <div class="col-7">
+                                            <asp:Button runat="server" Text="Add Book Waste +" ID="openAddBW" class="btn btn-primary" OnClick="openAddBW_Click" Style="margin-bottom: 20px; float: right; background-color: #052507; border-color: aquamarine; border-radius: 8px; border-width: 3px" data-bs-toggle="modal"></asp:Button>
+                                            <asp:Label ID="taxLabel" runat="server" Text="Tax" Style="color: antiquewhite"></asp:Label>
+                                        </div>
+                                        <%--end add book waste button--%>
+                                        <div class="col-2">
+                                            <%--                                            <asp:Label ID="taxLabel" runat="server" Text="Tax" Style="color: antiquewhite"></asp:Label>--%>
+                                        </div>
+
+                                        <div class="col-7">
+                                        </div>
+
+                                        <!-- GridView inside modal body -->
+                                        <div class="gridview-container">
+                                            <asp:GridView ID="gridView2" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="bw_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
+                                                <Columns>
+                                                    <asp:BoundField DataField="bw_id" HeaderText="Booking Waste ID" SortExpression="bw_id" ItemStyle-Width="100px">
+                                                        <ItemStyle Width="100px"></ItemStyle>
+                                                    </asp:BoundField>
+                                                    <asp:BoundField DataField="bw_name" HeaderText="Waste Type" SortExpression="bw_name" ItemStyle-Width="150px">
+                                                        <ItemStyle Width="150px"></ItemStyle>
+                                                    </asp:BoundField>
+                                                    <asp:BoundField DataField="bk_id" HeaderText="Booking ID" SortExpression="bk_id" ItemStyle-Width="150px">
+                                                        <ItemStyle Width="150px"></ItemStyle>
+                                                    </asp:BoundField>
+                                                    <asp:BoundField DataField="bw_total_unit" HeaderText="Total Unit" SortExpression="bw_total_unit" ItemStyle-Width="150px">
+                                                        <ItemStyle Width="150px"></ItemStyle>
+                                                    </asp:BoundField>
+                                                    <asp:BoundField DataField="bw_price" HeaderText="Price" SortExpression="bw_price" ItemStyle-Width="150px">
+                                                        <ItemStyle Width="150px"></ItemStyle>
+                                                    </asp:BoundField>
+                                                    <asp:BoundField DataField="bw_total_price" HeaderText="Total Price" SortExpression="bw_total_price" ItemStyle-Width="150px">
+                                                        <ItemStyle Width="150px"></ItemStyle>
+                                                    </asp:BoundField>
+
+                                                    <asp:TemplateField HeaderText="Action">
+                                                        <ItemTemplate>
+                                                            <asp:LinkButton ID="update" runat="server" OnClick="editBookWaste_Click" CommandArgument='<%# Eval("bw_id") %>'>
+                                                                <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
+                                                            </asp:LinkButton>
+                                                            <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("bw_id") %>' OnClientClick="return confirm('Are you sure you want to remove this bookwaste?');">
+                                                                <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
+                                                            </asp:LinkButton>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                </Columns>
+                                                <RowStyle BackColor="White" ForeColor="Black" BorderStyle="Solid" BorderColor="#ccc" BorderWidth="1px" />
+                                                <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="Solid" BorderColor="#66CDAA" BorderWidth="1px" />
+                                            </asp:GridView>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3"></div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3"></div>
+                                        </div>
+                                        <!-- Date Today / Date Issued -->
+                                        <div class="col-6" style="margin-top: 10px">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000; color: blue">Date</span>
+                                                </div>
+                                                <asp:TextBox ID="dateTodayTxt" TextMode="DateTimeLocal" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <!-- Due Date -->
+                                        <div class="col-6" style="margin-top:10px">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000; color: blue">Due Date</span>
+                                                </div>
+                                                <asp:TextBox ID="dueDateTxt" TextMode="DateTimeLocal" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <!-- Net of VAT -->
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000">Net of Vat</span>
+                                                </div>
+                                                <asp:TextBox ID="netVatTxt" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <!-- VAT Amount -->
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000">Vat Amount</span>
+                                                </div>
+                                                <asp:TextBox ID="vatAmntTxt" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                                            </div>
+                                        </div>
+
+                                        <!-- Total Sales -->
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000">Total Sales</span>
+                                                </div>
+                                                <asp:TextBox ID="totSalesTxt" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                                            </div>
+                                        </div>
+
+                                        <!-- Additional Fee -->
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000">Additional Fee</span>
+                                                </div>
+                                                <asp:TextBox ID="addFeeTxt" TextMode="Number" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" AutoPostBack="true" aria-describedby="inputGroup-sizing-sm" OnTextChanged="addFeeTxt_TextChanged"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <!-- Additional Note -->
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px; border-bottom-left-radius: 0;">Notes</span>
+                                                </div>
+                                                <asp:TextBox ID="noteTxt" runat="server" TextMode="MultiLine" CssClass="form-control" ClientIDMode="Static"
+                                                    aria-label="Small" aria-describedby="inputGroup-sizing-sm" Rows="4" Columns="30">
+                                                </asp:TextBox>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-6">
+                                            <asp:Button ID="btnViewSlip" CssClass="btn btn-success rounded-pill" runat="server" Text="View Slip" OnClick="btnViewSlip_Click" />
+                                            <asp:Button ID="btnOtherAction" CssClass="btn btn-success rounded-pill" runat="server" Text="Download Slip" OnClick="btnOtherAction_Click" />
+                                        </div>
+                                    </div>
+                                </div>
                                 <!-- Footer Design -->
                                 <div class="card-footer text-center" style="background-color: #0D342D; color: #26D8A8; padding: 10px;">
                                     <asp:Button ID="Button1" CssClass="btn btn-secondary" runat="server" Text="Cancel" OnClick="CancelGenerateBill_Click" />
                                     <asp:Button ID="Button2" CssClass="btn btn-primary" runat="server" Text="Generate Bill" OnClick="btnGenerateBill_Click" OnClientClick="return confirm('Are you sure you want to generate bill?')" />
 
-                                    <%--<asp:Button ID="Button2" CssClass="btn btn-primary" runat="server" Text="Generate Bill" OnClick="btnGenerateBill_Click" OnClientClick="return confirm('Are you sure you want to generate bill?') && closeUpdatePanel();" />--%>
                                 </div>
                             </div>
                         </ContentTemplate>
@@ -850,6 +1174,8 @@
                     </asp:UpdatePanel>
 
                 </div>
+
+
                 <ajaxToolkit:ModalPopupExtender
                     ID="ModalPopupExtender1"
                     runat="server"
@@ -1068,7 +1394,7 @@
                 <!-- Modal Popup Extender -->
                 <ajaxToolkit:ModalPopupExtender ID="ModalPopupExtender4" runat="server"
                     CancelControlID="Button6" PopupControlID="updatePanel3" TargetControlID="LinkButton4"
-                    BackgroundCssClass="Background" DropShadow="True">
+                    BackgroundCssClass="Background-scale-slip" DropShadow="True">
                 </ajaxToolkit:ModalPopupExtender>
 
 
@@ -1077,6 +1403,174 @@
                 <%-- VIEW BILL --%>
                 <asp:LinkButton ID="LinkButton5" runat="server"></asp:LinkButton>
                 <div class="container" style="max-height: 100vh; overflow-y: hidden; display: flex; justify-content: center; align-items: center; z-index: 200">
+                    <!-- Main Panel Design -->
+                    <asp:UpdatePanel ID="updatePanel4" runat="server" CssClass="card shadow-lg scrollable-panel" UpdateMode="Conditional" ChildrenAsTriggers="true" style="position: relative;">
+                        <ContentTemplate>
+                            <!-- Card Container -->
+                            <div class="card shadow-lg" style="max-width: 1000px; padding: 0; border: 2px solid #26D8A8; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);">
+
+                                <div class="modal-header" style="background-color: #0D342D; color: #26D8A8;">
+                                    <asp:Button ID="Button7" class="btn-close" runat="server" OnClick="btncancel_Click" />
+                                </div>
+
+                                <!-- Card Header Design -->
+                                <div class="card-header text-center" style="background-color: #0D342D; color: #26D8A8; padding: 15px;">
+                                    <h4>View Bill Details</h4>
+                                    <asp:HiddenField ID="bkidviewbill" runat="server" Value="<%= leadDays %>" />
+                                </div>
+
+                                <!-- Card Body with Form Elements - Scrollable Section -->
+                                <div class="card-body scrollable-content" style="padding: 30px; background-color: #052507; max-height: 400px; overflow-y: auto;">
+                                    <div class="row" style="margin-top: 15px;">
+                                        <div class="col-5">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px">Transaction no.</span>
+                                                </div>
+
+                                                <asp:TextBox ID="TextBox2" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <%--<div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000">Enter Date</span>
+                                                </div>
+                                            </div>
+                                        </div>--%>
+                                        <div class="col-2">
+                                            <asp:Label ID="Label4" runat="server" Text="Tax" Style="color: antiquewhite"></asp:Label>
+                                        </div>
+
+                                        <div class="col-7">
+                                        </div>
+
+                                        <!-- GridView inside modal body -->
+                                                                                <div class="gridview-container">
+                                            <asp:GridView ID="gridView3" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="bw_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
+                                                <Columns>
+                                                    <asp:BoundField DataField="bw_id" HeaderText="Booking Waste ID" SortExpression="bw_id" ItemStyle-Width="100px">
+                                                        <ItemStyle Width="100px"></ItemStyle>
+                                                    </asp:BoundField>
+                                                    <asp:BoundField DataField="bw_name" HeaderText="Waste Type" SortExpression="bw_name" ItemStyle-Width="150px">
+                                                        <ItemStyle Width="150px"></ItemStyle>
+                                                    </asp:BoundField>
+                                                    <asp:BoundField DataField="bk_id" HeaderText="Booking ID" SortExpression="bk_id" ItemStyle-Width="150px">
+                                                        <ItemStyle Width="150px"></ItemStyle>
+                                                    </asp:BoundField>
+                                                    <asp:BoundField DataField="bw_total_unit" HeaderText="Total Unit" SortExpression="bw_total_unit" ItemStyle-Width="150px">
+                                                        <ItemStyle Width="150px"></ItemStyle>
+                                                    </asp:BoundField>
+                                                    <asp:BoundField DataField="bw_price" HeaderText="Price" SortExpression="bw_price" ItemStyle-Width="150px">
+                                                        <ItemStyle Width="150px"></ItemStyle>
+                                                    </asp:BoundField>
+                                                    <asp:BoundField DataField="bw_total_price" HeaderText="Total Price" SortExpression="bw_total_price" ItemStyle-Width="150px">
+                                                        <ItemStyle Width="150px"></ItemStyle>
+                                                    </asp:BoundField>
+
+                                                </Columns>
+                                                <RowStyle BackColor="White" ForeColor="Black" BorderStyle="Solid" BorderColor="#ccc" BorderWidth="1px" />
+                                                <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="Solid" BorderColor="#66CDAA" BorderWidth="1px" />
+                                            </asp:GridView>
+                                        </div>
+
+
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3"></div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3"></div>
+                                        </div>
+                                        <!-- Date Today / Date Issued -->
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000; color: blue">Date Issued</span>
+                                                </div>
+                                                <asp:TextBox ID="Date" TextMode="DateTimeLocal" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <!-- Net of VAT -->
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000">Net of Vat</span>
+                                                </div>
+                                                <asp:TextBox ID="TextBox4" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <!-- VAT Amount -->
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000">Vat Amount</span>
+                                                </div>
+                                                <asp:TextBox ID="TextBox5" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                                            </div>
+                                        </div>
+
+                                        <!-- Total Sales -->
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000">Total Sales</span>
+                                                </div>
+                                                <asp:TextBox ID="TextBox6" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                                            </div>
+                                        </div>
+
+                                        <!-- Due Date -->
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000">Due Date</span>
+                                                </div>
+                                                <asp:TextBox ID="TextBox7" TextMode="DateTimeLocal" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <!-- Additional Fee -->
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000">Additional Fee</span>
+                                                </div>
+                                                <asp:TextBox ID="TextBox10" TextMode="Number" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <!-- Additional Note -->
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px; border-bottom-left-radius: 0;">Notes</span>
+                                                </div>
+                                                <asp:TextBox ID="TextBox11" runat="server" TextMode="MultiLine" CssClass="form-control" ClientIDMode="Static" Enabled="false"
+                                                    aria-label="Small" aria-describedby="inputGroup-sizing-sm" Rows="4" Columns="30">
+                                                </asp:TextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <asp:Button ID="Button8" CssClass="btn btn-primary rounded-pill" runat="server" Text="Download PDF Bill" OnClick="ViewBill_Click" />
+                                            <asp:Button ID="Button9" CssClass="btn btn-success rounded-pill" runat="server" Text="View Slip" OnClick="btnViewSlip1_Click" />
+                                            <asp:Button ID="Button10" CssClass="btn btn-success rounded-pill" runat="server" Text="Download Slip" OnClick="btnOtherAction1_Click" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Footer Design -->
+                                <div class="card-footer text-center" style="background-color: #0D342D; color: #26D8A8; padding: 10px;">
+                                    <asp:Button ID="Button11" CssClass="btn btn-secondary" runat="server" Text="Cancel" />
+                                </div>
+                            </div>
+                        </ContentTemplate>
+                        <Triggers>
+                            <asp:PostBackTrigger ControlID="Button11" />
+
+                            <asp:PostBackTrigger ControlID="Button8" />
+                            <asp:PostBackTrigger ControlID="Button2" />
+                        </Triggers>
+                    </asp:UpdatePanel>
+                </div>
+                <%--<div class="container" style="max-height: 100vh; overflow-y: hidden; display: flex; justify-content: center; align-items: center; z-index: 200">
                     <!-- Main Panel Design -->
                     <asp:UpdatePanel ID="updatePanel4" runat="server" CssClass="card shadow-lg scrollable-panel" UpdateMode="Conditional" ChildrenAsTriggers="true" style="position: relative;">
                         <ContentTemplate>
@@ -1152,20 +1646,9 @@
                                                         <ItemStyle Width="150px"></ItemStyle>
                                                     </asp:BoundField>
 
-                                                    <%--<asp:TemplateField HeaderText="Action">
-                                                        <ItemTemplate>
-                                                            <asp:LinkButton ID="update" runat="server" OnClick="editBookWaste_Click" CommandArgument='<%# Eval("bw_id") %>'>
-                                                                <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
-                                                            </asp:LinkButton>
-                                                            <asp:LinkButton ID="Remove" runat="server" OnClick="Remove_Click" CommandArgument='<%# Eval("bw_id") %>' OnClientClick="return confirm('Are you sure you want to remove this bookwaste?');">
-                                                                <asp:Image ID="Image1" runat="server" ImageUrl="~/Pictures/removeBtn.png" Width="35%" Height="35%" AlternateText="Remove" />
-                                                            </asp:LinkButton>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>--%>
                                                 </Columns>
                                                 <RowStyle BackColor="White" ForeColor="Black" BorderStyle="Solid" BorderColor="#ccc" BorderWidth="1px" />
                                                 <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="Solid" BorderColor="#66CDAA" BorderWidth="1px" />
-                                                <%--#66CDAA--%>
                                             </asp:GridView>
                                         </div>
 
@@ -1267,19 +1750,14 @@
 
                                         <div class="col-6">
                                             <asp:Button ID="Button8" CssClass="btn btn-primary rounded-pill" runat="server" Text="Download PDF Bill" OnClick="ViewBill_Click" />
-                                            <%--<span class="bi bi-check-circle"></span>--%>
                                             <asp:Button ID="Button9" CssClass="btn btn-success rounded-pill" runat="server" Text="View Slip" OnClick="btnViewSlip_Click" />
-                                            <%--<span class="bi bi-check-circle"></span>--%>
                                             <asp:Button ID="Button10" CssClass="btn btn-success rounded-pill" runat="server" Text="Download Slip" OnClick="btnOtherAction_Click" />
-                                            <%--<i class="bi bi-exclamation-octagon">--%>
                                         </div>
                                     </div>
                                 </div>
-                                <%--<asp:AsyncPostBackTrigger ControlID="addFeeTxt" EventName="TextChanged" />--%>
                                 <!-- Footer Design -->
                                 <div class="card-footer text-center" style="background-color: #0D342D; color: #26D8A8; padding: 10px;">
                                     <asp:Button ID="Button11" CssClass="btn btn-secondary" runat="server" Text="Cancel" />
-<%--                                    <asp:Button ID="Button12" CssClass="btn btn-primary" runat="server" Text="Generate Bill" OnClick="btnGenerateBill_Click" OnClientClick="return confirm('Are you sure you want to generate bill?');" />--%>
                                 </div>
                             </div>
                         </ContentTemplate>
@@ -1290,8 +1768,7 @@
                             <asp:PostBackTrigger ControlID="Button2" />
                         </Triggers>
                     </asp:UpdatePanel>
-
-                </div>
+                </div>--%>
                 <ajaxToolkit:ModalPopupExtender ID="ModalPopupExtender5" runat="server"
                     CancelControlID="Button11"
                     PopupControlID="updatePanel4"
@@ -1382,7 +1859,7 @@
                         updatePaymentTermsDates(localPhilippineTime);
                     }
 
-                    // Function to calculate and update Due Date, Accrual Date, and Suspension Date
+                    <%--// Function to calculate and update Due Date, Accrual Date, and Suspension Date
                     function updatePaymentTermsDates(now) {
                         var leadDays = parseInt('<%= ptLeadDaysHiddenField.Value %>'); // Lead days from the database
             var accrualPeriod = parseInt('<%= ptAccrualPeriodHiddenField.Value %>'); // Accrual period from the database
@@ -1405,6 +1882,29 @@
             suspensionDate.setDate(suspensionDate.getDate() + suspensionPeriod);
             var formattedSuspensionDate = suspensionDate.toISOString().slice(0, 16); // 'YYYY-MM-DDTHH:MM' format
             document.getElementById('<%= susDateTxt.ClientID %>').value = formattedSuspensionDate;
+                    }
+
+                    // Update the TextBoxes every second
+                    setInterval(updateDateTime, 1000);--%>
+
+                    function updatePaymentTermsDates(now) {
+
+            // Calculate Due Date (current date + lead days)
+            var dueDate = new Date(now);
+            dueDate.setDate(dueDate.getDate());
+            var formattedDueDate = dueDate.toISOString().slice(0, 16); // 'YYYY-MM-DDTHH:MM' format
+            document.getElementById('<%= dueDateTxt.ClientID %>').value = formattedDueDate;
+
+            // Calculate Accrual Date (due date + accrual period)
+            var accrualDate = new Date(dueDate);
+            accrualDate.setDate(accrualDate.getDate() + accrualPeriod);
+            var formattedAccrualDate = accrualDate.toISOString().slice(0, 16); // 'YYYY-MM-DDTHH:MM' format
+
+            // Calculate Suspension Date (due date + suspension period)
+            var suspensionDate = new Date(dueDate);
+            suspensionDate.setDate(suspensionDate.getDate() + suspensionPeriod);
+            var formattedSuspensionDate = suspensionDate.toISOString().slice(0, 16); // 'YYYY-MM-DDTHH:MM' format
+
                     }
 
                     // Update the TextBoxes every second
@@ -1448,28 +1948,288 @@
                         return true;
                     }
 
-                    // Function to refresh the GridView
-                    //function refreshGridView() {
-                    //    $.ajax({  
-                    //        type: 'POST',
-                    //        url: 'BO_Billing.aspx/LoadBookingList', // URL to call the WebMethod
-                    //        data: JSON.stringify({ connectionString: 'Server=localhost;Port=5432;User Id=postgres;Password=123456;Database=trashtrack' }), // Pass the connection string
-                    //        contentType: 'application/json; charset=utf-8',
-                    //        dataType: 'json',
+
+                    function updateNotificationCount1() {
+                        $.ajax({
+                            type: 'GET',
+                            url: '/api/payment/notificationCount1',  // Your API endpoint
+                            success: function (response) {
+                                var count = response.unreadCount1;  // The unread notification count
+                                if (count > 0) {
+                                    $('#notificationCount1').text(count).show();
+                                    $('#notificationHeader1').text(count);
+                                } else {
+                                    $('#notificationCount1').hide();
+                                    $('#notificationHeader1').text('0');
+                                }
+                            },
+                            error: function () {
+                                console.log('Error fetching notification count');
+                            }
+                        });
+                    }
+
+                    // Set interval to update the count (every 10 seconds)
+                    setInterval(updateNotificationCount1, 100); // Run every 10 seconds
+
+                    let isDropdownOpen = false;
+
+                    function detectDropdownState() {
+                        const dropdown = document.querySelector('#notificationDropdown1');
+                        isDropdownOpen = dropdown && dropdown.classList.contains('show');
+                    }
+
+                    function restoreDropdownState() {
+                        const dropdown = document.querySelector('#notificationDropdown1');
+                        const dropdownToggle = document.querySelector('[data-bs-toggle="dropdown"]');
+                        if (isDropdownOpen && dropdown && dropdownToggle) {
+                            dropdown.classList.add('show');
+                            dropdownToggle.setAttribute('aria-expanded', 'true');
+                        }
+                    }
+
+                    // Hook into ASP.NET UpdatePanel lifecycle events
+                    Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(() => detectDropdownState());
+                    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(() => restoreDropdownState());
+
+
+
+                    function markAllNotificationsAsDelete() {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/api/payment/deleteAllNotifications1',
+                            success: function (updatedNotifications) {
+                                updateNotificationUI(updatedNotifications);
+                                updateNotificationCount1();  // Refresh count
+                            },
+                            error: function () {
+                                console.error('Failed to delete all notifications.');
+                            }
+                        });
+                    }
+
+                    function markAllNotificationsAsRead() {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/api/payment/markAllAsRead1',
+                            success: function (updatedNotifications) {
+                                updateNotificationUI(updatedNotifications);
+                                updateNotificationCount1();  // Refresh count
+                            },
+                            error: function () {
+                                console.error('Failed to mark all notifications as read.');
+                            }
+                        });
+                    }
+
+                    document.addEventListener('click', (event) => {
+                        const dropdown = document.querySelector('#notificationDropdown1');
+                        const dropdownToggle = document.querySelector('[data-bs-toggle="dropdown"]');
+
+                        // Only close the dropdown if it's open and clicked outside
+                        if (dropdown && dropdownToggle && dropdown.classList.contains('show')) {
+                            const isClickInside = dropdown.contains(event.target) || dropdownToggle.contains(event.target);
+                            if (!isClickInside) {
+                                dropdown.classList.remove('show');
+                                dropdownToggle.setAttribute('aria-expanded', 'false');
+                                isDropdownOpen = false;
+                            }
+                        }
+                    });
+
+
+                    //function updateNotificationCount1() {
+                    //    $.ajax({
+                    //        type: 'GET',
+                    //        url: '/api/payment/notificationCount1',  // Your API endpoint
                     //        success: function (response) {
-                    //            // Replace the content of the gridview container with the new GridView HTML
-                    //            $('#gridviewContainer').html(response.d);
+                    //            var count = response.unreadCount1;  // The unread notification count
+                    //            // Only update the count and avoid closing the dropdown if it's open
+                    //            if (count > 0) {
+                    //                $('#notificationCount1').text(count).show();
+                    //                $('#notificationHeader1').text(count);
+                    //            } else {
+                    //                $('#notificationCount1').hide();
+                    //                $('#notificationHeader1').text('0');
+                    //            }
                     //        },
-                    //        error: function (error) {
-                    //            console.error('Error refreshing GridView: ', error);
+                    //        error: function () {
+                    //            console.log('Error fetching notification count');
                     //        }
                     //    });
                     //}
 
-                    //// Refresh every 5 seconds
-                    //setInterval(refreshGridView, 1000);
-                    
+                    //// Set interval to update the count
+                    //setInterval(updateNotificationCount, 100); // Run every 10 seconds instead of 100ms
 
+
+                    //let isDropdownOpen = false;
+
+                    //// Detect if the dropdown is open before the server refresh
+                    //function detectDropdownState() {
+                    //    const dropdown = document.querySelector('#notificationDropdown');
+                    //    isDropdownOpen = dropdown && dropdown.classList.contains('show');
+                    //}
+
+                    //// Reapply the open state after server refresh
+                    //function restoreDropdownState() {
+                    //    const dropdown = document.querySelector('#notificationDropdown');
+                    //    const dropdownToggle = document.querySelector('[data-bs-toggle="dropdown"]');
+                    //    if (isDropdownOpen && dropdown && dropdownToggle) {
+                    //        dropdown.classList.add('show');
+                    //        dropdownToggle.setAttribute('aria-expanded', 'true');
+                    //    }
+                    //}
+
+                    //// Hook into ASP.NET UpdatePanel lifecycle events
+                    //Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(() => detectDropdownState());
+                    //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(() => restoreDropdownState());
+
+                    //// Enable closing only by clicking outside
+                    //document.addEventListener('click', (event) => {
+                    //    const dropdown = document.querySelector('#notificationDropdown');
+                    //    const dropdownToggle = document.querySelector('[data-bs-toggle="dropdown"]');
+
+                    //    // Only close the dropdown if it's open and clicked outside
+                    //    if (dropdown && dropdownToggle && dropdown.classList.contains('show')) {
+                    //        const isClickInside = dropdown.contains(event.target) || dropdownToggle.contains(event.target);
+
+                    //        if (!isClickInside) {
+                    //            dropdown.classList.remove('show');
+                    //            dropdownToggle.setAttribute('aria-expanded', 'false');
+                    //            isDropdownOpen = false;
+                    //        }
+                    //    }
+                    //});
+
+
+                    //function markAllNotificationsAsDelete() {
+                    //    $.ajax({
+                    //        type: 'POST',
+                    //        url: '/api/payment/deleteAllNotifications1',
+                    //        success: function (updatedNotifications) {
+                    //            // Update the notification UI (list of notifications)
+                    //            updateNotificationUI(updatedNotifications);
+
+                    //            // After updating the notifications, refresh the notification count
+                    //            updateNotificationCount1();
+                    //        },
+                    //        error: function () {
+                    //            console.error('Failed to delete all notifications.');
+                    //        }
+                    //    });
+                    //}
+
+
+                    //function markAllNotificationsAsRead() {
+                    //    $.ajax({
+                    //        type: 'POST',
+                    //        url: '/api/payment/markAllAsRead1',
+                    //        success: function (updatedNotifications) {
+                    //            updateNotificationUI(updatedNotifications);
+                    //        },
+                    //        error: function () {
+                    //            console.error('Failed to mark all notifications as read.');
+                    //        }
+                    //    });
+                    //}
+
+
+                    //function markNotificationAsRead(notifId) {
+                    //    $.ajax({
+                    //        type: 'POST',
+                    //        url: '/api/payment/markNotificationAsRead1',  // Your API endpoint
+                    //        data: { notifId: notifId },
+                    //        success: function () {
+                    //            loadNotifications();  // Reload notifications after marking as read
+                    //            updateNotificationCount();  // Update count after marking as read
+                    //        },
+                    //        error: function () {
+                    //            console.log('Error marking notification as read');
+                    //        }
+                    //    });
+                    //}
+
+
+                    
+                //    function updateNotificationCount() {
+                //        $.ajax({
+                //            type: 'GET',
+                //            url: '/api/payment/notificationCount',  // Your API endpoint
+                //            success: function (response) {
+                //                var count = response.unreadCount;  // The unread notification count
+                //                if (count > 0) {
+                //                    $('#notificationCount').text(count).show();
+                //                    $('#notificationHeader').text(count);
+                //                } else {
+                //                    $('#notificationCount').hide();
+                //                    $('#notificationHeader').text('0');
+                //                }
+                //            },
+                //            error: function () {
+                //                console.log('Error fetching notification count');
+                //            }
+                //        });
+                //    }
+
+                //    // Fetch notifications and update the list
+                //    function loadNotifications() {
+                //        $.ajax({
+                //            type: 'GET',
+                //            url: '/api/payment/notifications',  // Your API endpoint
+                //            success: function (response) {
+                //                var notifications = response;
+                //                var notificationListHtml = '';
+
+                //                // Create HTML for each notification
+                //                notifications.forEach(function (notif) {
+                //                    var readClass = notif.notif_read ? 'read-notification' : '';
+                //                    var newBadge = notif.notif_read ? '' : '<span class="badge bg-danger" style="color: white;">New</span>';
+
+                //                    notificationListHtml += `
+                //    <li class="notification-item ${readClass}">
+                //        <div>
+                //            <h4>
+                //                <a href="#" class="notification-link" onclick="markNotificationAsRead(${notif.notif_id})">
+                //                    ${notif.notif_message}
+                //                </a>
+                //                ${newBadge}
+                //            </h4>
+                //            <p>${notif.notif_created_at} ago</p>
+                //        </div>
+                //    </li>
+                //    <li><hr class="dropdown-divider"></li>
+                //`;
+                //                });
+
+                //                $('#notificationList').html(notificationListHtml);
+                //            },
+                //            error: function () {
+                //                console.log('Error fetching notifications');
+                //            }
+                //        });
+                //    }
+                //    // Mark a notification as read
+                //    function markNotificationAsRead(notifId) {
+                //        $.ajax({
+                //            type: 'POST',
+                //            url: '/api/payment/markNotificationAsRead',  // Your API endpoint
+                //            data: { notifId: notifId },
+                //            success: function () {
+                //                loadNotifications();  // Reload notifications after marking as read
+                //                updateNotificationCount();  // Update count after marking as read
+                //            },
+                //            error: function () {
+                //                console.log('Error marking notification as read');
+                //            }
+                //        });
+                //    }
+
+                //    // Polling every 5 seconds to keep the count and notifications updated
+                //    setInterval(function () {
+                //        updateNotificationCount();
+                //        loadNotifications();
+                //    }, 100);
 
                 </script>
                 <script src="https://code.jquery.com/jquery-3.5.2.min.js"></script>

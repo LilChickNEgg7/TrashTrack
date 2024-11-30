@@ -24,6 +24,87 @@ namespace Capstone
         protected global::System.Web.UI.HtmlControls.HtmlForm form2;
 
         /// <summary>
+        /// ScriptManager1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.ScriptManager ScriptManager1;
+
+        /// <summary>
+        /// UpdatePanelNotifications1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanelNotifications1;
+
+        /// <summary>
+        /// LinkButton7 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton LinkButton7;
+
+        /// <summary>
+        /// notificationCount1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl notificationCount1;
+
+        /// <summary>
+        /// NotificationTimer1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.Timer NotificationTimer1;
+
+        /// <summary>
+        /// notificationHeader1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl notificationHeader1;
+
+        /// <summary>
+        /// lnkViewAllNotifications1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkViewAllNotifications1;
+
+        /// <summary>
+        /// NotificationRepeater1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater NotificationRepeater1;
+
+        /// <summary>
+        /// btnDeleteAllNotifications1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnDeleteAllNotifications1;
+
+        /// <summary>
         /// profile_image control.
         /// </summary>
         /// <remarks>
@@ -96,15 +177,6 @@ namespace Capstone
         protected global::System.Web.UI.WebControls.GridView gridView1;
 
         /// <summary>
-        /// ScriptManager1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.ScriptManager ScriptManager1;
-
-        /// <summary>
         /// LinkButton2 control.
         /// </summary>
         /// <remarks>
@@ -159,33 +231,6 @@ namespace Capstone
         protected global::System.Web.UI.WebControls.Label taxLabel;
 
         /// <summary>
-        /// interstLabel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label interstLabel;
-
-        /// <summary>
-        /// accrPerLabel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label accrPerLabel;
-
-        /// <summary>
-        /// susPerLabel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label susPerLabel;
-
-        /// <summary>
         /// gridView2 control.
         /// </summary>
         /// <remarks>
@@ -202,6 +247,15 @@ namespace Capstone
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox dateTodayTxt;
+
+        /// <summary>
+        /// dueDateTxt control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox dueDateTxt;
 
         /// <summary>
         /// netVatTxt control.
@@ -229,60 +283,6 @@ namespace Capstone
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox totSalesTxt;
-
-        /// <summary>
-        /// ptLeadDaysHiddenField control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField ptLeadDaysHiddenField;
-
-        /// <summary>
-        /// ptAccrualPeriodHiddenField control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField ptAccrualPeriodHiddenField;
-
-        /// <summary>
-        /// ptSuspPeriodHiddenField control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField ptSuspPeriodHiddenField;
-
-        /// <summary>
-        /// dueDateTxt control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox dueDateTxt;
-
-        /// <summary>
-        /// accDateTxt control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox accDateTxt;
-
-        /// <summary>
-        /// susDateTxt control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox susDateTxt;
 
         /// <summary>
         /// addFeeTxt control.
@@ -636,15 +636,6 @@ namespace Capstone
         protected global::System.Web.UI.WebControls.TextBox TextBox2;
 
         /// <summary>
-        /// dateEntered control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox dateEntered;
-
-        /// <summary>
         /// Label4 control.
         /// </summary>
         /// <remarks>
@@ -652,33 +643,6 @@ namespace Capstone
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label Label4;
-
-        /// <summary>
-        /// Label5 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label5;
-
-        /// <summary>
-        /// Label6 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label6;
-
-        /// <summary>
-        /// Label7 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label7;
 
         /// <summary>
         /// gridView3 control.
@@ -726,33 +690,6 @@ namespace Capstone
         protected global::System.Web.UI.WebControls.TextBox TextBox6;
 
         /// <summary>
-        /// HiddenField1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenField1;
-
-        /// <summary>
-        /// HiddenField2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenField2;
-
-        /// <summary>
-        /// HiddenField3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenField3;
-
-        /// <summary>
         /// TextBox7 control.
         /// </summary>
         /// <remarks>
@@ -760,24 +697,6 @@ namespace Capstone
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox7;
-
-        /// <summary>
-        /// TextBox8 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox8;
-
-        /// <summary>
-        /// TextBox9 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox9;
 
         /// <summary>
         /// TextBox10 control.

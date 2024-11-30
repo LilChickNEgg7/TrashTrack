@@ -430,22 +430,22 @@
                                 </li>
                                 <asp:Repeater ID="NotificationRepeater" runat="server">
                                     <ItemTemplate>
-                                        <li class="notification-item <%# Eval("read_status").ToString() == "Read" ? "read-notification" : "" %>">
-                                            <i class='<%# GetNotificationIcon(Eval("cont_status").ToString()) %>'></i>
+                                        <li class="notification-item <%# Eval("notif_read").ToString() == "Read" ? "read-notification" : "" %>">
+                                            <i class='<%# GetNotificationIcon(Eval("notif_status").ToString()) %>'></i>
                                             <div>
                                                 <h4>
                                                     <asp:LinkButton
                                                         ID="lnkNotification"
                                                         runat="server"
-                                                        CommandArgument='<%# Eval("cont_id") %>'
+                                                        CommandArgument='<%# Eval("cus_id") %>'
                                                         OnClick="Notification_Click"
-                                                        CssClass="notification-link"><%# Eval("cont_rep_name") %> - <%# Eval("cont_comp_name") %></asp:LinkButton>
-                                                    <asp:Literal ID="litNewBadge" runat="server" Visible='<%# Eval("read_status").ToString() == "Unread" %>'>
+                                                        CssClass="notification-link"><%# Eval("notif_type") %> - <%# Eval("notif_message") %></asp:LinkButton>
+                                                    <asp:Literal ID="litNewBadge" runat="server" Visible='<%# Eval("notif_read").ToString() == "Unread" %>'>
                                                         <span class="badge bg-danger" style="color: white;">New</span>
                                                     </asp:Literal>
                                                 </h4>
-                                                <p><%# Eval("cont_status") %></p>
-                                                <p><%# Eval("cont_created_at") %> ago</p>
+<%--                                                <p><%# Eval("notif_read") %></p>--%>
+                                                <p><%# Eval("notif_created_at") %> ago</p>
                                             </div>
                                         </li>
                                         <li>

@@ -63,6 +63,49 @@
                 <RowStyle BackColor="White" ForeColor="Black" BorderStyle="Solid" BorderColor="#ccc" BorderWidth="1px" />
                 <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="Solid" BorderColor="#66CDAA" BorderWidth="1px" />
             </asp:GridView>
+
+
+
+<asp:Label ID="lblMessage" runat="server" ForeColor="Red"></asp:Label>
+<asp:GridView ID="gridView2" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" 
+              DataKeyNames="notif_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
+    <Columns>
+        <asp:BoundField DataField="notif_id" HeaderText="Notification ID" SortExpression="notif_id" ItemStyle-Width="100px">
+            <ItemStyle Width="100px"></ItemStyle>
+        </asp:BoundField>
+
+        <asp:BoundField DataField="notif_message" HeaderText="Message" SortExpression="notif_message" ItemStyle-Width="300px">
+            <ItemStyle Width="300px" Wrap="True"></ItemStyle>
+        </asp:BoundField>
+
+        <asp:BoundField DataField="notif_created_at" HeaderText="Created At" SortExpression="notif_created_at" 
+                        DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px">
+            <ItemStyle Width="150px"></ItemStyle>
+        </asp:BoundField>
+
+        <asp:BoundField DataField="notif_updated_at" HeaderText="Updated At" SortExpression="notif_updated_at" 
+                        DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px">
+            <ItemStyle Width="150px"></ItemStyle>
+        </asp:BoundField>
+
+        <asp:BoundField DataField="notif_read" HeaderText="Read Status" SortExpression="notif_read" ItemStyle-Width="100px">
+            <ItemStyle Width="100px"></ItemStyle>
+        </asp:BoundField>
+
+        <asp:BoundField DataField="notif_type" HeaderText="Type" SortExpression="notif_type" ItemStyle-Width="150px">
+            <ItemStyle Width="150px"></ItemStyle>
+        </asp:BoundField>
+
+        <asp:BoundField DataField="notif_status" HeaderText="Status" SortExpression="notif_status" ItemStyle-Width="100px">
+            <ItemStyle Width="100px"></ItemStyle>
+        </asp:BoundField>
+    </Columns>
+
+    <RowStyle BackColor="White" ForeColor="Black" BorderStyle="Solid" BorderColor="#ccc" BorderWidth="1px" />
+    <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="Solid" BorderColor="#66CDAA" BorderWidth="1px" />
+</asp:GridView>
+
+
         </div>
     </form>
 </body>

@@ -617,10 +617,12 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="modalChangeInterestLabel">Change Payment Term</h1>
+                                <%--<h1 class="modal-title fs-5" id="modalChangeInterestLabel">Change Payment Term</h1>--%>
+                                <h1 class="modal-title fs-5" id="modalChangeInterestLabel">Change VAT (%)</h1>
+
                                 <button type="button" class="btn-close custom-close-button" data-bs-dismiss="modal" aria-label="Close" style="color: aquamarine !important"></button>
                             </div>
-                            <div class="modal-body">
+                            <%--<div class="modal-body">
                                 <div class="mb-3">
                                     <asp:Label ID="Label6" runat="server" Text="Overdue Interest (%)" for="inputText" Style="color: chartreuse; margin-top: 10px"></asp:Label>
                                     <asp:TextBox ID="interest" runat="server" type="number" min="0" class="form-control" Style="margin-top: 10px"></asp:TextBox>
@@ -631,14 +633,14 @@
                                     <asp:Label ID="Label7" runat="server" Text="Lead Day(s)" for="inputText" Style="color: chartreuse; margin-top: 10px"></asp:Label>
                                     <asp:TextBox ID="leaddays" runat="server" type="number" min="0" class="form-control" Style="margin-top: 10px"></asp:TextBox>
                                 </div>
-                            </div>
+                            </div>--%>
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <asp:Label ID="Label8" runat="server" Text="VAT (%)" for="inputText" Style="color: chartreuse; margin-top: 10px"></asp:Label>
                                     <asp:TextBox ID="vat" runat="server" type="number" min="0" class="form-control" Style="margin-top: 10px"></asp:TextBox>
                                 </div>
                             </div>
-                            <div class="modal-body">
+                            <%--<div class="modal-body">
                                 <div class="mb-3">
                                     <asp:Label ID="Label9" runat="server" Text="Accrual Period" for="inputText" Style="color: chartreuse; margin-top: 10px"></asp:Label>
                                     <asp:TextBox ID="acc_per" runat="server" type="number" min="0" class="form-control" Style="margin-top: 10px"></asp:TextBox>
@@ -649,7 +651,7 @@
                                     <asp:Label ID="Label10" runat="server" Text="Suspension Period" for="inputText" Style="color: chartreuse; margin-top: 10px"></asp:Label>
                                     <asp:TextBox ID="susp_per" runat="server" type="number" min="0" class="form-control" Style="margin-top: 10px"></asp:TextBox>
                                 </div>
-                            </div>
+                            </div>--%>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <asp:Button class="btn btn-primary" ID="Button1" runat="server" Text="Submit Form" OnClick="changeTerm_Click " />
