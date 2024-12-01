@@ -10,11 +10,7 @@ using System.Web.UI;
 
 using WebControls = System.Web.UI.WebControls;
 using MongoDB.Driver.Linq;
-using System.Data.SqlClient;
-using Amazon.SecurityToken.Model;
-//using AjaxControlToolkit.HtmlEditor.ToolbarButtons;
-using Amazon.Runtime.Documents;
-using Npgsql.Internal;
+
 using System.IO;
 
 
@@ -23,13 +19,8 @@ using iText.Kernel.Pdf;
 using ITextDocument = iText.Layout.Document;
 using iText.Layout.Element;
 using iText.Layout.Properties;
-
-
 using iText.Kernel.Colors;
 using iText.IO.Image;
-
-
-using iText.Kernel.Colors;
 using iText.IO.Font.Constants;
 using iText.Kernel.Font;
 using iText.Layout.Borders;
@@ -241,21 +232,66 @@ namespace Capstone
 
         }
 
+
         protected void DeleteNotification_Click(object sender, EventArgs e)
         {
             // Get the ID of the notification to be deleted from the CommandArgument
             LinkButton btnDelete = (LinkButton)sender;
             string notifId = btnDelete.CommandArgument;
 
-            // Logic to mark the notification as deleted in the database
-            DeleteNotificationFromDatabase(notifId);
-            GetUnreadNotificationCount();
-            // Refresh the notification list by re-binding the repeater
-            BindNotifications();
+            using (var conn = new NpgsqlConnection(con)) // Replace 'con' with your connection string variable
+            {
+                conn.Open();
 
-            // Update the UpdatePanel to reflect the changes on the UI
-            UpdatePanelNotifications1.Update();
+                // Update the notification status to 'Deleted' and notif_read to true
+                string updateQuery = @"
+            UPDATE notification
+            SET notif_status = 'Deleted',
+                notif_read = true
+            WHERE notif_id = @notifId;
+        ";
+
+                using (var cmd = new NpgsqlCommand(updateQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@notifId", int.Parse(notifId));
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        // Optionally show a success message
+                        ScriptManager.RegisterStartupScript(this, GetType(), "updateSuccess",
+                            "Swal.fire({ icon: 'success', title: 'Notification Deleted', text: 'The notification has been successfully deleted.', confirmButtonColor: '#28a745' });", true);
+                        // Refresh the notifications list
+                        BindNotifications();
+                    }
+                    else
+                    {
+                        // Optionally show an error message
+                        ScriptManager.RegisterStartupScript(this, GetType(), "updateError",
+                            "Swal.fire({ icon: 'error', title: 'Error', text: 'Unable to delete the notification.', confirmButtonColor: '#dc3545' });", true);
+                    }
+                }
+            }
+            GetUnreadNotificationCount();
+            // Refresh the notifications list
+            BindNotifications();
         }
+
+        //protected void DeleteNotification_Click(object sender, EventArgs e)
+        //{
+        //    // Get the ID of the notification to be deleted from the CommandArgument
+        //    LinkButton btnDelete = (LinkButton)sender;
+        //    string notifId = btnDelete.CommandArgument;
+
+        //    // Logic to mark the notification as deleted in the database
+        //    DeleteNotificationFromDatabase(notifId);
+        //    GetUnreadNotificationCount();
+        //    // Refresh the notification list by re-binding the repeater
+        //    BindNotifications();
+
+        //    // Update the UpdatePanel to reflect the changes on the UI
+        //    UpdatePanelNotifications1.Update();
+        //}
 
         private void DeleteNotificationFromDatabase(string notifId)
         {
@@ -384,10 +420,29 @@ namespace Capstone
                 {
                     cmd.CommandType = CommandType.Text;
                     // Query to fetch booking data from the database
-                    cmd.CommandText = @"
-                SELECT bk_id, bk_date, bk_status, bk_province, bk_city, bk_brgy, bk_street, bk_postal
-                FROM booking WHERE bk_status != 'Completed'
-                ORDER BY bk_id, bk_date";  // Sorting by date for recent bookings
+
+
+                    cmd.CommandText = @"SELECT 
+                        b.bk_id, 
+                        b.bk_date,
+                        b.bk_created_at,
+                        b.bk_fullname,
+                        b.bk_status, 
+                        b.bk_waste_scale_slip,
+                        CONCAT(b.bk_street, ', ', b.bk_brgy, ', ', b.bk_city, ', ', b.bk_province, ' ', b.bk_postal) AS location,
+                        c.cus_id,
+                        c.cus_email
+                    FROM 
+                        booking b
+                    JOIN 
+                        customer c ON b.cus_id = c.cus_id
+                    ORDER BY 
+                        b.bk_date DESC, b.bk_id DESC";
+
+                //    cmd.CommandText = @"
+                //SELECT bk_id, bk_date, bk_status, bk_province, bk_city, bk_brgy, bk_street, bk_postal
+                //FROM booking WHERE bk_status != 'Completed'
+                //ORDER BY bk_id, bk_date";  // Sorting by date for recent bookings
 
                     // Execute the query and bind the results to the GridView
                     DataTable bookingsDataTable = new DataTable();
@@ -601,6 +656,7 @@ namespace Capstone
                                 addFee = billReader["gb_add_fees"] == DBNull.Value ? 0.0 : Convert.ToDouble(billReader["gb_add_fees"]);
                                 dateIssued = Convert.ToDateTime(billReader["gb_date_issued"]);
                                 totalSales = Convert.ToDouble(billReader["gb_total_sales"]);
+                                dueDate = Convert.ToDateTime(billReader["gb_date_due"]);
 
 
 
@@ -634,47 +690,116 @@ namespace Capstone
                         .SetTextAlignment(TextAlignment.CENTER);
                     document.Add(title);
 
+                    // Create a 2-column table to align items in two columns
                     iText.Layout.Element.Table infoTable = new iText.Layout.Element.Table(2).UseAllAvailableWidth();
 
+                    // Set table border to none
                     infoTable.SetBorder(Border.NO_BORDER);
 
-                    // Bill ID cell
+                    // Left column: Bill ID
                     infoTable.AddCell(new Cell()
                         .SetBorder(Border.NO_BORDER)
                         .Add(new Paragraph($"Bill ID: {buttonText}")
-                            .SetFont(boldFont)
-                            .SetBorder(Border.NO_BORDER)));
+                            .SetFont(boldFont)));
 
-                    // Booking ID cell
+                    // Right column: Booking ID
                     infoTable.AddCell(new Cell()
                         .SetBorder(Border.NO_BORDER)
+                        .SetTextAlignment(TextAlignment.RIGHT)
                         .Add(new Paragraph($"Booking ID: {bkID}")
-                            .SetFont(boldFont)
-                            .SetBorder(Border.NO_BORDER)));
+                            .SetFont(boldFont)));
 
-                    // Date Issued cell, aligned to the right
+                    // Left column: Empty cell for spacing
                     infoTable.AddCell(new Cell()
                         .SetBorder(Border.NO_BORDER)
+                        .Add(new Paragraph("")));
+
+                    // Left column: Empty cell for spacing
+                    infoTable.AddCell(new Cell()
+                        .SetBorder(Border.NO_BORDER)
+                        .Add(new Paragraph("")));
+                    // Left column: Empty cell for spacing
+                    infoTable.AddCell(new Cell()
+                        .SetBorder(Border.NO_BORDER)
+                        .Add(new Paragraph("")));
+
+                    // Right column: Date Issued
+                    infoTable.AddCell(new Cell()
+                        .SetBorder(Border.NO_BORDER)
+                        .SetTextAlignment(TextAlignment.RIGHT)
                         .Add(new Paragraph($"Date Issued: {(dateIssued?.ToString("MM/dd/yyyy") ?? "N/A")}")
-                            .SetFont(boldFont)
-                            .SetTextAlignment(TextAlignment.RIGHT)
-                            .SetBorder(Border.NO_BORDER)));
+                            .SetFont(boldFont)));
 
-                    // Empty cell for spacing
+                    // Left column: Empty cell for spacing
                     infoTable.AddCell(new Cell()
                         .SetBorder(Border.NO_BORDER)
-                        .Add(new Paragraph("").SetBorder(Border.NO_BORDER)));
+                        .Add(new Paragraph("")));
 
-                    // Due Date cell, aligned to the right
+                    // Right column: Due Date
                     infoTable.AddCell(new Cell()
                         .SetBorder(Border.NO_BORDER)
+                        .SetTextAlignment(TextAlignment.RIGHT)
                         .Add(new Paragraph($"Due Date: {(dueDate?.ToString("MM/dd/yyyy") ?? "N/A")}")
-                            .SetFont(boldFont)
-                            .SetTextAlignment(TextAlignment.RIGHT)
-                            .SetBorder(Border.NO_BORDER)));
+                            .SetFont(boldFont)));
 
                     // Add the table to the document
                     document.Add(infoTable);
+
+
+                    //iText.Layout.Element.Table infoTable = new iText.Layout.Element.Table(3).UseAllAvailableWidth();
+
+                    //infoTable.SetBorder(Border.NO_BORDER);
+
+                    //// Bill ID cell
+                    //infoTable.AddCell(new Cell()
+                    //    .SetBorder(Border.NO_BORDER)
+                    //    .Add(new Paragraph($"Bill ID: {buttonText}")
+                    //        .SetFont(boldFont)
+                    //        .SetBorder(Border.NO_BORDER)));
+
+                    //// Booking ID cell
+                    //infoTable.AddCell(new Cell()
+                    //    .SetBorder(Border.NO_BORDER)
+                    //    .Add(new Paragraph($"")
+                    //        .SetFont(boldFont)
+                    //        .SetBorder(Border.NO_BORDER)));
+                    //// Booking ID cell
+                    //infoTable.AddCell(new Cell()
+                    //    .SetBorder(Border.NO_BORDER)
+                    //    .Add(new Paragraph($"Booking ID: {bkID}")
+                    //        .SetFont(boldFont)
+                    //        .SetBorder(Border.NO_BORDER)));
+
+                    //// Booking ID cell
+                    //infoTable.AddCell(new Cell()
+                    //    .SetBorder(Border.NO_BORDER)
+                    //    .Add(new Paragraph($"")
+                    //        .SetFont(boldFont)
+                    //        .SetBorder(Border.NO_BORDER)));
+
+                    //// Date Issued cell, aligned to the right
+                    //infoTable.AddCell(new Cell()
+                    //    .SetBorder(Border.NO_BORDER)
+                    //    .Add(new Paragraph($"Date Issued: {(dateIssued?.ToString("MM/dd/yyyy") ?? "N/A")}")
+                    //        .SetFont(boldFont)
+                    //        .SetTextAlignment(TextAlignment.RIGHT)
+                    //        .SetBorder(Border.NO_BORDER)));
+
+                    //// Empty cell for spacing
+                    //infoTable.AddCell(new Cell()
+                    //    .SetBorder(Border.NO_BORDER)
+                    //    .Add(new Paragraph("").SetBorder(Border.NO_BORDER)));
+
+                    //// Due Date cell, aligned to the right
+                    //infoTable.AddCell(new Cell()
+                    //    .SetBorder(Border.NO_BORDER)
+                    //    .Add(new Paragraph($"Due Date: {(dueDate?.ToString("MM/dd/yyyy") ?? "N/A")}")
+                    //        .SetFont(boldFont)
+                    //        .SetTextAlignment(TextAlignment.RIGHT)
+                    //        .SetBorder(Border.NO_BORDER)));
+
+                    //// Add the table to the document
+                    //document.Add(infoTable);
                 }
 
 
@@ -920,8 +1045,9 @@ namespace Capstone
                 // Add Total Sales label
                 summarySection.AddCell(new Cell()
                     .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph("Total Sales: ")
+                    .Add(new Paragraph("Total Amount: ")
                         .SetFont(boldFont)
+                        .SetFontColor(redColor)
                         .SetTextAlignment(TextAlignment.LEFT)
                         .SetBorder(Border.NO_BORDER)));
 
@@ -930,6 +1056,7 @@ namespace Capstone
                     .SetBorder(Border.NO_BORDER)
                     .Add(new Paragraph("₱" + totalSales.ToString("N2"))
                         .SetFont(font)
+                        .SetFontColor(redColor)
                         .SetTextAlignment(TextAlignment.LEFT)
                         .SetBorder(Border.NO_BORDER)));
 
@@ -940,26 +1067,26 @@ namespace Capstone
                     AddEmptyCell(summarySection);
                 }
 
-                // Add Total Amount label
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph("Total Amount: ")
-                        .SetFont(boldFont)
-                        .SetFontColor(redColor)
-                        .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER)));
+                //// Add Total Amount label
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER)
+                //    .Add(new Paragraph("Total Amount: ")
+                //        .SetFont(boldFont)
+                //        .SetFontColor(redColor)
+                //        .SetTextAlignment(TextAlignment.LEFT)
+                //        .SetBorder(Border.NO_BORDER)));
 
-                // Calculate Total Due
-                //double totalDue = totalPayment + (addFee.HasValue && addFee.Value > 0 ? addFee.Value : 0);
+                //// Calculate Total Due
+                ////double totalDue = totalPayment + (addFee.HasValue && addFee.Value > 0 ? addFee.Value : 0);
 
-                // Add Total Amount due
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph("₱" + totalPayment.ToString("N2"))
-                        .SetFont(boldFont)
-                        .SetFontColor(redColor)
-                        .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER)));
+                //// Add Total Amount due
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER)
+                //    .Add(new Paragraph("₱" + totalPayment.ToString("N2"))
+                //        .SetFont(boldFont)
+                //        .SetFontColor(redColor)
+                //        .SetTextAlignment(TextAlignment.LEFT)
+                //        .SetBorder(Border.NO_BORDER)));
 
                 // Add the summary section table to the document
                 document.Add(summarySection);
@@ -1253,7 +1380,8 @@ namespace Capstone
                     //p.p_date_paid DESC NULLS LAST,
 
                     // SQL query to fetch bill and payment data
-                    cmd.CommandText = @"SELECT 
+                    cmd.CommandText = @"
+                                        SELECT 
                                             gb.gb_id, 
                                             gb.gb_date_issued, 
                                             gb.gb_date_due, 
@@ -1263,14 +1391,17 @@ namespace Capstone
                                             COALESCE(p.p_amount, 0) AS p_amount, 
                                             COALESCE(p.p_method, 'N/A') AS p_method, 
                                             COALESCE(p.p_date_paid, NULL) AS p_date_paid, 
-                                            COALESCE(p.p_checkout_id, 'N/A') AS p_checkout_id
+                                            COALESCE(p.p_checkout_id, 'N/A') AS p_checkout_id,
+                                            COALESCE(p.p_trans_id, 'N/A') AS p_trans_id
                                         FROM 
                                             generate_bill gb
                                         LEFT JOIN 
                                             payment p ON gb.gb_id = p.gb_id
                                         ORDER BY 
                                             gb.gb_date_issued DESC,
-                                            gb.gb_id DESC";
+                                            gb.gb_id DESC;
+                                    ";
+
 
 
                     // Execute the query and fill the DataTable

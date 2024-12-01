@@ -40,7 +40,7 @@
     <link href="assets/css/style.css" rel="stylesheet">
     <%--#052507--%>
     <style>
-        /* Background for View Bill Modal */
+           /* Background for View Bill Modal */
     .Background {
         z-index: 1050 !important;
     }
@@ -59,6 +59,19 @@
     .modal-overlay-scale-slip .card {
         z-index: 1070 !important; /* Higher than View Bill */
     }
+
+    .notifications {
+    max-height: 431px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    padding: 10px;
+}
+
+.notification-item.read-notification {
+    background-color: #f8f9fa;
+}
 
         /*Container Styles */
         .gridview-container {
@@ -214,7 +227,7 @@
 
 
         /* Styling for GridView Tables */
-        #gridViewBookings, #gridView1, #gridView2, #gridView4 {
+        #gridViewBookings, #gridView1, #gridView2, #gridView3 {
             width: 100%;
             border-collapse: separate; /* Allows styling of borders separately */
             border-spacing: 0; /* Removes additional spacing */
@@ -226,7 +239,7 @@
         }
 
             /* GridView Header Styling */
-            #gridViewBookings th, #gridView1 th, #gridView2 th, #gridView4 th {
+            #gridViewBookings th, #gridView1 th, #gridView2 th, #gridView3 th {
                 background: #66CDAA; /* Luminous green for header */
                 color: white;
                 font-size: 16px; /* Slightly smaller font for a refined look */
@@ -237,7 +250,7 @@
             }
 
             /* GridView Row Styles */
-            #gridViewBookings td, #gridView1 td, #gridView2 td, #gridView4 td {
+            #gridViewBookings td, #gridView1 td, #gridView2 td, #gridView3 td {
                 padding: 12px;
                 font-size: 14px; /* Smaller font size */
                 font-weight: 500; /* Medium weight for row text */
@@ -248,12 +261,12 @@
             }
 
             /* Hover Effect for GridView Rows */
-            #gridViewBookings tr:hover, #gridView1 tr:hover, #gridView2 tr:hover, #gridView4 tr:hover {
+            #gridViewBookings tr:hover, #gridView1 tr:hover, #gridView2 tr:hover, #gridView3 tr:hover {
                 background: #eef8ee; /* Subtle hover effect */
             }
 
             /* Styling the GridView Footer */
-            #gridViewBookings .FooterStyle, #gridView1 .FooterStyle, #gridView2 .FooterStyle, #gridView4 .FooterStyle {
+            #gridViewBookings .FooterStyle, #gridView1 .FooterStyle, #gridView2 .FooterStyle, #gridView3 .FooterStyle {
                 border-radius: 0 0 12px 12px; /* Rounded bottom corners */
                 background: #66CDAA;
                 color: #fff;
@@ -262,15 +275,15 @@
             }
 
             /* Optional: Styling for the Status and Action Buttons */
-            #gridViewBookings .btnUnsuspend, #gridView1 .btnUnsuspend, #gridView2 .btnUnsuspend, #gridView4 .btnUnsuspend,
-            #gridViewBookings .btnSuspend, #gridView1 .btnSuspend, #gridView2 .btnSuspend, #gridView4 .btnSuspend {
+            #gridViewBookings .btnUnsuspend, #gridView1 .btnUnsuspend, #gridView2 .btnUnsuspend, #gridView3 .btnUnsuspend,
+            #gridViewBookings .btnSuspend, #gridView1 .btnSuspend, #gridView2 .btnSuspend, #gridView3 .btnSuspend {
                 font-size: 10px; /* Adjusted button font size */
                 border-radius: 8px; /* Slightly rounded buttons */
                 padding: 5px 10px; /* Comfortable padding */
             }
 
-            #gridViewBookings .imgEdit, #gridView1 .imgEdit, #gridView2 .imgEdit, #gridView4 .imgEdit,
-            #gridViewBookings .Image1, #gridView1 .Image1, #gridView2 .Image1, #gridView4 .Image1 {
+            #gridViewBookings .imgEdit, #gridView1 .imgEdit, #gridView2 .imgEdit, #gridView3 .imgEdit,
+            #gridViewBookings .Image1, #gridView1 .Image1, #gridView2 .Image1, #gridView3 .Image1 {
                 border-radius: 8px; /* Rounded corners for images */
                 margin-right: 10px; /* Margin between images */
             }
@@ -412,7 +425,7 @@
                                         <i class="bi bi-bell"></i>
                                         <span id="notificationCount1" runat="server" class="badge bg-primary badge-number" style="display: none;">0</span>
                                     </asp:LinkButton>
-                                            <asp:Timer ID="NotificationTimer1" runat="server" Interval="5000" OnTick="NotificationTimer_Tick" />
+                                    <asp:Timer ID="NotificationTimer1" runat="server" Interval="5000" OnTick="NotificationTimer_Tick" />
 
                                     <!-- Notification Dropdown -->
                                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications" id="notificationDropdown1">
@@ -424,7 +437,7 @@
                                                 runat="server"
                                                 OnClick="ViewAllNotifications_Click"
                                                 CssClass="badge rounded-pill bg-primary p-2 ms-2">
-                        View all
+                        Mark all read
                     </asp:LinkButton>
                                         </li>
                                         <li>
@@ -512,7 +525,7 @@
                                 </ContentTemplate>
                                 <Triggers>
                                     <asp:AsyncPostBackTrigger ControlID="LinkButton7" EventName="Click" />
-                                        <asp:AsyncPostBackTrigger ControlID="NotificationTimer1" EventName="Tick" />
+                                    <asp:AsyncPostBackTrigger ControlID="NotificationTimer1" EventName="Tick" />
 
                                 </Triggers>
                             </asp:UpdatePanel>
@@ -626,18 +639,6 @@
 
                     </li>
 
-                    <%--<li class="nav-item">
-                        <a class="nav-link collapsed" data-bs-target="#receipt-nav" data-bs-toggle="collapse" href="#">
-                            <i class="ri-secure-payment-line"></i><span>Payment</span><i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <ul id="receipt-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                            <li>
-                                <a href="BO_ViewHistory.aspx">
-                                    <i class="bi bi-circle"></i><span>View Payments</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>--%>
                     <!-- End Transaction Nav -->
                 </ul>
             </aside>
@@ -647,14 +648,6 @@
 
                 <div class="pagetitle">
                     <h1 style="padding-top: 20px; color: chartreuse">Billing</h1>
-                    <%--<nav>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="Admin_Dashboard.aspx">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="admin_manage_account.aspx">Billing</a></li>
-                            <li class="breadcrumb-item">Controls</li>
-
-                        </ol>
-                    </nav>--%>
                 </div>
                 <!-- End Page Title -->
 
@@ -676,13 +669,8 @@
                     </div>
                 </section>
 
-
-
-
                 <section style="background-color: #052507; padding: 25px; border-radius: 8px; box-shadow: 0 0 5px rgba(0, 0, 0, .2)">
-                    <%--<div>
-                        <asp:ImageMap ID="ImageMap1" runat="server" ImageUrl="Pictures//box_format.png" Style="float: right; margin-right: 0px; margin-top: 0px; width: 50px"></asp:ImageMap>
-                    </div>--%>
+
                     <div style="margin-top: 50px; margin-bottom: 30px">
                         <asp:TextBox Style="border-radius: 10px; padding-left: 10px; padding: 2px; margin-top: 7px; border-color: aquamarine; border-width: 3px" placeholder="Search" ID="txtSearch" runat="server" oninput="search();" AutoPostBack="false"></asp:TextBox>
                     </div>
@@ -693,11 +681,8 @@
                             <a class="nav-link" id="tab1-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="false" style="color: #061f0d;" >Booking History</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="tab2-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false" style="color: #061f0d;" >Billing History</a>
+                            <a class="nav-link" id="tab2-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false" style="color: #061f0d;" >Generated Bill History</a>
                         </li>
-                        <%--<li class="nav-item">
-                            <a class="nav-link" id="tab3-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false" style="color: #061f0d;">Payment History</a>
-                        </li>--%>
                     </ul>
 
                     <div class="tab-content" id="myTabContent">
@@ -708,42 +693,41 @@
                             <div class="gridview-container">
                                 <asp:GridView ID="gridViewBookings" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="bk_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
                                     <Columns>
-                                        <asp:BoundField DataField="bk_id" HeaderText="Booking ID" SortExpression="bk_id" ItemStyle-Width="100px">
-                                            <ItemStyle Width="100px"></ItemStyle>
-                                        </asp:BoundField>
-                                        <asp:BoundField DataField="bk_date" HeaderText="Date" SortExpression="bk_date" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px">
+                                        <asp:BoundField DataField="bk_id" HeaderText="Book ID" SortExpression="bk_id" ItemStyle-Width="150px">
                                             <ItemStyle Width="150px"></ItemStyle>
                                         </asp:BoundField>
+                                        <asp:BoundField DataField="cus_id" HeaderText="Customer ID" SortExpression="cus_id" ItemStyle-Width="150px">
+                                            <ItemStyle Width="150px"></ItemStyle>
+                                        </asp:BoundField>
+                                        <asp:BoundField DataField="bk_date" HeaderText="Date" SortExpression="bk_date" ItemStyle-Width="220px">
+                                            <ItemStyle Width="220px"></ItemStyle>
+                                        </asp:BoundField>
+
+                                        <asp:BoundField DataField="bk_fullname" HeaderText="Full Name" SortExpression="bk_fullname" ItemStyle-Width="300px">
+                                            <ItemStyle Width="300px"></ItemStyle>
+                                        </asp:BoundField>
+                                        <asp:BoundField DataField="location" HeaderText="Location" SortExpression="location" ItemStyle-Width="350px">
+                                            <ItemStyle Width="350px"></ItemStyle>
+                                        </asp:BoundField>
+                                        <asp:BoundField DataField="cus_email" HeaderText="Email" SortExpression="cus_email" ItemStyle-Width="300px">
+                                            <ItemStyle Width="300px"></ItemStyle>
+                                        </asp:BoundField>
+                                        <asp:BoundField DataField="bk_created_at" HeaderText="created at" SortExpression="bk_created_at" ItemStyle-Width="250px">
+                                            <ItemStyle Width="250px"></ItemStyle>
+                                        </asp:BoundField>
+                                        <asp:TemplateField HeaderText="Scale Slip" ItemStyle-Width="150px">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblWasteScaleSlip" runat="server"
+                                                    Text='<%# Eval("bk_waste_scale_slip") == DBNull.Value ? "None" : "Available" %>'
+                                                    ForeColor='<%# Eval("bk_waste_scale_slip") == DBNull.Value ? System.Drawing.Color.Gray : System.Drawing.Color.Red %>'>
+                </asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
                                         <asp:BoundField DataField="bk_status" HeaderText="Status" SortExpression="bk_status" ItemStyle-Width="150px">
                                             <ItemStyle Width="150px"></ItemStyle>
                                         </asp:BoundField>
-                                        <asp:BoundField DataField="bk_province" HeaderText="Province" SortExpression="bk_province" ItemStyle-Width="150px">
-                                            <ItemStyle Width="150px"></ItemStyle>
-                                        </asp:BoundField>
-                                        <asp:BoundField DataField="bk_city" HeaderText="City" SortExpression="bk_city" ItemStyle-Width="150px">
-                                            <ItemStyle Width="150px"></ItemStyle>
-                                        </asp:BoundField>
-                                        <asp:BoundField DataField="bk_brgy" HeaderText="Barangay" SortExpression="bk_brgy" ItemStyle-Width="150px">
-                                            <ItemStyle Width="150px"></ItemStyle>
-                                        </asp:BoundField>
-                                        <asp:BoundField DataField="bk_street" HeaderText="Street" SortExpression="bk_street" ItemStyle-Width="150px">
-                                            <ItemStyle Width="150px"></ItemStyle>
-                                        </asp:BoundField>
-                                        <asp:BoundField DataField="bk_postal" HeaderText="Postal Code" SortExpression="bk_postal" ItemStyle-Width="100px">
-                                            <ItemStyle Width="100px"></ItemStyle>
-                                        </asp:BoundField>
-
-                                        <%--<asp:TemplateField HeaderText="Generate Bill">
-                                            <ItemTemplate>
-                                                <asp:LinkButton ID="update" runat="server" OnClick="openBookWaste_Click" CommandArgument='<%# Eval("bk_id") %>'>
-                                                    <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Pictures/editlogo.png" Width="35%" Height="35%" Style="margin-right: 10px" AlternateText="Edit" />
-                                                </asp:LinkButton>
-                                            </ItemTemplate>
-                                        </asp:TemplateField>--%>
-
+                                        
                                     </Columns>
-                                    <RowStyle BackColor="White" ForeColor="Black" BorderStyle="Solid" BorderColor="#ccc" BorderWidth="1px" />
-                                    <HeaderStyle BackColor="#66CDAA" Font-Bold="True" ForeColor="black" BorderStyle="Solid" BorderColor="#66CDAA" BorderWidth="1px" />
                                 </asp:GridView>
                                 </div>
 <%--                            </div>--%>
@@ -753,11 +737,12 @@
                             <div class="gridview-container">
                                 <asp:GridView ID="gridView1" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="gb_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
                                     <Columns>
-                                        <asp:BoundField DataField="gb_id" HeaderText="Transaction No." SortExpression="gb_id" ItemStyle-Width="100px" />
+                                        <asp:BoundField DataField="gb_id" HeaderText="ID" SortExpression="gb_id" ItemStyle-Width="100px" />
                                         <asp:BoundField DataField="gb_date_issued" HeaderText="Issued Date" SortExpression="gb_date_issued" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px" />
                                         <asp:BoundField DataField="gb_date_due" HeaderText="Due Date" SortExpression="gb_date_due" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px" />
                                         <asp:BoundField DataField="bk_id" HeaderText="Book ID" SortExpression="bk_id" ItemStyle-Width="150px" />
                                         <asp:BoundField DataField="gb_total_sales" HeaderText="Total Sales" SortExpression="gb_total_sales" DataFormatString="₱{0:N2}" ItemStyle-Width="100px" />
+                                        <asp:BoundField DataField="p_trans_id" HeaderText="Trans. ID" SortExpression="p_trans_id" ItemStyle-Width="100px" />
                                         <asp:BoundField DataField="p_amount" HeaderText="Paid Amount" SortExpression="p_amount" DataFormatString="₱{0:N2}" ItemStyle-Width="100px" />
                                         <asp:BoundField DataField="p_method" HeaderText="Payment Method" SortExpression="p_method" ItemStyle-Width="150px" />
                                         <asp:BoundField DataField="p_date_paid" HeaderText="Date Paid" SortExpression="p_date_paid" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px" />
@@ -994,6 +979,8 @@
                     BackgroundCssClass="Background-scale-slip" DropShadow="True">
                 </ajaxToolkit:ModalPopupExtender>
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
                 <script>
                     $(function () {
                         $("input[name='EmpId']").on('input', function (e) {
@@ -1017,6 +1004,108 @@
                         $(".modal").removeClass("ui-dialog").css({ position: 'fixed' });
                     });
 
+
+                    function updateNotificationCount1() {
+                        $.ajax({
+                            type: 'GET',
+                            url: '/api/payment/notificationCount1',  // Your API endpoint
+                            success: function (response) {
+                                var count = response.unreadCount1;  // The unread notification count
+                                if (count > 0) {
+                                    $('#notificationCount1').text(count).show();
+                                    $('#notificationHeader1').text(count);
+                                } else {
+                                    $('#notificationCount1').hide();
+                                    $('#notificationHeader1').text('0');
+                                }
+                            },
+                            error: function () {
+                                console.log('Error fetching notification count');
+                            }
+                        });
+                    }
+
+                    // Set interval to update the count (every 10 seconds)
+                    setInterval(updateNotificationCount1, 100); // Run every 10 seconds
+
+                    let isDropdownOpen = false;
+
+                    function detectDropdownState() {
+                        const dropdown = document.querySelector('#notificationDropdown1');
+                        isDropdownOpen = dropdown && dropdown.classList.contains('show');
+                    }
+
+                    function restoreDropdownState() {
+                        const dropdown = document.querySelector('#notificationDropdown1');
+                        const dropdownToggle = document.querySelector('[data-bs-toggle="dropdown"]');
+                        if (isDropdownOpen && dropdown && dropdownToggle) {
+                            dropdown.classList.add('show');
+                            dropdownToggle.setAttribute('aria-expanded', 'true');
+                        }
+                    }
+
+                    // Hook into ASP.NET UpdatePanel lifecycle events
+                    Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(() => detectDropdownState());
+                    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(() => restoreDropdownState());
+
+                    function updateNotificationCount() {
+                        fetch('/api/payment/notificationCount1', { method: 'GET' })
+                            .then(response => response.json())
+                            .then(data => {
+                                // Assuming there's an element with ID 'notificationCount' to show the count
+                                document.getElementById('notificationCount1').innerText = data.unreadCount1 || 0;
+                            })
+                            .catch(error => {
+                                console.error('Error updating notification count:', error);
+                            });
+                    }
+
+
+
+
+                    function markAllNotificationsAsDelete() {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/api/payment/deleteAllNotifications1',
+                            success: function (updatedNotifications) {
+                                updateNotificationUI(updatedNotifications);
+                                updateNotificationCount1();  // Refresh count
+                            },
+                            error: function () {
+                                console.error('Failed to delete all notifications.');
+                            }
+                        });
+                    }
+
+                    function markAllNotificationsAsRead() {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/api/payment/markAllAsRead1',
+                            success: function (updatedNotifications) {
+                                updateNotificationUI(updatedNotifications);
+                                updateNotificationCount1();  // Refresh count
+                            },
+                            error: function () {
+                                console.error('Failed to mark all notifications as read.');
+                            }
+                        });
+                    }
+
+                    document.addEventListener('click', (event) => {
+                        const dropdown = document.querySelector('#notificationDropdown1');
+                        const dropdownToggle = document.querySelector('[data-bs-toggle="dropdown"]');
+
+                        // Only close the dropdown if it's open and clicked outside
+                        if (dropdown && dropdownToggle && dropdown.classList.contains('show')) {
+                            const isClickInside = dropdown.contains(event.target) || dropdownToggle.contains(event.target);
+                            if (!isClickInside) {
+                                dropdown.classList.remove('show');
+                                dropdownToggle.setAttribute('aria-expanded', 'false');
+                                isDropdownOpen = false;
+                            }
+                        }
+                    });
+
                 </script>
                 <script type="text/javascript">
                     $(document).ready(function () {
@@ -1033,15 +1122,39 @@
                         });
                     });
                 </script>
-
-
-                <!-- Include Bootstrap JS, Popper.js, and jQuery -->
+                <script src="Scripts/jquery-3.6.0.min.js"></script>
+<script src="Scripts/jquery.signalR-2.4.2.min.js"></script>
+<script src="/signalr/hubs"></script>
                 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
                 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
                 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+                <!-- TAB SCRIPTS-->
+                <%--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+                <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+                <script src="https://code.jquery.com/jquery-3.5.2.min.js"></script>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                <!-- Include Bootstrap JS, Popper.js, and jQuery -->
+                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+                <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>--%>
                 <!-- End General Form Elements -->
             </main>
             <!-- End #main -->
@@ -1053,7 +1166,12 @@
                 </div>
             </footer>--%>
             <!-- End Footer -->
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+
+                <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
             <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
             <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>

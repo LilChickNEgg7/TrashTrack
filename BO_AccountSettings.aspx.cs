@@ -11,10 +11,8 @@ using System.Text;
 using System.Data;
 using System.Text.Json;
 using System.IO;
-using System.Diagnostics;
-using System.Net.Mail;
-using System.Net;
-using System.Xml.Linq;
+using static Capstone.PaymentController;
+
 
 namespace Capstone
 {
@@ -35,8 +33,251 @@ namespace Capstone
                 {
                     hfActiveTab.Value = "#profile-overview";
                 }
+                BindNotifications();
+                GetUnreadNotificationCount();
             }
         }
+
+        public int GetUnreadNotificationCount()
+        {
+            int unreadCount1 = 0;
+
+            // Replace with your actual PostgreSQL connection string
+            using (var connection = new NpgsqlConnection(con))
+            {
+                connection.Open();
+                string query = "SELECT COUNT(*) FROM notification WHERE notif_read = false AND notif_type IN ('slip', 'payment');";
+
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    unreadCount1 = Convert.ToInt32(command.ExecuteScalar());
+                }
+            }
+
+            return unreadCount1;
+        }
+
+
+        protected void NotificationTimer_Tick(object sender, EventArgs e)
+        {
+            // Fetch updated notifications
+            var notifications = GetNotificationsFromDb1();
+
+            // Bind to the Repeater
+            NotificationRepeater1.DataSource = notifications;
+            NotificationRepeater1.DataBind();
+
+            // Update the notification count
+            int unreadCount = notifications.Count(n => !n.NotifRead1);
+            notificationCount1.InnerText = unreadCount.ToString();
+            notificationCount1.Style["display"] = unreadCount > 0 ? "block" : "none";
+
+            // Update the header count
+            notificationHeader1.InnerText = unreadCount.ToString();
+
+        }
+
+
+        private void BindNotifications()
+        {
+            var notifications1 = GetNotificationsFromDb1();  // This gets a List<Notification>
+            NotificationRepeater1.DataSource = notifications1;
+            NotificationRepeater1.DataBind();
+            // Update notification count (if applicable)
+            // Optionally, update the notification count and header
+            notificationCount1.InnerText = notifications1.Count.ToString();
+            notificationCount1.Visible = notifications1.Count > 0;  // Hide if there are no notifications
+            notificationHeader1.InnerText = notifications1.Count.ToString() + " new notifications";
+        }
+        private List<Notification1> GetNotificationsFromDb1()
+        {
+            string query = "SELECT notif_id, notif_message, notif_created_at, notif_read, notif_type, cus_id, notif_status " +
+                           "FROM notification WHERE notif_status != 'Deleted' AND notif_type IN ('slip', 'payment') " +
+                           "ORDER BY notif_created_at DESC;";
+            var notifications1 = new List<Notification1>();
+
+            using (var connection = new NpgsqlConnection(con))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand(query, connection))
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        notifications1.Add(new Notification1
+                        {
+                            NotifId1 = reader.GetInt32(0),
+                            NotifMessage1 = reader.GetString(1),
+                            NotifCreatedAt1 = reader.GetDateTime(2),
+                            NotifRead1 = reader.GetBoolean(3),
+                            NotifType1 = reader.GetString(4),
+                            CusId1 = reader.GetInt32(5),
+                            NotifStatus1 = reader.GetString(6)
+                        });
+                    }
+                }
+            }
+
+            return notifications1;
+        }
+
+        protected void NotificationBell_Click(object sender, EventArgs e)
+        {
+            // Call the method to retrieve notifications (replace with your actual logic)
+            BindNotifications();
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "OpenDropdown",
+                   "$('#LinkButton7').dropdown('show');", true);
+            //Response.Redirect($"SAM_AccountManCustomers.aspx");
+
+            UpdatePanelNotifications1.Update();
+            Response.Redirect($"BO_Billing.aspx");
+            //this.ModalPopupExtender12.Show();
+
+        }
+
+        protected void Notification_Click(object sender, EventArgs e)
+        {
+            LinkButton btn = sender as LinkButton;
+            if (btn != null)
+            {
+                int notifId = Convert.ToInt32(btn.CommandArgument);
+                MarkNotificationAsRead(notifId);
+                Response.Redirect($"BO_Billing.aspx");
+
+                // Rebind notifications to reflect the change
+                BindNotifications();
+            }
+        }
+
+
+        protected void ViewAllNotifications_Click(object sender, EventArgs e)
+        {
+            string query = "UPDATE notification SET notif_read = true WHERE notif_type IN ('slip', 'payment') AND notif_read = false;";
+            using (var connection = new NpgsqlConnection(con))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.ExecuteNonQuery();
+                    BindNotifications();
+                }
+            }
+        }
+        private void MarkNotificationAsRead(int notifId)
+        {
+            string query = "UPDATE notification SET notif_read = true WHERE notif_id = @notifId AND notif_type IN ('slip', 'payment');";
+            using (var connection = new NpgsqlConnection(con))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@notifId", notifId);
+                    command.ExecuteNonQuery();
+                    BindNotifications();
+                    GetUnreadNotificationCount();
+                }
+            }
+        }
+
+        //Helper function to get the corresponding icon based on the status
+        protected string GetNotificationIcon(string status)
+        {
+            switch (status)
+            {
+                case "Pending":
+                    return "bi bi-exclamation-circle text-warning";
+                case "Declined":
+                    return "bi bi-x-circle text-danger";
+                case "Approved":
+                    return "bi bi-check-circle text-success";
+                default:
+                    return "bi bi-info-circle text-primary";
+            }
+        }
+
+
+
+        protected void DeleteAllNotifications_Click(object sender, EventArgs e)
+        {
+
+
+
+            string query = "UPDATE notification SET notif_status = 'Deleted', notif_read = true WHERE notif_type IN ('slip', 'payment');";
+            using (var connection = new NpgsqlConnection(con))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.ExecuteNonQuery();
+                    BindNotifications();
+                    GetUnreadNotificationCount();
+
+                }
+            }
+            //BindNotifications();
+            //DeleteAllNotificationsFromDb();
+            //GetUnreadNotificationCount();
+
+        }
+
+
+        protected void DeleteNotification_Click(object sender, EventArgs e)
+        {
+            // Get the ID of the notification to be deleted from the CommandArgument
+            LinkButton btnDelete = (LinkButton)sender;
+            string notifId = btnDelete.CommandArgument;
+
+            using (var conn = new NpgsqlConnection(con)) // Replace 'con' with your connection string variable
+            {
+                conn.Open();
+
+                // Update the notification status to 'Deleted' and notif_read to true
+                string updateQuery = @"
+            UPDATE notification
+            SET notif_status = 'Deleted',
+                notif_read = true
+            WHERE notif_id = @notifId;
+        ";
+
+                using (var cmd = new NpgsqlCommand(updateQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@notifId", int.Parse(notifId));
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        // Optionally show a success message
+                        ScriptManager.RegisterStartupScript(this, GetType(), "updateSuccess",
+                            "Swal.fire({ icon: 'success', title: 'Notification Deleted', text: 'The notification has been successfully deleted.', confirmButtonColor: '#28a745' });", true);
+                        // Refresh the notifications list
+                        BindNotifications();
+                    }
+                    else
+                    {
+                        // Optionally show an error message
+                        ScriptManager.RegisterStartupScript(this, GetType(), "updateError",
+                            "Swal.fire({ icon: 'error', title: 'Error', text: 'Unable to delete the notification.', confirmButtonColor: '#dc3545' });", true);
+                    }
+                }
+            }
+            GetUnreadNotificationCount();
+            // Refresh the notifications list
+            BindNotifications();
+        }
+
+
+        //public class Notification1
+        //{
+        //    public int NotifId1 { get; set; }
+        //    public string NotifMessage1 { get; set; }
+        //    public DateTime NotifCreatedAt1 { get; set; }
+        //    public bool NotifRead1 { get; set; }
+        //    public string NotifType1 { get; set; }
+        //    public int CusId1 { get; set; }
+        //    public string NotifStatus1 { get; set; }
+        //    public string NotifIcon1 { get; set; }  // Ensure this property is included
+        //}
 
         private void LoadProfile()
         {

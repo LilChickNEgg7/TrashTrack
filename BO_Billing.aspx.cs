@@ -21,6 +21,7 @@ using System.Web.Services;
 
 using System.Linq;
 using static Capstone.PaymentController;
+using System.Data.SqlClient;
 
 
 
@@ -210,9 +211,6 @@ namespace Capstone
 
         protected void DeleteAllNotifications_Click(object sender, EventArgs e)
         {
-
-
-
             string query = "UPDATE notification SET notif_status = 'Deleted', notif_read = true WHERE notif_type IN ('slip', 'payment');";
             using (var connection = new NpgsqlConnection(con))
             {
@@ -221,15 +219,13 @@ namespace Capstone
                 {
                     command.ExecuteNonQuery();
                     BindNotifications();
+                    //GetUnreadNotificationCount();
                     GetUnreadNotificationCount();
-
                 }
             }
-            //BindNotifications();
-            //DeleteAllNotificationsFromDb();
-            //GetUnreadNotificationCount();
-
         }
+
+
 
         protected void DeleteNotification_Click(object sender, EventArgs e)
         {
@@ -237,15 +233,64 @@ namespace Capstone
             LinkButton btnDelete = (LinkButton)sender;
             string notifId = btnDelete.CommandArgument;
 
-            // Logic to mark the notification as deleted in the database
-            DeleteNotificationFromDatabase(notifId);
-            GetUnreadNotificationCount();
-            // Refresh the notification list by re-binding the repeater
+            using (var conn = new NpgsqlConnection(con)) // Replace 'con' with your connection string variable
+            {
+                conn.Open();
+
+                // Update the notification status to 'Deleted' and notif_read to true
+                string updateQuery = @"
+            UPDATE notification
+            SET notif_status = 'Deleted',
+                notif_read = true
+            WHERE notif_id = @notifId;
+        ";
+
+                using (var cmd = new NpgsqlCommand(updateQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@notifId", int.Parse(notifId));
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        // Optionally show a success message
+                        ScriptManager.RegisterStartupScript(this, GetType(), "updateSuccess",
+                            "Swal.fire({ icon: 'success', title: 'Notification Deleted', text: 'The notification has been successfully deleted.', confirmButtonColor: '#28a745' });", true);
+                        GetUnreadNotificationCount();
+
+                    }
+                    else
+                    {
+                        // Optionally show an error message
+                        ScriptManager.RegisterStartupScript(this, GetType(), "updateError",
+                            "Swal.fire({ icon: 'error', title: 'Error', text: 'Unable to delete the notification.', confirmButtonColor: '#dc3545' });", true);
+                    }
+                }
+            }
+
+            // Refresh the notifications list
             BindNotifications();
 
-            // Update the UpdatePanel to reflect the changes on the UI
-            UpdatePanelNotifications1.Update();
+            //// Update the UpdatePanel to reflect the changes on the UI
+            //UpdatePanelNotifications1.Update();
         }
+
+
+
+        //protected void DeleteNotification_Click(object sender, EventArgs e)
+        //{
+        //    // Get the ID of the notification to be deleted from the CommandArgument
+        //    LinkButton btnDelete = (LinkButton)sender;
+        //    string notifId = btnDelete.CommandArgument;
+
+        //    // Logic to mark the notification as deleted in the database
+        //    DeleteNotificationFromDatabase(notifId);
+        //    GetUnreadNotificationCount();
+        //    // Refresh the notification list by re-binding the repeater
+        //    BindNotifications();
+
+        //    // Update the UpdatePanel to reflect the changes on the UI
+        //    UpdatePanelNotifications1.Update();
+        //}
 
         private void DeleteNotificationFromDatabase(string notifId)
         {
@@ -263,7 +308,17 @@ namespace Capstone
             }
         }
 
-
+        public class Notification1
+        {
+            public int NotifId1 { get; set; }
+            public string NotifMessage1 { get; set; }
+            public DateTime NotifCreatedAt1 { get; set; }
+            public bool NotifRead1 { get; set; }
+            public string NotifType1 { get; set; }
+            public int CusId1 { get; set; }
+            public string NotifStatus1 { get; set; }
+            public string NotifIcon1 { get; set; }  // Ensure this property is included
+        }
 
         /// <summary>
         /// MUGANAAAA LATEST 11/30/24 12:21
@@ -446,7 +501,7 @@ namespace Capstone
         }
 
         //not real-time
-        [WebMethod]
+        //[WebMethod]
         protected void LoadBookingList()
         {
             using (var db = new NpgsqlConnection(con))
@@ -459,6 +514,7 @@ namespace Capstone
                     cmd.CommandText = @"SELECT 
                         b.bk_id, 
                         b.bk_date,
+                        b.bk_created_at,
                         b.bk_fullname,
                         b.bk_status, 
                         b.bk_waste_scale_slip,
@@ -472,7 +528,7 @@ namespace Capstone
                     WHERE 
                         b.bk_status NOT IN ('Completed', 'Billed', 'Cancelled', 'Failed') 
                     ORDER BY 
-                        b.bk_date DESC, b.bk_id DESC";
+                        b.bk_id DESC, b.bk_date DESC";
 
 
                     // Execute the query and bind the results to the GridView
@@ -490,270 +546,6 @@ namespace Capstone
         }
 
 
-        //[WebMethod]
-        //public static string LoadBookingList()
-        //{
-        //    StringWriter sw = new StringWriter();
-
-        //    using (var db = new NpgsqlConnection(con))
-        //    {
-        //        db.Open();
-        //        using (var cmd = db.CreateCommand())
-        //        {
-        //            cmd.CommandType = CommandType.Text;
-        //            cmd.CommandText = @"
-        //        SELECT 
-        //            b.bk_id, 
-        //            b.bk_date,
-        //            b.bk_fullname,
-        //            b.bk_status, 
-        //            CONCAT(b.bk_street, ', ', b.bk_brgy, ', ', b.bk_city, ', ', b.bk_province, ' ', b.bk_postal) AS location,
-        //            c.cus_id,
-        //            c.cus_email
-        //        FROM 
-        //            booking b
-        //        JOIN 
-        //            customer c ON b.cus_id = c.cus_id
-        //        WHERE 
-        //            b.bk_status NOT IN ('Completed', 'Billed', 'Cancelled', 'Failed') 
-        //        ORDER BY 
-        //            b.bk_date DESC, b.bk_id DESC";
-
-        //            DataTable bookingsDataTable = new DataTable();
-        //            NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
-        //            bookingsAdapter.Fill(bookingsDataTable);
-
-        //            // Create GridView instance to render rows only
-        //            GridView gridView = new GridView();
-        //            gridView.DataSource = bookingsDataTable;
-        //            gridView.DataBind();
-
-        //            // Render only the rows (<tbody>) of the GridView
-        //            foreach (GridViewRow row in gridView.Rows)
-        //            {
-        //                row.RenderControl(new HtmlTextWriter(sw));
-        //            }
-        //        }
-        //        db.Close();
-        //    }
-
-        //    // Return the <tbody> HTML (the rows)
-        //    return sw.ToString();
-        //}
-
-
-
-        //[WebMethod]
-        //public static string LoadBookingList()
-        //{
-        //    StringWriter sw = new StringWriter();
-
-        //    using (var db = new NpgsqlConnection(con))
-        //    {
-        //        db.Open();
-        //        using (var cmd = db.CreateCommand())
-        //        {
-        //            cmd.CommandType = CommandType.Text;
-        //            cmd.CommandText = @"
-        //        SELECT 
-        //            b.bk_id, 
-        //            b.bk_date,
-        //            b.bk_fullname,
-        //            b.bk_status, 
-        //            b.bk_waste_scale_slip,
-        //            CONCAT(b.bk_street, ', ', b.bk_brgy, ', ', b.bk_city, ', ', b.bk_province, ' ', b.bk_postal) AS location,
-        //            c.cus_id,
-        //            c.cus_email
-        //        FROM 
-        //            booking b
-        //        JOIN 
-        //            customer c ON b.cus_id = c.cus_id
-        //        WHERE 
-        //            b.bk_status NOT IN ('Completed', 'Billed', 'Cancelled', 'Failed') 
-        //        ORDER BY 
-        //            b.bk_date DESC, b.bk_id DESC";
-
-
-        //            // Execute the query and bind the results to the GridView
-        //            //DataTable bookingsDataTable = new DataTable();
-        //            //NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
-        //            //bookingsAdapter.Fill(bookingsDataTable);
-
-        //            //// Bind the data to the GridView
-        //            //gridViewBookings.DataSource = bookingsDataTable;
-        //            //gridViewBookings.DataBind();
-
-
-
-
-
-        //            DataTable bookingsDataTable = new DataTable();
-        //            NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
-        //            bookingsAdapter.Fill(bookingsDataTable);
-
-        //            // Render the GridView to HTML
-        //            //GridView gridView = new GridView();
-        //            gridViewBookings.DataSource = bookingsDataTable;
-        //            gridViewBookings.DataBind();
-        //            gridViewBookings.RenderControl(new HtmlTextWriter(sw));
-        //        }
-        //        db.Close();
-        //    }
-
-        //    // Return the HTML of the GridView as a string
-        //    return sw.ToString();
-        //}
-
-
-
-        //[WebMethod]
-        //protected void LoadBookingList()
-        //{
-        //    StringWriter sw = new StringWriter();
-
-        //    using (var db = new NpgsqlConnection(con))
-        //    {
-        //        db.Open();
-        //        using (var cmd = db.CreateCommand())
-        //        {
-        //            cmd.CommandType = CommandType.Text;
-        //            // Query to fetch booking data from the database
-        //            cmd.CommandText = @"SELECT 
-        //                b.bk_id, 
-        //                b.bk_date,
-        //                b.bk_fullname,
-        //                b.bk_status, 
-        //                b.bk_waste_scale_slip,
-        //                CONCAT(b.bk_street, ', ', b.bk_brgy, ', ', b.bk_city, ', ', b.bk_province, ' ', b.bk_postal) AS location,
-        //                c.cus_id,
-        //                c.cus_email
-        //            FROM 
-        //                booking b
-        //            JOIN 
-        //                customer c ON b.cus_id = c.cus_id
-        //            WHERE 
-        //                b.bk_status NOT IN ('Completed', 'Billed', 'Cancelled', 'Failed') 
-        //            ORDER BY 
-        //                b.bk_date DESC, b.bk_id DESC";
-
-
-        //            //// Execute the query and bind the results to the GridView
-        //            //DataTable bookingsDataTable = new DataTable();
-        //            //NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
-        //            //bookingsAdapter.Fill(bookingsDataTable);
-
-        //            //// Bind the data to the GridView
-        //            //gridViewBookings.DataSource = bookingsDataTable;
-        //            //gridViewBookings.DataBind();
-
-        //            DataTable bookingsDataTable = new DataTable();
-        //            NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
-        //            bookingsAdapter.Fill(bookingsDataTable);
-
-        //            // Render the GridView to HTML
-        //            GridView gridView = new GridView();
-        //            gridView.DataSource = bookingsDataTable;
-        //            gridView.DataBind();
-        //            gridView.RenderControl(new HtmlTextWriter(sw));
-
-        //        }
-        //        db.Close();
-        //    }
-        //    return sw.ToString(); // Return the HTML of the GridView
-
-        //}
-
-
-        //[WebMethod]
-        //public static string LoadBookingList()
-        //{
-        //    StringWriter sw = new StringWriter();
-        //    GridView gridViewBookings = new GridView(); // Instantiate the GridView here
-
-        //    using (var db = new NpgsqlConnection(con))
-        //    {
-        //        db.Open();
-        //        using (var cmd = db.CreateCommand())
-        //        {
-        //            cmd.CommandType = CommandType.Text;
-        //            cmd.CommandText = @"
-        //        SELECT 
-        //            b.bk_id, 
-        //            b.bk_date,
-        //            b.bk_fullname,
-        //            b.bk_status, 
-        //            b.bk_waste_scale_slip,
-        //            CONCAT(b.bk_street, ', ', b.bk_brgy, ', ', b.bk_city, ', ', b.bk_province, ' ', b.bk_postal) AS location,
-        //            c.cus_id,
-        //            c.cus_email
-        //        FROM 
-        //            booking b
-        //        JOIN 
-        //            customer c ON b.cus_id = c.cus_id
-        //        WHERE 
-        //            b.bk_status NOT IN ('Completed', 'Billed', 'Cancelled', 'Failed') 
-        //        ORDER BY 
-        //            b.bk_date DESC, b.bk_id DESC";
-
-        //            DataTable bookingsDataTable = new DataTable();
-        //            NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
-        //            bookingsAdapter.Fill(bookingsDataTable);
-
-        //            // Bind the DataTable to the GridView
-        //            gridViewBookings.DataSource = bookingsDataTable;
-        //            gridViewBookings.DataBind();
-        //        }
-        //        db.Close();
-        //    }
-
-        //    // Render the GridView to HTML and return it as a string
-        //    gridViewBookings.RenderControl(new HtmlTextWriter(sw));
-        //    return sw.ToString();
-        //}
-
-        //[WebMethod]
-        //public static string LoadBookingList()
-        //{
-        //    // Create a DataTable to hold the data
-        //    DataTable bookingsDataTable = new DataTable();
-
-        //    // Fetch data from the database
-        //    using (var db = new NpgsqlConnection(con))
-        //    {
-        //        db.Open();
-        //        using (var cmd = db.CreateCommand())
-        //        {
-        //            cmd.CommandType = CommandType.Text;
-        //            cmd.CommandText = @"
-        //        SELECT 
-        //            b.bk_id, 
-        //            b.bk_date,
-        //            b.bk_fullname,
-        //            b.bk_status, 
-        //            b.bk_waste_scale_slip,
-        //            CONCAT(b.bk_street, ', ', b.bk_brgy, ', ', b.bk_city, ', ', b.bk_province, ' ', b.bk_postal) AS location,
-        //            c.cus_id,
-        //            c.cus_email
-        //        FROM 
-        //            booking b
-        //        JOIN 
-        //            customer c ON b.cus_id = c.cus_id
-        //        WHERE 
-        //            b.bk_status NOT IN ('Completed', 'Billed', 'Cancelled', 'Failed') 
-        //        ORDER BY 
-        //            b.bk_date DESC, b.bk_id DESC";
-
-        //            NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
-        //            bookingsAdapter.Fill(bookingsDataTable);
-        //        }
-        //        db.Close();
-        //    }
-
-        //    // Serialize the DataTable to JSON to return to the client
-        //    return Newtonsoft.Json.JsonConvert.SerializeObject(bookingsDataTable);
-        //}
-
-
 
 
         protected void GeneratedBillList()
@@ -768,7 +560,8 @@ namespace Capstone
                     //p.p_date_paid DESC NULLS LAST,
 
                     // SQL query to fetch bill and payment data
-                    cmd.CommandText = @"SELECT 
+                    cmd.CommandText = @"
+                                        SELECT 
                                             gb.gb_id, 
                                             gb.gb_date_issued, 
                                             gb.gb_date_due, 
@@ -778,14 +571,17 @@ namespace Capstone
                                             COALESCE(p.p_amount, 0) AS p_amount, 
                                             COALESCE(p.p_method, 'N/A') AS p_method, 
                                             COALESCE(p.p_date_paid, NULL) AS p_date_paid, 
-                                            COALESCE(p.p_checkout_id, 'N/A') AS p_checkout_id
+                                            COALESCE(p.p_checkout_id, 'N/A') AS p_checkout_id,
+                                            COALESCE(p.p_trans_id, 'N/A') AS p_trans_id
                                         FROM 
                                             generate_bill gb
                                         LEFT JOIN 
                                             payment p ON gb.gb_id = p.gb_id
                                         ORDER BY 
                                             gb.gb_date_issued DESC,
-                                            gb.gb_id DESC";
+                                            gb.gb_id DESC;
+                                    ";
+
 
 
                     // Execute the query and fill the DataTable
@@ -1683,13 +1479,16 @@ namespace Capstone
 
                 // SQL Query to fetch waste categories that are NOT already associated with the given bk_id
                 string query = @"
-            SELECT wc.wc_id, wc.wc_name
-            FROM waste_category wc
-            WHERE wc.wc_id NOT IN (
-                SELECT bw.wc_id
-                FROM booking_waste bw
-                WHERE bw.bk_id = 1047
-            )";
+                                SELECT wc.wc_id, wc.wc_name
+                                FROM waste_category wc
+                                WHERE wc.wc_status != 'Deleted' 
+                                  AND wc.wc_id NOT IN (
+                                      SELECT bw.wc_id
+                                      FROM booking_waste bw
+                                      WHERE bw.bk_id = @bk_id
+                                  );
+                            ";
+
 
                 // Prepare command
                 NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
@@ -2220,47 +2019,61 @@ namespace Capstone
                         .SetTextAlignment(TextAlignment.CENTER);
                     document.Add(title);
 
+                    // Create a 2-column table to align items in two columns
                     iText.Layout.Element.Table infoTable = new iText.Layout.Element.Table(2).UseAllAvailableWidth();
 
+                    // Set table border to none
                     infoTable.SetBorder(Border.NO_BORDER);
 
-                    // Bill ID cell
+                    // Left column: Bill ID
                     infoTable.AddCell(new Cell()
                         .SetBorder(Border.NO_BORDER)
                         .Add(new Paragraph($"Bill ID: {buttonText}")
-                            .SetFont(boldFont)
-                            .SetBorder(Border.NO_BORDER)));
+                            .SetFont(boldFont)));
 
-                    // Booking ID cell
+                    // Right column: Booking ID
                     infoTable.AddCell(new Cell()
                         .SetBorder(Border.NO_BORDER)
+                        .SetTextAlignment(TextAlignment.RIGHT)
                         .Add(new Paragraph($"Booking ID: {bkID}")
-                            .SetFont(boldFont)
-                            .SetBorder(Border.NO_BORDER)));
+                            .SetFont(boldFont)));
 
-                    // Date Issued cell, aligned to the right
+                    // Left column: Empty cell for spacing
                     infoTable.AddCell(new Cell()
                         .SetBorder(Border.NO_BORDER)
+                        .Add(new Paragraph("")));
+
+                    // Left column: Empty cell for spacing
+                    infoTable.AddCell(new Cell()
+                        .SetBorder(Border.NO_BORDER)
+                        .Add(new Paragraph("")));
+                    // Left column: Empty cell for spacing
+                    infoTable.AddCell(new Cell()
+                        .SetBorder(Border.NO_BORDER)
+                        .Add(new Paragraph("")));
+
+                    // Right column: Date Issued
+                    infoTable.AddCell(new Cell()
+                        .SetBorder(Border.NO_BORDER)
+                        .SetTextAlignment(TextAlignment.RIGHT)
                         .Add(new Paragraph($"Date Issued: {(dateIssued?.ToString("MM/dd/yyyy") ?? "N/A")}")
-                            .SetFont(boldFont)
-                            .SetTextAlignment(TextAlignment.RIGHT)
-                            .SetBorder(Border.NO_BORDER)));
+                            .SetFont(boldFont)));
 
-                    // Empty cell for spacing
+                    // Left column: Empty cell for spacing
                     infoTable.AddCell(new Cell()
                         .SetBorder(Border.NO_BORDER)
-                        .Add(new Paragraph("").SetBorder(Border.NO_BORDER)));
+                        .Add(new Paragraph("")));
 
-                    // Due Date cell, aligned to the right
+                    // Right column: Due Date
                     infoTable.AddCell(new Cell()
                         .SetBorder(Border.NO_BORDER)
+                        .SetTextAlignment(TextAlignment.RIGHT)
                         .Add(new Paragraph($"Due Date: {(dueDate?.ToString("MM/dd/yyyy") ?? "N/A")}")
-                            .SetFont(boldFont)
-                            .SetTextAlignment(TextAlignment.RIGHT)
-                            .SetBorder(Border.NO_BORDER)));
+                            .SetFont(boldFont)));
 
                     // Add the table to the document
                     document.Add(infoTable);
+
                 }
 
 
@@ -2506,8 +2319,9 @@ namespace Capstone
                 // Add Total Sales label
                 summarySection.AddCell(new Cell()
                     .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph("Total Sales: ")
+                    .Add(new Paragraph("Total Amount: ")
                         .SetFont(boldFont)
+                        .SetFontColor(redColor)
                         .SetTextAlignment(TextAlignment.LEFT)
                         .SetBorder(Border.NO_BORDER)));
 
@@ -2516,6 +2330,7 @@ namespace Capstone
                     .SetBorder(Border.NO_BORDER)
                     .Add(new Paragraph("₱" + totalSales.ToString("N2"))
                         .SetFont(font)
+                        .SetFontColor(redColor)
                         .SetTextAlignment(TextAlignment.LEFT)
                         .SetBorder(Border.NO_BORDER)));
 
@@ -2526,26 +2341,26 @@ namespace Capstone
                     AddEmptyCell(summarySection);
                 }
 
-                // Add Total Amount label
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph("Total Amount: ")
-                        .SetFont(boldFont)
-                        .SetFontColor(redColor)
-                        .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER)));
+                //// Add Total Amount label
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER)
+                //    .Add(new Paragraph("Total Amount: ")
+                //        .SetFont(boldFont)
+                //        .SetFontColor(redColor)
+                //        .SetTextAlignment(TextAlignment.LEFT)
+                //        .SetBorder(Border.NO_BORDER)));
 
-                // Calculate Total Due
-                //double totalDue = totalPayment + (addFee.HasValue && addFee.Value > 0 ? addFee.Value : 0);
+                //// Calculate Total Due
+                ////double totalDue = totalPayment + (addFee.HasValue && addFee.Value > 0 ? addFee.Value : 0);
 
-                // Add Total Amount due
-                summarySection.AddCell(new Cell()
-                    .SetBorder(Border.NO_BORDER)
-                    .Add(new Paragraph("₱" + totalPayment.ToString("N2"))
-                        .SetFont(boldFont)
-                        .SetFontColor(redColor)
-                        .SetTextAlignment(TextAlignment.LEFT)
-                        .SetBorder(Border.NO_BORDER)));
+                //// Add Total Amount due
+                //summarySection.AddCell(new Cell()
+                //    .SetBorder(Border.NO_BORDER)
+                //    .Add(new Paragraph("₱" + totalPayment.ToString("N2"))
+                //        .SetFont(boldFont)
+                //        .SetFontColor(redColor)
+                //        .SetTextAlignment(TextAlignment.LEFT)
+                //        .SetBorder(Border.NO_BORDER)));
 
                 // Add the summary section table to the document
                 document.Add(summarySection);
@@ -4193,26 +4008,51 @@ namespace Capstone
                 using (var db = new NpgsqlConnection(con))
                 {
                     db.Open();
-                    using (var cmd = db.CreateCommand())
-                    {
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = "UPDATE generate_bill SET gb_status = 'unpaid' WHERE gb_id = @id";
-                        cmd.Parameters.AddWithValue("@id", managerId);
 
-                        var ctr = cmd.ExecuteNonQuery();
-                        if (ctr >= 1)
+                    // Begin a transaction to ensure both updates happen together
+                    using (var transaction = db.BeginTransaction())
+                    {
+                        try
                         {
+                            // Update the gb_status in the generate_bill table
+                            using (var cmd = db.CreateCommand())
+                            {
+                                cmd.CommandType = CommandType.Text;
+                                cmd.CommandText = "UPDATE generate_bill SET gb_status = 'unpaid' WHERE gb_id = @id";
+                                cmd.Parameters.AddWithValue("@id", managerId);
+                                cmd.Transaction = transaction;
+                                cmd.ExecuteNonQuery();
+                            }
+
+                            // Update p_amount to zero in the payment table
+                            using (var cmd = db.CreateCommand())
+                            {
+                                cmd.CommandType = CommandType.Text;
+                                cmd.CommandText = "UPDATE payment SET p_amount = 0 WHERE gb_id = @id";
+                                cmd.Parameters.AddWithValue("@id", managerId);
+                                cmd.Transaction = transaction;
+                                cmd.ExecuteNonQuery();
+                            }
+
+                            // Commit the transaction
+                            transaction.Commit();
+
                             // Show success dialog with SweetAlert
                             ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-                                "Swal.fire({ icon: 'success', title: 'Marked Unpaid!', text: 'Bill Marked Unpaid Successfully!', background: '#e9f7ef', confirmButtonColor: '#28a745' });", true);
-                            hfActiveTab.Value = "#tab2"; // Set the tab to display
+                                "Swal.fire({ icon: 'success', title: 'Marked Unpaid!', text: 'Bill marked unpaid successfully and payment reset!', background: '#e9f7ef', confirmButtonColor: '#28a745' });", true);
 
+                            hfActiveTab.Value = "#tab2"; // Set the tab to display
                             GeneratedBillList(); // Refresh the list
+                            LoadProfile(); // Reload profile data if needed
+                        }
+                        catch (Exception)
+                        {
+                            // Rollback in case of any error
+                            transaction.Rollback();
+                            throw; // Re-throw the exception to handle it outside
                         }
                     }
-                    hfActiveTab.Value = "#tab2"; // Set the tab to display
-                    GeneratedBillList();
-                    LoadProfile();
+
                     db.Close();
                 }
             }
@@ -4229,19 +4069,50 @@ namespace Capstone
 
         protected void Paid_Click(object sender, EventArgs e)
         {
-            Button btn = (Button)sender;
-            int managerId = Convert.ToInt32(btn.CommandArgument);
+            try
+            {
+                Button btn = (Button)sender;
+                int managerId = Convert.ToInt32(btn.CommandArgument);
 
-            hfActiveTab.Value = "#tab2";
-            TextBox3.Text = managerId.ToString();
-            hfManagerId.Value = managerId.ToString();
-            ModalPopupExtender1.Hide();
-            // Show the modal popup
-            ModalPopupExtender6.Show();
-            hfActiveTab.Value = "#tab2";
+                // Set values for the modal popup and other controls
+                hfActiveTab.Value = "#tab2";
+                TextBox3.Text = managerId.ToString();
+                hfManagerId.Value = managerId.ToString();
 
-            // Optional: Load other details related to managerId if needed
-            this.ModalPopupExtender6.Show(); // Show the modal
+                // Hide the first modal and show the second one
+                ModalPopupExtender1.Hide();
+                ModalPopupExtender6.Show();
+
+                // Database query to retrieve gb_total_sales
+                using (NpgsqlConnection conn = new NpgsqlConnection(con))
+                {
+                    string query = @"
+                SELECT gb_total_sales
+                FROM generate_bill WHERE gb_id = @ManagerId";
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@ManagerId", managerId);
+
+                    conn.Open();
+                    object result = cmd.ExecuteScalar();
+
+                    // Handle the result and assign to the textbox
+                    if (result != null && result != DBNull.Value)
+                    {
+                        decimal totalSales = Convert.ToDecimal(result);
+                        txtAmntPaid.Text = totalSales.ToString("N2"); // Format to 2 decimal places
+                    }
+                    else
+                    {
+                        txtAmntPaid.Text = "0.00"; // Default if no result is found
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle any errors
+                Console.WriteLine("Error: " + ex.Message);
+            }
         }
 
 
@@ -4283,15 +4154,15 @@ namespace Capstone
 
 
                                 paymentCmd.ExecuteNonQuery();
+                                GeneratedBillList(); // Refresh the list
+
+                                ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+    "Swal.fire({ icon: 'success', title: 'Updated to Paid', text: 'Bill has been changed to paid successfully!', background: '#e9f7ef', confirmButtonColor: '#28a745' });", true);
                             }
                             hfActiveTab.Value = "#tab2"; // Set Tab 1 as the default
-
-                            // Display success message with SweetAlert
-                            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-                                "Swal.fire({ icon: 'success', title: 'Update Successful', text: 'Account Manager updated to paid successfully!', background: '#e9f7ef', confirmButtonColor: '#28a745' });", true);
                             ModalPopupExtender6.Hide();
-                            hfActiveTab.Value = "#tab2"; // Set the tab to display
-
+                            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+    "Swal.fire({ icon: 'success', title: 'Updated to Paid', text: 'Bill has been changed to paid successfully!', background: '#e9f7ef', confirmButtonColor: '#28a745' });", true);
                             GeneratedBillList(); // Refresh the list
                             LoadProfile();
                         }
@@ -4302,6 +4173,7 @@ namespace Capstone
                                 "Swal.fire({ icon: 'error', title: 'Update Failed', text: 'Failed to update status', background: '#f8d7da', confirmButtonColor: '#dc3545' });", true);
                         }
                     }
+                    GeneratedBillList();
                 }
             }
             catch (Exception ex)

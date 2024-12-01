@@ -31,6 +31,22 @@
 
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
+    <style>
+        .notifications {
+    max-height: 431px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    padding: 10px;
+}
+
+.notification-item.read-notification {
+    background-color: #f8f9fa;
+}
+
+
+    </style>
     <%--<style>
   .nav-item:hover i, .nav-item:hover span {
     color: aquamarine !important;
@@ -123,79 +139,126 @@
           </a>
         </li>--%><!-- End Search Icon-->
 
+                        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+
+
                         <li class="nav-item dropdown">
+                            <asp:UpdatePanel ID="UpdatePanelNotifications" runat="server" UpdateMode="Conditional">
+                                <ContentTemplate>
+                                    <asp:LinkButton
+                                        data-bs-toggle="dropdown"
+                                        ID="LinkButton3"
+                                        runat="server"
+                                        OnClick="NotificationBell_Click"
+                                        aria-expanded="false"
+                                        CssClass="nav-link nav-icon">
+                                        <i class="bi bi-bell"></i>
+                                        <span id="notificationCount" runat="server" class="badge bg-primary badge-number" style="display: none;">0</span>
+                                    </asp:LinkButton>
+                                            <asp:Timer ID="NotificationTimer" runat="server" Interval="5000" OnTick="NotificationTimer_Tick" />
 
-                            <%--<a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number">4</span>
-          </a>--%><!-- End Notification Icon -->
+                                    <!-- Notification Dropdown -->
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications" id="notificationDropdown">
+                                        <!-- Header -->
+                                        <li class="dropdown-header">You have <span id="notificationHeader" runat="server">0</span> new notifications
+                   
+                                            <asp:LinkButton
+                                                ID="lnkViewAllNotifications"
+                                                runat="server"
+                                                OnClick="ViewAllNotifications_Click"
+                                                CssClass="badge rounded-pill bg-primary p-2 ms-2">
+                        View all
+                    </asp:LinkButton>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
 
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-                                <%--<li class="dropdown-header">
-              You have 4 new notifications
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>--%>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
+                                        <!-- Scrollable Repeater Container -->
+                                        <div style="max-height: 305px; overflow-y: auto;">
+                                            <asp:Repeater ID="NotificationRepeater" runat="server">
+                                                <ItemTemplate>
+                                                    <!-- Notification Item -->
 
-                                <%--<li class="notification-item">
-              <i class="bi bi-exclamation-circle text-warning"></i>
-              <div>
-                <h4>Lorem Ipsum</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>30 min. ago</p>
-              </div>
-            </li>--%>
 
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
 
-                                <%--<li class="notification-item">
-              <i class="bi bi-x-circle text-danger"></i>
-              <div>
-                <h4>Atque rerum nesciunt</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>1 hr. ago</p>
-              </div>
-            </li>--%>
 
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
+                                                    <li id="notifReadHighLight" class="notification-item <%# Eval("NotifRead").ToString() == "True" ? "" : "bg-highlight" %>">
+                                                        <i id="notifTypee" class="<%# GetNotificationIcon(Eval("NotifType").ToString()) %> me-2"></i>
+                                                        <div>
+                                                            <h4>
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <!-- Notification Type -->
+                                                                    <asp:LinkButton
+                                                                        ID="LinkButton2"
+                                                                        runat="server"
+                                                                        CommandArgument='<%# Eval("NotifId") %>'
+                                                                        OnClick="Notification_Click"
+                                                                        CssClass="notification-header"
+                                                                        Style="color: inherit;"
+                                                                        onmouseover="this.style.color='black'; this.style.textDecoration='none';"
+                                                                        onmouseout="this.style.color='inherit';">
+                                                <%# Eval("NotifType") %>
+                                                                    </asp:LinkButton>
 
-                                <%--<li class="notification-item">
-              <i class="bi bi-check-circle text-success"></i>
-              <div>
-                <h4>Sit rerum fuga</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>2 hrs. ago</p>
-              </div>
-            </li>--%>
+                                                                    <!-- Badge for New Notifications -->
+                                                                    <asp:Literal
+                                                                        ID="litNewBadge"
+                                                                        runat="server"
+                                                                        Visible='<%# Eval("NotifRead").ToString() == "False" %>'>
+                                                <span style="margin-left: 5px" class="badge bg-success text-white">New</span>
+                                                                    </asp:Literal>
 
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
+                                                                    <!-- Delete Button -->
+                                                                    <asp:LinkButton
+                                                                        ID="btnDeleteNotification"
+                                                                        runat="server"
+                                                                        CommandArgument='<%# Eval("NotifId") %>'
+                                                                        OnClick="DeleteNotification_Click"
+                                                                        CssClass="bi bi-x-circle-fill text-danger ms-auto">
+                                                                    </asp:LinkButton>
+                                                                </div>
+                                                            </h4>
+                                                            <p>
+                                                                <asp:LinkButton
+                                                                    ID="lnkNotification"
+                                                                    runat="server"
+                                                                    CommandArgument='<%# Eval("NotifId") %>'
+                                                                    OnClick="Notification_Click"
+                                                                    CssClass="notification-link"
+                                                                    Style="color: inherit;"
+                                                                    onmouseover="this.style.color='black'; this.style.textDecoration='none';"
+                                                                    onmouseout="this.style.color='inherit';">
+                                            <%# Eval("NotifMessage") %>
+                                                                </asp:LinkButton>
+                                                            </p>
+                                                            <p class="notification-footer">
+                                                                <span id="createdAt" class="text-muted"><%# Eval("NotifCreatedAt", "{0:yyyy-MM-dd HH:mm}") %></span>
+                                                                <span id="custID" class="text-muted ms-2">Customer ID: <%# Eval("CusId") %></span>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <hr class="dropdown-divider">
+                                                    </li>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                        </div>
 
-                                <%--<li class="notification-item">
-              <i class="bi bi-info-circle text-primary"></i>
-              <div>
-                <h4>Dicta reprehenderit</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>4 hrs. ago</p>
-              </div>
-            </li>--%>
+                                        <!-- Footer -->
+                                        <li class="dropdown-footer">
+                                            <asp:LinkButton ID="btnDeleteAllNotifications" runat="server" OnClick="DeleteAllNotifications_Click" CssClass="btn btn-link">
+                        Delete all notifications
+                    </asp:LinkButton>
+                                        </li>
+                                    </ul>
+                                </ContentTemplate>
+                                <Triggers>
+                                    <asp:AsyncPostBackTrigger ControlID="LinkButton3" EventName="Click" />
+                                        <asp:AsyncPostBackTrigger ControlID="NotificationTimer" EventName="Tick" />
 
-                                <%--<li>
-              <hr class="dropdown-divider">
-            </li>
-            <li class="dropdown-footer">
-              <a href="#">Show all notifications</a>
-            </li>--%>
-                            </ul>
-                            <!-- End Notification Dropdown Items -->
-
+                                </Triggers>
+                            </asp:UpdatePanel>
                         </li>
                         <!-- End Notification Nav -->
 
@@ -1169,14 +1232,117 @@
                             </div>
                     </section>
                 </section>
+                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+                <script>
+
+                    function updateNotificationCount() {
+                        $.ajax({
+                            type: 'GET',
+                            url: '/api/payment/notificationCount',  // Your API endpoint
+                            success: function (response) {
+                                var count = response.unreadCount;  // The unread notification count
+                                // Only update the count and avoid closing the dropdown if it's open
+                                if (count > 0) {
+                                    $('#notificationCount').text(count).show();
+                                    $('#notificationHeader').text(count);
+                                } else {
+                                    $('#notificationCount').hide();
+                                    $('#notificationHeader').text('0');
+                                }
+                            },
+                            error: function () {
+                                console.log('Error fetching notification count');
+                            }
+                        });
+                    }
+
+                    // Set interval to update the count
+                    setInterval(updateNotificationCount, 100); // Run every 10 seconds instead of 100ms
 
 
+                    let isDropdownOpen = false;
+
+                    // Detect if the dropdown is open before the server refresh
+                    function detectDropdownState() {
+                        const dropdown = document.querySelector('#notificationDropdown');
+                        isDropdownOpen = dropdown && dropdown.classList.contains('show');
+                    }
+
+                    // Reapply the open state after server refresh
+                    function restoreDropdownState() {
+                        const dropdown = document.querySelector('#notificationDropdown');
+                        const dropdownToggle = document.querySelector('[data-bs-toggle="dropdown"]');
+                        if (isDropdownOpen && dropdown && dropdownToggle) {
+                            dropdown.classList.add('show');
+                            dropdownToggle.setAttribute('aria-expanded', 'true');
+                        }
+                    }
+
+                    // Hook into ASP.NET UpdatePanel lifecycle events
+                    Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(() => detectDropdownState());
+                    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(() => restoreDropdownState());
+
+                    // Enable closing only by clicking outside
+                    document.addEventListener('click', (event) => {
+                        const dropdown = document.querySelector('#notificationDropdown');
+                        const dropdownToggle = document.querySelector('[data-bs-toggle="dropdown"]');
+
+                        // Only close the dropdown if it's open and clicked outside
+                        if (dropdown && dropdownToggle && dropdown.classList.contains('show')) {
+                            const isClickInside = dropdown.contains(event.target) || dropdownToggle.contains(event.target);
+
+                            if (!isClickInside) {
+                                dropdown.classList.remove('show');
+                                dropdownToggle.setAttribute('aria-expanded', 'false');
+                                isDropdownOpen = false;
+                            }
+                        }
+                    });
+
+                    function markAllNotificationsAsDelete() {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/api/payment/deleteAllNotifications',
+                            success: function (updatedNotifications) {
+                                // Update the notification UI (list of notifications)
+                                updateNotificationUI(updatedNotifications);
+
+                                // After updating the notifications, refresh the notification count
+                                updateNotificationCount();
+                            },
+                            error: function () {
+                                console.error('Failed to delete all notifications.');
+                            }
+                        });
+                    }
+
+                    function markNotificationAsRead(notifId) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/api/payment/markNotificationAsRead',  // Your API endpoint
+                            data: { notifId: notifId },
+                            success: function () {
+                                loadNotifications();  // Reload notifications after marking as read
+                                updateNotificationCount();  // Update count after marking as read
+                            },
+                            error: function () {
+                                console.log('Error marking notification as read');
+                            }
+                        });
+                    }
+                </script>
 
 
                 <!-- End General Form Elements -->
             </main>
             <!-- End #main -->
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+
+                <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
             <!-- ======= Footer ======= -->
             <%--<footer id="footer" class="footer" style="border-top-color: chartreuse">
                 <div class="copyright" style="color: #d4f3cf">
@@ -1184,7 +1350,8 @@
                 </div>
             </footer>--%>
             <!-- End Footer -->
-
+            <script src="/Scripts/jquery.signalR-{version}.js"></script>
+<script src="/signalr/hubs"></script>
             <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
             <!-- Vendor JS Files -->

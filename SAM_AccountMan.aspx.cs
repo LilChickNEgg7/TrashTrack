@@ -333,7 +333,7 @@ namespace Capstone
             }
         }
 
-        
+
 
         //private void DeleteAllNotificationsFromDb()
         //{
@@ -354,22 +354,65 @@ namespace Capstone
 
 
 
-
         protected void DeleteNotification_Click(object sender, EventArgs e)
         {
             // Get the ID of the notification to be deleted from the CommandArgument
             LinkButton btnDelete = (LinkButton)sender;
             string notifId = btnDelete.CommandArgument;
 
-            // Logic to mark the notification as deleted in the database
-            DeleteNotificationFromDatabase(notifId);
-            GetUnreadNotificationCount();
-            // Refresh the notification list by re-binding the repeater
-            BindNotifications();
+            using (var conn = new NpgsqlConnection(con)) // Replace 'con' with your connection string variable
+            {
+                conn.Open();
 
-            // Update the UpdatePanel to reflect the changes on the UI
-            UpdatePanelNotifications.Update();
+                // Update the notification status to 'Deleted' and notif_read to true
+                string updateQuery = @"
+            UPDATE notification
+            SET notif_status = 'Deleted',
+                notif_read = true
+            WHERE notif_id = @notifId;
+        ";
+
+                using (var cmd = new NpgsqlCommand(updateQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@notifId", int.Parse(notifId));
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        // Optionally show a success message
+                        ScriptManager.RegisterStartupScript(this, GetType(), "updateSuccess",
+                            "Swal.fire({ icon: 'success', title: 'Notification Deleted', text: 'The notification has been successfully deleted.', confirmButtonColor: '#28a745' });", true);
+                        // Refresh the notifications list
+                        BindNotifications();
+                    }
+                    else
+                    {
+                        // Optionally show an error message
+                        ScriptManager.RegisterStartupScript(this, GetType(), "updateError",
+                            "Swal.fire({ icon: 'error', title: 'Error', text: 'Unable to delete the notification.', confirmButtonColor: '#dc3545' });", true);
+                    }
+                }
+            }
+            GetUnreadNotificationCount();
+            // Refresh the notifications list
+            BindNotifications();
         }
+
+        //protected void DeleteNotification_Click(object sender, EventArgs e)
+        //{
+        //    // Get the ID of the notification to be deleted from the CommandArgument
+        //    LinkButton btnDelete = (LinkButton)sender;
+        //    string notifId = btnDelete.CommandArgument;
+
+        //    // Logic to mark the notification as deleted in the database
+        //    DeleteNotificationFromDatabase(notifId);
+        //    GetUnreadNotificationCount();
+        //    // Refresh the notification list by re-binding the repeater
+        //    BindNotifications();
+
+        //    // Update the UpdatePanel to reflect the changes on the UI
+        //    UpdatePanelNotifications.Update();
+        //}
 
         private void DeleteNotificationFromDatabase(string notifId)
         {
@@ -1506,8 +1549,7 @@ namespace Capstone
                 $"Once you log in, kindly fill out the remaining information required to complete your registration. After completing this step, these credentials will serve as your permanent login information for daily use in our system.\n\n" +
                 $"If you encounter any issues or have any questions, please do not hesitate to contact our support team.\n\n" +
                 $"Best regards,\n" +
-                $"The Account Manager Team\n" +
-                $"[Company Name]";
+                $"The TrashTrack Team";
 
             // Validation: Ensure all required fields are filled
             if (!string.IsNullOrEmpty(emp_firstname.Text) &&

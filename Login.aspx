@@ -189,7 +189,7 @@
     </style>
 </head>
 
-<body class="bg-gradient-primary" style="background-image: url('Pictures//nature_deer.png'); background-size: cover; background-position: center; background-repeat: no-repeat" >
+<body class="bg-gradient-primary" style="background-image: url('Pictures//bg_login1.png'); background-size: cover; background-position: center; background-repeat: no-repeat" >
 
     <div class="container" style="margin-top: 100px">
 

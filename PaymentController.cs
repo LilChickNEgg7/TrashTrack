@@ -57,7 +57,7 @@ namespace Capstone
         private int GetUnreadNotificationCount()
         {
             // SQL query to fetch the unread notifications count
-            string query = "SELECT COUNT(*) FROM notification WHERE notif_type = 'request verification' AND notif_read = false AND notif_status = 'Active';";
+            string query = "SELECT COUNT(*) FROM notification WHERE notif_type = 'request verification' AND notif_read = false AND notif_status != 'Deleted';";
 
             using (var connection = new NpgsqlConnection(con))
             {
@@ -312,10 +312,11 @@ namespace Capstone
         }
 
         // Fetch unread notifications count
-        // Fetch unread notifications count
+        // Fetch unread notifications count             string query = "SELECT COUNT(*) FROM notification WHERE notif_type = 'request verification' AND notif_read = false AND notif_status != 'Deleted';";
+
         private int GetUnreadNotificationCount1()
         {
-            string query = "SELECT COUNT(*) FROM notification WHERE (notif_type = 'payment' OR notif_type = 'slip') AND notif_read = false AND notif_status = 'Active';";
+            string query = "SELECT COUNT(*) FROM notification WHERE notif_read = false AND notif_type IN ('slip', 'payment');";
             using (var connection = new NpgsqlConnection(con))
             {
                 connection.Open();

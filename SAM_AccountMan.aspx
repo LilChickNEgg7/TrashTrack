@@ -55,35 +55,6 @@
 }
 
         
-        
-        /*.modal-dialog {
-            margin: auto;
-        }
-
-        .notification-link {
-            color: black;*/ /* Initial color */
-            /*text-decoration: none;*/ /* Optional: remove underline */
-        /*}
-
-            .notification-link:hover {
-                color: gray;*/ /* Change to gray on hover */
-                /*cursor: pointer;*/ /* Show pointer cursor */
-            /*}
-
-        .notification-item.read-notification {
-            background-color: #f0f0f0;*/ /* Lighter background for read notifications */
-            /*color: #999;*/ /* Dimmed text color */
-        /*}
-
-        .dropdown-menu.notifications {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .read-notification {
-            background-color: #f0f0f0;*/ /* Example color for read notifications */
-            /*color: #999;*/ /* Optional: Change text color for read notifications */
-        /*}*/
 
 
         /*Panel scrollable height*/
@@ -677,7 +648,7 @@
                                                 runat="server"
                                                 OnClick="ViewAllNotifications_Click"
                                                 CssClass="badge rounded-pill bg-primary p-2 ms-2">
-                        View all
+                        Mark all read
                     </asp:LinkButton>
                                         </li>
                                         <li>

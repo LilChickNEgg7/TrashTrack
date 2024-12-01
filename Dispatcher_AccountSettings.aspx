@@ -150,7 +150,7 @@
                             </li>
 
                             <li>
-                                <a class="dropdown-item d-flex align-items-center" href="SAM_AccountSettings.aspx">
+                                <a class="dropdown-item d-flex align-items-center" href="Dispatcher_AccountSettings.aspx">
                                     <i class="bi bi-gear"></i>
                                     <span>Account Settings</span>
                                 </a>

@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using AjaxControlToolkit;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Npgsql;
 using System;
@@ -9,6 +10,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using static Capstone.PaymentController;
+
 
 namespace Capstone
 {
@@ -27,9 +30,239 @@ namespace Capstone
                 showPaymentTerm();
                 LoadProfile();
                 WasteCatList();
+                GetUnreadNotificationCount();
+                BindNotifications();
             }
         }
 
+
+        public int GetUnreadNotificationCount()
+        {
+            int unreadCount1 = 0;
+
+            // Replace with your actual PostgreSQL connection string
+            using (var connection = new NpgsqlConnection(con))
+            {
+                connection.Open();
+                string query = "SELECT COUNT(*) FROM notification WHERE notif_read = false AND notif_type IN ('slip', 'payment');";
+
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    unreadCount1 = Convert.ToInt32(command.ExecuteScalar());
+                }
+            }
+
+            return unreadCount1;
+        }
+
+
+        protected void NotificationTimer_Tick(object sender, EventArgs e)
+        {
+            // Fetch updated notifications
+            var notifications = GetNotificationsFromDb1();
+
+            // Bind to the Repeater
+            NotificationRepeater1.DataSource = notifications;
+            NotificationRepeater1.DataBind();
+
+            // Update the notification count
+            int unreadCount = notifications.Count(n => !n.NotifRead1);
+            notificationCount1.InnerText = unreadCount.ToString();
+            notificationCount1.Style["display"] = unreadCount > 0 ? "block" : "none";
+
+            // Update the header count
+            notificationHeader1.InnerText = unreadCount.ToString();
+
+        }
+
+
+        private void BindNotifications()
+        {
+            var notifications1 = GetNotificationsFromDb1();  // This gets a List<Notification>
+            NotificationRepeater1.DataSource = notifications1;
+            NotificationRepeater1.DataBind();
+            // Update notification count (if applicable)
+            // Optionally, update the notification count and header
+            notificationCount1.InnerText = notifications1.Count.ToString();
+            notificationCount1.Visible = notifications1.Count > 0;  // Hide if there are no notifications
+            notificationHeader1.InnerText = notifications1.Count.ToString() + " new notifications";
+        }
+        private List<Notification1> GetNotificationsFromDb1()
+        {
+            string query = "SELECT notif_id, notif_message, notif_created_at, notif_read, notif_type, cus_id, notif_status " +
+                           "FROM notification WHERE notif_status != 'Deleted' AND notif_type IN ('slip', 'payment') " +
+                           "ORDER BY notif_created_at DESC;";
+            var notifications1 = new List<Notification1>();
+
+            using (var connection = new NpgsqlConnection(con))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand(query, connection))
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        notifications1.Add(new Notification1
+                        {
+                            NotifId1 = reader.GetInt32(0),
+                            NotifMessage1 = reader.GetString(1),
+                            NotifCreatedAt1 = reader.GetDateTime(2),
+                            NotifRead1 = reader.GetBoolean(3),
+                            NotifType1 = reader.GetString(4),
+                            CusId1 = reader.GetInt32(5),
+                            NotifStatus1 = reader.GetString(6)
+                        });
+                    }
+                }
+            }
+
+            return notifications1;
+        }
+
+        protected void NotificationBell_Click(object sender, EventArgs e)
+        {
+            // Call the method to retrieve notifications (replace with your actual logic)
+            BindNotifications();
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "OpenDropdown",
+                   "$('#LinkButton7').dropdown('show');", true);
+            //Response.Redirect($"SAM_AccountManCustomers.aspx");
+
+            UpdatePanelNotifications1.Update();
+            Response.Redirect($"BO_Billing.aspx");
+            //this.ModalPopupExtender12.Show();
+
+        }
+
+        protected void Notification_Click(object sender, EventArgs e)
+        {
+            LinkButton btn = sender as LinkButton;
+            if (btn != null)
+            {
+                int notifId = Convert.ToInt32(btn.CommandArgument);
+                MarkNotificationAsRead(notifId);
+                Response.Redirect($"BO_Billing.aspx");
+
+                // Rebind notifications to reflect the change
+                BindNotifications();
+            }
+        }
+
+
+        protected void ViewAllNotifications_Click(object sender, EventArgs e)
+        {
+            string query = "UPDATE notification SET notif_read = true WHERE notif_type IN ('slip', 'payment') AND notif_read = false;";
+            using (var connection = new NpgsqlConnection(con))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.ExecuteNonQuery();
+                    BindNotifications();
+                }
+            }
+        }
+        private void MarkNotificationAsRead(int notifId)
+        {
+            string query = "UPDATE notification SET notif_read = true WHERE notif_id = @notifId AND notif_type IN ('slip', 'payment');";
+            using (var connection = new NpgsqlConnection(con))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@notifId", notifId);
+                    command.ExecuteNonQuery();
+                    BindNotifications();
+                    GetUnreadNotificationCount();
+                }
+            }
+        }
+
+        //Helper function to get the corresponding icon based on the status
+        protected string GetNotificationIcon(string status)
+        {
+            switch (status)
+            {
+                case "Pending":
+                    return "bi bi-exclamation-circle text-warning";
+                case "Declined":
+                    return "bi bi-x-circle text-danger";
+                case "Approved":
+                    return "bi bi-check-circle text-success";
+                default:
+                    return "bi bi-info-circle text-primary";
+            }
+        }
+
+
+
+        protected void DeleteAllNotifications_Click(object sender, EventArgs e)
+        {
+
+
+
+            string query = "UPDATE notification SET notif_status = 'Deleted', notif_read = true WHERE notif_type IN ('slip', 'payment');";
+            using (var connection = new NpgsqlConnection(con))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.ExecuteNonQuery();
+                    BindNotifications();
+                    GetUnreadNotificationCount();
+
+                }
+            }
+            //BindNotifications();
+            //DeleteAllNotificationsFromDb();
+            //GetUnreadNotificationCount();
+
+        }
+
+
+        protected void DeleteNotification_Click(object sender, EventArgs e)
+        {
+            // Get the ID of the notification to be deleted from the CommandArgument
+            LinkButton btnDelete = (LinkButton)sender;
+            string notifId = btnDelete.CommandArgument;
+
+            using (var conn = new NpgsqlConnection(con)) // Replace 'con' with your connection string variable
+            {
+                conn.Open();
+
+                // Update the notification status to 'Deleted' and notif_read to true
+                string updateQuery = @"
+            UPDATE notification
+            SET notif_status = 'Deleted',
+                notif_read = true
+            WHERE notif_id = @notifId;
+        ";
+
+                using (var cmd = new NpgsqlCommand(updateQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@notifId", int.Parse(notifId));
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        // Optionally show a success message
+                        ScriptManager.RegisterStartupScript(this, GetType(), "updateSuccess",
+                            "Swal.fire({ icon: 'success', title: 'Notification Deleted', text: 'The notification has been successfully deleted.', confirmButtonColor: '#28a745' });", true);
+                        // Refresh the notifications list
+                        BindNotifications();
+                    }
+                    else
+                    {
+                        // Optionally show an error message
+                        ScriptManager.RegisterStartupScript(this, GetType(), "updateError",
+                            "Swal.fire({ icon: 'error', title: 'Error', text: 'Unable to delete the notification.', confirmButtonColor: '#dc3545' });", true);
+                    }
+                }
+            }
+            GetUnreadNotificationCount();
+            // Refresh the notifications list
+            BindNotifications();
+        }
 
         private void LoadProfile()
         {
@@ -145,8 +378,8 @@ namespace Capstone
                     // Modified the query to fetch only required fields and avoid deleted records
                     cmd.CommandText = "SELECT wc_id, wc_name, wc_price, wc_unit, wc_max FROM waste_category WHERE wc_status != 'Deleted' order by wc_id";
 
-                    // Assuming that 'emp_id' is associated with the current session user's ID
-                    cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, Convert.ToInt32(Session["bo_id"]));
+                    //// Assuming that 'emp_id' is associated with the current session user's ID
+                    //cmd.Parameters.AddWithValue("@id", NpgsqlTypes.NpgsqlDbType.Integer, Convert.ToInt32(Session["bo_id"]));
 
                     // Execute the query and bind to the GridView
                     DataTable admin_datatable = new DataTable();
@@ -458,13 +691,14 @@ namespace Capstone
 
                         if (rowsAffected >= 1)
                         {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-                                "swal('Deleted!', 'Waste category deleted successfully!', 'success')", true);
+                            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+    "Swal.fire({ icon: 'success', title: 'Deleted!', text: 'Waste category deleted successfully!', background: '#e9f7ef', confirmButtonColor: '#28a745' });", true);
+                            WasteCatList();
                         }
                         else
                         {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert",
-                                "swal('Unsuccessful!', 'Waste category not found or not updated!', 'error')", true);
+                            ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+    "Swal.fire({ icon: 'error', title: 'Unsuccessful!', text: 'Waste category not found or not updated!', background: '#f8d7da', confirmButtonColor: '#dc3545' });", true);
                         }
                     }
                 }
@@ -530,19 +764,16 @@ namespace Capstone
 
 
 
-
-
-
-        // Update the new name or password of the employee account
         protected void UpdateWasteCategory(object sender, EventArgs e)
         {
             int id;
             if (!int.TryParse(txtbxID.Text, out id))
             {
-                Response.Write("<script>alert('Invalid ID format.')</script>");
+                ScriptManager.RegisterStartupScript(this, GetType(), "showError",
+                    "Swal.fire({ icon: 'error', title: 'Invalid ID', text: 'Please enter a valid numeric ID.', confirmButtonColor: '#dc3545' });", true);
                 return;
             }
-            //int id = int.Parse(txtbxID.Text);
+
             string name = txtbxnewName.Text;
             string unit = txtbxnewUnit.Text;
             double limit = double.Parse(txtLimit.Text);
@@ -551,8 +782,27 @@ namespace Capstone
             using (var conn = new NpgsqlConnection(con))
             {
                 conn.Open();
-                string updateQuery = "UPDATE waste_category SET wc_name = @name, wc_unit = @unit, wc_price = @price, wc_max = @max WHERE wc_id = @id";
 
+                // Check if the wc_name already exists in the database (excluding the current record)
+                string checkQuery = "SELECT COUNT(*) FROM waste_category WHERE wc_name = @name AND wc_id <> @id";
+                using (var checkCmd = new NpgsqlCommand(checkQuery, conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@name", name);
+                    checkCmd.Parameters.AddWithValue("@id", id);
+
+                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+                    if (count > 0)
+                    {
+                        // If a duplicate wc_name exists, show an error dialog
+                        ScriptManager.RegisterStartupScript(this, GetType(), "showDuplicateAlert",
+                            "Swal.fire({ icon: 'error', title: 'Duplicate Found', text: 'This waste category name already exists in the database.', confirmButtonColor: '#dc3545' });", true);
+                        ModalPopupExtender2.Hide();
+                        return;
+                    }
+                }
+
+                // Proceed with the update if no duplicates are found
+                string updateQuery = "UPDATE waste_category SET wc_name = @name, wc_unit = @unit, wc_price = @price, wc_max = @max WHERE wc_id = @id";
                 using (var updateCmd = new NpgsqlCommand(updateQuery, conn))
                 {
                     updateCmd.Parameters.AddWithValue("@name", name);
@@ -561,18 +811,151 @@ namespace Capstone
                     updateCmd.Parameters.AddWithValue("@id", id);
                     updateCmd.Parameters.AddWithValue("@max", limit);
 
-                    updateCmd.ExecuteNonQuery();
-                    showPaymentTerm();
-                    WasteCatList();
+                    int rowsAffected = updateCmd.ExecuteNonQuery(); // Execute once
+                    if (rowsAffected >= 1)
+                    {
+                        // Success dialog after updating the waste category
+                        ScriptManager.RegisterStartupScript(this, GetType(), "showSuccessAlert",
+                            "Swal.fire({ icon: 'success', title: 'Updated Successfully', text: 'Waste category updated successfully!', confirmButtonColor: '#28a745' });", true);
+
+                        // Close the modal and refresh the data
+                        ModalPopupExtender2.Hide();
+                        WasteCatList(); // Ensure this method is binding the updated data
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+                            "Swal.fire({ icon: 'error', title: 'Unsuccessful!', text: 'There was an error updating the waste category!', background: '#f8d7da', confirmButtonColor: '#dc3545' });", true);
+                        ModalPopupExtender2.Hide();
+                    }
                 }
             }
-
-            // Optionally refresh the grid or list showing waste categories
-            // Response.Redirect(Request.RawUrl); // Example to refresh the page after update
-            Response.Write("<script>alert('Waste category updated successfully!');</script>");
-            showPaymentTerm();
-            WasteCatList();
         }
+
+
+        //    protected void UpdateWasteCategory(object sender, EventArgs e)
+        //    {
+        //        int id;
+        //        if (!int.TryParse(txtbxID.Text, out id))
+        //        {
+        //            ScriptManager.RegisterStartupScript(this, GetType(), "showError",
+        //                "Swal.fire({ icon: 'error', title: 'Invalid ID', text: 'Please enter a valid numeric ID.', confirmButtonColor: '#dc3545' });", true);
+        //            return;
+        //        }
+
+        //        string name = txtbxnewName.Text;
+        //        string unit = txtbxnewUnit.Text;
+        //        double limit = double.Parse(txtLimit.Text);
+        //        decimal price = decimal.Parse(txtbxnewPrice.Text);
+
+        //        using (var conn = new NpgsqlConnection(con))
+        //        {
+        //            conn.Open();
+
+        //            // Check if the wc_name already exists in the database (excluding the current record)
+        //            string checkQuery = "SELECT COUNT(*) FROM waste_category WHERE wc_name = @name AND wc_id <> @id";
+        //            using (var checkCmd = new NpgsqlCommand(checkQuery, conn))
+        //            {
+        //                checkCmd.Parameters.AddWithValue("@name", name);
+        //                checkCmd.Parameters.AddWithValue("@id", id);
+
+        //                int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+        //                if (count > 0)
+        //                {
+        //                    // If a duplicate wc_name exists, show an error dialog
+        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showDuplicateAlert",
+        //                        "Swal.fire({ icon: 'error', title: 'Duplicate Found', text: 'This waste category name already exists in the database.', confirmButtonColor: '#dc3545' });", true);
+        //                    ModalPopupExtender2.Hide();
+
+        //                    return;
+        //                }
+        //            }
+
+        //            // Proceed with the update if no duplicates are found
+        //            string updateQuery = "UPDATE waste_category SET wc_name = @name, wc_unit = @unit, wc_price = @price, wc_max = @max WHERE wc_id = @id";
+        //            using (var updateCmd = new NpgsqlCommand(updateQuery, conn))
+        //            {
+        //                updateCmd.Parameters.AddWithValue("@name", name);
+        //                updateCmd.Parameters.AddWithValue("@unit", unit);
+        //                updateCmd.Parameters.AddWithValue("@price", price);
+        //                updateCmd.Parameters.AddWithValue("@id", id);
+        //                updateCmd.Parameters.AddWithValue("@max", limit);
+
+        //                updateCmd.ExecuteNonQuery();
+        //                int rowsAffected = updateCmd.ExecuteNonQuery();
+        //                if (rowsAffected >= 1)
+        //                {
+        //                    // Success dialog after updating the waste category
+        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showSuccessAlert",
+        //                    "Swal.fire({ icon: 'success', title: 'Updated Successfully', text: 'Waste category updated successfully!', confirmButtonColor: '#28a745' });", true);
+
+        //                    // Refresh data or close modal
+        //                    showPaymentTerm();
+        //                    ModalPopupExtender2.Hide();
+        //                    WasteCatList();
+        //                }
+        //                else
+        //                {
+        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //"Swal.fire({ icon: 'error', title: 'Unsuccessful!', text: 'There's an error in updating!', background: '#f8d7da', confirmButtonColor: '#dc3545' });", true);
+        //                    ModalPopupExtender2.Hide();
+
+        //                }
+        //                //// Success dialog after updating the waste category
+        //                //ScriptManager.RegisterStartupScript(this, GetType(), "showSuccessAlert",
+        //                //    "Swal.fire({ icon: 'success', title: 'Updated Successfully', text: 'Waste category updated successfully!', confirmButtonColor: '#28a745' });", true);
+
+        //                // Refresh data or close modal
+        //                showPaymentTerm();
+        //                ModalPopupExtender2.Hide();
+        //                WasteCatList();
+        //            }
+        //        }
+        //    }
+
+
+
+        //// Update the new name or password of the employee account
+        //protected void UpdateWasteCategory(object sender, EventArgs e)
+        //{
+        //    int id;
+        //    if (!int.TryParse(txtbxID.Text, out id))
+        //    {
+        //        Response.Write("<script>alert('Invalid ID format.')</script>");
+        //        return;
+        //    }
+        //    //int id = int.Parse(txtbxID.Text);
+        //    string name = txtbxnewName.Text;
+        //    string unit = txtbxnewUnit.Text;
+        //    double limit = double.Parse(txtLimit.Text);
+        //    decimal price = decimal.Parse(txtbxnewPrice.Text);
+
+        //    using (var conn = new NpgsqlConnection(con))
+        //    {
+        //        conn.Open();
+        //        string updateQuery = "UPDATE waste_category SET wc_name = @name, wc_unit = @unit, wc_price = @price, wc_max = @max WHERE wc_id = @id";
+
+        //        using (var updateCmd = new NpgsqlCommand(updateQuery, conn))
+        //        {
+        //            updateCmd.Parameters.AddWithValue("@name", name);
+        //            updateCmd.Parameters.AddWithValue("@unit", unit);
+        //            updateCmd.Parameters.AddWithValue("@price", price);
+        //            updateCmd.Parameters.AddWithValue("@id", id);
+        //            updateCmd.Parameters.AddWithValue("@max", limit);
+
+        //            updateCmd.ExecuteNonQuery();
+        //            showPaymentTerm();
+        //            ModalPopupExtender2.Hide();
+        //            WasteCatList();
+        //        }
+        //    }
+        //    ModalPopupExtender2.Hide();
+        //    // Optionally refresh the grid or list showing waste categories
+        //    // Response.Redirect(Request.RawUrl); // Example to refresh the page after update
+        //    Response.Write("<script>alert('Waste category updated successfully!');</script>");
+        //    showPaymentTerm();
+        //    WasteCatList();
+        //}
 
     }
 }

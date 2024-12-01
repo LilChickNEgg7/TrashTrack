@@ -331,7 +331,10 @@
     <Content Include="Global.asax" />
     <Content Include="mongocrypt.dll" />
     <Content Include="OD_manage.aspx" />
+    <Content Include="Pictures\bg_login.png" />
+    <Content Include="Pictures\bg_login1.png" />
     <Content Include="Pictures\category.png" />
+    <Content Include="Pictures\collection6.png" />
     <Content Include="Pictures\customer.png" />
     <Content Include="Pictures\dot.gif" />
     <Content Include="Pictures\driver.png" />

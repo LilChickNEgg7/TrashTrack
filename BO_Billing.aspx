@@ -47,39 +47,39 @@
     <%--#052507--%>
     <style>
         /* Background for View Bill Modal */
-    .Background {
-        z-index: 1050 !important;
-    }
+        .Background {
+            z-index: 1050 !important;
+        }
 
-    /* Background for View Scale Slip Modal */
-    .Background-scale-slip {
-        z-index: 1060 !important; /* Higher than View Bill */
-    }
+        /* Background for View Scale Slip Modal */
+        .Background-scale-slip {
+            z-index: 1060 !important; /* Higher than View Bill */
+        }
 
-    /* Card for View Bill Modal */
-    .modal-overlay .card {
-        z-index: 1060 !important; /* For View Bill */
-    }
+        /* Card for View Bill Modal */
+        .modal-overlay .card {
+            z-index: 1060 !important; /* For View Bill */
+        }
 
-    /* Card for View Scale Slip Modal */
-    .modal-overlay-scale-slip .card {
-        z-index: 1070 !important; /* Higher than View Bill */
-    }
+        /* Card for View Scale Slip Modal */
+        .modal-overlay-scale-slip .card {
+            z-index: 1070 !important; /* Higher than View Bill */
+        }
 
 
 
         .notifications {
-    max-height: 431px;
-    overflow-y: auto;
-}
+            max-height: 431px;
+            overflow-y: auto;
+        }
 
-.notification-item {
-    padding: 10px;
-}
+        .notification-item {
+            padding: 10px;
+        }
 
-.notification-item.read-notification {
-    background-color: #f8f9fa;
-}
+            .notification-item.read-notification {
+                background-color: #f8f9fa;
+            }
 
 
         /*Container Styles */
@@ -438,7 +438,7 @@
                                         <i class="bi bi-bell"></i>
                                         <span id="notificationCount1" runat="server" class="badge bg-primary badge-number" style="display: none;">0</span>
                                     </asp:LinkButton>
-                                            <asp:Timer ID="NotificationTimer1" runat="server" Interval="5000" OnTick="NotificationTimer_Tick" />
+                                    <asp:Timer ID="NotificationTimer1" runat="server" Interval="5000" OnTick="NotificationTimer_Tick" />
 
                                     <!-- Notification Dropdown -->
                                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications" id="notificationDropdown1">
@@ -450,7 +450,7 @@
                                                 runat="server"
                                                 OnClick="ViewAllNotifications_Click"
                                                 CssClass="badge rounded-pill bg-primary p-2 ms-2">
-                        View all
+                        Mark all read
                     </asp:LinkButton>
                                         </li>
                                         <li>
@@ -538,7 +538,7 @@
                                 </ContentTemplate>
                                 <Triggers>
                                     <asp:AsyncPostBackTrigger ControlID="LinkButton7" EventName="Click" />
-                                        <asp:AsyncPostBackTrigger ControlID="NotificationTimer1" EventName="Tick" />
+                                    <asp:AsyncPostBackTrigger ControlID="NotificationTimer1" EventName="Tick" />
 
                                 </Triggers>
                             </asp:UpdatePanel>
@@ -709,8 +709,8 @@
                                         <asp:BoundField DataField="cus_id" HeaderText="Customer ID" SortExpression="cus_id" ItemStyle-Width="100px">
                                             <ItemStyle Width="100px"></ItemStyle>
                                         </asp:BoundField>
-                                        <asp:BoundField DataField="bk_date" HeaderText="Date" SortExpression="bk_date" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px">
-                                            <ItemStyle Width="150px"></ItemStyle>
+                                        <asp:BoundField DataField="bk_date" HeaderText="Date" SortExpression="bk_date" ItemStyle-Width="220px">
+                                            <ItemStyle Width="220px"></ItemStyle>
                                         </asp:BoundField>
 
                                         <asp:BoundField DataField="bk_fullname" HeaderText="Full Name" SortExpression="bk_fullname" ItemStyle-Width="300px">
@@ -719,15 +719,18 @@
                                         <asp:BoundField DataField="location" HeaderText="Location" SortExpression="location" ItemStyle-Width="300px">
                                             <ItemStyle Width="300px"></ItemStyle>
                                         </asp:BoundField>
-                                        <asp:BoundField DataField="cus_email" HeaderText="Email" SortExpression="cus_email" ItemStyle-Width="300px">
-                                            <ItemStyle Width="300px"></ItemStyle>
+                                        <asp:BoundField DataField="cus_email" HeaderText="Email" SortExpression="cus_email" ItemStyle-Width="180px">
+                                            <ItemStyle Width="180px"></ItemStyle>
+                                        </asp:BoundField>
+                                        <asp:BoundField DataField="bk_created_at" HeaderText="created at" SortExpression="bk_created_at" ItemStyle-Width="250px">
+                                            <ItemStyle Width="250px"></ItemStyle>
                                         </asp:BoundField>
                                         <asp:TemplateField HeaderText="Scale Slip" ItemStyle-Width="150px">
                                             <ItemTemplate>
                                                 <asp:Label ID="lblWasteScaleSlip" runat="server"
                                                     Text='<%# Eval("bk_waste_scale_slip") == DBNull.Value ? "None" : "Available" %>'
                                                     ForeColor='<%# Eval("bk_waste_scale_slip") == DBNull.Value ? System.Drawing.Color.Gray : System.Drawing.Color.Red %>'>
-                </asp:Label>
+                                                </asp:Label>
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:BoundField DataField="bk_status" HeaderText="Status" SortExpression="bk_status" ItemStyle-Width="150px">
@@ -752,14 +755,15 @@
                             <div class="gridview-container">
                                 <asp:GridView ID="gridView1" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="gb_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
                                     <Columns>
-                                        <asp:BoundField DataField="gb_id" HeaderText="Transaction No." SortExpression="gb_id" ItemStyle-Width="100px" />
-                                        <asp:BoundField DataField="gb_date_issued" HeaderText="Issued Date" SortExpression="gb_date_issued" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px" />
-                                        <asp:BoundField DataField="gb_date_due" HeaderText="Due Date" SortExpression="gb_date_due" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px" />
+                                        <asp:BoundField DataField="gb_id" HeaderText="ID" SortExpression="gb_id" ItemStyle-Width="100px" />
+                                        <asp:BoundField DataField="gb_date_issued" HeaderText="Issued Date" SortExpression="gb_date_issued" ItemStyle-Width="150px" />
+                                        <asp:BoundField DataField="gb_date_due" HeaderText="Due Date" SortExpression="gb_date_due" ItemStyle-Width="150px" />
                                         <asp:BoundField DataField="bk_id" HeaderText="Book ID" SortExpression="bk_id" ItemStyle-Width="150px" />
                                         <asp:BoundField DataField="gb_total_sales" HeaderText="Total Sales" SortExpression="gb_total_sales" DataFormatString="₱{0:N2}" ItemStyle-Width="100px" />
+                                        <asp:BoundField DataField="p_trans_id" HeaderText="Trans. ID" SortExpression="p_trans_id" ItemStyle-Width="100px" />
                                         <asp:BoundField DataField="p_amount" HeaderText="Paid Amount" SortExpression="p_amount" DataFormatString="₱{0:N2}" ItemStyle-Width="100px" />
                                         <asp:BoundField DataField="p_method" HeaderText="Payment Method" SortExpression="p_method" ItemStyle-Width="150px" />
-                                        <asp:BoundField DataField="p_date_paid" HeaderText="Date Paid" SortExpression="p_date_paid" DataFormatString="{0:yyyy-MM-dd HH:mm}" ItemStyle-Width="150px" />
+                                        <asp:BoundField DataField="p_date_paid" HeaderText="Date Paid" SortExpression="p_date_paid" ItemStyle-Width="150px" />
                                         <asp:BoundField DataField="p_checkout_id" HeaderText="Checkout ID" SortExpression="p_checkout_id" ItemStyle-Width="150px" />
                                         <asp:TemplateField HeaderText="Details">
                                             <ItemTemplate>
@@ -772,9 +776,13 @@
                                             <ItemTemplate>
                                                 <asp:Button CssClass="btn btn-outline-danger" Style="font-size: 10px; font-weight: bolder;" ID="btnPaid" runat="server" Text='<%# Eval("gb_status") + " ▼"%>'
                                                     OnClick="Paid_Click" Visible='<%# Eval("gb_status").ToString() == "unpaid" %>' CommandArgument='<%# Eval("gb_id") %>' />
-                                                <asp:Label ID="Label9" runat="server" Text='<%# Eval("gb_status")%>' Visible='<%# Eval("gb_status").ToString() == "Inactive" %>' />
-                                                <asp:Button CssClass="btn btn-outline-success" Style="font-size: 10px; font-weight: bolder;" ID="btnUnpaid" runat="server" Text='<%# Eval("gb_status") + " ▲"%>'
-                                                    OnClick="Unpaid_Click" Visible='<%# Eval("gb_status").ToString() == "paid" %>' CommandArgument='<%# Eval("gb_id") %>' />
+                                                <asp:Label
+                                                    ID="Label9"
+                                                    runat="server"
+                                                    Text='<%# Eval("gb_status") %>'
+                                                    Visible='<%# Eval("gb_status").ToString() == "paid" %>' />
+                                                <%--<asp:Button CssClass="btn btn-outline-success" Style="font-size: 10px; font-weight: bolder;" ID="btnUnpaid" runat="server" Text='<%# Eval("gb_status") + " ▲"%>'
+                                                    OnClick="Unpaid_Click" Visible='<%# Eval("gb_status").ToString() == "paid" %>' CommandArgument='<%# Eval("gb_id") %>' />--%>
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                     </Columns>
@@ -788,7 +796,7 @@
 
 
                 <%-- POP-UP PANELS AND MODALS--%>
-<%--                <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>--%>
+                <%--                <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>--%>
 
                 <%-- GENERATE BILL PANEL 1--%>
                 <asp:LinkButton ID="LinkButton2" runat="server"></asp:LinkButton>
@@ -1092,7 +1100,7 @@
                                             </div>
                                         </div>
                                         <!-- Due Date -->
-                                        <div class="col-6" style="margin-top:10px">
+                                        <div class="col-6" style="margin-top: 10px">
                                             <div class="input-group input-group-sm mb-3">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000; color: blue">Due Date</span>
@@ -1446,7 +1454,7 @@
                                         </div>
 
                                         <!-- GridView inside modal body -->
-                                                                                <div class="gridview-container">
+                                        <div class="gridview-container">
                                             <asp:GridView ID="gridView3" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="bw_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
                                                 <Columns>
                                                     <asp:BoundField DataField="bw_id" HeaderText="Booking Waste ID" SortExpression="bw_id" ItemStyle-Width="100px">
@@ -1889,21 +1897,21 @@
 
                     function updatePaymentTermsDates(now) {
 
-            // Calculate Due Date (current date + lead days)
-            var dueDate = new Date(now);
-            dueDate.setDate(dueDate.getDate());
-            var formattedDueDate = dueDate.toISOString().slice(0, 16); // 'YYYY-MM-DDTHH:MM' format
-            document.getElementById('<%= dueDateTxt.ClientID %>').value = formattedDueDate;
+                        // Calculate Due Date (current date + lead days)
+                        var dueDate = new Date(now);
+                        dueDate.setDate(dueDate.getDate());
+                        var formattedDueDate = dueDate.toISOString().slice(0, 16); // 'YYYY-MM-DDTHH:MM' format
+                        document.getElementById('<%= dueDateTxt.ClientID %>').value = formattedDueDate;
 
-            // Calculate Accrual Date (due date + accrual period)
-            var accrualDate = new Date(dueDate);
-            accrualDate.setDate(accrualDate.getDate() + accrualPeriod);
-            var formattedAccrualDate = accrualDate.toISOString().slice(0, 16); // 'YYYY-MM-DDTHH:MM' format
+                        // Calculate Accrual Date (due date + accrual period)
+                        var accrualDate = new Date(dueDate);
+                        accrualDate.setDate(accrualDate.getDate() + accrualPeriod);
+                        var formattedAccrualDate = accrualDate.toISOString().slice(0, 16); // 'YYYY-MM-DDTHH:MM' format
 
-            // Calculate Suspension Date (due date + suspension period)
-            var suspensionDate = new Date(dueDate);
-            suspensionDate.setDate(suspensionDate.getDate() + suspensionPeriod);
-            var formattedSuspensionDate = suspensionDate.toISOString().slice(0, 16); // 'YYYY-MM-DDTHH:MM' format
+                        // Calculate Suspension Date (due date + suspension period)
+                        var suspensionDate = new Date(dueDate);
+                        suspensionDate.setDate(suspensionDate.getDate() + suspensionPeriod);
+                        var formattedSuspensionDate = suspensionDate.toISOString().slice(0, 16); // 'YYYY-MM-DDTHH:MM' format
 
                     }
 
@@ -1936,7 +1944,7 @@
                         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                             var activeTab = $(e.target).attr("href");
                             $("#<%= hfActiveTab.ClientID %>").val(activeTab);
-            });
+                        });
                     });
 
                     function closeModal() {
@@ -1991,6 +1999,19 @@
                     // Hook into ASP.NET UpdatePanel lifecycle events
                     Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(() => detectDropdownState());
                     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(() => restoreDropdownState());
+
+                    function updateNotificationCount() {
+                        fetch('/api/payment/notificationCount1', { method: 'GET' })
+                            .then(response => response.json())
+                            .then(data => {
+                                // Assuming there's an element with ID 'notificationCount' to show the count
+                                document.getElementById('notificationCount1').innerText = data.unreadCount1 || 0;
+                            })
+                            .catch(error => {
+                                console.error('Error updating notification count:', error);
+                            });
+                    }
+
 
 
 
@@ -2151,89 +2172,93 @@
                     //}
 
 
-                    
-                //    function updateNotificationCount() {
-                //        $.ajax({
-                //            type: 'GET',
-                //            url: '/api/payment/notificationCount',  // Your API endpoint
-                //            success: function (response) {
-                //                var count = response.unreadCount;  // The unread notification count
-                //                if (count > 0) {
-                //                    $('#notificationCount').text(count).show();
-                //                    $('#notificationHeader').text(count);
-                //                } else {
-                //                    $('#notificationCount').hide();
-                //                    $('#notificationHeader').text('0');
-                //                }
-                //            },
-                //            error: function () {
-                //                console.log('Error fetching notification count');
-                //            }
-                //        });
-                //    }
 
-                //    // Fetch notifications and update the list
-                //    function loadNotifications() {
-                //        $.ajax({
-                //            type: 'GET',
-                //            url: '/api/payment/notifications',  // Your API endpoint
-                //            success: function (response) {
-                //                var notifications = response;
-                //                var notificationListHtml = '';
+                    //    function updateNotificationCount() {
+                    //        $.ajax({
+                    //            type: 'GET',
+                    //            url: '/api/payment/notificationCount',  // Your API endpoint
+                    //            success: function (response) {
+                    //                var count = response.unreadCount;  // The unread notification count
+                    //                if (count > 0) {
+                    //                    $('#notificationCount').text(count).show();
+                    //                    $('#notificationHeader').text(count);
+                    //                } else {
+                    //                    $('#notificationCount').hide();
+                    //                    $('#notificationHeader').text('0');
+                    //                }
+                    //            },
+                    //            error: function () {
+                    //                console.log('Error fetching notification count');
+                    //            }
+                    //        });
+                    //    }
 
-                //                // Create HTML for each notification
-                //                notifications.forEach(function (notif) {
-                //                    var readClass = notif.notif_read ? 'read-notification' : '';
-                //                    var newBadge = notif.notif_read ? '' : '<span class="badge bg-danger" style="color: white;">New</span>';
+                    //    // Fetch notifications and update the list
+                    //    function loadNotifications() {
+                    //        $.ajax({
+                    //            type: 'GET',
+                    //            url: '/api/payment/notifications',  // Your API endpoint
+                    //            success: function (response) {
+                    //                var notifications = response;
+                    //                var notificationListHtml = '';
 
-                //                    notificationListHtml += `
-                //    <li class="notification-item ${readClass}">
-                //        <div>
-                //            <h4>
-                //                <a href="#" class="notification-link" onclick="markNotificationAsRead(${notif.notif_id})">
-                //                    ${notif.notif_message}
-                //                </a>
-                //                ${newBadge}
-                //            </h4>
-                //            <p>${notif.notif_created_at} ago</p>
-                //        </div>
-                //    </li>
-                //    <li><hr class="dropdown-divider"></li>
-                //`;
-                //                });
+                    //                // Create HTML for each notification
+                    //                notifications.forEach(function (notif) {
+                    //                    var readClass = notif.notif_read ? 'read-notification' : '';
+                    //                    var newBadge = notif.notif_read ? '' : '<span class="badge bg-danger" style="color: white;">New</span>';
 
-                //                $('#notificationList').html(notificationListHtml);
-                //            },
-                //            error: function () {
-                //                console.log('Error fetching notifications');
-                //            }
-                //        });
-                //    }
-                //    // Mark a notification as read
-                //    function markNotificationAsRead(notifId) {
-                //        $.ajax({
-                //            type: 'POST',
-                //            url: '/api/payment/markNotificationAsRead',  // Your API endpoint
-                //            data: { notifId: notifId },
-                //            success: function () {
-                //                loadNotifications();  // Reload notifications after marking as read
-                //                updateNotificationCount();  // Update count after marking as read
-                //            },
-                //            error: function () {
-                //                console.log('Error marking notification as read');
-                //            }
-                //        });
-                //    }
+                    //                    notificationListHtml += `
+                    //    <li class="notification-item ${readClass}">
+                    //        <div>
+                    //            <h4>
+                    //                <a href="#" class="notification-link" onclick="markNotificationAsRead(${notif.notif_id})">
+                    //                    ${notif.notif_message}
+                    //                </a>
+                    //                ${newBadge}
+                    //            </h4>
+                    //            <p>${notif.notif_created_at} ago</p>
+                    //        </div>
+                    //    </li>
+                    //    <li><hr class="dropdown-divider"></li>
+                    //`;
+                    //                });
 
-                //    // Polling every 5 seconds to keep the count and notifications updated
-                //    setInterval(function () {
-                //        updateNotificationCount();
-                //        loadNotifications();
-                //    }, 100);
+                    //                $('#notificationList').html(notificationListHtml);
+                    //            },
+                    //            error: function () {
+                    //                console.log('Error fetching notifications');
+                    //            }
+                    //        });
+                    //    }
+                    //    // Mark a notification as read
+                    //    function markNotificationAsRead(notifId) {
+                    //        $.ajax({
+                    //            type: 'POST',
+                    //            url: '/api/payment/markNotificationAsRead',  // Your API endpoint
+                    //            data: { notifId: notifId },
+                    //            success: function () {
+                    //                loadNotifications();  // Reload notifications after marking as read
+                    //                updateNotificationCount();  // Update count after marking as read
+                    //            },
+                    //            error: function () {
+                    //                console.log('Error marking notification as read');
+                    //            }
+                    //        });
+                    //    }
+
+                    //    // Polling every 5 seconds to keep the count and notifications updated
+                    //    setInterval(function () {
+                    //        updateNotificationCount();
+                    //        loadNotifications();
+                    //    }, 100);
 
                 </script>
-                <script src="https://code.jquery.com/jquery-3.5.2.min.js"></script>
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+                <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
                 <!-- TAB SCRIPTS-->
