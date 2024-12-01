@@ -708,7 +708,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <asp:Label ID="Label7" runat="server" Text="Description" for="waste_desc" Style="color: chartreuse"></asp:Label>
-                                    <asp:TextBox ID="waste_desc" runat="server" TextMode="MultiLine" class="form-control"
+                                    <asp:TextBox ID="waste_desc" runat="server" TextMode="MultiLine" class="form-control" Rows="8"
                                         Style="margin-top: 10px; margin-bottom: 10px"></asp:TextBox>
                                 </div>
                                 <div class="mb-3">
