@@ -707,16 +707,21 @@
                                     <asp:TextBox ID="waste_name" runat="server" class="form-control" Style="margin-top: 10px"></asp:TextBox>
                                 </div>
                                 <div class="mb-3">
+                                    <asp:Label ID="Label7" runat="server" Text="Description" for="waste_desc" Style="color: chartreuse"></asp:Label>
+                                    <asp:TextBox ID="waste_desc" runat="server" TextMode="MultiLine" class="form-control"
+                                        Style="margin-top: 10px; margin-bottom: 10px"></asp:TextBox>
+                                </div>
+                                <div class="mb-3">
                                     <asp:Label ID="Label4" runat="server" Text="Unit" for="inputText" Style="color: chartreuse"></asp:Label>
                                     <asp:TextBox ID="unit" runat="server" class="form-control" Style="margin-top: 10px; margin-bottom: 10px"></asp:TextBox>
                                 </div>
                                 <div class="mb-3">
                                     <asp:Label ID="Label5" runat="server" Text="Price" for="inputText" Style="color: chartreuse"></asp:Label>
-                                    <asp:TextBox ID="price" runat="server" type="number" min="1" class="form-control" Style="margin-top: 10px; margin-bottom: 10px"></asp:TextBox>
+                                    <asp:TextBox ID="price" runat="server" type="number" min="0.1" step="0.0000001" class="form-control" Style="margin-top: 10px; margin-bottom: 10px"></asp:TextBox>
                                 </div>
                                 <div class="mb-3">
                                     <asp:Label ID="Label12" runat="server" Text="Max Limit" for="inputText" Style="color: chartreuse"></asp:Label>
-                                    <asp:TextBox ID="max" runat="server" type="number" min="1" class="form-control" Style="margin-top: 10px; margin-bottom: 10px"></asp:TextBox>
+                                    <asp:TextBox ID="max" runat="server" type="number" min="0.1" step="0.0000001" class="form-control" Style="margin-top: 10px; margin-bottom: 10px"></asp:TextBox>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -875,9 +880,115 @@
                 </section>
 
 
-                <asp:LinkButton ID="LinkButton1" runat="server"></asp:LinkButton>
-<%--                <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>--%>
-                <asp:UpdatePanel ID="updatePanel" CssClass="card" runat="server" Style="background-color: #052507; border: 1px solid aquamarine; width: 80%; left: 8%">
+
+
+
+
+
+
+
+
+
+
+
+
+<asp:LinkButton ID="LinkButton1" runat="server"></asp:LinkButton>
+
+                <div class="container" style="max-height: 100vh; overflow-y: hidden; display: flex; justify-content: center; align-items: center; z-index: 200">
+                    <!-- Main Panel Design -->
+                    <asp:UpdatePanel ID="updatePanel" runat="server" CssClass="card shadow-lg scrollable-panel" UpdateMode="Conditional" ChildrenAsTriggers="true" style="position: relative;">
+                        <ContentTemplate>
+                            <!-- Card Container -->
+                            <div class="card shadow-lg" style="max-width: 1000px; padding: 0; border: 2px solid #26D8A8; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);">
+
+                                <div class="modal-header" style="background-color: #0D342D; color: #26D8A8;">
+<%--                                    <asp:Button ID="Button3" class="btn-close" runat="server" OnClick="btncancel_Click" />--%>
+                                </div>
+
+                                <!-- Card Header Design -->
+                                <div class="card-header text-center" style="background-color: #0D342D; color: #26D8A8; padding: 15px;">
+                                    <h4>Update Waste Category</h4>
+                                </div>
+
+                                <!-- Card Body with Form Elements - Scrollable Section -->
+                                <div class="card-body scrollable-content" style="padding: 30px; background-color: #052507; max-height: 400px; overflow-y: auto;">
+                                    <div class="row" style="margin-top: 15px;">
+
+                                        <div class="col-6">
+
+                                            <div class="input-group input-group-sm mb-3">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px">ID</span>
+                                                <asp:TextBox ID="txtbxID" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px">Name</span>
+                                                <asp:TextBox ID="txtbxnewName" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; height: 100px;">Description</span>
+                                                <asp:TextBox ID="txtDescription" runat="server" CssClass="form-control" ClientIDMode="Static"
+                                                    TextMode="MultiLine" Rows="10" Style="height: 100px;"
+                                                    aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px">Unit</span>
+                                                <asp:TextBox ID="txtbxnewUnit" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                                            </div>
+                                            <div class="input-group input-group-sm mb-3">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px">Price</span>
+                                                <asp:TextBox ID="txtbxnewPrice" runat="server" CssClass="form-control" ClientIDMode="Static" type="number" min="0.1" step="0.0000001" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <%--<div class="col-6">
+                                        </div>--%>
+                                        <div class="col-6">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px">Max Limit</span>
+                                                <asp:TextBox ID="txtLimit" runat="server" CssClass="form-control" ClientIDMode="Static" type="number" min="0.1" step="0.0000001" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <!-- Footer Design -->
+                                <div class="card-footer text-center" style="background-color: #0D342D; color: #26D8A8; padding: 10px;">
+                                    <asp:Button ID="btncancel" CssClass="btn btn-secondary" runat="server" Text="Cancel" />
+                                <asp:Button ID="btnUpdate" CssClass="btn btn-primary" runat="server" Text="Update" OnClick="UpdateWasteCategory" OnClientClick="return confirm('Are you sure you want to update category?');" />
+                                </div>
+                            </div>
+                        </ContentTemplate>
+                        <Triggers>
+                            <asp:PostBackTrigger ControlID="btncancel" />
+                        <asp:PostBackTrigger ControlID="btnUpdate" />
+
+                        </Triggers>
+                    </asp:UpdatePanel>
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+                <%--<asp:UpdatePanel ID="updatePanel" CssClass="card" runat="server" Style="background-color: #052507; border: 1px solid aquamarine; width: 80%; left: 8%">
                     <ContentTemplate>
                         <div class="card bg-light" style="background-color: #052507">
                             <div class="card-header" style="background-color: #052507; color: aquamarine;">
@@ -888,7 +999,7 @@
                                     <div class="col-6">
 
                                         <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px">ID</span><%--txtbxID txtbxnewName txtbxnewUnit txtbxnewPrice--%>
+                                            <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px">ID</span>
                                             <asp:TextBox ID="txtbxID" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm" Enabled="false"></asp:TextBox>
                                         </div>
                                     </div>
@@ -898,6 +1009,17 @@
                                             <asp:TextBox ID="txtbxnewName" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
                                         </div>
                                     </div>
+                                    <div class="col-6">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; height: 100px;">Description</span>
+                                            <asp:TextBox ID="txtDescription" runat="server" CssClass="form-control" ClientIDMode="Static"
+                                                TextMode="MultiLine" Rows="6" Style="height: 100px;"
+                                                aria-label="Small" aria-describedby="inputGroup-sizing-sm"></asp:TextBox>
+                                        </div>
+                                    </div>
+
+
+
                                     <div class="col-6">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px">Unit</span>
@@ -929,7 +1051,7 @@
                         <asp:PostBackTrigger ControlID="btnUpdate" />
 
                         </Triggers>
-                </asp:UpdatePanel>
+                </asp:UpdatePanel>--%>
 
 
 

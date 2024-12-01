@@ -1143,7 +1143,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px; font-weight: 1000">Additional Fee</span>
                                                 </div>
-                                                <asp:TextBox ID="addFeeTxt" TextMode="Number" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" AutoPostBack="true" aria-describedby="inputGroup-sizing-sm" OnTextChanged="addFeeTxt_TextChanged"></asp:TextBox>
+                                                <asp:TextBox ID="addFeeTxt" TextMode="Number" min="0.1" step="0.0000001" runat="server" CssClass="form-control" ClientIDMode="Static" aria-label="Small" AutoPostBack="true" aria-describedby="inputGroup-sizing-sm" OnTextChanged="addFeeTxt_TextChanged"></asp:TextBox>
                                             </div>
                                         </div>
                                         <!-- Additional Note -->
@@ -1240,7 +1240,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 140px">Enter Total Unit</span>
                                                 </div>
-                                                <asp:TextBox ID="txtTotalUnit" runat="server" type="number" CssClass="form-control" ClientIDMode="Static" aria-label="Small" AutoPostBack="true" aria-describedby="inputGroup-sizing-sm" OnTextChanged="txtTotalUnit_TextChanged"></asp:TextBox>
+                                                <asp:TextBox ID="txtTotalUnit" runat="server" type="number" min="0.1" step="0.0000001" CssClass="form-control" ClientIDMode="Static" aria-label="Small" AutoPostBack="true" aria-describedby="inputGroup-sizing-sm" OnTextChanged="txtTotalUnit_TextChanged"></asp:TextBox>
                                             </div>
                                         </div>
 
@@ -1334,7 +1334,7 @@
                                                     <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 135px">Enter Total Unit</span>
                                                 </div>
                                                 <%--step="0.01" min="0.01"--%>
-                                                <asp:TextBox ID="txtTotalUnit1" runat="server" type="number" CssClass="form-control" ClientIDMode="Static" aria-label="Small" AutoPostBack="true" aria-describedby="inputGroup-sizing-sm" Enabled="false" OnTextChanged="txtTotalUnit_TextChanged1"></asp:TextBox>
+                                                <asp:TextBox ID="txtTotalUnit1" runat="server" type="number" min="0.1" step="0.0000001" CssClass="form-control" ClientIDMode="Static" aria-label="Small" AutoPostBack="true" aria-describedby="inputGroup-sizing-sm" Enabled="false" OnTextChanged="txtTotalUnit_TextChanged1"></asp:TextBox>
                                             </div>
                                         </div>
 

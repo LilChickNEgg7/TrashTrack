@@ -392,10 +392,15 @@ namespace Capstone
                 }
             }
         }
-
-
         protected void submitBtn_Click(object sender, EventArgs e)
         {
+            // Validate Description field
+            if (string.IsNullOrWhiteSpace(waste_desc.Text))
+            {
+                Response.Write("<script>alert('Description cannot be empty. Please provide a description.')</script>");
+                return;
+            }
+
             // Establish the PostgreSQL connection using Npgsql
             using (var conn = new NpgsqlConnection(con))
             {
@@ -410,7 +415,6 @@ namespace Capstone
 
                     if (existingCount > 0)
                     {
-                        // Display an error message indicating that the waste name already exists
                         Response.Write("<script>alert('Waste name already exists. Please choose a different waste name.')</script>");
                         return;
                     }
@@ -419,18 +423,17 @@ namespace Capstone
                 // Validate and convert the price
                 if (!decimal.TryParse(price.Text, out decimal wastePrice))
                 {
-                    // Display an error message for invalid price
                     Response.Write("<script>alert('Invalid price. Please enter a valid decimal value.')</script>");
                     return;
                 }
 
-                // Round to two decimal places
+                // Round price to two decimal places
                 wastePrice = Math.Round(wastePrice, 2);
 
-                // Insert the new waste category into the PostgreSQL database
+                // Insert the new waste category
                 string insertQuery = @"
-            INSERT INTO waste_category (wc_name, wc_unit, wc_price, wc_status, emp_id, wc_max) 
-            VALUES (@name, @unit, @price, 'Active', @empId, @max)";
+            INSERT INTO waste_category (wc_name, wc_unit, wc_price, wc_status, emp_id, wc_max, wc_desc) 
+            VALUES (@name, @unit, @price, 'Active', @empId, @max, @desc)";
 
                 using (var insertCmd = new NpgsqlCommand(insertQuery, conn))
                 {
@@ -439,18 +442,75 @@ namespace Capstone
                     insertCmd.Parameters.AddWithValue("@price", wastePrice);
                     insertCmd.Parameters.AddWithValue("@empId", Convert.ToInt32(Session["bo_id"])); // Assuming 'emp_id' is stored in the session
                     insertCmd.Parameters.AddWithValue("@max", Convert.ToInt32(max.Text));
+                    insertCmd.Parameters.AddWithValue("@desc", waste_desc.Text);
 
                     insertCmd.ExecuteNonQuery();
                     Response.Write("<script>alert('Waste added!')</script>");
-                    WasteCatList();
                 }
+
                 WasteCatList();
                 conn.Close();
             }
-
-            // Load or refresh the category data (implement this method as needed)
-            //LoadCategoryData();
         }
+
+
+        //protected void submitBtn_Click(object sender, EventArgs e)
+        //{
+        //    // Establish the PostgreSQL connection using Npgsql
+        //    using (var conn = new NpgsqlConnection(con))
+        //    {
+        //        conn.Open();
+
+        //        // Check if the waste name already exists
+        //        string checkWasteQuery = "SELECT COUNT(*) FROM waste_category WHERE wc_name = @name";
+        //        using (var checkCmd = new NpgsqlCommand(checkWasteQuery, conn))
+        //        {
+        //            checkCmd.Parameters.AddWithValue("@name", waste_name.Text);
+        //            int existingCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+        //            if (existingCount > 0)
+        //            {
+        //                // Display an error message indicating that the waste name already exists
+        //                Response.Write("<script>alert('Waste name already exists. Please choose a different waste name.')</script>");
+        //                return;
+        //            }
+        //        }
+
+        //        // Validate and convert the price
+        //        if (!decimal.TryParse(price.Text, out decimal wastePrice))
+        //        {
+        //            // Display an error message for invalid price
+        //            Response.Write("<script>alert('Invalid price. Please enter a valid decimal value.')</script>");
+        //            return;
+        //        }
+
+        //        // Round to two decimal places
+        //        wastePrice = Math.Round(wastePrice, 2);
+
+        //        // Insert the new waste category into the PostgreSQL database
+        //        string insertQuery = @"
+        //    INSERT INTO waste_category (wc_name, wc_unit, wc_price, wc_status, emp_id, wc_max) 
+        //    VALUES (@name, @unit, @price, 'Active', @empId, @max)";
+
+        //        using (var insertCmd = new NpgsqlCommand(insertQuery, conn))
+        //        {
+        //            insertCmd.Parameters.AddWithValue("@name", waste_name.Text);
+        //            insertCmd.Parameters.AddWithValue("@unit", unit.Text);
+        //            insertCmd.Parameters.AddWithValue("@price", wastePrice);
+        //            insertCmd.Parameters.AddWithValue("@empId", Convert.ToInt32(Session["bo_id"])); // Assuming 'emp_id' is stored in the session
+        //            insertCmd.Parameters.AddWithValue("@max", Convert.ToInt32(max.Text));
+
+        //            insertCmd.ExecuteNonQuery();
+        //            Response.Write("<script>alert('Waste added!')</script>");
+        //            WasteCatList();
+        //        }
+        //        WasteCatList();
+        //        conn.Close();
+        //    }
+
+        //    // Load or refresh the category data (implement this method as needed)
+        //    //LoadCategoryData();
+        //}
 
         ////WITH INTEREST AND SUCH OR MURAG LOAN
         ////protected void changeTerm_Click(object sender, EventArgs e)
@@ -627,6 +687,7 @@ namespace Capstone
                             {
                                 // Assign the data to the respective textboxes
                                 txtbxnewName.Text = reader["wc_name"].ToString();
+                                txtDescription.Text = reader["wc_desc"].ToString();
                                 txtbxnewUnit.Text = reader["wc_unit"].ToString();
                                 txtbxnewPrice.Text = reader["wc_price"].ToString();
                                 txtLimit.Text = reader["wc_max"].ToString();
@@ -762,8 +823,6 @@ namespace Capstone
             }
         }
 
-
-
         protected void UpdateWasteCategory(object sender, EventArgs e)
         {
             int id;
@@ -776,8 +835,30 @@ namespace Capstone
 
             string name = txtbxnewName.Text;
             string unit = txtbxnewUnit.Text;
-            double limit = double.Parse(txtLimit.Text);
-            decimal price = decimal.Parse(txtbxnewPrice.Text);
+            double limit;
+            decimal price;
+
+            if (!double.TryParse(txtLimit.Text, out limit) || limit <= 0)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "showValidationError",
+                    "Swal.fire({ icon: 'error', title: 'Invalid Limit', text: 'Max Limit must be a number greater than zero.', confirmButtonColor: '#dc3545' });", true);
+                return;
+            }
+
+            if (!decimal.TryParse(txtbxnewPrice.Text, out price) || price <= 0)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "showValidationError",
+                    "Swal.fire({ icon: 'error', title: 'Invalid Price', text: 'Price must be a number greater than zero.', confirmButtonColor: '#dc3545' });", true);
+                return;
+            }
+
+            string description = txtDescription.Text.Trim();
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "showError",
+                    "Swal.fire({ icon: 'error', title: 'Empty Description', text: 'Description cannot be empty.', confirmButtonColor: '#dc3545' });", true);
+                return;
+            }
 
             using (var conn = new NpgsqlConnection(con))
             {
@@ -793,7 +874,6 @@ namespace Capstone
                     int count = Convert.ToInt32(checkCmd.ExecuteScalar());
                     if (count > 0)
                     {
-                        // If a duplicate wc_name exists, show an error dialog
                         ScriptManager.RegisterStartupScript(this, GetType(), "showDuplicateAlert",
                             "Swal.fire({ icon: 'error', title: 'Duplicate Found', text: 'This waste category name already exists in the database.', confirmButtonColor: '#dc3545' });", true);
                         ModalPopupExtender2.Hide();
@@ -802,35 +882,189 @@ namespace Capstone
                 }
 
                 // Proceed with the update if no duplicates are found
-                string updateQuery = "UPDATE waste_category SET wc_name = @name, wc_unit = @unit, wc_price = @price, wc_max = @max WHERE wc_id = @id";
+                string updateQuery = "UPDATE waste_category SET wc_name = @name, wc_unit = @unit, wc_price = @price, wc_max = @max, wc_desc = @desc WHERE wc_id = @id";
                 using (var updateCmd = new NpgsqlCommand(updateQuery, conn))
                 {
                     updateCmd.Parameters.AddWithValue("@name", name);
                     updateCmd.Parameters.AddWithValue("@unit", unit);
                     updateCmd.Parameters.AddWithValue("@price", price);
-                    updateCmd.Parameters.AddWithValue("@id", id);
                     updateCmd.Parameters.AddWithValue("@max", limit);
+                    updateCmd.Parameters.AddWithValue("@desc", description);
+                    updateCmd.Parameters.AddWithValue("@id", id);
 
                     int rowsAffected = updateCmd.ExecuteNonQuery(); // Execute once
                     if (rowsAffected >= 1)
                     {
-                        // Success dialog after updating the waste category
                         ScriptManager.RegisterStartupScript(this, GetType(), "showSuccessAlert",
                             "Swal.fire({ icon: 'success', title: 'Updated Successfully', text: 'Waste category updated successfully!', confirmButtonColor: '#28a745' });", true);
 
                         // Close the modal and refresh the data
                         ModalPopupExtender2.Hide();
-                        WasteCatList(); // Ensure this method is binding the updated data
+                        WasteCatList(); // Ensure this method binds the updated data
                     }
                     else
                     {
                         ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-                            "Swal.fire({ icon: 'error', title: 'Unsuccessful!', text: 'There was an error updating the waste category!', background: '#f8d7da', confirmButtonColor: '#dc3545' });", true);
+                            "Swal.fire({ icon: 'error', title: 'Unsuccessful!', text: 'There was an error updating the waste category!', confirmButtonColor: '#dc3545' });", true);
                         ModalPopupExtender2.Hide();
                     }
                 }
             }
         }
+
+
+        //protected void UpdateWasteCategory(object sender, EventArgs e)
+        //{
+        //    int id;
+        //    if (!int.TryParse(txtbxID.Text, out id))
+        //    {
+        //        ScriptManager.RegisterStartupScript(this, GetType(), "showError",
+        //            "Swal.fire({ icon: 'error', title: 'Invalid ID', text: 'Please enter a valid numeric ID.', confirmButtonColor: '#dc3545' });", true);
+        //        return;
+        //    }
+
+        //    string name = txtbxnewName.Text;
+        //    string unit = txtbxnewUnit.Text;
+        //    double limit;
+        //    decimal price;
+
+        //    if (!double.TryParse(txtLimit.Text, out limit) || !decimal.TryParse(txtbxnewPrice.Text, out price))
+        //    {
+        //        ScriptManager.RegisterStartupScript(this, GetType(), "showValidationError",
+        //            "Swal.fire({ icon: 'error', title: 'Invalid Input', text: 'Please ensure limit and price are valid numeric values.', confirmButtonColor: '#dc3545' });", true);
+        //        return;
+        //    }
+
+        //    string description = txtDescription.Text.Trim();
+
+        //    if (string.IsNullOrWhiteSpace(description))
+        //    {
+        //        ScriptManager.RegisterStartupScript(this, GetType(), "showError",
+        //            "Swal.fire({ icon: 'error', title: 'Empty Description', text: 'Description cannot be empty.', confirmButtonColor: '#dc3545' });", true);
+        //        return;
+        //    }
+
+        //    using (var conn = new NpgsqlConnection(con))
+        //    {
+        //        conn.Open();
+
+        //        // Check if the wc_name already exists in the database (excluding the current record)
+        //        string checkQuery = "SELECT COUNT(*) FROM waste_category WHERE wc_name = @name AND wc_id <> @id";
+        //        using (var checkCmd = new NpgsqlCommand(checkQuery, conn))
+        //        {
+        //            checkCmd.Parameters.AddWithValue("@name", name);
+        //            checkCmd.Parameters.AddWithValue("@id", id);
+
+        //            int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+        //            if (count > 0)
+        //            {
+        //                ScriptManager.RegisterStartupScript(this, GetType(), "showDuplicateAlert",
+        //                    "Swal.fire({ icon: 'error', title: 'Duplicate Found', text: 'This waste category name already exists in the database.', confirmButtonColor: '#dc3545' });", true);
+        //                ModalPopupExtender2.Hide();
+        //                return;
+        //            }
+        //        }
+
+        //        // Proceed with the update if no duplicates are found
+        //        string updateQuery = "UPDATE waste_category SET wc_name = @name, wc_unit = @unit, wc_price = @price, wc_max = @max, wc_desc = @desc WHERE wc_id = @id";
+        //        using (var updateCmd = new NpgsqlCommand(updateQuery, conn))
+        //        {
+        //            updateCmd.Parameters.AddWithValue("@name", name);
+        //            updateCmd.Parameters.AddWithValue("@unit", unit);
+        //            updateCmd.Parameters.AddWithValue("@price", price);
+        //            updateCmd.Parameters.AddWithValue("@max", limit);
+        //            updateCmd.Parameters.AddWithValue("@desc", description);
+        //            updateCmd.Parameters.AddWithValue("@id", id);
+
+        //            int rowsAffected = updateCmd.ExecuteNonQuery(); // Execute once
+        //            if (rowsAffected >= 1)
+        //            {
+        //                ScriptManager.RegisterStartupScript(this, GetType(), "showSuccessAlert",
+        //                    "Swal.fire({ icon: 'success', title: 'Updated Successfully', text: 'Waste category updated successfully!', confirmButtonColor: '#28a745' });", true);
+
+        //                // Close the modal and refresh the data
+        //                ModalPopupExtender2.Hide();
+        //                WasteCatList(); // Ensure this method binds the updated data
+        //            }
+        //            else
+        //            {
+        //                ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                    "Swal.fire({ icon: 'error', title: 'Unsuccessful!', text: 'There was an error updating the waste category!', confirmButtonColor: '#dc3545' });", true);
+        //                ModalPopupExtender2.Hide();
+        //            }
+        //        }
+        //    }
+        //}
+
+
+
+        //protected void UpdateWasteCategory(object sender, EventArgs e)
+        //{
+        //    int id;
+        //    if (!int.TryParse(txtbxID.Text, out id))
+        //    {
+        //        ScriptManager.RegisterStartupScript(this, GetType(), "showError",
+        //            "Swal.fire({ icon: 'error', title: 'Invalid ID', text: 'Please enter a valid numeric ID.', confirmButtonColor: '#dc3545' });", true);
+        //        return;
+        //    }
+
+        //    string name = txtbxnewName.Text;
+        //    string unit = txtbxnewUnit.Text;
+        //    double limit = double.Parse(txtLimit.Text);
+        //    decimal price = decimal.Parse(txtbxnewPrice.Text);
+
+        //    using (var conn = new NpgsqlConnection(con))
+        //    {
+        //        conn.Open();
+
+        //        // Check if the wc_name already exists in the database (excluding the current record)
+        //        string checkQuery = "SELECT COUNT(*) FROM waste_category WHERE wc_name = @name AND wc_id <> @id";
+        //        using (var checkCmd = new NpgsqlCommand(checkQuery, conn))
+        //        {
+        //            checkCmd.Parameters.AddWithValue("@name", name);
+        //            checkCmd.Parameters.AddWithValue("@id", id);
+
+        //            int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+        //            if (count > 0)
+        //            {
+        //                // If a duplicate wc_name exists, show an error dialog
+        //                ScriptManager.RegisterStartupScript(this, GetType(), "showDuplicateAlert",
+        //                    "Swal.fire({ icon: 'error', title: 'Duplicate Found', text: 'This waste category name already exists in the database.', confirmButtonColor: '#dc3545' });", true);
+        //                ModalPopupExtender2.Hide();
+        //                return;
+        //            }
+        //        }
+
+        //        // Proceed with the update if no duplicates are found
+        //        string updateQuery = "UPDATE waste_category SET wc_name = @name, wc_unit = @unit, wc_price = @price, wc_max = @max WHERE wc_id = @id";
+        //        using (var updateCmd = new NpgsqlCommand(updateQuery, conn))
+        //        {
+        //            updateCmd.Parameters.AddWithValue("@name", name);
+        //            updateCmd.Parameters.AddWithValue("@unit", unit);
+        //            updateCmd.Parameters.AddWithValue("@price", price);
+        //            updateCmd.Parameters.AddWithValue("@id", id);
+        //            updateCmd.Parameters.AddWithValue("@max", limit);
+
+        //            int rowsAffected = updateCmd.ExecuteNonQuery(); // Execute once
+        //            if (rowsAffected >= 1)
+        //            {
+        //                // Success dialog after updating the waste category
+        //                ScriptManager.RegisterStartupScript(this, GetType(), "showSuccessAlert",
+        //                    "Swal.fire({ icon: 'success', title: 'Updated Successfully', text: 'Waste category updated successfully!', confirmButtonColor: '#28a745' });", true);
+
+        //                // Close the modal and refresh the data
+        //                ModalPopupExtender2.Hide();
+        //                WasteCatList(); // Ensure this method is binding the updated data
+        //            }
+        //            else
+        //            {
+        //                ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                    "Swal.fire({ icon: 'error', title: 'Unsuccessful!', text: 'There was an error updating the waste category!', background: '#f8d7da', confirmButtonColor: '#dc3545' });", true);
+        //                ModalPopupExtender2.Hide();
+        //            }
+        //        }
+        //    }
+        //}
 
 
         //    protected void UpdateWasteCategory(object sender, EventArgs e)
