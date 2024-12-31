@@ -308,14 +308,19 @@ namespace Capstone
             }
         }
 
-        // Assign a vehicle to a driver.
         protected void btnAssignVehicle_Click(object sender, EventArgs e)
         {
-            // Validate that a vehicle plate and driver ID are selected
-            if (string.IsNullOrEmpty(ddlvplate.SelectedValue))
+            // Validate that valid dropdown values are selected
+            if (ddlVehicle.SelectedValue == "")
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Please select a vehicle plate.');", true);
-                return; // Exit the method if no vehicle is selected
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Please select a valid category.');", true);
+                return; // Exit the method if no valid category is selected
+            }
+
+            if (ddlvplate.SelectedValue == "")
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Please select a valid vehicle plate.');", true);
+                return; // Exit the method if no valid plate is selected
             }
 
             if (string.IsNullOrEmpty(hiddenDriverId.Value))
@@ -361,15 +366,15 @@ namespace Capstone
                         if (result > 0)
                         {
                             ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-                            "Swal.fire({ icon: 'success', title: 'Hauler Assigned!', text: 'Vehicle was successfully assigned.', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
-                            true);
+                                "Swal.fire({ icon: 'success', title: 'Hauler Assigned!', text: 'Vehicle was successfully assigned.', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
+                                true);
                             VehicleGridView(); // Refresh the vehicle GridView
                         }
                         else
                         {
                             ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
-                           "Swal.fire({ icon: 'error', title: 'Assignment Failed', text: 'Unable to assign vehicle. Please try again.', confirmButtonColor: '#d33' });",
-                           true);
+                                "Swal.fire({ icon: 'error', title: 'Assignment Failed', text: 'Unable to assign vehicle. Please try again.', confirmButtonColor: '#d33' });",
+                                true);
                         }
                     }
                     catch (Exception ex)
@@ -379,6 +384,80 @@ namespace Capstone
                 }
             }
         }
+
+
+        //ORIGINAL CODE
+        // Assign a vehicle to a driver.
+        //protected void btnAssignVehicle_Click(object sender, EventArgs e)
+        //{
+        //    // Validate that a vehicle plate and driver ID are selected
+        //    if (string.IsNullOrEmpty(ddlvplate.SelectedValue))
+        //    {
+        //        ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Please select a vehicle plate.');", true);
+        //        return; // Exit the method if no vehicle is selected
+        //    }
+
+        //    if (string.IsNullOrEmpty(hiddenDriverId.Value))
+        //    {
+        //        ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Driver ID is invalid. Please try again.');", true);
+        //        return; // Exit the method if driver ID is not valid
+        //    }
+
+        //    int newVehicleId = int.Parse(ddlvplate.SelectedValue);
+        //    int newDriverId = int.Parse(hiddenDriverId.Value); // Get new driver_id from hidden field
+
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            // First, update the old vehicle's driver_id to NULL and set v_status to 'Awaiting Driver'
+        //            cmd.CommandText = @"
+        //        UPDATE vehicle 
+        //        SET driver_id = NULL, 
+        //            v_status = 'Awaiting Driver' 
+        //        WHERE driver_id = @newDriverId";
+
+        //            cmd.Parameters.AddWithValue("@newDriverId", newDriverId);
+        //            cmd.ExecuteNonQuery(); // Execute to remove the old assignment and update status
+
+        //            // Now, assign the new vehicle to the driver
+        //            cmd.CommandText = @"
+        //        UPDATE vehicle 
+        //        SET driver_id = @newDriverId, 
+        //            driver_date_assigned_at = @assignedAt, 
+        //            driver_date_updated_at = @updatedAt, 
+        //            v_status = 'Assigned' 
+        //        WHERE v_id = @newVehicleId";
+
+        //            cmd.Parameters.AddWithValue("@newVehicleId", newVehicleId);
+        //            cmd.Parameters.AddWithValue("@assignedAt", DateTime.Now);
+        //            cmd.Parameters.AddWithValue("@updatedAt", DateTime.Now);
+
+        //            try
+        //            {
+        //                int result = cmd.ExecuteNonQuery();
+        //                if (result > 0)
+        //                {
+        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                    "Swal.fire({ icon: 'success', title: 'Hauler Assigned!', text: 'Vehicle was successfully assigned.', background: '#e9f7ef', confirmButtonColor: '#28a745' });",
+        //                    true);
+        //                    VehicleGridView(); // Refresh the vehicle GridView
+        //                }
+        //                else
+        //                {
+        //                    ScriptManager.RegisterStartupScript(this, GetType(), "showAlert",
+        //                   "Swal.fire({ icon: 'error', title: 'Assignment Failed', text: 'Unable to assign vehicle. Please try again.', confirmButtonColor: '#d33' });",
+        //                   true);
+        //                }
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error: " + ex.Message + "');", true);
+        //            }
+        //        }
+        //    }
+        //}
 
 
         // Populate GridView with vehicles that already have a driver assigned.

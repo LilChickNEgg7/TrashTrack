@@ -586,7 +586,7 @@ public IHttpActionResult GetPaymentStatus()
             SELECT b.bk_id, b.bk_date, b.bk_status, gb.gb_total_sales 
             FROM booking b
             LEFT JOIN generate_bill gb ON b.bk_id = gb.bk_id
-            WHERE b.bk_status NOT IN ('Cancelled', 'Failed') AND gb.gb_status = 'unpaid';", db))
+            WHERE b.bk_status NOT IN ('Cancelled', 'Failed') AND gb.gb_status = 'Unpaid';", db))
         {
             using (var reader = cmdUnpaid.ExecuteReader())
             {
@@ -691,7 +691,7 @@ public IHttpActionResult GetPaymentStatus()
         SELECT COALESCE(SUM(gb.gb_total_sales), 0) 
         FROM public.generate_bill gb
         JOIN public.booking b ON gb.bk_id = b.bk_id
-        WHERE gb.gb_status = 'unpaid' 
+        WHERE gb.gb_status = 'Unpaid' 
         AND b.bk_status NOT IN ('Cancelled', 'Failed') 
         AND gb_created_at >= @startDate 
         AND gb_created_at < @endDate";

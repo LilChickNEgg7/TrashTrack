@@ -246,11 +246,11 @@
                                     <i class="bi bi-circle"></i><span>Manage Booking Limit</span>
                                 </a>
                             </li>
-                            <li>
+                            <%--<li>
                                 <a href="Dispatcher_AddSlip.aspx">
                                     <i class="bi bi-circle"></i><span>Manage Booking Slip</span>
                                 </a>
-                            </li>
+                            </li>--%>
                             <li>
                                 <a href="Re_AssignVehicle.aspx"  class="active">
                                     <i class="bi bi-circle"></i><span>Assigns and Control</span>

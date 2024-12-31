@@ -545,9 +545,6 @@ namespace Capstone
             }
         }
 
-
-
-
         protected void GeneratedBillList()
         {
             using (var db = new NpgsqlConnection(con))
@@ -570,16 +567,16 @@ namespace Capstone
                                             gb.gb_status, 
                                             COALESCE(p.p_amount, 0) AS p_amount, 
                                             COALESCE(p.p_method, 'N/A') AS p_method, 
-                                            COALESCE(p.p_date_paid, NULL) AS p_date_paid, 
-                                            COALESCE(p.p_checkout_id, 'N/A') AS p_checkout_id,
-                                            COALESCE(p.p_trans_id, 'N/A') AS p_trans_id
+                                            p.p_date_paid, 
+                                            p.p_checkout_id, 
+                                            p.p_trans_id
                                         FROM 
                                             generate_bill gb
                                         LEFT JOIN 
                                             payment p ON gb.gb_id = p.gb_id
                                         ORDER BY 
                                             gb.gb_date_issued DESC,
-                                            gb.gb_id DESC;
+                                            gb.gb_id DESC
                                     ";
 
 
@@ -596,6 +593,56 @@ namespace Capstone
                 db.Close();
             }
         }
+
+
+        //protected void GeneratedBillList()
+        //{
+        //    using (var db = new NpgsqlConnection(con))
+        //    {
+        //        db.Open();
+        //        using (var cmd = db.CreateCommand())
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            //gb.gb_total_amnt_interest, 
+        //            //p.p_date_paid DESC NULLS LAST,
+
+        //            // SQL query to fetch bill and payment data
+        //            cmd.CommandText = @"
+        //                                SELECT 
+        //                                    gb.gb_id, 
+        //                                    gb.gb_date_issued, 
+        //                                    gb.gb_date_due, 
+        //                                    gb.bk_id, 
+        //                                    gb.gb_total_sales, 
+        //                                    gb.gb_status, 
+        //                                    COALESCE(p.p_amount, 0) AS p_amount, 
+        //                                    COALESCE(p.p_method, 'N/A') AS p_method, 
+        //                                    COALESCE(p.p_date_paid, NULL) AS p_date_paid, 
+        //                                    COALESCE(p.p_checkout_id, 'N/A') AS p_checkout_id,
+        //                                    COALESCE(p.p_trans_id, 'N/A') AS p_trans_id
+        //                                FROM 
+        //                                    generate_bill gb
+        //                                LEFT JOIN 
+        //                                    payment p ON gb.gb_id = p.gb_id
+        //                                ORDER BY 
+        //                                    gb.gb_date_issued DESC,
+        //                                    gb.gb_id DESC;
+        //                            ";
+
+
+
+        //            // Execute the query and fill the DataTable
+        //            DataTable bookingsDataTable = new DataTable();
+        //            NpgsqlDataAdapter bookingsAdapter = new NpgsqlDataAdapter(cmd);
+        //            bookingsAdapter.Fill(bookingsDataTable);
+
+        //            // Bind data to the GridView
+        //            gridView1.DataSource = bookingsDataTable;
+        //            gridView1.DataBind();
+        //        }
+        //        db.Close();
+        //    }
+        //}
 
 
         protected void Remove_Click(object sender, EventArgs e)
@@ -3605,7 +3652,7 @@ namespace Capstone
                         cmd.Parameters.AddWithValue("@DateIssued", dateIssued ?? (object)DBNull.Value);
                         //cmd.Parameters.AddWithValue("@DateDue", dateDue ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@Tax", tax ?? (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@Status", "unpaid");
+                        cmd.Parameters.AddWithValue("@Status", "Unpaid");
                         cmd.Parameters.AddWithValue("@BkId", bk_id);
                         cmd.Parameters.AddWithValue("@EmpId", empId);
 
@@ -4018,7 +4065,7 @@ namespace Capstone
                             using (var cmd = db.CreateCommand())
                             {
                                 cmd.CommandType = CommandType.Text;
-                                cmd.CommandText = "UPDATE generate_bill SET gb_status = 'unpaid' WHERE gb_id = @id";
+                                cmd.CommandText = "UPDATE generate_bill SET gb_status = 'Unpaid' WHERE gb_id = @id";
                                 cmd.Parameters.AddWithValue("@id", managerId);
                                 cmd.Transaction = transaction;
                                 cmd.ExecuteNonQuery();
@@ -4134,23 +4181,27 @@ namespace Capstone
                     {
                         cmd.CommandType = CommandType.Text;
                         //cmd.CommandText = "UPDATE generate_bill SET gb_status = 'paid' WHERE gb_id = @id";
-                        cmd.CommandText = "UPDATE generate_bill SET gb_status = 'paid', gb_updated_at = CURRENT_TIMESTAMP WHERE gb_id = @id";
+                        cmd.CommandText = "UPDATE generate_bill SET gb_status = 'Paid', gb_updated_at = CURRENT_TIMESTAMP WHERE gb_id = @id";
                         cmd.Parameters.AddWithValue("@id", gbID);
 
                         var ctr = cmd.ExecuteNonQuery();
+                        //Response.Write("<script>alert('No '"+ amntPaid + "" + gbID + "' found for the specified ID.')</script>");
+
                         if (ctr >= 1)
                         {
+                            //Response.Write("<script>alert('No '" + amntPaid + "" + gbID + "' found for the specified ID.')</script>");
+
                             // Insert a new record into the payment table
                             using (var paymentCmd = db.CreateCommand())
                             {
                                 paymentCmd.CommandType = CommandType.Text;
                                 paymentCmd.CommandText = @"
-                        INSERT INTO payment (p_amount, p_status, p_method, gb_id, p_date_paid, emp_id)
-                        VALUES (@amount, 'paid', 'walk-in', @gbId, CURRENT_TIMESTAMP, @emp_id)";
+                        INSERT INTO payment (p_amount, p_status, p_method, gb_id, p_date_paid)
+                        VALUES (@amount, 'paid', 'cash', @gbId, CURRENT_TIMESTAMP)";
 
                                 paymentCmd.Parameters.AddWithValue("@amount", amntPaid);
                                 paymentCmd.Parameters.AddWithValue("@gbId", gbID);
-                                paymentCmd.Parameters.AddWithValue("@emp_id", empId);
+                                //paymentCmd.Parameters.AddWithValue("@emp_id", empId);
 
 
                                 paymentCmd.ExecuteNonQuery();
@@ -4189,13 +4240,13 @@ namespace Capstone
         // validate if the admin status is Suspend
         protected Boolean IsSuspended(string status)
         {
-            return status == "unpaid";
+            return status == "Unpaid";
         }
 
         // validate if the admin status is Unsuspend
         protected Boolean IsActive(string status)
         {
-            return status == "paid";
+            return status == "Paid";
         }
 
     }

@@ -760,11 +760,11 @@
                                         <asp:BoundField DataField="gb_date_due" HeaderText="Due Date" SortExpression="gb_date_due" ItemStyle-Width="150px" />
                                         <asp:BoundField DataField="bk_id" HeaderText="Book ID" SortExpression="bk_id" ItemStyle-Width="150px" />
                                         <asp:BoundField DataField="gb_total_sales" HeaderText="Total Sales" SortExpression="gb_total_sales" DataFormatString="₱{0:N2}" ItemStyle-Width="100px" />
-                                        <asp:BoundField DataField="p_trans_id" HeaderText="Trans. ID" SortExpression="p_trans_id" ItemStyle-Width="100px" />
+<%--                                        <asp:BoundField DataField="p_trans_id" HeaderText="Trans. ID" SortExpression="p_trans_id" ItemStyle-Width="100px" />--%>
                                         <asp:BoundField DataField="p_amount" HeaderText="Paid Amount" SortExpression="p_amount" DataFormatString="₱{0:N2}" ItemStyle-Width="100px" />
                                         <asp:BoundField DataField="p_method" HeaderText="Payment Method" SortExpression="p_method" ItemStyle-Width="150px" />
                                         <asp:BoundField DataField="p_date_paid" HeaderText="Date Paid" SortExpression="p_date_paid" ItemStyle-Width="150px" />
-                                        <asp:BoundField DataField="p_checkout_id" HeaderText="Checkout ID" SortExpression="p_checkout_id" ItemStyle-Width="150px" />
+<%--                                        <asp:BoundField DataField="p_checkout_id" HeaderText="Checkout ID" SortExpression="p_checkout_id" ItemStyle-Width="150px" />--%>
                                         <asp:TemplateField HeaderText="Details">
                                             <ItemTemplate>
                                                 <asp:LinkButton ID="update" runat="server" OnClick="openViewBill_Click" CommandArgument='<%# Eval("gb_id") %>'>
@@ -775,12 +775,12 @@
                                         <asp:TemplateField HeaderText="Status">
                                             <ItemTemplate>
                                                 <asp:Button CssClass="btn btn-outline-danger" Style="font-size: 10px; font-weight: bolder;" ID="btnPaid" runat="server" Text='<%# Eval("gb_status") + " ▼"%>'
-                                                    OnClick="Paid_Click" Visible='<%# Eval("gb_status").ToString() == "unpaid" %>' CommandArgument='<%# Eval("gb_id") %>' />
+                                                    OnClick="Paid_Click" Visible='<%# Eval("gb_status").ToString() == "Unpaid" %>' CommandArgument='<%# Eval("gb_id") %>' />
                                                 <asp:Label
                                                     ID="Label9"
                                                     runat="server"
                                                     Text='<%# Eval("gb_status") %>'
-                                                    Visible='<%# Eval("gb_status").ToString() == "paid" %>' />
+                                                    Visible='<%# Eval("gb_status").ToString() == "Paid" %>' />
                                                 <%--<asp:Button CssClass="btn btn-outline-success" Style="font-size: 10px; font-weight: bolder;" ID="btnUnpaid" runat="server" Text='<%# Eval("gb_status") + " ▲"%>'
                                                     OnClick="Unpaid_Click" Visible='<%# Eval("gb_status").ToString() == "paid" %>' CommandArgument='<%# Eval("gb_id") %>' />--%>
                                             </ItemTemplate>
@@ -1827,6 +1827,9 @@
                             </div>
                         </ContentTemplate>
                         <Triggers>
+                                                        <asp:PostBackTrigger ControlID="Button13" />
+                                                                                    <asp:PostBackTrigger ControlID="Button14" />
+
                         </Triggers>
                     </asp:UpdatePanel>
                 </div>
