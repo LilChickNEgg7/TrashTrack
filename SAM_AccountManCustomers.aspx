@@ -911,7 +911,7 @@
                                 </div>--%>
                             <div class="gridview-container">
                                 <asp:GridView Style="width: 100%; word-break: break-all; table-layout: fixed" ID="gridView1" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True"
-                                    DataKeyNames="cus_id" AllowPaging="False" CellPadding="20" GridLines="None" AutoPostBack="True">
+                                    DataKeyNames="cus_id" AllowPaging="True" CellPadding="20" GridLines="None" AutoPostBack="True" PageSize="5" OnPageIndexChanging="gridView1_PageIndexChanging">
                                     <AlternatingRowStyle BackColor="white" ForeColor="Black" />
 
                                     <Columns>

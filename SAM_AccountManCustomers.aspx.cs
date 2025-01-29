@@ -3696,6 +3696,12 @@ SELECT emp_email AS email, emp_status AS status FROM employee WHERE emp_email = 
 
         }
 
+        protected void gridView1_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gridView1.PageIndex = e.NewPageIndex; // Set the new page index
+            CustomerList(); // Reload the data
+        }
+
 
     }
 }

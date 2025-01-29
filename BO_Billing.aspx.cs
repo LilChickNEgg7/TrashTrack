@@ -4249,5 +4249,12 @@ namespace Capstone
             return status == "Paid";
         }
 
+        protected void gridViewBookings_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gridView1.PageIndex = e.NewPageIndex; // Set the new page index
+            LoadBookingList();
+        }
+
+
     }
 }

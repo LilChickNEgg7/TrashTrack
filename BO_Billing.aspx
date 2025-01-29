@@ -701,7 +701,8 @@
                         <div class="tab-pane fade" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
                             <div class="gridview-container" id="gridviewContainer">
                                 <%--BOOKING GRIDVIEW--%>
-                                <asp:GridView ID="gridViewBookings" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="bk_id" AllowPaging="False" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None">
+                                <asp:GridView ID="gridViewBookings" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" DataKeyNames="bk_id" AllowPaging="True" CellPadding="20" Font-Size="10px" ForeColor="Black" GridLines="None" PageSize="5" OnPageIndexChanging="gridViewBookings_PageIndexChanging" PagerStyle-VerticalAlign="NotSet" PagerStyle-ForeColor="#006600">
+                                    <AlternatingRowStyle BackColor="white" ForeColor="Black" />
                                     <Columns>
                                         <asp:BoundField DataField="bk_id" HeaderText="Book ID" SortExpression="bk_id" ItemStyle-Width="100px">
                                             <ItemStyle Width="100px"></ItemStyle>

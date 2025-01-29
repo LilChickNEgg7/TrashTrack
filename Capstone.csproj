@@ -695,6 +695,7 @@
     <Content Include="Z3.aspx" />
     <Content Include="Z4.aspx" />
     <Content Include="Z5.aspx" />
+    <Content Include="Z6.aspx" />
     <Content Include="Z_Trial.aspx" />
     <Content Include="fonts\arial-unicode-ms.ttf" />
     <Content Include="fonts\Roboto\Roboto-Black.ttf" />
@@ -2595,6 +2596,13 @@
     </Compile>
     <Compile Include="Z5.aspx.designer.cs">
       <DependentUpon>Z5.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Z6.aspx.cs">
+      <DependentUpon>Z6.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Z6.aspx.designer.cs">
+      <DependentUpon>Z6.aspx</DependentUpon>
     </Compile>
     <Compile Include="Z_Trial.aspx.cs">
       <DependentUpon>Z_Trial.aspx</DependentUpon>
